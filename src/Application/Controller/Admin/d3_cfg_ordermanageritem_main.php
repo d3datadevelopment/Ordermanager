@@ -1,0 +1,101 @@
+<?php
+
+/**
+ * This Software is the property of Data Development and is protected
+ * by copyright law - it is NOT Freeware.
+ *
+ * Any unauthorized use of this software without a valid license
+ * is a violation of the license agreement and will be prosecuted by
+ * civil and criminal law.
+ *
+ * http://www.shopmodule.com
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+ * @link      http://www.oxidmodule.com
+ */
+
+namespace D3\Ordermanager\Application\Controller\Admin;
+
+use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Request;
+
+class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
+{
+    protected $_sSavedId = null;
+    protected $_sSetModId = 'd3_ordermanager';
+    protected $_sModId = 'd3_ordermanager';
+    protected $_sMenuItemTitle = 'd3mxordermanager';
+    protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
+    protected $_sThisTemplate = "d3_cfg_ordermanageritem_main.tpl";
+    protected $_blUseOwnOxid = true;
+    protected $_aNaviItems = array(
+        'new' => array(
+            'sScript' => 'top.oxid.admin.editThis( -1 );return false;',
+            'sTranslationId' => 'D3_TOOLTIPS_NEWORDERMANAGER',
+        ),
+    );
+    protected $_sD3ObjectClass = d3ordermanager::class;
+
+    /**
+     * Loads article parameters and passes them to Smarty engine, returns
+     * name of template file "article_main.tpl".
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $sRet = parent::render();
+
+        $this->addTplParam("blUseTimeCheck", Registry::getConfig()->getConfigParam('blUseTimeCheck'));
+
+        return $sRet;
+    }
+
+    /**
+     * Sets default values for empty article (currently does nothing), returns
+     * array with parameters.
+     *
+     * @param array $aParams Parameters, to set default values
+     *
+     * @return array
+     */
+    public function addDefaultValues($aParams)
+    {
+        $aParams = parent::addDefaultValues($aParams);
+
+        /** @var d3ordermanager $oOrderManager */
+        $oOrderManager = oxNew(d3Ordermanager::class);
+        $sFieldLongName = $oOrderManager->d3GetFieldLongName('d3_cronjobid');
+
+        $aRequestParameter = Registry::get(Request::class)->getRequestEscapedParameter("editval");
+
+        if (is_array($aRequestParameter) && isset($aRequestParameter[$sFieldLongName])) {
+            $aRequestParameter[$sFieldLongName] = $this->fixCronjobId($aRequestParameter[$sFieldLongName]);
+            if (isset($_POST['editval'])) {
+                $_POST['editval'] = $aRequestParameter;
+            } elseif (isset($_GET['editval'])) {
+                $_GET['editval'] = $aRequestParameter;
+            }
+        }
+
+
+        return $aParams;
+    }
+
+    /**
+     * @param $sId
+     * @return mixed
+     */
+    public function fixCronjobId($sId)
+    {
+        $aSearch = array(
+            ' ',
+        );
+        $sReplace = '_';
+
+        return str_replace($aSearch, $sReplace, $sId);
+    }
+}

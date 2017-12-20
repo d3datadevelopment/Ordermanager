@@ -1,0 +1,1 @@
+Lieferverzoegerung / delivery delay
