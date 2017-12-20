@@ -1,0 +1,44 @@
+{
+  "name": "D3/Ordermanager",
+  "description": "Order manager module for OXID eShop.",
+  "type": "oxideshop-module",
+  "keywords": [
+    "oxid",
+    "modules",
+    "eShop",
+    "d3",
+    "ordermanager",
+    "orders",
+    "requirements",
+    "actions",
+    "tasks"
+  ],
+  "authors": [
+    {
+        "name": "D3 Data Development (Inh. Thomas Dartsch)",
+        "email": "info@shopmodule.com",
+        "homepage": "http://www.oxidmodule.com"
+    }
+  ],
+  "homepage": "https://www.oxidmodule.com/",
+  "license": [
+    "proprietary"
+  ],
+  "extra": {
+    "oxideshop": {
+      "source-directory": "/src",
+      "target-directory": "d3/ordermanager"
+    }
+  },
+  "require": {
+    "php": "5.6.* || 7.0.*",
+    "ext-ionCube-Loader": "*",
+    "oxid-esales/oxideshop-ce": "6.0.x",
+    "d3/modcfg": ">=5.1.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "D3\\Ordermanager\\": "../../../source/modules/d3/ordermanager"
+    }
+  }
+}
