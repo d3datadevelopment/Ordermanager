@@ -17,14 +17,20 @@
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
 use D3\Ordermanager\Application\Model\d3ordermanager_execute;
 use D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\d3filesystem;
+use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 
@@ -36,6 +42,12 @@ class d3_ordermanager_jobs extends AdminDetailsController
 
     /**
      * @return string
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
      */
     public function render()
     {
@@ -81,6 +93,12 @@ class d3_ordermanager_jobs extends AdminDetailsController
     /**
      * @param $sFolderId
      * @return d3ordermanagerlist
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
      */
     protected function _d3GetManuallyManagerJobs($sFolderId)
     {
@@ -97,6 +115,15 @@ class d3_ordermanager_jobs extends AdminDetailsController
         return $this->_aJobList->getArray();
     }
 
+    /**
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws \Exception
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     */
     public function d3execordermanager()
     {
         /** @var d3ordermanager $oManager */
@@ -108,6 +135,15 @@ class d3_ordermanager_jobs extends AdminDetailsController
         $oManagerExec->finishJobExecution();
     }
 
+    /**
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws \Exception
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     */
     public function d3ExecChangedOrderManager()
     {
         /** @var d3ordermanager $oManager */
@@ -120,6 +156,10 @@ class d3_ordermanager_jobs extends AdminDetailsController
         $oManagerExec->finishJobExecution();
     }
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     public function d3resetOrderManagerAssignment()
     {
         /** @var d3ordermanager $oManager */
@@ -134,6 +174,8 @@ class d3_ordermanager_jobs extends AdminDetailsController
 
     /**
      * @return mixed
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getFolderList()
     {
@@ -142,6 +184,14 @@ class d3_ordermanager_jobs extends AdminDetailsController
         return $oManager->d3getSelectableFolderList();
     }
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws DBALException
+     * @throws StandardException
+     */
     public function execChangedContents()
     {
         $sItemId = Registry::get(Request::class)->getRequestEscapedParameter('oxid');
@@ -163,6 +213,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
 
     /**
      * @return string
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getHelpURL()
     {
@@ -186,6 +239,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
 
     /**
      * @return d3_cfg_mod
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function d3GetSet()
     {

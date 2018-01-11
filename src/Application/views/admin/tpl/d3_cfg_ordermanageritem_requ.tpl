@@ -37,14 +37,14 @@
     {
         var _cur = el.parentNode;
 
-        if (_cur.className == "exp") _cur.className = "";
+        if (_cur.className === "exp") _cur.className = "";
           else _cur.className = "exp";
     }
 
     function selectAllListElems(el)
     {
         var aSelectLen = el.length;
-        for(i = 0; i < aSelectLen; i++)
+        for(var i = 0; i < aSelectLen; i++)
         {
             el.options[i].selected = true;
         }
@@ -53,7 +53,7 @@
     function selectNoListElems(el)
     {
         var aSelectLen = el.length;
-        for(i = 0; i < aSelectLen; i++)
+        for(var i = 0; i < aSelectLen; i++)
         {
             el.options[i].selected = false;
         }

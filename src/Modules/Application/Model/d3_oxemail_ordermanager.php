@@ -17,18 +17,25 @@
 
 namespace D3\Ordermanager\Modules\Application\Model;
 
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Log\d3log;
 use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
 use D3\ModCfg\Application\Model\d3str;
+use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\Shop;
 use OxidEsales\Eshop\Application\Model\Remark;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Application\Model\Content;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\DatabaseException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Module\Module;
 use OxidEsales\Eshop\Core\UtilsView;
 use OxidEsales\Eshop\Core\Registry;
@@ -54,6 +61,12 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
     /**
      * @param array $aOrderManagerNotes
      * @return bool
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
      */
     public function d3sendOrderManagerEmail($aOrderManagerNotes)
     {
@@ -128,6 +141,13 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
     /**
      * @param d3ordermanager $oOrderManager
      * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws DatabaseException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
      */
     public function sendOrderManagerMail(d3ordermanager $oOrderManager)
     {
@@ -220,6 +240,9 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
 
     /**
      * @return d3_cfg_mod
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function d3GetSet()
     {
@@ -229,6 +252,12 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
     /**
      * @param d3ordermanager $oOrderManager
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
      */
     public function getOrderManagerMailContent(d3ordermanager $oOrderManager)
     {
@@ -285,6 +314,8 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
     /**
      * @param d3ordermanager $oOrderManager
      * @return string
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
      */
     public function getTemplateDir4OrderManager($oOrderManager)
     {
@@ -486,6 +517,12 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
 
     /**
      * @param d3ordermanager $oOrderManager
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
      */
     protected function _d3AddOrderManagerPdfAttachment(d3ordermanager $oOrderManager)
     {

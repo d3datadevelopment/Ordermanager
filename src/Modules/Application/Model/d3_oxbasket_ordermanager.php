@@ -22,6 +22,9 @@ use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\BasketItem;
 use OxidEsales\Eshop\Application\Model\DiscountList;
 use OxidEsales\Eshop\Application\Model\Discount;
+use OxidEsales\Eshop\Core\Exception\ArticleException;
+use OxidEsales\Eshop\Core\Exception\ArticleInputException;
+use OxidEsales\Eshop\Core\Exception\NoArticleException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Price;
 use OxidEsales\Eshop\Core\PriceList;
@@ -63,6 +66,9 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
     /**
      * @param bool $blForceUpdate
      * @param      $oOrder
+     * @throws ArticleException
+     * @throws ArticleInputException
+     * @throws NoArticleException
      */
     public function calculateBasket4OrderManager($blForceUpdate = false, $oOrder)
     {
@@ -128,6 +134,11 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
         $this->afterUpdate();
     }
 
+    /**
+     * @throws ArticleInputException
+     * @throws NoArticleException
+     * @throws ArticleException
+     */
     protected function _calcItemsPrice4OrderManager()
     {
         // resetting

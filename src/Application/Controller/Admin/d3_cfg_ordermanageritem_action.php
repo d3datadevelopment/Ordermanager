@@ -17,12 +17,18 @@
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist;
 use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
+use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\ContentList;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Module\Module;
 use OxidEsales\Eshop\Core\Module\ModuleList;
 use OxidEsales\Eshop\Core\Model\ListModel;
@@ -187,6 +193,8 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
 
     /**
      * @return array
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws StandardException
      */
     public function getModulePathList()
     {
@@ -211,6 +219,14 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
         return $aModulePathList;
     }
 
+    /**
+     * @throws StandardException
+     * @throws d3_cfg_mod_exception
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws d3ShopCompatibilityAdapterException
+     */
     public function markAsFinished()
     {
         /** @var d3ordermanager $oProfile */

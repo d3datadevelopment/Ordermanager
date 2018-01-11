@@ -30,7 +30,7 @@ function EditThis( sID)
 function _groupExp(el) {
     var _cur = el.parentNode;
 
-    if (_cur.className == "exp") _cur.className = "";
+    if (_cur.className === "exp") _cur.className = "";
       else _cur.className = "exp";
 }
 
@@ -47,7 +47,7 @@ function showFormatSettings(sElemId, visible, blUseOldElem)
         sOldSettingElem = sElemId;
     }
 
-    if (visible == true)
+    if (visible === true)
         document.getElementById(sElemId).style.display = 'block';
     else
         document.getElementById(sElemId).style.display = 'none';
@@ -83,17 +83,6 @@ function showFormatSettings(sElemId, visible, blUseOldElem)
 
     td.edittext {
         white-space: normal;
-    }
-
-    .groupExp dl.borderbold {
-        border-top: 2px solid #000;
-    }
-
-    dl.borderbold dt {
-        background-color: #fefefe;
-        font-weight: bold;
-        padding: 5px 0;
-        width: 100%;
     }
 -->
 </style>

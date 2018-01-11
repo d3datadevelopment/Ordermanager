@@ -19,8 +19,11 @@ namespace D3\Ordermanager\Application\Controller\Admin;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\d3filesystem;
+use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminMall;  // required for non fallback case
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 
@@ -121,6 +124,9 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
 
     /**
      * @return string
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getHelpURL()
     {
@@ -144,6 +150,9 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
 
     /**
      * @return d3_cfg_mod
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function d3GetSet()
     {
