@@ -17,6 +17,7 @@
 
 namespace D3\Ordermanager\Setup;
 
+use D3\ModCfg\Application\Model\d3database;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
@@ -197,7 +198,7 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
     public $aIndizes = array(
         'O_OXID' => array(
             'sTableName' => 'd3order2ordermanager',
-            'sType'      => 'PRIMARY KEY',
+            'sType'      => d3database::INDEX_TYPE_PRIMARY,
             'sName'      => 'PRIMARY',
             'aFields'    => array(
                 'OXID' => 'OXID',
@@ -205,7 +206,7 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
         ),
         'O2OM_OXORDERMANAGERID' => array(
             'sTableName' => 'd3order2ordermanager',
-            'sType'      => '',
+            'sType'      => d3database::INDEX_TYPE_INDEX,
             'sName'      => 'OXORDERMANAGERID',
             'aFields'    => array(
                 'OXORDERMANAGERID' => 'OXORDERMANAGERID',
@@ -213,7 +214,7 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
         ),
         'O2OM_OXORDERID' => array(
             'sTableName' => 'd3order2ordermanager',
-            'sType'      => '',
+            'sType'      => d3database::INDEX_TYPE_INDEX,
             'sName'      => 'OXORDERID',
             'aFields'    => array(
                 'OXORDERID' => 'OXORDERID',

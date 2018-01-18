@@ -166,7 +166,7 @@ $aModule = array(
     'blocks'      => array(
         array(
             'template'  => 'order_remark.tpl',
-            'block'     => 'd3ordermanager_order_remark_type',
+            'block'     => 'admin_order_remark_type',
             'file'      => 'Application/views/admin/blocks/d3ordermanager_order_remark_type.tpl',
         )
     ),
