@@ -1,5 +1,5 @@
 {
-  "name": "D3/Ordermanager",
+  "name": "d3/ordermanager",
   "description": "Order manager module for OXID eShop.",
   "type": "oxideshop-module",
   "keywords": [
@@ -31,7 +31,7 @@
     }
   },
   "require": {
-    "php": "8.1.*",
+    "php": "7.1 - 7.2",
     "ext-ionCube-Loader": "*",
     "oxid-esales/oxideshop-ce": "6.0.x",
     "d3/modcfg": ">=5.1.0.0"

@@ -17,12 +17,19 @@
 
 namespace D3\Ordermanager\Application\Controller;
 
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
 use D3\Ordermanager\Application\Model\d3ordermanager_execute;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Log\d3log;
+use Doctrine\DBAL\DBALException;
+use Exception;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\DatabaseException;
 use OxidEsales\Eshop\Core\Request;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Base;
@@ -32,6 +39,12 @@ class d3ordermanager_response extends Base
 {
     private $_sModId = 'd3_ordermanager';
 
+    /**
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws Exception
+     */
     public function init()
     {
         startProfile(__METHOD__);
@@ -51,6 +64,8 @@ class d3ordermanager_response extends Base
 
     /**
      * @return bool
+     * @throws DBALException
+     * @throws Exception
      */
     protected function _startExecution()
     {
@@ -93,6 +108,16 @@ class d3ordermanager_response extends Base
         return $blExc;
     }
 
+    /**
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws DatabaseException
+     * @throws StandardException
+     * @throws Exception
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     */
     protected function _startJobs()
     {
         startProfile(__METHOD__);
@@ -140,6 +165,9 @@ class d3ordermanager_response extends Base
 
     /**
      * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     protected function _checkAccessKey()
     {
@@ -159,6 +187,9 @@ class d3ordermanager_response extends Base
 
     /**
      * @return d3_cfg_mod
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     protected function _getSet()
     {
@@ -167,6 +198,9 @@ class d3ordermanager_response extends Base
 
     /**
      * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function showDisabledMessage()
     {
@@ -197,7 +231,13 @@ class d3ordermanager_response extends Base
     }
 
     /**
-     * @throws d3ordermanager_cronunavailableexception
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws d3ordermanager_cronUnavailableException
      */
     protected function _checkUnavailableCronjob()
     {
@@ -219,7 +259,13 @@ class d3ordermanager_response extends Base
     }
 
     /**
-     * @throws d3ordermanager_cronunavailableexception
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws d3ordermanager_cronUnavailableException
      */
     public function _checkDisabledCronjob()
     {

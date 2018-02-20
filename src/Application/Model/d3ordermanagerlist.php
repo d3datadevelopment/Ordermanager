@@ -19,7 +19,13 @@ namespace D3\Ordermanager\Application\Model;
 
 use D3\ModCfg\Application\Model\Configuration\d3modprofilelist;
 use D3\ModCfg\Application\Model\d3utils;
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
+use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
 
 class d3ordermanagerlist extends d3modprofilelist
 {
@@ -33,6 +39,12 @@ class d3ordermanagerlist extends d3modprofilelist
     /**
      * @param $sFolderId
      * @return d3ordermanagerlist
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
      */
     public function d3GetManuallyManagerJobsByFolder($sFolderId)
     {
@@ -62,6 +74,12 @@ class d3ordermanagerlist extends d3modprofilelist
      * @param d3ordermanager $oManager
      *
      * @return bool
+     * @throws DatabaseConnectionException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws DBALException
+     * @throws DatabaseErrorException
+     * @throws StandardException
      */
     public function canExecutedManually(d3ordermanager $oManager)
     {
@@ -72,9 +90,10 @@ class d3ordermanagerlist extends d3modprofilelist
     /**
      * @param d3ordermanager $oListObject
      * @param                $sQ
-     * @param bool           $blManually
+     * @param bool $blManually
      *
      * @return string
+     * @throws DatabaseConnectionException
      */
     public function d3AddActiveSnippet(d3ordermanager $oListObject, $sQ, $blManually = false)
     {
@@ -110,6 +129,7 @@ class d3ordermanagerlist extends d3modprofilelist
      * @param               $sQ
      *
      * @return string
+     * @throws DatabaseConnectionException
      */
     public function d3AddFolderSelection($sFolderId, d3ordermanager $oListObject, $sQ)
     {

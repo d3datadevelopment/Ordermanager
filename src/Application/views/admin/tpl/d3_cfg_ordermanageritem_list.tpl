@@ -25,7 +25,7 @@
 
     function DeleteThis( sID)
     {
-        blCheck = confirm("[{oxmultilang ident="GENERAL_YOUWANTTODELETE"}]");
+        var blCheck = confirm("[{oxmultilang ident="GENERAL_YOUWANTTODELETE"}]");
         if( blCheck === true)
         {
             var oSearch = document.getElementById("search");

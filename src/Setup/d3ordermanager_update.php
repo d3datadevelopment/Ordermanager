@@ -17,10 +17,19 @@
 
 namespace D3\Ordermanager\Setup;
 
+use D3\ModCfg\Application\Model\d3database;
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\ModCfg\Application\Model\Install\d3install_updatebase;
 use D3\ModCfg\Application\Model\Installwizzard\d3installdbrecord;
 use D3\ModCfg\Application\Model\d3bit;
+use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Exception\ConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\Shop;
 use OxidEsales\Facts\Facts;
@@ -189,7 +198,7 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
     public $aIndizes = array(
         'O_OXID' => array(
             'sTableName' => 'd3order2ordermanager',
-            'sType'      => 'PRIMARY KEY',
+            'sType'      => d3database::INDEX_TYPE_PRIMARY,
             'sName'      => 'PRIMARY',
             'aFields'    => array(
                 'OXID' => 'OXID',
@@ -197,7 +206,7 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
         ),
         'O2OM_OXORDERMANAGERID' => array(
             'sTableName' => 'd3order2ordermanager',
-            'sType'      => '',
+            'sType'      => d3database::INDEX_TYPE_INDEX,
             'sName'      => 'OXORDERMANAGERID',
             'aFields'    => array(
                 'OXORDERMANAGERID' => 'OXORDERMANAGERID',
@@ -205,7 +214,7 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
         ),
         'O2OM_OXORDERID' => array(
             'sTableName' => 'd3order2ordermanager',
-            'sType'      => '',
+            'sType'      => d3database::INDEX_TYPE_INDEX,
             'sName'      => 'OXORDERID',
             'aFields'    => array(
                 'OXORDERID' => 'OXORDERID',
@@ -217,6 +226,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function checkOrderManagerTableExist()
     {
@@ -225,6 +237,10 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws ConnectionException
      */
     public function convertOrderManagerItems()
     {
@@ -383,6 +399,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
     /**
      * @param $sOldKey
      * @param $sNewKey
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     protected function _changeItemContent($sOldKey, $sNewKey)
     {
@@ -436,6 +455,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function checkOrder2OrderManagerTableExist()
     {
@@ -444,6 +466,10 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws ConnectionException
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function updateOrder2OrderManagerTableExist()
     {
@@ -464,6 +490,8 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
      */
     public function checkModCfgItemExist()
     {
@@ -490,6 +518,10 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws ConnectionException
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function updateModCfgItemExist()
     {
@@ -575,7 +607,7 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
                         ),
                         array (
                             'fieldname'     => 'OXSHOPVERSION',
-                            'content'       => (oxNew(Facts::class))->getEdition(),
+                            'content'       => oxNew(Facts::class)->getEdition(),
                             'force_update'  => true,
                             'use_quote'     => true,
                             'use_multilang' => false,
@@ -617,6 +649,7 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool true, if update is required
+     * @throws DatabaseConnectionException
      */
     public function checkExampleJobList()
     {
@@ -635,6 +668,10 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws ConnectionException
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function addExampleJobList()
     {
@@ -655,6 +692,7 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool true, if update is required
+     * @throws DatabaseConnectionException
      */
     public function checkExampleContentList()
     {
@@ -683,6 +721,10 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws ConnectionException
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function addExampleContentList()
     {
@@ -703,6 +745,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool true, if update is required
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws d3ParameterNotFoundException
      */
     public function requireExample2ShopRelation()
     {
@@ -729,6 +774,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws d3ParameterNotFoundException
      */
     public function addExample2ShopRelation()
     {
@@ -818,6 +866,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
      * @param Shop $oShop
      *
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getExampleJobItem1InsertFields(Shop $oShop)
     {
@@ -1002,6 +1053,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
      * @param Shop $oShop
      *
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getExampleJobItem2InsertFields(Shop $oShop)
     {
@@ -1184,6 +1238,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
      * @param Shop $oShop
      *
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getExampleJobItem3InsertFields(Shop $oShop)
     {
@@ -1366,6 +1423,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
      * @param Shop $oShop
      *
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getExampleJobItem4InsertFields(Shop $oShop)
     {
@@ -1548,6 +1608,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
      * @param Shop $oShop
      *
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getExampleJobItem5InsertFields(Shop $oShop)
     {
@@ -1730,6 +1793,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
      * @param Shop $oShop
      *
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getExampleJobItem6InsertFields(Shop $oShop)
     {
@@ -1912,6 +1978,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
      * @param Shop $oShop
      *
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getExampleJobItem7InsertFields(Shop $oShop)
     {
@@ -2094,6 +2163,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
      * @param Shop $oShop
      *
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getExampleJobItem8InsertFields(Shop $oShop)
     {
@@ -2276,6 +2348,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
      * @param Shop $oShop
      *
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getExampleJobItem9InsertFields(Shop $oShop)
     {
@@ -2458,6 +2533,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
      * @param Shop $oShop
      *
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getExampleContent1InsertFields(Shop $oShop)
     {
@@ -2562,6 +2640,9 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
      * @param Shop $oShop
      *
      * @return array
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getExampleContent2InsertFields(Shop $oShop)
     {
@@ -2663,10 +2744,14 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
     }
 
     /**
-     * @param $sGetFieldContentMethodName
      * @param $sTableName
      *
+     * @param $sGetFieldContentMethodName
      * @return bool
+     * @throws ConnectionException
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     protected function _addExampleJobItem($sTableName, $sGetFieldContentMethodName)
     {
@@ -2709,6 +2794,7 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws DatabaseConnectionException
      */
     public function checkOrderArticlesParentId()
     {
@@ -2722,6 +2808,8 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function addOrderArticlesParentId()
     {
@@ -2735,6 +2823,13 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ParameterNotFoundException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
      */
     public function hasUnregisteredFiles()
     {
@@ -2743,6 +2838,12 @@ nVqK1hLaVBMWEx3WTY5NThZUVNKR1NGb3BXSWVGVG10TFBTSDVVQzhLbFVsZmh3PT0=';
 
     /**
      * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws StandardException
      */
     public function showUnregisteredFiles()
     {

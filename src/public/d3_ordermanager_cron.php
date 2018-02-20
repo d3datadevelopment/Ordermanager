@@ -68,7 +68,11 @@ if (isset($argv) && is_array($argv) && count($argv)) {
 
 /** @var $oResponse d3ordermanager_response */
 $oResponse = oxNew(d3ordermanager_response::class);
-$oResponse->init();
+try {
+    $oResponse->init();
+} catch (Exception $oEx) {
+    ob_end_flush();
+}
 ob_end_flush();
 
 Registry::getConfig()->pageClose();

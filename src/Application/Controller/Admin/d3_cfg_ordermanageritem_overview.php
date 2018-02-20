@@ -21,7 +21,11 @@ use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlis
 use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
+use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\SystemComponentException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 
@@ -47,6 +51,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      * @param $aArguments
      *
      * @return mixed
+     * @throws SystemComponentException
      */
     public function __call($sName, $aArguments)
     {
@@ -109,6 +114,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 
     /**
      * @return int
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getToFinishedCount()
     {
@@ -127,6 +135,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 
     /**
      * @return int
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getFinishedCount()
     {
@@ -145,6 +156,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 
     /**
      * @return int
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getFinishedMonthCount()
     {
@@ -163,6 +177,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 
     /**
      * @return int
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function getNotFinishedCount()
     {
@@ -183,6 +200,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      * @param $sFunctionName
      *
      * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function canRequestData($sFunctionName)
     {
@@ -194,6 +214,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      * @param $iRequestCount
      *
      * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function canUseRequestData($iRequestCount)
     {
@@ -203,6 +226,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 
     /**
      * @return bool
+     * @throws DatabaseConnectionException
+     * @throws DBALException
+     * @throws DatabaseErrorException
      */
     public function getDataOnDemand()
     {

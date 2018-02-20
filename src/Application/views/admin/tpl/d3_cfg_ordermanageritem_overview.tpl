@@ -37,14 +37,14 @@
     {
         var _cur = el.parentNode;
 
-        if (_cur.className == "exp") _cur.className = "";
+        if (_cur.className === "exp") _cur.className = "";
           else _cur.className = "exp";
     }
 
     function selectAllListElems(el)
     {
         var aSelectLen = el.length;
-        for(i = 0; i < aSelectLen; i++)
+        for(var i = 0; i < aSelectLen; i++)
         {
             el.options[i].selected = true;
         }
@@ -53,7 +53,7 @@
     function selectNoListElems(el)
     {
         var aSelectLen = el.length;
-        for(i = 0; i < aSelectLen; i++)
+        for(var i = 0; i < aSelectLen; i++)
         {
             el.options[i].selected = false;
         }
@@ -64,32 +64,6 @@
 
 <style type="text/css">
     <!--
-    .questbox{
-        background-color: #07f;
-        color: white;
-        float: right;
-        position: relative;
-        display: block;
-        padding: 1px 4px;
-        font-weight: bold;
-        z-index: 98;
-        cursor: help;
-        font-family: Verdana,Arial,Helvetica,sans-serif;
-        font-size: 10px;
-    }
-
-    .helptextbox{
-        background-color: white;
-        color: black;
-        border: 1px solid black;
-        position: absolute;
-        overflow: hidden;
-        padding: 5px;
-        margin-top: 15px;
-        width: 300px;
-        z-index: 99;
-    }
-
     fieldset{
         border: 1px inset black;
         background-color: #F0F0F0;

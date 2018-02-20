@@ -24,6 +24,9 @@ use OxidEsales\Eshop\Application\Model\OrderArticle;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Application\Model\Voucher;
+use OxidEsales\Eshop\Core\Exception\ArticleException;
+use OxidEsales\Eshop\Core\Exception\ArticleInputException;
+use OxidEsales\Eshop\Core\Exception\NoArticleException;
 use OxidEsales\Eshop\Core\Model\ListModel;
 
 class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
@@ -65,6 +68,9 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
     /**
      * @param d3ordermanager $oOrderManager
      * @return Basket
+     * @throws ArticleException
+     * @throws ArticleInputException
+     * @throws NoArticleException
      */
     public function d3getOrderBasket4OrderManager(d3ordermanager $oOrderManager)
     {
