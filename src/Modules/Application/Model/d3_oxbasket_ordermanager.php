@@ -17,29 +17,45 @@
 
 namespace D3\Ordermanager\Modules\Application\Model;
 
+use Exception;
+use oxArticleInputException;
+use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\BasketItem;
 use OxidEsales\Eshop\Application\Model\DiscountList;
 use OxidEsales\Eshop\Application\Model\Discount;
+use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\ArticleException;
 use OxidEsales\Eshop\Core\Exception\ArticleInputException;
 use OxidEsales\Eshop\Core\Exception\NoArticleException;
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Price;
 use OxidEsales\Eshop\Core\PriceList;
+use OxidEsales\Eshop\Core\Session;
+use oxNoArticleException;
+use stdClass;
 
 /**
  * Class d3_oxbasket_ordermanager
  * @package D3\Ordermanager\Modules\Models
- * @mixin \OxidEsales\Eshop\Application\Model\Basket
+ * @mixin Basket
  */
 class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
 {
     /**
+     * @return d3_oxbasketitem_ordermanager
+     * @throws Exception
+     */
+    public function getBasketItemInstance()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.BasketItem::class);
+    }
+
+    /**
      * Adds order article to basket (method normally used while recalculating order)
      *
      * @param OrderArticle $oOrderArticle order article to store in basket
+     * @throws Exception
      */
     public function addOrderArticleToBasket4OrderManager($oOrderArticle)
     {
@@ -47,8 +63,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
         if ($oOrderArticle->getFieldData('oxamount') > 0) {
             $sItemId = $oOrderArticle->getId();
             //inserting new
-            /** @var $oBasketItem d3_oxbasketitem_ordermanager */
-            $oBasketItem = oxNew(BasketItem::class);
+            $oBasketItem = $this->getBasketItemInstance();
             $oBasketItem->setStockCheckStatus(false);
             $oBasketItem->initFromOrderArticle($oOrderArticle);
             $oBasketItem->setPrice($oOrderArticle->getPrice());
@@ -64,13 +79,34 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
     }
 
     /**
+     * @return Config
+     * @throws Exception
+     */
+    public function d3GetConfig()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
+    }
+
+    /**
+     * @return Session
+     * @throws Exception
+     */
+    public function d3GetSession()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Session::class);
+    }
+
+    /**
      * @param bool $blForceUpdate
      * @param      $oOrder
      * @throws ArticleException
      * @throws ArticleInputException
      * @throws NoArticleException
+     * @throws oxArticleInputException
+     * @throws oxNoArticleException
+     * @throws Exception
      */
-    public function calculateBasket4OrderManager($blForceUpdate = false, $oOrder)
+    public function calculateBasket4OrderManager($blForceUpdate, $oOrder)
     {
         if (!$this->isEnabled()) {
             return;
@@ -82,7 +118,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
 
         $this->_aCosts = array();
 
-        $this->_oPrice = oxNew(Price::class);
+        $this->_oPrice = $this->d3GetPrice();
         $this->_oPrice->setBruttoPriceMode();
 
         //  1. saving basket to the database
@@ -95,8 +131,8 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
         $this->_addBundles();
 
         // reserve active basket
-        if (Registry::getConfig()->getConfigParam('blPsBasketReservationEnabled')) {
-            Registry::getSession()->getBasketReservations()->reserveBasket($this);
+        if ($this->d3GetConfig()->getConfigParam('blPsBasketReservationEnabled')) {
+            $this->d3GetSession()->getBasketReservations()->reserveBasket($this);
         }
 
         //  4. calculating item prices
@@ -135,9 +171,27 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
     }
 
     /**
-     * @throws ArticleInputException
-     * @throws NoArticleException
-     * @throws ArticleException
+     * @return PriceList
+     * @throws Exception
+     */
+    public function d3getPriceList()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.PriceList::class);
+    }
+
+    /**
+     * @return DiscountList
+     * @throws Exception
+     */
+    public function d3GetDiscountList()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.DiscountList::class);
+    }
+
+    /**
+     * @throws oxArticleInputException
+     * @throws oxNoArticleException
+     * @throws Exception
      */
     protected function _calcItemsPrice4OrderManager()
     {
@@ -147,12 +201,11 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
         // resetting
         $this->_aItemDiscounts = array();
 
-        $this->_oProductsPriceList = oxNew(PriceList::class);
-        $this->_oDiscountProductsPriceList = oxNew(PriceList::class);
-        $this->_oNotDiscountedProductsPriceList = oxNew(PriceList::class);
+        $this->_oProductsPriceList = $this->d3getPriceList();
+        $this->_oDiscountProductsPriceList = $this->d3getPriceList();
+        $this->_oNotDiscountedProductsPriceList = $this->d3getPriceList();
 
-        /** @var $oDiscountList DiscountList */
-        $oDiscountList = Registry::get(DiscountList::class);
+        $oDiscountList = $this->d3GetDiscountList();
 
         /** @var $oBasketItem BasketItem */
         foreach ($this->_aBasketContents as $oBasketItem) {
@@ -191,19 +244,29 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
                 }
             } elseif ($oBasketItem->isBundle()) {
                 // if bundles price is set to zero
-                $oPrice = oxNew(Price::class);
+                $oPrice = $this->d3GetPrice();
                 $oBasketItem->setPrice($oPrice);
             }
         }
     }
 
     /**
+     * @return Price
+     * @throws Exception
+     */
+    public function d3GetPrice()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Price::class);
+    }
+
+    /**
      * @param Order $oOrder
      * @return Price
+     * @throws Exception
      */
     protected function _calcPaymentCost4OrderManager($oOrder)
     {
-        $oPaymentPrice = oxNew(Price::class);
+        $oPaymentPrice = $this->d3GetPrice();
         $oPaymentPrice->setBruttoPriceMode();
         $oPaymentPrice->setPrice($oOrder->getFieldData('oxpaycost'));
 
@@ -215,7 +278,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
      */
     protected function _calcBasketDiscount4OrderManager($oOrder)
     {
-        $oDiscount = new \stdClass();
+        $oDiscount = new stdClass();
         $oDiscount->sOXID     = 'stdDiscount';
         $oDiscount->sDiscount = 'RabattText';
         $oDiscount->sType     = 'abs';
@@ -229,5 +292,21 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
                 '0' => 0
             );
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function d3GetDiscounts()
+    {
+        return $this->_aDiscounts;
+    }
+
+    /**
+     * @return array
+     */
+    public function d3GetDiscountedVats()
+    {
+        return $this->_aDiscountedVats;
     }
 }

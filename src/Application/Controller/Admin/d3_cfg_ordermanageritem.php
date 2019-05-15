@@ -26,8 +26,8 @@ class d3_cfg_ordermanageritem extends d3_cfg_mod_
      */
     public function render()
     {
-        $this->addTplParam('sListClass', 'd3_cfg_ordermanageritem_list');
-        $this->addTplParam('sMainClass', 'd3_cfg_ordermanageritem_main');
+        $this->addTplParam('sListClass', d3_cfg_ordermanageritem_list::class);
+        $this->addTplParam('sMainClass', d3_cfg_ordermanageritem_main::class);
 
         $this->_hasListItems = true;
 

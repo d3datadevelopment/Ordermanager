@@ -1,6 +1,15 @@
 # D³ Auftragsmanager für OXID eShop
 Lassen Sie wiederkehrende Aufgaben automatisch nach frei definierbaren Regeln ausführen
 
+[![Latest Stable Release](https://img.shields.io/packagist/v/d3/ordermanager.svg?label=aktuelles%20Release)](https://packagist.org/packages/d3/ordermanager)
+![](https://img.shields.io/badge/V6--konform-komplett-brightgreen.svg)
+![](https://img.shields.io/badge/softwaregetestet-komplett-brightgreen.svg)
+![](https://img.shields.io/badge/Testabdeckung-100%25-brightgreen.svg)
+
+[![Downloads](https://img.shields.io/packagist/dt/d3/ordermanager.svg?label=Downloads)](https://packagist.org/packages/d3/ordermanager)
+[![](https://img.shields.io/badge/documentation-online-brightgreen.svg)](https://docs.oxidmodule.com/Auftragsmanager/)
+[![License](https://img.shields.io/packagist/l/d3/ordermanager.svg?label=Lizenz)](https://packagist.org/packages/d3/ordermanager)
+
 ## Systemanforderungen:
 - installierter OXID eShop
 - PHP-Version, für die Installationspakete verfügbar sind
@@ -8,9 +17,8 @@ Lassen Sie wiederkehrende Aufgaben automatisch nach frei definierbaren Regeln au
 - ionCubeLoader
 - D3 Modul Connector
 
-Die jeweils geforderten Versionen und sonstige Anforderungen entnehmen Sie bitte der Dokumentation im docs-Verzeichnis dieses Paketes. 
+Die jeweils geforderten Versionen und sonstige Anforderungen entnehmen Sie bitte der Dokumentation [online](https://docs.oxidmodule.com/Auftragsmanager/) und im docs-Verzeichnis dieses Paketes. 
 
 ## Installation:
 
-Verwenden Sie zur Installation bitte immer unser Quellenverzeichnis unter https://satis.oxidmodule.com.
-Eine detaillierte Installationsanleitung finden Sie im docs-Verzeichnis dieses Pakets.
+Eine detaillierte Installationsanleitung finden Sie [online](https://docs.oxidmodule.com/Auftragsmanager/) und im docs-Verzeichnis dieses Pakets.

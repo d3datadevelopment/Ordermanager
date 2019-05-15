@@ -1,19 +1,20 @@
 <?php
-
 /**
- * Order Manager
  * This Software is the property of Data Development and is protected
  * by copyright law - it is NOT Freeware.
+ *
  * Any unauthorized use of this software without a valid license
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
+ *
  * http://www.shopmodule.com
  *
- * @copyright © D³ Data Development, Thomas Dartsch
- * @package   OrderManager
- * @author    D³ Data Development - Daniel Seifert <support@shopmodule.com>
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      http://www.oxidmodule.com
  */
+
+// @codeCoverageIgnoreStart
 
 $sLangName = "Deutsch";
 $iLangNr   = 0;
@@ -262,7 +263,7 @@ $aLang = array(
     'D3_ORDERMANAGER_ACTION_DELETEGROUP'                 => 'Löschen',
     'D3_ORDERMANAGER_ACTION_ORDERDELETE'                 => 'Bestellung löschen',
     'D3_ORDERMANAGER_ACTION_INDIV'                       => 'Individualaktionen',
-    'D3_ORDERMANAGER_ACTION_MARKASFINISHED'              => "gefundene Bestellungen ohne Bearbeitung als erledigt markieren",
+    'D3_ORDERMANAGER_ACTION_MARKASFINISHED'              => "gefundene Bestellungen als erledigt markieren",
     'D3_ORDERMANAGER_ACTION_MARKASFINISHED_MESSAGE'      => "%u Bestellung(en) wurde(n) als erledigt markiert",
 
     'D3_ORDERMANAGER_STAT'                               => 'Auftragsmanager - Statistik',
@@ -316,7 +317,7 @@ $aLang = array(
     'D3_ORDERMANAGER_JOBDESC_ADDREMARK'                  => 'füge Remark hinzu',
     'D3_ORDERMANAGER_JOBERR_NOFOLDER'                    => 'FEHLER: Bestellungsordner ist nicht vorhanden: %s',
     'D3_ORDERMANAGER_JOBERR_NOFOLDERDEFINED'             => 'FEHLER: Kein Bestellungsordner gewählt',
-    'D3_ORDERMANAGER_JOBERR_NOGROUP'                     => 'FEHLER: Kundengruppe ist nicht vorhanden: %s',
+    'D3_ORDERMANAGER_JOBERR_NOGROUP'                     => 'FEHLER: Kundengruppe ist nicht verfügbar: %s',
     'D3_ORDERMANAGER_JOBERR_NOGROUPDEFINED'              => 'FEHLER: Keine Kundengruppe gewählt',
     'D3_ORDERMANAGER_JOBERR_NOTEXECUTABLE'               => 'Die Aktion kann nicht ausgeführt werden, da möglicherweise Lizenzeinschränkungen greifen oder benötigte Parameter nicht vollständig oder fehlerhaft gesetzt sind',
     'D3_ORDERMANAGER_CONFIGVARS_IEXECJOBSLIMIT'          => 'Anzahl ausführbarer Aufgaben:',
@@ -326,6 +327,8 @@ $aLang = array(
     'D3_ORDERMANAGER_ERROR_IEXECJOBSLIMIT'               => 'Ihre Modullizenz erlaubt Ihnen eine maximale Anzahl an Aufgaben. Sie können weitere Aufgaben anlegen, diese werden jedoch nicht ausgeführt. Lassen Sie Ihre Lizenz dafür erweitern.',
     'D3_ORDERMANAGER_ERROR_RESTRICTIONS'                 => 'Sie nutzen die "%s"-Edition. Möchten Sie die inaktiven Funktion nutzen, lassen Sie Ihre Lizenz dafür erweitern.',
     'D3_ORDERMANAGER_ERROR_NOMALL'                       => 'Mandanten stehen in Ihrer Shopedition nicht zur Verfügung.',
+    'D3_ORDERMANAGER_ERROR_MISSINGREQUACTIONVALUES'      => 'Die markierten Aktionen erfordern zusätzliche Einstellung zur fehlerfreien Ausführung. Bitte kontrollieren Sie Ihre Angaben.',
+    'D3_ORDERMANAGER_ERROR_MISSINGREQUREQUIREMENTVALUES' => 'Die markierten Bedingungen erfordern zusätzliche Einstellung zur fehlerfreien Ausführung. Bitte kontrollieren Sie Ihre Angaben.',
     'D3_ORDERMANAGER_FIELDTITLE_OXID'                    => 'Bestell-Ident',
     'D3_ORDERMANAGER_FIELDTITLE_OXSHOPID'                => 'Shop-Zuordnung',
     'D3_ORDERMANAGER_FIELDTITLE_OXUSERID'                => 'Benutzer-Zuordnung',
@@ -416,10 +419,4 @@ $aLang = array(
     'D3_ORDERMANAGER_FILTER_FOLDER'                      => 'nach Ordner filtern',
 );
 
-
-/*
-
-[{oxmultilang ident="GENERAL_YOUWANTTODELETE"}]
-
-
-*/
+// @codeCoverageIgnoreEnd

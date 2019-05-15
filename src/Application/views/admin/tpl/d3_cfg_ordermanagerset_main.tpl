@@ -222,10 +222,10 @@ function showFormatSettings(sElemId, visible, blUseOldElem)
                             </dl>
                             <dl>
                                 <dt>
-                                    [{oxmultilang ident="D3_SHGENERATOR_CRON_SHGENERATOR"}]
+                                    <label for="cronProviderList">[{oxmultilang ident="D3_SHGENERATOR_CRON_SHGENERATOR"}]</label>
                                 </dt>
                                 <dd>
-                                    <select style="float: left; margin-right: 10px;" id="shcrontype_[{$aCronJobIds.id}]">
+                                    <select id="cronProviderList" style="float: left; margin-right: 10px;" id="shcrontype_[{$aCronJobIds.id}]">
                                         [{foreach from=$oView->getCronProviderList() item="sProviderName" key="sProviderId"}]
                                             <option value="[{$sProviderId}]">
                                                 [{$sProviderName}]

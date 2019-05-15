@@ -260,8 +260,8 @@
         [{include file="_formparams.tpl" cl=$oViewConf->getActiveClassName() lstrt=$lstrt actedit=$actedit oxid=$oxid fnc="" language=$actlang editlanguage=$actlang}]
 
         [{if $blShowLangSwitch}]
-            [{oxmultilang ident="D3_CFG_MOD_LIST_SETTLANG"}]
-            <select name="changelang" class="editinput" onChange="top.oxid.admin.changeLanguage();">
+            <label for="changelang">[{oxmultilang ident="D3_CFG_MOD_LIST_SETTLANG"}]</label>
+            <select id="changelang" name="changelang" class="editinput" onChange="top.oxid.admin.changeLanguage();">
                 [{foreach from=$languages item="lang"}]
                     <option value="[{$lang->id}]" [{if $lang->selected}]SELECTED[{/if}]>[{$lang->name}]</option>
                 [{/foreach}]

@@ -19,6 +19,7 @@ namespace D3\Ordermanager\Application\Controller;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
+use D3\ModCfg\Application\Model\Log\d3LogInterface;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
@@ -31,18 +32,26 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\DatabaseException;
 use OxidEsales\Eshop\Core\Request;
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Base;
 use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\Eshop\Core\Session;
 
 class d3ordermanager_response extends Base
 {
     private $_sModId = 'd3_ordermanager';
 
     /**
+     * d3ordermanager_response constructor.
+     */
+    public function __construct()
+    {
+        d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', $this->_sModId);
+
+        parent::__construct();
+    }
+
+    /**
      * @throws DBALException
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
      * @throws Exception
      */
     public function init()
@@ -55,11 +64,15 @@ class d3ordermanager_response extends Base
             echo "script successfully finished".PHP_EOL;
         }
 
-        Registry::getSession()->freeze();
+        /** @var Session $session */
+        $session =  d3GetModCfgDIC()->get('d3ox.ordermanager.'.Session::class);
+        $session->freeze();
 
         stopProfile(__METHOD__);
 
-        $this->_getSet()->d3getLog()->d3GetProfiling();
+        /** @var d3log $oLog */
+        $oLog = d3GetModCfgDIC()->get('d3.ordermanager.log');
+        $oLog->d3GetProfiling();
     }
 
     /**
@@ -75,7 +88,10 @@ class d3ordermanager_response extends Base
 
         try {
             $iStartTime = microtime(true);
-            $this->_getSet()->d3getLog()->log(d3log::INFO, __CLASS__, __FUNCTION__, __LINE__, "start cron", "");
+
+            /** @var d3LogInterface $oLog */
+            $oLog = d3GetModCfgDIC()->get('d3.ordermanager.log');
+            $oLog->info(__CLASS__, __FUNCTION__, __LINE__, "start cron", "");
 
             $this->_checkUnavailableCronjob();
             $this->_getSet()->setValue($this->_getCronTimestampVarName(), date('Y-m-d H:i:s'));
@@ -84,8 +100,7 @@ class d3ordermanager_response extends Base
             $this->_startJobs();
 
             $iExecTime = microtime(true) - $iStartTime;
-            $this->_getSet()->d3getLog()->log(
-                d3log::INFO,
+            $oLog->info(
                 __CLASS__,
                 __FUNCTION__,
                 __LINE__,
@@ -109,11 +124,34 @@ class d3ordermanager_response extends Base
     }
 
     /**
+     * @return d3ordermanagerlist
+     * @throws Exception
+     */
+    public function getManagerList()
+    {
+        return d3GetModCfgDIC()->get(d3ordermanagerlist::class);
+    }
+
+    /**
+     * @param d3ordermanager $oManager
+     * @return d3ordermanager_execute
+     * @throws Exception
+     */
+    public function getManagerExecute(d3ordermanager $oManager)
+    {
+        d3GetModCfgDIC()->set(
+            d3ordermanager_execute::class.'.args.ordermanager',
+            $oManager
+        );
+
+        return d3GetModCfgDIC()->get(d3ordermanager_execute::class);
+    }
+
+    /**
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @throws DatabaseException
-     * @throws StandardException
      * @throws Exception
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
@@ -122,23 +160,21 @@ class d3ordermanager_response extends Base
     {
         startProfile(__METHOD__);
 
-        /** @var $oManagerList d3OrdermanagerList */
-        $oManagerList = oxNew(d3ordermanagerlist::class);
+        $oManagerList = $this->getManagerList();
         $oManagerList->setCronJobId($this->_getCronJobIdParameter());
         $oManagerList->setCustomSorting('oxsort ASC');
         $oManagerList->getList();
 
-        /** @var d3OrderManager $oHandleManager */
-        $oHandleManager = oxNew(d3ordermanager::class);
-        /** @var d3ordermanager_execute $oHandleManagerExec */
-        $oHandleManagerExec = oxNew(d3ordermanager_execute::class, $oHandleManager);
+        $oHandleManager = $this->getManager();
+        $oHandleManagerExec = $this->getManagerExecute($oHandleManager);
 
         // disable admin mode for using active check
         $blOldAdminMode = self::$_blIsAdmin;
         self::$_blIsAdmin = false;
 
-        $oHandleManager->d3getLog()->log(
-            d3log::INFO,
+        /** @var d3LogInterface $oLog */
+        $oLog = d3GetModCfgDIC()->get('d3.ordermanager.log');
+        $oLog->info(
             __CLASS__,
             __FUNCTION__,
             __LINE__,
@@ -148,7 +184,7 @@ class d3ordermanager_response extends Base
 
         /** @var $oManager d3ordermanager */
         foreach ($oManagerList->getList() as $oManager) {
-            $oHandleManager = oxNew(d3ordermanager::class);
+            $oHandleManager = $this->getManager();
             $oHandleManager->load($oManager->getId());
             $oHandleManagerExec->setManager($oHandleManager);
 
@@ -164,36 +200,37 @@ class d3ordermanager_response extends Base
     }
 
     /**
+     * @return d3ordermanager
+     * @throws Exception
+     */
+    public function getManager()
+    {
+        return d3GetModCfgDIC()->get(d3ordermanager::class);
+    }
+
+    /**
      * @return bool
-     * @throws DBALException
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
+     * @throws Exception
      */
     protected function _checkAccessKey()
     {
         $sSetCronPassword = $this->_getSet()->getValue('sCronPassword');
 
-        /** @var d3ordermanager $oManager */
-        $oManager = oxNew(d3ordermanager::class);
-        $sGetAccessKey  = Registry::get(Request::class)->getRequestEscapedParameter("key");
-        $sRegisteredAccessKey = $sSetCronPassword ? $sSetCronPassword : $oManager->getBaseCronPW();
+        /** @var Request $request */
+        $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
+        $sGetAccessKey  = $request->getRequestEscapedParameter("key");
+        $sRegisteredAccessKey = $sSetCronPassword ? $sSetCronPassword : $this->getManager()->getBaseCronPW();
 
-        if ($this->hasValidAccessKey($sRegisteredAccessKey, $sGetAccessKey)) {
-            return false;
-        }
-
-        return true;
+        return $this->hasValidAccessKey($sRegisteredAccessKey, $sGetAccessKey);
     }
 
     /**
      * @return d3_cfg_mod
-     * @throws DBALException
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
+     * @throws Exception
      */
     protected function _getSet()
     {
-        return d3_cfg_mod::get($this->_sModId);
+        return d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
     }
 
     /**
@@ -201,6 +238,7 @@ class d3ordermanager_response extends Base
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function showDisabledMessage()
     {
@@ -225,9 +263,11 @@ class d3ordermanager_response extends Base
     protected function hasValidAccessKey($sRegisteredAccessKey, $sGetAccessKey)
     {
         return (
-            $_SERVER['REMOTE_ADDR'] ||
-            $_SERVER['HTTP_USER_AGENT']
-        ) && $sRegisteredAccessKey != $sGetAccessKey;
+            false == $this->isBrowserCall()
+            || (
+                $sRegisteredAccessKey == $sGetAccessKey
+            )
+        );
     }
 
     /**
@@ -238,18 +278,17 @@ class d3ordermanager_response extends Base
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
      * @throws d3ordermanager_cronUnavailableException
+     * @throws Exception
      */
     protected function _checkUnavailableCronjob()
     {
         if (false == $this->_getSet()->isActive()) {
-            /** @var d3ordermanager_cronunavailableexception $oEx */
-            $oEx = oxNew(d3ordermanager_cronunavailableexception::class, 'order manager module is disabled');
+            $oEx = $this->getCronUnavailableException('order manager module is disabled');
             $oEx->d3enableScreenMessage();
             $oEx->debugOut();
             throw $oEx;
         } elseif (false == $this->_checkAccessKey()) {
-            /** @var d3ordermanager_cronunavailableexception $oEx */
-            $oEx = oxNew(d3ordermanager_cronunavailableexception::class, 'cron via browser: missing or wrong identification');
+            $oEx = $this->getCronUnavailableException('cron via browser: missing or wrong identification');
             $oEx->d3enableScreenMessage();
             $oEx->debugOut();
             throw $oEx;
@@ -266,18 +305,17 @@ class d3ordermanager_response extends Base
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
      * @throws d3ordermanager_cronUnavailableException
+     * @throws Exception
      */
     public function _checkDisabledCronjob()
     {
         if ($this->showDisabledMessage()) {
-            /** @var d3ordermanager_cronunavailableexception $oEx */
-            $oEx = oxNew(d3ordermanager_cronunavailableexception::class, 'cronjob script is disabled');
+            $oEx = $this->getCronUnavailableException('cronjob script is disabled');
             $oEx->d3enableScreenMessage();
             $oEx->debugOut();
             throw $oEx;
         } elseif (false == $this->_getSet()->getValue('blCronActive')) {
-            /** @var d3ordermanager_cronunavailableexception $oEx */
-            $oEx = oxNew(d3ordermanager_cronunavailableexception::class, 'cron via browser: missing or wrong identification');
+            $oEx = $this->getCronUnavailableException('cron via browser: missing or wrong identification');
             $oEx->d3disableScreenMessage();
             $oEx->debugOut();
             throw $oEx;
@@ -285,11 +323,29 @@ class d3ordermanager_response extends Base
     }
 
     /**
+     * @param $sMessage
+     * @return d3ordermanager_cronUnavailableException
+     * @throws Exception
+     */
+    public function getCronUnavailableException($sMessage)
+    {
+        d3GetModCfgDIC()->setParameter(
+            d3ordermanager_cronUnavailableException::class.'.args.message',
+            $sMessage
+        );
+
+        return d3GetModCfgDIC()->get(d3ordermanager_cronUnavailableException::class);
+    }
+
+    /**
      * @return string
+     * @throws Exception
      */
     protected function _getCronJobIdParameter()
     {
-        $iCjId = Registry::get(Request::class)->getRequestEscapedParameter('cjid');
+        /** @var Request $request */
+        $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
+        $iCjId = $request->getRequestEscapedParameter('cjid');
 
         if (false === $iCjId || null === $iCjId) {
             $iCjId = 0;
@@ -300,6 +356,7 @@ class d3ordermanager_response extends Base
 
     /**
      * @return string
+     * @throws Exception
      */
     protected function _getCronTimestampVarName()
     {

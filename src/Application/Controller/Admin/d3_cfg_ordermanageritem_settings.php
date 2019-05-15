@@ -1,5 +1,5 @@
 <?php
- /**
+/**
  * This Software is the property of Data Development and is protected
  * by copyright law - it is NOT Freeware.
  *
@@ -9,8 +9,8 @@
  *
  * http://www.shopmodule.com
  *
- * @copyright © D³ Data Development, Thomas Dartsch
- * @author    D³ Data Development - Daniel Seifert <support@shopmodule.com>
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      http://www.oxidmodule.com
  */
 
@@ -22,16 +22,18 @@ use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use Doctrine\DBAL\DBALException;
+use Exception;
+use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Model\ListModel;
 use OxidEsales\Eshop\Core\Model\MultiLanguageModel;
-use OxidEsales\Eshop\Core\Registry;
 
 class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
 {
-    protected $_sSetModId = 'd3_ordermanager';
+    protected $_sModId = 'd3_ordermanager';
     protected $_sMenuItemTitle = 'd3mxordermanager';
     protected $_blUseOwnOxid = true;
     protected $_aNaviItems = array(
@@ -43,37 +45,55 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
     protected $_sD3ObjectClass = d3ordermanager::class;
 
     /**
+     * d3_cfg_ordermanageritem_settings constructor.
+     */
+    public function __construct()
+    {
+        d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', $this->_sModId);
+
+        parent::__construct();
+    }
+
+    /**
      * @return array
+     * @throws Exception
      */
     public function getItemFolders()
     {
-        return Registry::getConfig()->getConfigParam('aOrderfolder');
+        /** @var Config $config */
+        $config = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
+
+        return $config->getConfigParam('aOrderfolder');
     }
 
     /**
      * @return ListModel
+     * @throws Exception
      */
     public function getGroupsList()
     {
         /** @var $oGroupsList ListModel */
-        $oGroupsList = oxNew(ListModel::class);
+        $oGroupsList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.ListModel::class);
         $oGroupsList->init('oxgroups');
         return $this->_getObjectList($oGroupsList);
     }
 
     /**
      * @param ListModel $oObjectList
-     *
      * @return ListModel
+     * @throws Exception
      */
     protected function _getObjectList($oObjectList)
     {
         startProfile(__METHOD__);
 
+        /** @var Language $oLang */
+        $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+
         /** @var $oObject MultiLanguageModel */
         $oObject = $oObjectList->getBaseObject();
         if ($oObject->isMultilang()) {
-            $oObject->setLanguage(Registry::getLang()->getTplLanguage());
+            $oObject->setLanguage($oLang->getTplLanguage());
         }
         $sFieldList = $oObject->getSelectFields();
         $sQ = "select {$sFieldList} from {$oObject->getViewName()}";
@@ -94,18 +114,25 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
 
     /**
      * @return string
-     * @throws d3ShopCompatibilityAdapterException
-     * @throws d3_cfg_mod_exception
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
      */
     public function getRestrictionMessage()
     {
+        /** @var Language $oLang */
+        $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+
+        /** @var d3_cfg_mod $oModCfg */
+        $oModCfg =  d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+
         return sprintf(
-            Registry::getLang()->translateString('D3_ORDERMANAGER_ERROR_RESTRICTIONS'),
-            d3_cfg_mod::get($this->_sSetModId)->getLicenseConfigData('sEditionId', 'unknown')
+            $oLang->translateString('D3_ORDERMANAGER_ERROR_RESTRICTIONS'),
+            $oModCfg->getLicenseConfigData('sEditionId', 'unknown')
         );
     }
 }

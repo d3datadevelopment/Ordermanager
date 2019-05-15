@@ -1,0 +1,340 @@
+# This Software is the property of Data Development and is protected
+# by copyright law - it is NOT Freeware.
+#
+# Any unauthorized use of this software without a valid license
+# is a violation of the license agreement and will be prosecuted by
+# civil and criminal law.
+#
+# http://www.shopmodule.com
+#
+# @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+# @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+# @link      http://www.oxidmodule.com
+
+parameters:
+  D3\Ordermanager\Application\Model\d3ordermanagerlist.args.objectname:
+  D3\Ordermanager\Application\Model\d3ordermanager_export.args.filename:
+  D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.message:
+  D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.code:
+
+services:
+  # ordermanager
+  D3\Ordermanager\Application\Model\d3ordermanager:
+    class:      D3\Ordermanager\Application\Model\d3ordermanager
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\d3ordermanager
+
+  # ordermanager_conf
+  D3\Ordermanager\Application\Model\d3ordermanager_conf:
+    class:      D3\Ordermanager\Application\Model\d3ordermanager_conf
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\d3ordermanager_conf
+
+  # ordermanagerlist
+  D3\Ordermanager\Application\Model\d3ordermanagerlist:
+    class:      D3\Ordermanager\Application\Model\d3ordermanagerlist
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\d3ordermanagerlist
+      - '%D3\Ordermanager\Application\Model\d3ordermanagerlist.args.objectname%'
+
+  # d3_cfg_ordermanageritem_action
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action:
+    class:      D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action
+
+  # d3_cfg_ordermanageritem_requ
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ:
+    class:      D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ
+
+  # d3ordermanager_response
+  D3\Ordermanager\Application\Controller\d3ordermanager_response:
+    class:      D3\Ordermanager\Application\Controller\d3ordermanager_response
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Controller\d3ordermanager_response
+
+  # d3ordermanager_listgenerator
+  D3\Ordermanager\Application\Model\d3ordermanager_listgenerator:
+    class:      D3\Ordermanager\Application\Model\d3ordermanager_listgenerator
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\d3ordermanager_listgenerator
+      - @D3\Ordermanager\Application\Model\d3ordermanager_listgenerator.args.ordermanager
+  D3\Ordermanager\Application\Model\d3ordermanager_listgenerator.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  # d3ordermanager_actionlist
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist
+      - @D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist.args.ordermanager
+      - @D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist.args.order
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist.args.order:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  # d3ordermanager_pdfhandler
+  D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler:
+    class:      D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler
+      - @D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler.args.ordermanager
+      - @D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler.args.order
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler.args.order:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  # d3ordermanager_remark
+  D3\Ordermanager\Application\Model\d3ordermanager_remark:
+    class:      D3\Ordermanager\Application\Model\d3ordermanager_remark
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\d3ordermanager_remark
+      - @D3\Ordermanager\Application\Model\d3ordermanager_remark.args.ordermanager
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\d3ordermanager_remark.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  # d3ordermanager_requirementlist
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist
+      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist.args.ordermanager
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  # d3ordermanager_requirementgrouplist
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist
+      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist.args.ordermanager
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  # d3ordermanager_actiongrouplist
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist
+      - @D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist.args.ordermanager
+      - @D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist.args.order
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist.args.order:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  # d3ordermanager_execute
+  D3\Ordermanager\Application\Model\d3ordermanager_execute:
+    class:      D3\Ordermanager\Application\Model\d3ordermanager_execute
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\d3ordermanager_execute
+      - @D3\Ordermanager\Application\Model\d3ordermanager_execute.args.ordermanager
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\d3ordermanager_execute.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  # d3ordermanager_export
+  D3\Ordermanager\Application\Model\d3ordermanager_export:
+    class:      D3\Ordermanager\Application\Model\d3ordermanager_export
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\d3ordermanager_export
+      - '%D3\Ordermanager\Application\Model\d3ordermanager_export.args.filename%'
+      - @D3\Ordermanager\Application\Model\d3ordermanager_export.args.ordermanager
+      - @D3\Ordermanager\Application\Model\d3ordermanager_export.args.parametercontainer
+    # arg #2 ordermanager
+  D3\Ordermanager\Application\Model\d3ordermanager_export.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    # arg #2 parametercontainer
+  D3\Ordermanager\Application\Model\d3ordermanager_export.args.parametercontainer:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  # d3ordermanager_cronUnavailableException
+  D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException:
+    class:      D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException
+      - '%D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.message%'
+      - '%D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.code%'
+      - '@?D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.exception'
+    # arg #3 exception
+    # no synthetic instance, because it's an optional argument
+ # D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.exception:
+ #   synthetic:  true
+ #   shared:     false
+ #   public:     false
+
+  # d3ordermanager_toorderassignment
+  D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment:
+    class:      D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment
+      - @D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment.args.ordermanager
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  D3\Ordermanager\tests\additional:
+    class:    D3\Ordermanager\tests\additional
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\tests\additional
+
+  D3\Ordermanager\Setup\d3ordermanager_update:
+    class:    D3\Ordermanager\Setup\d3ordermanager_update
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Setup\d3ordermanager_update
+
+  D3\Ordermanager\Modules\Application\Controller\Admin\d3_order_remark_ordermanager:
+    class:    D3\Ordermanager\Modules\Application\Controller\Admin\d3_order_remark_ordermanager
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Modules\Application\Controller\Admin\d3_order_remark_ordermanager
+
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall:
+    class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall
+
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings:
+    class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings
+
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_overview:
+    class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_overview
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_overview
+
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main:
+    class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main
+
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list:
+    class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list
+
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main:
+    class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main
+
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset:
+    class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset
+
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerlog:
+    class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerlog
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerlog
+
+  D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs:
+    class:    D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs
+
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem:
+    class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem

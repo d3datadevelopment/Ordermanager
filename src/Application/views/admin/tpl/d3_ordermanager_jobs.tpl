@@ -91,26 +91,26 @@
                             </tr>
                             <tr>
                                 <td class="listitem2" style="padding: 5px; height: auto;">
-                                    [{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_SUBJECT"}]
+                                    <label for="mailsubject">[{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_SUBJECT"}]</label>
                                 </td>
                                 <td class="listitem2" style="padding: 5px; height: auto;">
-                                    <input type="text" name="aContent[mail][subject]" value="[{$aMailContent.subject}]" style="width: 95%;">
+                                    <input id="mailsubject" type="text" name="aContent[mail][subject]" value="[{$aMailContent.subject}]" style="width: 95%;">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="listitem" style="padding: 5px; height: auto;">
-                                    [{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_HTML"}]
+                                    <label for="mailhtml">[{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_HTML"}]</label>
                                 </td>
                                 <td class="listitem" style="padding: 5px; height: auto;">
-                                    <textarea name="aContent[mail][html]" style="width: 95%; height: 180px; padding: 5px;">[{$aMailContent.html}]</textarea>
+                                    <textarea id="mailhtml" name="aContent[mail][html]" style="width: 95%; height: 180px; padding: 5px;">[{$aMailContent.html}]</textarea>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="listitem2" style="padding: 5px; height: auto;">
-                                    [{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_PLAIN"}]
+                                    <label for="mailplain">[{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_PLAIN"}]</label>
                                 </td>
                                 <td class="listitem2" style="padding: 5px; height: auto;">
-                                    <textarea name="aContent[mail][plain]" style="width: 95%; height: 180px; padding: 5px;">[{$aMailContent.plain}]</textarea>
+                                    <textarea id="mailplain" name="aContent[mail][plain]" style="width: 95%; height: 180px; padding: 5px;">[{$aMailContent.plain}]</textarea>
                                 </td>
                             </tr>
                         </table>

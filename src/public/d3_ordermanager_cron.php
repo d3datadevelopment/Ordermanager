@@ -16,7 +16,9 @@
  */
 
 use D3\Ordermanager\Application\Controller\d3ordermanager_response;
-use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Config;
+
+// @codeCoverageIgnoreStart
 
 /**
  * Returns shop base path.
@@ -66,13 +68,19 @@ if (isset($argv) && is_array($argv) && count($argv)) {
     $_GET = $aParams;
 }
 
-/** @var $oResponse d3ordermanager_response */
-$oResponse = oxNew(d3ordermanager_response::class);
 try {
-    $oResponse->init();
-} catch (Exception $oEx) {
+    /** @var $oResponse d3ordermanager_response */
+    $oResponse = d3GetModCfgDIC()->get(d3ordermanager_response::class);
+    try {
+        $oResponse->init();
+    } catch (Exception $oEx) {
+        ob_end_flush();
+    }
     ob_end_flush();
-}
-ob_end_flush();
 
-Registry::getConfig()->pageClose();
+    /** @var Config $config */
+    $config = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
+} catch ( Exception $oEx) {}
+$config->pageClose();
+
+// @codeCoverageIgnoreEnd

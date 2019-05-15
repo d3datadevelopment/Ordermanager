@@ -17,8 +17,9 @@
 
 namespace D3\Ordermanager\Modules\Application\Controller\Admin;
 
+use Exception;
 use OxidEsales\Eshop\Application\Model\Remark;
-use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Language;
 
 class d3_order_remark_ordermanager extends d3_order_remark_ordermanager_parent
 {
@@ -37,15 +38,13 @@ class d3_order_remark_ordermanager extends d3_order_remark_ordermanager_parent
     /**
      * @param $sTplContent
      * @return string
+     * @throws Exception
      */
     public function d3FixRemarkItems($sTplContent)
     {
         $aRemarkList = $this->getViewDataElement("allremark");
-        /**
-         * @var  $sOffSet
-         * @var Remark $oRemark
-         */
-        foreach ($aRemarkList as $sOffSet => $oRemark) {
+        /** @var Remark $oRemark */
+        foreach ($aRemarkList as $oRemark) {
             if ($oRemark->getFieldData('oxtype') == 'd3om') {
                 $sTplContent = $this->d3ReplaceType($sTplContent, $oRemark->getId());
             }
@@ -54,14 +53,24 @@ class d3_order_remark_ordermanager extends d3_order_remark_ordermanager_parent
     }
 
     /**
+     * @return Language
+     * @throws Exception
+     */
+    public function getLang()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+    }
+
+    /**
      * @param $sHtml
      * @param $sId
      * @return string
+     * @throws Exception
      */
     public function d3ReplaceType($sHtml, $sId)
     {
         $sPattern = '@'.sprintf($this->_d3SearchPattern, $sId).'@is';
-        $sReplace = '\1'.Registry::getLang()->translateString('D3_ORDERMANAGER_REMARK_NOTE', null, true).'\5';
+        $sReplace = '\1'.$this->getLang()->translateString('D3_ORDERMANAGER_REMARK_NOTE', null, true).'\5';
         return preg_replace($sPattern, $sReplace, $sHtml);
     }
 }

@@ -17,18 +17,26 @@
 
 namespace D3\Ordermanager\Modules\Application\Model
 {
-    class d3_oxbasket_ordermanager_parent extends \OxidEsales\Eshop\Application\Model\Basket {}
+    use OxidEsales\Eshop\Application\Model\Basket;
+    use OxidEsales\Eshop\Application\Model\BasketItem;
+    use OxidEsales\Eshop\Application\Model\Order;
+    use OxidEsales\Eshop\Application\Model\User;
+    use OxidEsales\Eshop\Core\Email;
 
-    class d3_oxbasketitem_ordermanager_parent extends \OxidEsales\Eshop\Application\Model\BasketItem {}
+    class d3_oxbasket_ordermanager_parent extends Basket {}
 
-    class d3_oxemail_ordermanager_parent extends \OxidEsales\Eshop\Core\Email {}
+    class d3_oxbasketitem_ordermanager_parent extends BasketItem {}
 
-    class d3_oxorder_ordermanager_parent extends \OxidEsales\Eshop\Application\Model\Order {}
+    class d3_oxemail_ordermanager_parent extends Email {}
 
-    class d3_oxuser_ordermanager_parent extends \OxidEsales\Eshop\Application\Model\User {}
+    class d3_oxorder_ordermanager_parent extends Order {}
+
+    class d3_oxuser_ordermanager_parent extends User {}
 }
 
 namespace D3\Ordermanager\Modules\Application\Controller\Admin
 {
-    class d3_order_remark_ordermanager_parent extends \OxidEsales\Eshop\Application\Controller\Admin\OrderRemark {}
+    use OxidEsales\Eshop\Application\Controller\Admin\OrderRemark;
+
+    class d3_order_remark_ordermanager_parent extends OrderRemark {}
 }
