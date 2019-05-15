@@ -19,14 +19,13 @@ namespace D3\Ordermanager\Application\Controller\Admin;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\d3filesystem;
-use Doctrine\DBAL\DBALException;
+use Exception;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminMall;  // required for non fallback case
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
-use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Request;
 
+// @codeCoverageIgnoreStart
 // fallback for non ee editions
 if (false == class_exists("\OxidEsales\Eshop\Application\Controller\Admin\AdminMall")) {
     class d3AdminMall extends AdminDetailsController
@@ -49,12 +48,14 @@ if (false == class_exists("\OxidEsales\Eshop\Application\Controller\Admin\AdminM
 } else {
     class d3AdminMall extends AdminMall {}
 }
+// @codeCoverageIgnoreEnd
 
 /**
  *
  */
 class d3_cfg_ordermanageritem_mall extends d3AdminMall
 {
+    private $_sModId = 'd3_ordermanager';
     /**
      * DB table having oxshopincl and oxshopexcl fields we are going to deal with
      */
@@ -76,13 +77,33 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
     protected $_sObjectClassName = d3ordermanager::class;
 
     /**
+     * d3_cfg_ordermanageritem_mall constructor.
+     */
+    public function __construct()
+    {
+        d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', $this->_sModId);
+
+        parent::__construct();
+    }
+
+    /**
+     * @return d3ordermanager
+     */
+    public function getProfile()
+    {
+        return d3GetModCfgDIC()->get($this->_sObjectClassName);
+    }
+
+    /**
      * @return string
+     * @throws Exception
      */
     public function render()
     {
-        /** @var d3ordermanager $oProfile */
-        $oProfile = oxNew($this->_sObjectClassName);
-        $soxId = Registry::get(Request::class)->getRequestEscapedParameter("oxid");
+        $oProfile = $this->getProfile();
+        /** @var Request $request */
+        $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
+        $soxId = $request->getRequestEscapedParameter("oxid");
 
         if ($this->_isSetOxid($soxId)) {
             // load object
@@ -96,25 +117,6 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
     }
 
     /**
-     * Assigns record information in multiple shop field
-     */
-    public function assignToSubshops()
-    {
-        $sOXID = $this->getEditObjectId();
-        $this->_sUpdateAddSql = " ";
-
-        parent::assignToSubshops();
-
-        //reseting oxfield2shop values
-        $oShop = $this->_getEditShop($sOXID);
-
-        // bc for OXID 5.0 + 5.1
-        if (method_exists($oShop, 'cleanMultishopFields')) {
-            $oShop->cleanMultishopFields($sOXID);
-        }
-    }
-
-    /**
      * @return array
      */
     public function getUserMessages()
@@ -123,19 +125,34 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
     }
 
     /**
+     * @return Language
+     * @throws Exception
+     */
+    public function getLang()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+    }
+
+    /**
+     * @return d3filesystem
+     * @throws Exception
+     */
+    public function getFileSystem()
+    {
+        return d3GetModCfgDIC()->get(d3filesystem::class);
+    }
+
+    /**
      * @return string
-     * @throws DBALException
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getHelpURL()
     {
         $sUrl = $this->d3GetSet()->getHelpURL();
-        /** @var $oFS d3filesystem */
-        $oFS = oxNew(d3filesystem::class);
+        $oFS = $this->getFileSystem();
 
         if ($this->_sHelpLinkMLAdd) {
-            $sUrl .= $oFS->unprefixedslashit(Registry::getLang()->TranslateString($this->_sHelpLinkMLAdd));
+            $sUrl .= $oFS->unprefixedslashit($this->getLang()->translateString($this->_sHelpLinkMLAdd));
         }
 
         $aFileName = $oFS->splitFilename($sUrl);
@@ -150,13 +167,11 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
 
     /**
      * @return d3_cfg_mod
-     * @throws DBALException
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function d3GetSet()
     {
-        return d3_cfg_mod::get('d3_ordermanager');
+        return d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
     }
 
     /**
@@ -207,6 +222,7 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
     {
         // load object in other languages
         $oOtherLang = $oProfile->getAvailableInLangs();
+
         if (false == isset($oOtherLang[$this->_iEditLang])) {
             $oProfile->loadInLang(key($oOtherLang), $soxId);
         }

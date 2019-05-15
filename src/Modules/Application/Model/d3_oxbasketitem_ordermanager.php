@@ -17,16 +17,20 @@
 
 namespace D3\Ordermanager\Modules\Application\Model;
 
+use Exception;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
 use OxidEsales\Eshop\Application\Model\Article;
 
 class d3_oxbasketitem_ordermanager extends d3_oxbasketitem_ordermanager_parent
 {
+    /**
+     * @throws Exception
+     */
     public function d3ChangeOrderArticle2RealArticle()
     {
         if ($this->_oArticle instanceof OrderArticle) {
             $sArticleId = $this->_oArticle->getProductId();
-            $oArticle = oxNew(Article::class);
+            $oArticle = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Article::class);
 
             if ($oArticle->exists($sArticleId) && $oArticle->load($sArticleId)) {
                 $this->_oArticle = $oArticle;

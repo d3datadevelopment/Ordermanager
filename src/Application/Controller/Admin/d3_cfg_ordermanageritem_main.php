@@ -22,10 +22,11 @@ use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
 use Doctrine\DBAL\DBALException;
+use Exception;
+use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 
 class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
@@ -56,12 +57,16 @@ class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @throws StandardException
+     * @throws Exception
      */
     public function render()
     {
         $sRet = parent::render();
 
-        $this->addTplParam("blUseTimeCheck", Registry::getConfig()->getConfigParam('blUseTimeCheck'));
+        /** @var Config $config */
+        $config = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
+
+        $this->addTplParam("blUseTimeCheck", $config->getConfigParam('blUseTimeCheck'));
 
         return $sRet;
     }
@@ -73,16 +78,19 @@ class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
      * @param array $aParams Parameters, to set default values
      *
      * @return array
+     * @throws Exception
      */
     public function addDefaultValues($aParams)
     {
         $aParams = parent::addDefaultValues($aParams);
 
         /** @var d3ordermanager $oOrderManager */
-        $oOrderManager = oxNew(d3Ordermanager::class);
+        $oOrderManager = d3GetModCfgDIC()->get(d3ordermanager::class);
         $sFieldLongName = $oOrderManager->d3GetFieldLongName('d3_cronjobid');
 
-        $aRequestParameter = Registry::get(Request::class)->getRequestEscapedParameter("editval");
+        /** @var Request $request */
+        $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
+        $aRequestParameter = $request->getRequestEscapedParameter("editval");
 
         if (is_array($aRequestParameter) && isset($aRequestParameter[$sFieldLongName])) {
             $aRequestParameter[$sFieldLongName] = $this->fixCronjobId($aRequestParameter[$sFieldLongName]);
@@ -92,7 +100,6 @@ class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
                 $_GET['editval'] = $aRequestParameter;
             }
         }
-
 
         return $aParams;
     }

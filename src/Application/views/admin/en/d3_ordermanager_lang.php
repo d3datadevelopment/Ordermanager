@@ -1,19 +1,20 @@
 <?php
-
 /**
- * Order Manager
  * This Software is the property of Data Development and is protected
  * by copyright law - it is NOT Freeware.
+ *
  * Any unauthorized use of this software without a valid license
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
+ *
  * http://www.shopmodule.com
  *
- * @copyright © D³ Data Development, Thomas Dartsch
- * @package   OrderManager
- * @author    D³ Data Development - Daniel Seifert <support@shopmodule.com>
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      http://www.oxidmodule.com
  */
+
+// @codeCoverageIgnoreStart
 
 $sLangName = "English";
 $iLangNr   = 0;
@@ -326,6 +327,8 @@ $aLang = array(
     'D3_ORDERMANAGER_ERROR_IEXECJOBSLIMIT'               => 'Your module license makes you a maximum count of jobs available. You are able to create new job, possible they won\'t executed. Contact us for an extended license please.',
     'D3_ORDERMANAGER_ERROR_RESTRICTIONS'                 => 'You use the "%s" edition. Would you like to use the inactive functions, please contact us for an extended license.',
     'D3_ORDERMANAGER_ERROR_NOMALL'                       => 'Subshops aren\t available in your shop edition.',
+    'D3_ORDERMANAGER_ERROR_MISSINGREQUACTIONVALUES'      => 'The selected active actions require additional setting for execution. Please check your details.',
+    'D3_ORDERMANAGER_ERROR_MISSINGREQUREQUIREMENTVALUES' => 'The selected active conditions require additional setting for execution. Please check your details.',
     'D3_ORDERMANAGER_FIELDTITLE_OXID'                    => 'Order ID',
     'D3_ORDERMANAGER_FIELDTITLE_OXSHOPID'                => 'Shop assignment',
     'D3_ORDERMANAGER_FIELDTITLE_OXUSERID'                => 'User assignment',
@@ -416,10 +419,4 @@ $aLang = array(
     'D3_ORDERMANAGER_FILTER_FOLDER'                      => 'filter by folder',
 );
 
-
-/*
-
-[{oxmultilang ident="GENERAL_YOUWANTTODELETE"}]
-
-
-*/
+// @codeCoverageIgnoreEnd

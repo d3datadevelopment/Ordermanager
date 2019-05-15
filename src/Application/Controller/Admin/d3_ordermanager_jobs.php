@@ -18,6 +18,7 @@
 namespace D3\Ordermanager\Application\Controller\Admin;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
@@ -26,19 +27,41 @@ use D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\d3filesystem;
 use Doctrine\DBAL\DBALException;
+use Exception;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
-use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Request;
+use OxidEsales\Eshop\Core\Session;
 
 class d3_ordermanager_jobs extends AdminDetailsController
 {
+    private $_sModId = 'd3_ordermanager';
     /** @var d3ordermanagerlist */
     protected $_aJobList;
     protected $_sHelpLinkMLAdd;
+
+    /**
+     * d3_ordermanager_jobs constructor.
+     */
+    public function __construct()
+    {
+        d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', $this->_sModId);
+
+        parent::__construct();
+    }
+
+    /**
+     * @return Order
+     * @throws Exception
+     */
+    public function getItemObject()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
+    }
 
     /**
      * @return string
@@ -48,6 +71,7 @@ class d3_ordermanager_jobs extends AdminDetailsController
      * @throws StandardException
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
+     * @throws Exception
      */
     public function render()
     {
@@ -57,34 +81,60 @@ class d3_ordermanager_jobs extends AdminDetailsController
         $this->addTplParam("oxid", $soxId);
 
         if ($soxId != "-1" && isset($soxId)) {
-            // load object
-            $oItem = oxNew(Order::class);
+            $oItem = $this->getItemObject();
             $oItem->load($soxId);
             $this->addTplParam("edit", $oItem);
         }
 
-        $sJobFolder = Registry::getSession()->getVariable('d3OrderManagerFolderSelect');
+        /** @var Session $session */
+        $session = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Session::class);
+
+        $sJobFolder = $session->getVariable('d3OrderManagerFolderSelect');
         $this->addTplParam("jobfolder", $sJobFolder);
         $this->_aJobList = $this->_d3GetManuallyManagerJobs($sJobFolder);
 
         return "d3_ordermanager_jobs.tpl";
     }
 
+    /**
+     * @return Session
+     * @throws Exception
+     */
+    public function d3GetSession()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Session::class);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function changeFolder()
     {
-        Registry::getSession()->setVariable(
+        /** @var Request $request */
+        $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
+
+        $this->d3GetSession()->setVariable(
             'd3OrderManagerFolderSelect',
-            Registry::get(Request::class)->getRequestEscapedParameter('jobfolder')
+            $request->getRequestEscapedParameter('jobfolder')
         );
     }
 
     /**
      * @return d3ordermanagerlist
+     * @throws Exception
+     */
+    public function getManagerList()
+    {
+        return d3GetModCfgDIC()->get(d3ordermanagerlist::class);
+    }
+
+    /**
+     * @return d3ordermanagerlist
+     * @throws Exception
      */
     public function d3GetManagerJobs()
     {
-        /** @var d3ordermanagerlist $oManagerList */
-        $oManagerList = oxNew(d3ordermanagerlist::class);
+        $oManagerList = $this->getManagerList();
         $oManagerList->getList();
 
         return $oManagerList;
@@ -92,6 +142,7 @@ class d3_ordermanager_jobs extends AdminDetailsController
 
     /**
      * @param $sFolderId
+     *
      * @return d3ordermanagerlist
      * @throws DBALException
      * @throws DatabaseConnectionException
@@ -99,11 +150,11 @@ class d3_ordermanager_jobs extends AdminDetailsController
      * @throws StandardException
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
+     * @throws Exception
      */
     protected function _d3GetManuallyManagerJobs($sFolderId)
     {
-        /** @var $oManagerList d3ordermanagerlist */
-        $oManagerList = oxNew(d3ordermanagerlist::class);
+        $oManagerList = $this->getManagerList();
         return $oManagerList->d3GetManuallyManagerJobsByFolder($sFolderId);
     }
 
@@ -116,22 +167,47 @@ class d3_ordermanager_jobs extends AdminDetailsController
     }
 
     /**
+     * @return d3ordermanager
+     * @throws Exception
+     */
+    public function getManager()
+    {
+        return d3GetModCfgDIC()->get(d3ordermanager::class);
+    }
+
+    /**
+     * @param d3ordermanager $oManager
+     * @return d3ordermanager_execute
+     * @throws Exception
+     */
+    public function getManagerExecute(d3ordermanager $oManager)
+    {
+        d3GetModCfgDIC()->set(
+            d3ordermanager_execute::class.'.args.ordermanager',
+            $oManager
+        );
+
+        return d3GetModCfgDIC()->get(d3ordermanager_execute::class);
+    }
+
+    /**
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @throws StandardException
-     * @throws \Exception
+     * @throws Exception
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
      */
     public function d3execordermanager()
     {
-        /** @var d3ordermanager $oManager */
-        $oManager = oxNew(d3ordermanager::class);
-        $oManager->load(Registry::get(Request::class)->getRequestEscapedParameter('ordermanagerid'));
-        /** @var d3ordermanager_execute $oManagerExec */
-        $oManagerExec = oxNew(d3ordermanager_execute::class, $oManager);
-        $oManagerExec->exec4order(Registry::get(Request::class)->getRequestEscapedParameter('oxid'));
+        /** @var Request $request */
+        $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
+
+        $oManager = $this->getManager();
+        $oManager->load($request->getRequestEscapedParameter('ordermanagerid'));
+        $oManagerExec = $this->getManagerExecute($oManager);
+        $oManagerExec->exec4order($request->getRequestEscapedParameter('oxid'));
         $oManagerExec->finishJobExecution();
     }
 
@@ -140,35 +216,53 @@ class d3_ordermanager_jobs extends AdminDetailsController
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @throws StandardException
-     * @throws \Exception
+     * @throws Exception
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
      */
     public function d3ExecChangedOrderManager()
     {
-        /** @var d3ordermanager $oManager */
-        $oManager = oxNew(d3ordermanager::class);
-        $oManager->load(Registry::get(Request::class)->getRequestEscapedParameter('ordermanagerid'));
-        $oManager->setEditedValues(Registry::get(Request::class)->getRequestEscapedParameter('aContent'));
-        /** @var d3ordermanager_execute $oManagerExec */
-        $oManagerExec = oxNew(d3ordermanager_execute::class, $oManager);
-        $oManagerExec->exec4order(Registry::get(Request::class)->getRequestEscapedParameter('oxid'));
+        /** @var Request $request */
+        $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
+
+        $oManager = $this->getManager();
+        $oManager->load($request->getRequestEscapedParameter('ordermanagerid'));
+        $oManager->setEditedValues($request->getRequestEscapedParameter('aContent'));
+        $oManagerExec = $this->getManagerExecute($oManager);
+        $oManagerExec->exec4order($request->getRequestEscapedParameter('oxid'));
         $oManagerExec->finishJobExecution();
     }
 
     /**
-     * @throws DatabaseConnectionException
+     * @param d3ordermanager $oManager
+     * @return d3ordermanager_toorderassignment
+     * @throws Exception
+     */
+    public function getOrderManagerAssignment(d3ordermanager $oManager)
+    {
+        d3GetModCfgDIC()->set(
+            d3ordermanager_toorderassignment::class.'.args.ordermanager',
+            $oManager
+        );
+
+        return d3GetModCfgDIC()->get(d3ordermanager_toorderassignment::class);
+    }
+
+    /**
      * @throws DatabaseErrorException
+     * @throws d3ParameterNotFoundException
+     * @throws Exception
      */
     public function d3resetOrderManagerAssignment()
     {
-        /** @var d3ordermanager $oManager */
-        $oManager = oxNew(d3ordermanager::class);
-        /** @var d3ordermanager_toorderassignment $oAssignment */
-        $oAssignment = oxNew(d3ordermanager_toorderassignment::class, $oManager);
+        /** @var Request $request */
+        $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
+
+        $oManager = $this->getManager();
+        $oAssignment = $this->getOrderManagerAssignment($oManager);
         $oAssignment->resetAssignment(
-            Registry::get(Request::class)->getRequestEscapedParameter('ordermanagerid'),
-            Registry::get(Request::class)->getRequestEscapedParameter('oxid')
+            $request->getRequestEscapedParameter('ordermanagerid'),
+            $request->getRequestEscapedParameter('oxid')
         );
     }
 
@@ -176,28 +270,30 @@ class d3_ordermanager_jobs extends AdminDetailsController
      * @return mixed
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getFolderList()
     {
-        /** @var d3ordermanager $oManager */
-        $oManager = oxNew(d3ordermanager::class);
+        $oManager = $this->getManager();
         return $oManager->d3getSelectableFolderList();
     }
 
     /**
+     * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws StandardException
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
-     * @throws DBALException
-     * @throws StandardException
+     * @throws Exception
      */
     public function execChangedContents()
     {
-        $sItemId = Registry::get(Request::class)->getRequestEscapedParameter('oxid');
-        /** @var $oManager d3ordermanager */
-        $oManager = oxNew(d3ordermanager::class);
-        $oManager->load(Registry::get(Request::class)->getRequestEscapedParameter('ordermanagerid'));
+        /** @var Request $request */
+        $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
+        $sItemId = $request->getRequestEscapedParameter('oxid');
+        $oManager = $this->getManager();
+        $oManager->load($request->getRequestEscapedParameter('ordermanagerid'));
         $this->addTplParam('aMailContent', $oManager->getEditableContent($sItemId));
         $this->addTplParam('sAction', __FUNCTION__);
         $this->addTplParam('oOrderManager', $oManager);
@@ -212,19 +308,34 @@ class d3_ordermanager_jobs extends AdminDetailsController
     }
 
     /**
+     * @return d3filesystem
+     * @throws Exception
+     */
+    public function getFileSystem()
+    {
+        return d3GetModCfgDIC()->get(d3filesystem::class);
+    }
+
+    /**
+     * @return Language
+     * @throws Exception
+     */
+    public function getLang()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+    }
+
+    /**
      * @return string
-     * @throws DBALException
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getHelpURL()
     {
         $sUrl = $this->d3GetSet()->getHelpURL();
-        /** @var $oFS d3filesystem */
-        $oFS = oxNew(d3filesystem::class);
+        $oFS = $this->getFileSystem();
 
         if ($this->_sHelpLinkMLAdd) {
-            $sUrl .= $oFS->unprefixedslashit(Registry::getLang()->TranslateString($this->_sHelpLinkMLAdd));
+            $sUrl .= $oFS->unprefixedslashit($this->getLang()->translateString($this->_sHelpLinkMLAdd));
         }
 
         $aFileName = $oFS->splitFilename($sUrl);
@@ -239,13 +350,11 @@ class d3_ordermanager_jobs extends AdminDetailsController
 
     /**
      * @return d3_cfg_mod
-     * @throws DBALException
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function d3GetSet()
     {
-        return d3_cfg_mod::get('d3_ordermanager');
+        return d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
     }
 
     public function getLink()

@@ -146,6 +146,14 @@
             </tr>
         [{/if}]
 
+        [{if $missingRequValuesActions}]
+            <tr>
+                <td style="vertical-align: top;" class="edittext" colspan="2">
+                    <div class="extension_error">[{oxmultilang ident="D3_ORDERMANAGER_ERROR_MISSINGREQUREQUIREMENTVALUES"}]</div>
+                </td>
+            </tr>
+        [{/if}]
+
         <tr>
             <td style="vertical-align:top;" class="edittext">
 
@@ -158,7 +166,7 @@
                                     [{oxmultilang ident=$sGroupId}]
                                 </b>
                             </a>
-                            [{foreach from=$oRequList->getRequirementList() item="oRequ"}]
+                            [{foreach from=$oRequList->getRequirementList() key="sRequId" item="oRequ"}]
                                 [{if $oRequ->isAllowed()}]
                                     [{assign var="blActionRestriction" value=""}]
                                 [{else}]
@@ -166,7 +174,9 @@
                                     [{assign var="blRestricted" value=true}]
                                 [{/if}]
 
-                                [{include file=$oRequ->getTplName() oRequ=$oRequ}]
+                                <div style="[{if $missingRequValuesActions && $sRequId|in_array:$missingRequValuesActions}]border: 1px solid red; [{/if}]">
+                                    [{include file=$oRequ->getTplName() oRequ=$oRequ}]
+                                </div>
                             [{/foreach}]
                         </div>
                     </div>

@@ -19,6 +19,9 @@ namespace D3\Ordermanager\Modules\Application\Model;
 
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler;
+use Exception;
+use InvoicepdfPDF;
+use oxArticleInputException;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
 use OxidEsales\Eshop\Application\Model\Basket;
@@ -28,9 +31,12 @@ use OxidEsales\Eshop\Core\Exception\ArticleException;
 use OxidEsales\Eshop\Core\Exception\ArticleInputException;
 use OxidEsales\Eshop\Core\Exception\NoArticleException;
 use OxidEsales\Eshop\Core\Model\ListModel;
+use oxNoArticleException;
 
 class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
 {
+    /** @var Payment */
+    protected $_oPayment = null;
     protected $_iSelectedLang;
 
     /**
@@ -58,6 +64,14 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
     }
 
     /**
+     * @return Basket
+     */
+    public function d3getBasket4OrderManager()
+    {
+        return $this->_oBasket;
+    }
+
+    /**
      * @param Payment $oPayment
      */
     public function d3setPayment4OrderManager(Payment $oPayment)
@@ -66,11 +80,31 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
     }
 
     /**
+     * @return Payment
+     */
+    public function d3getPayment4OrderManager()
+    {
+        return $this->_oPayment;
+    }
+
+    /**
+     * @return Voucher
+     * @throws Exception
+     */
+    public function d3GetVoucher()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Voucher::class);
+    }
+
+    /**
      * @param d3ordermanager $oOrderManager
      * @return Basket
      * @throws ArticleException
      * @throws ArticleInputException
      * @throws NoArticleException
+     * @throws oxArticleInputException
+     * @throws oxNoArticleException
+     * @throws Exception
      */
     public function d3getOrderBasket4OrderManager(d3ordermanager $oOrderManager)
     {
@@ -100,7 +134,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
 
         $this->_aVoucherList = $oBasket->getVouchers();
         foreach (array_keys($this->_aVoucherList) as $sKey) {
-            $oVoucher = oxNew(Voucher::class);
+            $oVoucher = $this->d3GetVoucher();
             $oVoucher->load($sKey);
             $this->_aVoucherList[$sKey] = $oVoucher;
         }
@@ -109,11 +143,39 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
     }
 
     /**
-     * @param        $sFilename
-     * @param int    $iSelLang
+     * @return d3ordermanager_pdfhandler
+     * @throws Exception
+     */
+    public function d3GetPdfHandler()
+    {
+        d3GetModCfgDIC()->set(
+            d3ordermanager_pdfhandler::class.'.args.ordermanager',
+            d3GetModCfgDIC()->get(d3ordermanager::class)
+        );
+        d3GetModCfgDIC()->set(
+            d3ordermanager_pdfhandler::class.'.args.order',
+            d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)
+        );
+
+        return d3GetModCfgDIC()->get(d3ordermanager_pdfhandler::class);
+    }
+
+    /**
+     * @return InvoicepdfPDF
+     * @throws Exception
+     */
+    public function d3GetInvoicePdf()
+    {
+        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.InvoicepdfPDF::class);
+    }
+
+    /**
+     * @param $sFilename
+     * @param int $iSelLang
      * @param string $sDocType
      * @param string $sDestination
-     * @return string
+     * @return null|string
+     * @throws Exception
      */
     public function d3generatePdf($sFilename, $iSelLang = 0, $sDocType = 'invoice', $sDestination = 'S')
     {
@@ -127,13 +189,12 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
             $this->save();
         }
 
-        $oPdfHandler = oxNew(d3ordermanager_pdfhandler::class, (oxNew(d3ordermanager::class)), (oxNew(Order::class)));
+        $oPdfHandler = $this->d3GetPdfHandler();
         if ($oPdfHandler->canGeneratePdf()) {
 
-            /** @var \InvoicepdfPDF $oPdf */
-            $oPdf = oxNew(\InvoicepdfPDF::class);
+            $oPdf = $this->d3GetInvoicePdf();
             $oPdf->setPrintHeader(false);
-            $oPdf->open();
+            $oPdf->Open();
 
             // adding header
             $this->pdfHeader($oPdf);
@@ -151,7 +212,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
             $this->pdfFooter($oPdf);
 
             // outputting file to browser
-            return $oPdf->output($sFilename, $sDestination);
+            return $oPdf->Output($sFilename, $sDestination);
         }
 
         return null;

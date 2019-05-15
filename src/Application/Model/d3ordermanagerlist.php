@@ -22,7 +22,8 @@ use D3\ModCfg\Application\Model\d3utils;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use Doctrine\DBAL\DBALException;
-use OxidEsales\Eshop\Core\DatabaseProvider;
+use Exception;
+use OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
@@ -45,6 +46,7 @@ class d3ordermanagerlist extends d3modprofilelist
      * @throws StandardException
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
+     * @throws Exception
      */
     public function d3GetManuallyManagerJobsByFolder($sFolderId)
     {
@@ -54,7 +56,7 @@ class d3ordermanagerlist extends d3modprofilelist
         $sQ = "select $sFieldList from " . $oListObject->getViewName();
 
         $sQ .= " where ";
-        $sQ = $this->d3AddActiveSnippet($oListObject, $sQ, true);
+        $sQ = $this->d3AddActiveSnippet($oListObject, $sQ, true, false);
         $sQ = $this->d3AddFolderSelection($sFolderId, $oListObject, $sQ);
         $sQ .= " ORDER BY ".$oListObject->getViewName().".oxsort ASC, ".$oListObject->getViewName().".oxfolder ASC";
 
@@ -91,27 +93,33 @@ class d3ordermanagerlist extends d3modprofilelist
      * @param d3ordermanager $oListObject
      * @param                $sQ
      * @param bool $blManually
+     * @param bool $blUseCommonActiveCheck (oxactive field)
      *
      * @return string
      * @throws DatabaseConnectionException
+     * @throws Exception
      */
-    public function d3AddActiveSnippet(d3ordermanager $oListObject, $sQ, $blManually = false)
+    public function d3AddActiveSnippet(d3ordermanager $oListObject, $sQ, $blManually = false, $blUseCommonActiveCheck = true)
     {
         $sActiveSnippet = $oListObject->getSqlActiveSnippet();
-        if ($sActiveSnippet) {
+
+        /** @var d3utils $d3Utils */
+        $d3Utils = d3GetModCfgDIC()->get(d3utils::class);
+
+        if ($blUseCommonActiveCheck && $sActiveSnippet) {
             $sQ .= " $sActiveSnippet ";
         } else {
             $sQ .= " 1 ";
         }
 
         if ($blManually) {
-            $sFieldName = d3utils::getInstance()->getMultiLangFieldName(
+            $sFieldName = $d3Utils->getMultiLangFieldName(
                 'D3_OM_EXECMANUALLY',
                 '',
                 $oListObject
             );
         } else {
-            $sFieldName = d3utils::getInstance()->getMultiLangFieldName(
+            $sFieldName = $d3Utils->getMultiLangFieldName(
                 'oxactive',
                 '',
                 $oListObject
@@ -129,12 +137,15 @@ class d3ordermanagerlist extends d3modprofilelist
      * @param               $sQ
      *
      * @return string
-     * @throws DatabaseConnectionException
+     * @throws Exception
      */
     public function d3AddFolderSelection($sFolderId, d3ordermanager $oListObject, $sQ)
     {
+        /** @var DatabaseInterface $oDb */
+        $oDb = d3GetModCfgDIC()->get('d3ox.ordermanager.'.DatabaseInterface::class.'.num');
+
         if ($sFolderId && $sFolderId != '-1') {
-            $sQ .= " AND " . $oListObject->getViewName() . ".oxfolder = " . DatabaseProvider::getDb()->quote($sFolderId);
+            $sQ .= " AND " . $oListObject->getViewName() . ".oxfolder = " . $oDb->quote($sFolderId);
         }
 
         return $sQ;
