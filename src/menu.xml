@@ -17,6 +17,7 @@
                 <TAB id="d3tbclordermanager_items_main" cl="d3_cfg_ordermanageritem_main" />
                 <TAB id="d3tbclordermanager_items_mall" cl="d3_cfg_ordermanageritem_mall" />
                 <TAB id="d3tbclordermanager_items_overview" cl="d3_cfg_ordermanageritem_overview" />
+                <TAB id="d3tbclordermanager_items_trigger" cl="d3_cfg_ordermanageritem_trigger" />
                 <TAB id="d3tbclordermanager_items_requ" cl="d3_cfg_ordermanageritem_requ" />
                 <TAB id="d3tbclordermanager_items_action" cl="d3_cfg_ordermanageritem_action" />
             </SUBMENU>

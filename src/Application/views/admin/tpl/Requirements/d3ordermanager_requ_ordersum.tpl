@@ -6,12 +6,14 @@
     </dt>
     <dd>
         [{if $oView->isEditMode()}]
-            <SELECT class="editinput" name="value[sOrderSumType]" size="1" [{$blActionRestriction}] [{$readonly}]>
+            <label for="sOrderSumType" style="position: absolute; left: -2000px">[{oxmultilang ident="sOrderSumType"}]</label>
+            <SELECT id="sOrderSumType" class="editinput" name="value[sOrderSumType]" size="1" [{$blActionRestriction}] [{$readonly}]>
                 <option value="total" [{if $edit->getValue('sOrderSumType') == 'total'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMTYPE_TOTAL"}]</option>
                 <option value="article" [{if $edit->getValue('sOrderSumType') == 'article'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMTYPE_ARTICLE"}]</option>
             </SELECT>
 
-            <SELECT class="editinput" name="value[sOrderSumRelation]" size="1" [{$blActionRestriction}] [{$readonly}]>
+            <label for="sOrderSumRelation" style="position: absolute; left: -2000px">[{oxmultilang ident="sOrderSumRelation"}]</label>
+            <SELECT id="sOrderSumRelation" class="editinput" name="value[sOrderSumRelation]" size="1" [{$blActionRestriction}] [{$readonly}]>
                 <option value="higher" [{if $edit->getValue('sOrderSumRelation') == 'higher'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMREL_HIGHER"}]</option>
                 <option value="lower" [{if $edit->getValue('sOrderSumRelation') == 'lower'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMREL_LOWER"}]</option>
             </SELECT>

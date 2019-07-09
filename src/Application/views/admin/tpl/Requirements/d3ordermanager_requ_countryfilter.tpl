@@ -7,7 +7,8 @@
     <dd>
         [{if $oView->isEditMode()}]
             <input type="hidden" name="value[sCustCountryId]" value="">
-            <SELECT class="editinput" name="value[sCustCountryId][]" id="sCustCountryId" size="5" multiple [{$blActionRestriction}] [{$readonly}]>
+            <label for="sCustCountryId" style="position: absolute; left: -2000px">[{oxmultilang ident="sCustCountryId"}]</label>
+            <SELECT id="sCustCountryId" class="editinput" name="value[sCustCountryId][]" id="sCustCountryId" size="5" multiple [{$blActionRestriction}] [{$readonly}]>
                 [{foreach from=$oView->getCountryList() item="oCountry"}]
                     <option value="[{$oCountry->getId()}]" [{if is_array($edit->getValue('sCustCountryId')) && in_array($oCountry->getId(), $edit->getValue('sCustCountryId'))}]selected[{/if}]>[{$oCountry->getFieldData('oxtitle')}]</option>
                 [{/foreach}]

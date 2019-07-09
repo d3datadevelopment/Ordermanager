@@ -17,11 +17,17 @@
 
 namespace D3\Ordermanager\Modules\Application\Model;
 
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Application\Model\d3ordermanager_execute;
 use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler;
+use D3\Ordermanager\Application\Model\d3ordermanagerlist;
+use Doctrine\DBAL\DBALException;
 use Exception;
 use InvoicepdfPDF;
-use oxArticleInputException;
+use oxarticleinputexception;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
 use OxidEsales\Eshop\Application\Model\Basket;
@@ -29,9 +35,12 @@ use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Application\Model\Voucher;
 use OxidEsales\Eshop\Core\Exception\ArticleException;
 use OxidEsales\Eshop\Core\Exception\ArticleInputException;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\NoArticleException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use oxNoArticleException;
+use oxnoarticleexception;
 
 class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
 {
@@ -216,5 +225,79 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
         }
 
         return null;
+    }
+
+    /**
+     * @param Basket $oBasket
+     * @param object $oUser
+     * @param bool $blRecalculatingOrder
+     * @return int
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ParameterNotFoundException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     */
+    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
+    {
+        $iRet = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
+
+        $oOrderManagerList = d3GetModCfgDIC()->get(d3ordermanagerlist::class);
+        /** @var d3ordermanager $oManager */
+        foreach ($oOrderManagerList->d3GetOrderFinishTriggeredManagerTasks() as $oManager) {
+            /** @var d3ordermanager_execute $oManagerExecute */
+            $oManagerExecute = $this->getManagerExecute($oManager);
+            if ($oManagerExecute->orderMeetsConditions($this->getId())) {
+                $oManagerExecute->exec4order($this->getId(), d3ordermanager_execute::EXECTYPE_ORDERFINISHTRIGGERED);
+            }
+        };
+
+        return $iRet;
+    }
+
+    /**
+     * @return bool
+     * @throws d3ParameterNotFoundException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws Exception
+     */
+    public function save()
+    {
+        $blSave = parent::save();
+
+        $oOrderManagerList = d3GetModCfgDIC()->get(d3ordermanagerlist::class);
+        /** @var d3ordermanager $oManager */
+        foreach ($oOrderManagerList->d3GetOrderSaveTriggeredManagerTasks() as $oManager) {
+            /** @var d3ordermanager_execute $oManagerExecute */
+            $oManagerExecute = $this->getManagerExecute($oManager);
+            if ($oManagerExecute->orderMeetsConditions($this->getId())) {
+                $oManagerExecute->exec4order($this->getId(), d3ordermanager_execute::EXECTYPE_ORDERSAVETRIGGERED);
+            }
+        };
+
+        return $blSave;
+    }
+
+    /**
+     * @param d3ordermanager $oManager
+     * @return d3ordermanager_execute
+     * @throws Exception
+     */
+    public function getManagerExecute(d3ordermanager $oManager)
+    {
+        d3GetModCfgDIC()->set(
+            d3ordermanager_execute::class.'.args.ordermanager',
+            $oManager
+        );
+
+        return d3GetModCfgDIC()->get(d3ordermanager_execute::class);
     }
 }

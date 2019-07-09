@@ -12,6 +12,7 @@
 # @link      http://www.oxidmodule.com
 
 imports:
+  - { resource: packages.yaml }
   - { resource: modcfg.yaml }
   - { resource: oxid.yaml }
   - { resource: ordermanager.yaml }

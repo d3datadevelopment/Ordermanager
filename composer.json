@@ -35,7 +35,8 @@
     "php": "7.1 - 7.2", "ext-ionCube-Loader": "*",
     "oxid-esales/oxideshop-metapackage-ce": "~6.0.0 || ~6.1.0",
     "d3/modcfg": "^5.2.0.000",
-    "oxid-projects/pdf-invoice-module": "*"
+    "oxid-projects/pdf-invoice-module": "*",
+    "league/flysystem": "^1.0"
   },
   "require-dev": {
     "mikey179/vfsStream": "^1.4"

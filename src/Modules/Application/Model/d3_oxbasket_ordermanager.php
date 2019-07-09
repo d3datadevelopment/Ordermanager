@@ -18,8 +18,9 @@
 namespace D3\Ordermanager\Modules\Application\Model;
 
 use Exception;
-use oxArticleInputException;
+use oxarticleinputexception;
 use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Application\Model\BasketReservation;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\BasketItem;
@@ -32,7 +33,7 @@ use OxidEsales\Eshop\Core\Exception\NoArticleException;
 use OxidEsales\Eshop\Core\Price;
 use OxidEsales\Eshop\Core\PriceList;
 use OxidEsales\Eshop\Core\Session;
-use oxNoArticleException;
+use oxnoarticleexception;
 use stdClass;
 
 /**
@@ -132,7 +133,9 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
 
         // reserve active basket
         if ($this->d3GetConfig()->getConfigParam('blPsBasketReservationEnabled')) {
-            $this->d3GetSession()->getBasketReservations()->reserveBasket($this);
+            /** @var BasketReservation $oBasketReservation */
+            $oBasketReservation = $this->d3GetSession()->getBasketReservations();
+            $oBasketReservation->reserveBasket($this);
         }
 
         //  4. calculating item prices

@@ -30,7 +30,7 @@
     <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
 </form>
 
-<table cellspacing="0" cellpadding="0" border="0" width="100%">
+<table style="border: none; padding: 0; width: 100%">
     <tr>
         [{d3modcfgcheck modid="d3_ordermanager"}]
             [{if $sAction == "execChangedContents"}]
@@ -42,7 +42,7 @@
                         <input type="hidden" name="oxid" value="[{$oxid}]">
                         <input type="hidden" name="editval[oxorder__oxid]" value="[{$oxid}]">
                         <input type="hidden" name="ordermanagerid" value="-1">
-                        <table cellspacing="0" cellpadding="0" style="width: 100%;">
+                        <table  style="border: none; padding: 0; width: 100%;">
                             <tr>
                                 <td class="listitem" style="padding: 5px; height: auto;">
                                     Auftrag:
@@ -86,6 +86,7 @@
                                     <input id="ToMail" class="edittext ext_edittext" type="checkbox" name="aContent[blSendMailToCustom]" value='1' [{if $oOrderManager->getValue('blSendMailToCustom') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
                                     <label for="ToMail">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL"}]</label>
                                     <input id="ToMailInput" type="text" name="aContent[sSendMailToCustomAddress]" size="30" maxlength="60" value="[{$oOrderManager->getValue('sSendMailToCustomAddress')}]" [{$blActionRestriction}] [{$readonly}]>
+                                    <label for="ToMailInput" style="position: absolute; left: -2000px">[{oxmultilang ident="sSendMailToCustomAddress"}]</label>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL_DESC"}]
                                 </td>
                             </tr>
@@ -117,23 +118,24 @@
                     </form>
                 </td>
             [{else}]
-                <td valign="top" class="edittext">
+                <td style="vertical-align: top;" class="edittext">
                     <fieldset>
-                        <legend>
-                            <form name="d3folderselector" id="d3folderselector" action="[{$oViewConf->getSelfLink()}]" method="post">
+                        <form name="d3folderselector" id="d3folderselector" action="[{$oViewConf->getSelfLink()}]" method="post">
+                            <legend>
                                 [{$oViewConf->getHiddenSid()}]
                                 <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
                                 <input type="hidden" name="oxid" value="[{$oxid}]">
                                 <input type="hidden" name="editval[oxorder__oxid]" value="[{$oxid}]">
                                 <input type="hidden" name="ordermanagerid" value="-1">
                                 <input type="hidden" name="fnc" value="changeFolder">
-                                <select size="1" class="editinput" name="jobfolder" onchange="document.getElementById('d3folderselector').submit();">
+                                <label for="folderselector" style="position: absolute; left: -2000px">[{oxmultilang ident="jobfolder"}]</label>
+                                <select id="folderselector" size="1" class="editinput" name="jobfolder" onchange="document.getElementById('d3folderselector').submit();">
                                     [{foreach from=$oView->getFolderList() key="sMLItem" item="sTranslation"}]
                                         <option value="[{$sMLItem}]" [{if $sMLItem == $jobfolder}] selected[{/if}]>[{$sTranslation}]</option>
                                     [{/foreach}]
                                 </select>
-                            </form>
-                        </legend>
+                            </legend>
+                        </form>
                         [{if $oView->d3GetJobList()}]
                             <form name="d3execordermanager" id="d3execordermanager" action="[{$oViewConf->getSelfLink()}]" method="post">
                                 [{$oViewConf->getHiddenSid()}]
@@ -142,7 +144,7 @@
                                 <input type="hidden" name="oxid" value="[{$oxid}]">
                                 <input type="hidden" name="editval[oxorder__oxid]" value="[{$oxid}]">
                                 <input type="hidden" name="ordermanagerid" value="-1">
-                                <table cellspacing="0" cellpadding="0" style="width: 100%;">
+                                <table  style="border: none; padding: 0; width: 100%;">
                                     [{assign var="listclass" value="listitem"}]
                                     [{foreach from=$oView->d3GetJobList() item="oOrderManager"}]
                                         <tr>
@@ -161,7 +163,7 @@
                                                     <span class="d3modcfg_btn icon d3color-blue">
                                                         <button style="width: 300px;" onclick="document.getElementById('d3execordermanager').ordermanagerid.value = '[{$oOrderManager->getId()}]'; document.getElementById('d3execordermanager').submit();">
                                                             <i class="fa fa-circle"></i>
-                                                            [{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_REEXECSTART"}]
+                                                            [{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_REEXECSTART"}][{if false == $oOrderManager->getValue('sManuallyExecMeetCondition')}]*[{/if}]
                                                         </button>
                                                     </span>
                                                     [{assign var="blExecNote" value=true}]
@@ -169,7 +171,7 @@
                                                     <span class="d3modcfg_btn icon d3color-blue">
                                                         <button style="width: 300px;" name="requestData" onclick="document.getElementById('d3execordermanager').ordermanagerid.value = '[{$oOrderManager->getId()}]'; document.getElementById('d3execordermanager').submit();">
                                                             <i class="fa fa-circle-o"></i>
-                                                            [{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_EXECSTART"}]
+                                                            [{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_EXECSTART"}][{if false == $oOrderManager->getValue('sManuallyExecMeetCondition')}]*[{/if}]
                                                         </button>
                                                     </span>
                                                     [{assign var="blExecNote" value=true}]
@@ -184,7 +186,7 @@
                                                     <span class="d3modcfg_btn icon d3color-orange">
                                                         <button style="width: 300px;" onclick="document.getElementById('d3execordermanager').ordermanagerid.value = '[{$oOrderManager->getId()}]'; document.getElementById('d3execordermanager').fnc.value = 'execChangedContents'; document.getElementById('d3execordermanager').submit();">
                                                             <i class="fa fa-pencil fa-inverse"></i>
-                                                            [{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_CHANGEEXEC"}]
+                                                            [{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_CHANGEEXEC"}][{if false == $oOrderManager->getValue('sManuallyExecMeetCondition')}]*[{/if}]
                                                         </button>
                                                     </span>
                                                 [{else}]

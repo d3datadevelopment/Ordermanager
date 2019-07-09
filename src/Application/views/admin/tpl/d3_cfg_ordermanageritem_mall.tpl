@@ -1,5 +1,18 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 
+<style type="text/css">
+    details {
+        margin: 0 0 15px;
+        padding: 6px 9px 2px 18px;
+        border: 1px solid silver;
+        color: silver;
+    }
+    details summary {
+        margin: 0 0 3px -12px;
+        cursor: pointer;
+    }
+</style>
+
 <form name="transfer" id="transfer" action="[{$oViewConf->getSelfLink()}]" method="post">
     [{$oViewConf->getHiddenSid()}]
     <input type="hidden" name="oxid" value="[{$oxid}]">
@@ -9,14 +22,19 @@
 </form>
 
 [{if $edit->getId() && !$edit->getLicenseActive()}]
-    <table cellspacing="0" cellpadding="0" border="0" style="width:98%;">
+    <table style="width:98%; padding: 0: border: none;">
         <tr>
-            <td valign="top" class="edittext" colspan="2">
+            <td style="vertical-align: top;" class="edittext" colspan="2">
                 <div class="extension_warning">[{oxmultilang ident="D3_ORDERMANAGER_ERROR_IEXECJOBSLIMIT"}]</div>
             </td>
         </tr>
     </table>
 [{/if}]
+
+<details>
+    <summary>[{oxmultilang ident="D3_GENERAL_ORDERMANAGER_DESCRIPTION"}]</summary>
+    [{oxmultilang ident="d3tbclordermanager_items_mall_desc"}]
+</details>
 
 [{oxmultilang ident="D3_ORDERMANAGER_ERROR_NOMALL"}]
 

@@ -297,6 +297,13 @@ services:
     arguments:
       - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main
 
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger:
+    class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger
+    factory:  'oxNew'
+    shared:   false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger
+
   D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list:
     class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list
     factory:  'oxNew'

@@ -19,7 +19,8 @@
                 <option value="oxcatid" [{if $edit->getValue($sTypeVarName) == 'oxcatid'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_CATID"}]</option>
             </SELECT>:
 
-            <input class="editinput" type="text" size="30" maxlength="100" name="value[sArticleContent[{$oRequ->getSlotId()}]RegExp]" value="[{$edit->getValue($sRegExpVarName)}]" [{$blActionRestriction}] [{$readonly}]>
+            <label for="sArticleContentRegExp" style="position: absolute; left: -2000px">[{oxmultilang ident="sArticleContentRegExp"}]</label>
+            <input id="sArticleContentRegExp" class="editinput" type="text" size="30" maxlength="100" name="value[sArticleContent[{$oRequ->getSlotId()}]RegExp]" value="[{$edit->getValue($sRegExpVarName)}]" [{$blActionRestriction}] [{$readonly}]>
         [{else}]
             <label for="RequArticleContent[{$oRequ->getSlotId()}]Type">[{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTICLECONTENT2"}]</label>
             [{if $edit->getValue($sTypeVarName) == 'oxartnum'}]

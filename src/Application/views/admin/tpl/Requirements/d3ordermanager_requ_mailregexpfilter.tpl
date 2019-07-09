@@ -5,7 +5,8 @@
         <label for="RequMailRegExp">[{oxmultilang ident="D3_ORDERMANAGER_REQU_MAILREGEXP"}]</label>    </dt>
     <dd>
         [{if $oView->isEditMode()}]
-            <input class="edittext ext_edittext" type="text" size="50" maxlength="100" name="value[sMailValue]" value='[{if $edit->getValue('sMailValue')}][{$edit->getValue('sMailValue')}][{/if}]' [{$blActionRestriction}] [{$readonly}]>
+            <label for="sMailValue" style="position: absolute; left: -2000px">[{oxmultilang ident="sMailValue"}]</label>
+            <input id="sMailValue" class="edittext ext_edittext" type="text" size="50" maxlength="100" name="value[sMailValue]" value='[{if $edit->getValue('sMailValue')}][{$edit->getValue('sMailValue')}][{/if}]' [{$blActionRestriction}] [{$readonly}]>
         [{else}]
             [{$edit->getValue('sMailValue')}]
         [{/if}]

@@ -16,9 +16,10 @@
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
+use D3\ModCfg\Application\Model\d3filesystem;
+use D3\ModCfg\Application\Model\d3str;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
-use D3\ModCfg\Application\Model\d3filesystem;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminMall;  // required for non fallback case
@@ -88,6 +89,7 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
 
     /**
      * @return d3ordermanager
+     * @throws Exception
      */
     public function getProfile()
     {
@@ -134,32 +136,25 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
     }
 
     /**
-     * @return d3filesystem
-     * @throws Exception
-     */
-    public function getFileSystem()
-    {
-        return d3GetModCfgDIC()->get(d3filesystem::class);
-    }
-
-    /**
      * @return string
      * @throws Exception
      */
     public function getHelpURL()
     {
         $sUrl = $this->d3GetSet()->getHelpURL();
-        $oFS = $this->getFileSystem();
+        /** @var d3str $oD3Str */
+        $oD3Str = d3GetModCfgDIC()->get(d3str::class);
 
         if ($this->_sHelpLinkMLAdd) {
-            $sUrl .= $oFS->unprefixedslashit($this->getLang()->translateString($this->_sHelpLinkMLAdd));
+            $sUrl .= $oD3Str->unprefixedslashit($this->getLang()->translateString($this->_sHelpLinkMLAdd));
         }
 
+        $oFS = d3GetModCfgDIC()->get(d3filesystem::class);
         $aFileName = $oFS->splitFilename($sUrl);
 
         // has no extension
         if (false == $aFileName['ext']) {
-            $sUrl = $oFS->trailingslashit($sUrl);
+            $sUrl = $oD3Str->trailingslashit($sUrl);
         }
 
         return $sUrl;

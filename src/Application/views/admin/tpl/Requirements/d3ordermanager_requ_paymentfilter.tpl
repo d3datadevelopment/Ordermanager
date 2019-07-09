@@ -7,6 +7,7 @@
     <dd>
         [{if $oView->isEditMode()}]
             <input type="hidden" name="value[sPaymentId]" value="">
+            <label for="sPaymentId" style="position: absolute; left: -2000px">[{oxmultilang ident="sPaymentId"}]</label>
             <SELECT class="editinput" name="value[sPaymentId][]" id="sPaymentId" size="5" multiple [{$blActionRestriction}] [{$readonly}]>
                 [{foreach from=$oView->getPaymentList() item="oPayment"}]
                     <option value="[{$oPayment->getId()}]" [{if is_array($edit->getValue('sPaymentId')) && in_array($oPayment->getId(), $edit->getValue('sPaymentId'))}]selected[{/if}]>[{$oPayment->getFieldData('oxdesc')}]</option>
