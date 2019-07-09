@@ -29,7 +29,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Request;
-use oxSystemComponentException;
+use oxsystemcomponentexception;
 
 class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 {

@@ -7,6 +7,7 @@
     <dd>
         [{if $oView->isEditMode()}]
             <input type="hidden" name="value[sNotInFolderId]" value="">
+            <label for="sNotInFolderId" style="position: absolute; left: -2000px">[{oxmultilang ident="sNotInFolderId"}]</label>
             <SELECT class="editinput" name="value[sNotInFolderId][]" id="sNotInFolderId" multiple [{$blActionRestriction}] [{$readonly}]>
                 [{foreach from=$oView->getItemFolders() key="field" item="color"}]
                     <option value="[{$field}]" [{if is_array($edit->getValue('sNotInFolderId')) && in_array($field, $edit->getValue('sNotInFolderId'))}]selected[{/if}] style="color: [{$color}];">[{oxmultilang ident=$field noerror=true}]</option>

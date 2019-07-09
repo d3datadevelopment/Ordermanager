@@ -6,7 +6,8 @@
     </dt>
     <dd>
         [{if $oView->isEditMode()}]
-            <SELECT class="editinput" name="value[sOrderFolder]" size="1" [{$blActionRestriction}] [{$readonly}]>
+            <label for="sOrderFolder" style="position: absolute; left: -2000px">[{oxmultilang ident="sOrderFolder"}]</label>
+            <SELECT id="sOrderFolder" class="editinput" name="value[sOrderFolder]" size="1" [{$blActionRestriction}] [{$readonly}]>
                 [{foreach from=$oView->getItemFolders() key="field" item="color"}]
                     <option value="[{$field}]" [{if $edit->getValue('sOrderFolder') == $field}]selected[{/if}] style="color: [{$color}];">[{oxmultilang ident=$field noerror=true}]</option>
                 [{/foreach}]

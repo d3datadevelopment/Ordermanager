@@ -6,7 +6,8 @@
     </dt>
     <dd>
         [{if $oView->isEditMode()}]
-            <input class="editinput" type="text" size="4" maxlength="5" name="value[sCurrencyISOValue]" value="[{$edit->getValue('sCurrencyISOValue')}]" [{$blActionRestriction}] [{$readonly}]>
+            <label for="sCuurencyISOValue" style="position: absolute; left: -2000px">[{oxmultilang ident="sCurrencyISOValue"}]</label>
+            <input id="sCuurencyISOValue" class="editinput" type="text" size="4" maxlength="5" name="value[sCurrencyISOValue]" value="[{$edit->getValue('sCurrencyISOValue')}]" [{$blActionRestriction}] [{$readonly}]>
         [{else}]
             [{$edit->getValue('sCurrencyISOValue')}]
         [{/if}]

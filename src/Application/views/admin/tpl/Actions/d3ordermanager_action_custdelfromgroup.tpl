@@ -7,6 +7,7 @@
     <dd>
         [{if $oView->isEditMode()}]
             <input type="hidden" name="value[sCustRemoveGroup]" value="">
+            <label for="sCustRemoveGroup" style="position: absolute; left: -2000px">[{oxmultilang ident="sCustRemoveGroup"}]</label>
             <SELECT class="editinput" name="value[sCustRemoveGroup][]" id="sCustRemoveGroup" size="7" multiple [{$blActionRestriction}] [{$readonly}]>
                 [{foreach from=$oView->getGroupsList() item="oGroup"}]
                     <option value="[{$oGroup->getId()}]" [{if is_array($edit->getValue('sCustRemoveGroup')) && in_array($oGroup->getId(), $edit->getValue('sCustRemoveGroup'))}]selected[{/if}]>[{$oGroup->getFieldData('oxtitle')}]</option>

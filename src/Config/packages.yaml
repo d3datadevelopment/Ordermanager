@@ -1,0 +1,38 @@
+# This Software is the property of Data Development and is protected
+# by copyright law - it is NOT Freeware.
+#
+# Any unauthorized use of this software without a valid license
+# is a violation of the license agreement and will be prosecuted by
+# civil and criminal law.
+#
+# http://www.shopmodule.com
+#
+# @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+# @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+# @link      http://www.oxidmodule.com
+
+parameters:
+  League\Flysystem\Filesystem.args.config:
+  League\Flysystem\Adapter\Local.args.root:
+  League\Flysystem\Adapter\Local.args.writeFlags:
+  League\Flysystem\Adapter\Local.args.linkHandling:
+  League\Flysystem\Adapter\Local.args.permissions: []
+
+services:
+  League\Flysystem\Filesystem:
+    class:      League\Flysystem\Filesystem
+    arguments:
+      - @League\Flysystem\Filesystem.args.adapter
+      - '%League\Flysystem\Filesystem.args.config%'
+  League\Flysystem\Filesystem.args.adapter:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  League\Flysystem\Adapter\Local:
+    class:      League\Flysystem\Adapter\Local
+    arguments:
+      - '%League\Flysystem\Adapter\Local.args.root%'
+      - '%League\Flysystem\Adapter\Local.args.writeFlags%'
+      - '%League\Flysystem\Adapter\Local.args.linkHandling%'
+      - '%League\Flysystem\Adapter\Local.args.permissions%'

@@ -2,6 +2,24 @@
 title: Changelog
 --- 
 
+## 3.1.0.0 - (2019-07-08)
+### Added
+- neue Auslöser "onOrderSave" und "onOrderFinalize"
+- alle Auslöser haben eine "pre execute script"- und "post execute script"-Option (nicht in allen Moduleditionen verfügbar)
+- Basisbeschreibung für jede Adminseite eingefügt
+- "verfügbar für manuelle Ausführung" kann nun optional auch die erfüllten Bedingungen prüfen - Aufgabe steht bei unpassenden Bedingungen dann nicht an Bestellung zur Verfügung
+- ergänzende Tests hinzugefügt
+
+### Changed
+- Adminbereich optimiert - alle Auslöser in eigenen Tab ausgelagert
+- Bootstrap-Locator für zukünftige Verwendung des globalen bin-Verzeichnisses angepasst
+
+### Fixed
+- HTML-Struktur der Admin-Templates korrigiert
+- zu wenig isoliert laufende Unit-Tests angepasst
+
+---
+
 ## 3.0.2.0 - (2019-05-07)
 ### Added
 - automatisierte Tests (Unit Tests, Integration Tests) integriert

@@ -14,7 +14,7 @@
 
     function UpdateList( sID)
     {
-        var oSearch = parent.list.document.getElementById("search");
+        let oSearch = parent.list.document.getElementById("search");
         oSearch.oxid.value=sID;
         oSearch.fnc.value='';
         oSearch.submit();
@@ -22,12 +22,12 @@
 
     function EditThis( sID)
     {
-        var oTransfer = document.getElementById("transfer");
+        let oTransfer = document.getElementById("transfer");
         oTransfer.oxid.value=sID;
         oTransfer.cl.value='';
         oTransfer.submit();
 
-        var oSearch = parent.list.document.getElementById("search");
+        let oSearch = parent.list.document.getElementById("search");
         oSearch.actedit.value = 0;
         oSearch.oxid.value=sID;
         oSearch.submit();
@@ -35,7 +35,7 @@
 
     function _groupExp(el)
     {
-        var _cur = el.parentNode;
+        let _cur = el.parentNode;
 
         if (_cur.className === "exp") _cur.className = "";
           else _cur.className = "exp";
@@ -43,8 +43,8 @@
 
     function selectAllListElems(el)
     {
-        var aSelectLen = el.length;
-        for(var i = 0; i < aSelectLen; i++)
+        let aSelectLen = el.length;
+        for(let i = 0; i < aSelectLen; i++)
         {
             el.options[i].selected = true;
         }
@@ -52,8 +52,8 @@
 
     function selectNoListElems(el)
     {
-        var aSelectLen = el.length;
-        for(var i = 0; i < aSelectLen; i++)
+        let aSelectLen = el.length;
+        for(let i = 0; i < aSelectLen; i++)
         {
             el.options[i].selected = false;
         }
@@ -82,6 +82,17 @@
     .groupExp dl dd {
         margin-left: 42%;
     }
+
+    details {
+        margin: 0 0 15px;
+        padding: 6px 9px 2px 18px;
+        border: 1px solid silver;
+        color: silver;
+    }
+    details summary {
+        margin: 0 0 3px -12px;
+        cursor: pointer;
+    }
     -->
 </style>
 
@@ -106,17 +117,22 @@
         <input type="hidden" name="editval[d3_cfg_mod__oxid]" value="[{$oxid}]">
 [{/if}]
 
-    <table border="0" width="98%">
+    <table style="border: none; width: 98%">
         [{if $edit->getId() && !$edit->getLicenseActive()}]
             <tr>
-                <td valign="top" class="edittext" colspan="2">
+                <td  style="vertical-align: top;" class="edittext" colspan="2">
                     <div class="extension_warning">[{oxmultilang ident="D3_ORDERMANAGER_ERROR_IEXECJOBSLIMIT"}]</div>
                 </td>
             </tr>
         [{/if}]
 
         <tr>
-            <td valign="top" class="edittext">
+            <td style="vertical-align: top;" class="edittext">
+
+                <details>
+                    <summary>[{oxmultilang ident="D3_GENERAL_ORDERMANAGER_DESCRIPTION"}]</summary>
+                    [{oxmultilang ident="d3tbclordermanager_items_overview_desc"}]
+                </details>
 
                 <div class="groupExp">
                     <div class="exp">

@@ -8,7 +8,7 @@
 
     function UpdateList( sID)
     {
-        var oSearch = parent.list.document.getElementById("search");
+        let oSearch = parent.list.document.getElementById("search");
         oSearch.oxid.value=sID;
         oSearch.fnc.value='';
         oSearch.submit();
@@ -16,12 +16,12 @@
 
     function EditThis( sID)
     {
-        var oTransfer = document.getElementById("transfer");
+        let oTransfer = document.getElementById("transfer");
         oTransfer.oxid.value=sID;
         oTransfer.cl.value='[{$oViewConf->getActiveClassName()}]';
         oTransfer.submit();
 
-        var oSearch = parent.list.document.getElementById("search");
+        let oSearch = parent.list.document.getElementById("search");
         oSearch.actedit.value = 0;
         oSearch.oxid.value=sID;
         oSearch.submit();
@@ -29,7 +29,7 @@
 
     function ChangeLstrt()
     {
-        var oSearch = document.getElementById("search");
+        let oSearch = document.getElementById("search");
         if (document.search != null && document.search.lstrt != null)
             oSearch.lstrt.value=0;
     }
@@ -53,6 +53,17 @@
     fieldset table td:nth-child(2) {
         width: 20%;
         text-align: right;
+    }
+
+    details {
+        margin: 0 0 15px;
+        padding: 6px 9px 2px 18px;
+        border: 1px solid silver;
+        color: silver;
+    }
+    details summary {
+        margin: 0 0 3px -12px;
+        cursor: pointer;
     }
 </style>
 
@@ -78,7 +89,7 @@
     <input type="hidden" name="voxid" value="[{$oxid}]">
     <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('oxid')}]]" value="[{$oxid}]">
 
-    <table cellspacing="0" cellpadding="0" border="0" style="width:98%;">
+    <table style="width:98%; padding: 0; border: none">
         [{if $edit->getId() && !$edit->getLicenseActive()}]
             <tr>
                 <td style="vertical-align:top;" colspan="2">
@@ -88,130 +99,18 @@
         [{/if}]
 
         <tr>
-            <td style="vertical-align: top; padding-top:10px;padding-left:10px;">
-                <fieldset>
-                    <legend>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_ACTIVE"}]</legend>
-                    <table cellspacing="0" cellpadding="0" border="0">
-                        <tr>
-                            <td class="edittext">
-                                <label for="MainActive">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_ACTIVE"}]</label>
-                            </td>
-                            <td class="edittext">
-                                <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('oxactive')}]]" value='0'>
-                                <input id="MainActive" class="edittext" type="checkbox" name="editval[[{$edit->d3GetFieldLongName('oxactive')}]]" value='1' [{if $edit->getFieldData('oxactive') == 1}]checked[{/if}] [{$readonly}]>
-                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_ACTIVE_DESC"}]
-                            </td>
-                        </tr>
-                        [{if $blUseTimeCheck}]
-                            <tr>
-                                <td class="edittext">
-                                    [{oxmultilang ident="D3_ORDERMANAGER_MAIN_ACTIVFROMTILL"}]&nbsp;
-                                </td>
-                                <td class="edittext">
-                                    <label for="MainActiveFrom">[{oxmultilang ident="D3_MODPROFILE_MAIN_ACTIVEFROM"}]</label>&nbsp;<input id="MainActiveFrom" type="text" class="editinput" size="27" name="editval[[{$edit->d3GetFieldLongName('oxactivefrom')}]]" value="[{$edit->getFieldData('oxactivefrom')|oxformdate}]" [{include file="help.tpl" helpid=article_vonbis}] [{$readonly}]><br>
-                                    <label for="MainActiveTo">[{oxmultilang ident="D3_MODPROFILE_MAIN_ACTIVETO"}]</label>&nbsp;&nbsp;<input id="MainActiveTo" type="text" class="editinput" size="27" name="editval[[{$edit->d3GetFieldLongName('oxactiveto')}]]" value="[{$edit->getFieldData('oxactiveto')|oxformdate}]" [{include file="help.tpl" helpid=article_vonbis}] [{$readonly}]>
-                                </td>
-                            </tr>
-                        [{/if}]
-
-                        <tr>
-                            <td class="edittext">
-                                <label for="MainCJID">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_CRONJOBID"}]</label>&nbsp;
-                            </td>
-                            <td class="edittext">
-                                <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_CRONJOBID')}]]" value="0">
-                                <input id="MainCJID" type="text" size="5" maxlength="[{$edit->d3modprofile__d3_cronjobid->fldmax_length}]" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_CRONJOBID')}]]" value="[{if $edit->getFieldData('D3_CRONJOBID')}][{$edit->getFieldData('D3_CRONJOBID')}][{else}]0[{/if}]" [{$readonly}]>
-                                [{oxinputhelp ident="D3_ORDERMANAGER_SET_CRON_JOB_DESC"}]
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="edittext">
-                                <label for="MainExecManually">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECMANUALLY"}]</label>&nbsp;
-                            </td>
-                            <td class="edittext">
-                                <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_OM_EXECMANUALLY')}]]" value="0">
-                                <input id="MainExecManually" type="checkbox" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_EXECMANUALLY')}]]" value="1" [{if $edit->getFieldData('D3_OM_EXECMANUALLY')}]checked[{/if}] [{$readonly}]>
-                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_EXECMANUALLY_DESC"}]
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
-
-                <fieldset>
-                    <legend>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_EXECUTION"}]</legend>
-                    <table cellspacing="0" cellpadding="0" border="0">
-                        <tr>
-                            <td class="edittext" style="
-                                [{if ($edit->getFieldData('oxactive') == 1 OR
-                                     ($blUseTimeCheck && ($edit->getFieldData('oxactivefrom') != '0000-00-00 00:00:00' AND $edit->getFieldData('oxactiveto') != '0000-00-00 00:00:00')))
-                                     AND !$edit->getValue('blItemExecute') AND !$edit->getValue('blItemMailSend')}]
-                                        font-weight: bold; background-color: darkred; color: white;
-                                [{/if}]">
-                                <label for="MainExecute">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECUTE2"}][{if $oSet->hasDebugMode()}]<br><span id="debugnote">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECUTE_DEBUG"}]</span>[{/if}]</label>
-                            </td>
-                            <td class="edittext">
-                                <input type="hidden" name="value[blItemExecute]" value="1">
-                                <input id="MainExecute" type="checkbox" [{if $oSet->hasDebugMode()}]disabled[{/if}] class="edittext ext_edittext" name="value[blItemExecute]" value="0" [{if false == $edit->getValue('blItemExecute')}]checked[{/if}] [{$readonly}]>
-                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_EXECUTE_DESC"}]
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="edittext" style="
-                                [{if ($edit->getFieldData('oxactive') == 1 OR
-                                     ($blUseTimeCheck && ($edit->getFieldData('oxactivefrom') != '0000-00-00 00:00:00' AND $edit->getFieldData('oxactiveto') != '0000-00-00 00:00:00')))
-                                     AND !$edit->getValue('blItemExecute') AND !$edit->getValue('blItemMailSend')}]
-                                        font-weight: bold; background-color: darkred; color: white;
-                                [{/if}]">
-                                <label for="MainMailsend">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_MAILSEND"}]</label>&nbsp;
-                            </td>
-                            <td class="edittext">
-                                <input type="hidden" name="value[blItemMailSend]" value="0">
-                                <input id="MainMailsend" type="checkbox" class="edittext ext_edittext" name="value[blItemMailSend]" value="1" [{if $edit->getValue('blItemMailSend')}]checked[{/if}] [{$readonly}]>
-                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_MAILSEND_DESC"}]
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
-
-                <fieldset>
-                    <legend>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_FOLLOWUP"}]</legend>
-                    <table cellspacing="0" cellpadding="0" border="0">
-                        <tr>
-                            <td class="edittext">
-                                <label for="MainMarkOrder">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_MARKORDER"}]</label>&nbsp;
-                            </td>
-                            <td class="edittext">
-                                <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_OM_MARKORDER')}]]" value="0">
-                                <input id="MainMarkOrder" type="checkbox" onclick="if(this.checked){document.getElementById('delayTime').style.display = 'table-row';}else{document.getElementById('delayTime').style.display = 'none';}" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_MARKORDER')}]]" value="1" [{if $edit->getFieldData('D3_OM_MARKORDER')}]checked[{/if}] [{$readonly}]>
-                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_MARKORDER_DESC"}]
-                            </td>
-                        </tr>
-
-                        <tr id="delayTime" style="display:[{if $edit->getFieldData('D3_OM_MARKORDER')}]table-row[{else}]none[{/if}];">
-                            <td class="edittext">
-                                <label for="MainMarkOrderDelay">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY"}]</label>&nbsp;
-                            </td>
-                            <td class="edittext">
-                                <input id="MainMarkOrderDelay" type="text" name="value[iUnmarkExecDelayTimeValue]" class="edittext ext_edittext" size="3" maxlength="5" value="[{if $edit->getValue('iUnmarkExecDelayTimeValue')}][{$edit->getValue('iUnmarkExecDelayTimeValue')}][{else}]1[{/if}]" [{$readonly}]>
-                                <select id="MainMarkOrderUnit" name="value[sUnmarkExecDelayTimeUnit]" class="edittext ext_edittext" size="1" [{$readonly}]>
-                                    <option value="days" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'days'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_DAY"}]</option>
-                                    <option value="hours" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'hours'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_HOUR"}]</option>
-                                    <option value="minutes" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'minutes'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_MINUTE"}]</option>
-                                </select>
-                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_DESC"}]
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
-
-                <table cellspacing="0" cellpadding="0" border="0">
-                    [{include file="d3_modprofile_actionbuttons.tpl"}]
-                </table>
+            <td class="edittext" colspan="2">
+                <details>
+                    <summary>[{oxmultilang ident="D3_GENERAL_ORDERMANAGER_DESCRIPTION"}]</summary>
+                    [{oxmultilang ident="d3tbclordermanager_items_main_desc"}]
+                </details>
             </td>
-<!-- Anfang rechte Seite -->
+        </tr>
+
+        <tr>
             <td class="edittext" style="text-align:left; vertical-align:top; height:99%;padding-left:5px;padding-bottom:30px;padding-top:10px;">
-                <table cellspacing="0" cellpadding="0" border="0">
+
+                <table style="border: none; padding: 0;">
                     <tr>
                         <td class="edittext">
                             <label for="MainTitle">[{oxmultilang ident="D3_MODPROFILE_MAIN_TITLE"}]</label>&nbsp;
@@ -268,6 +167,81 @@
                         </tr>
                     [{/if}]
                 </table>
+
+                <table style="border: none; padding: 0;">
+                    [{include file="d3_modprofile_actionbuttons.tpl"}]
+                </table>
+            </td>
+
+            <!-- Anfang rechte Seite -->
+            <td style="vertical-align: top; padding-top:10px;padding-left:10px;">
+                <fieldset>
+                    <legend>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_EXECUTION"}]</legend>
+                    <table style="border: none; padding: 0;">
+                        <tr>
+                            <td class="edittext" style="
+                                    [{if ($edit->getFieldData('oxactive') == 1 OR
+                            ($blUseTimeCheck && ($edit->getFieldData('oxactivefrom') != '0000-00-00 00:00:00' AND $edit->getFieldData('oxactiveto') != '0000-00-00 00:00:00')))
+                            AND !$edit->getValue('blItemExecute') AND !$edit->getValue('blItemMailSend')}]
+                                    font-weight: bold; background-color: darkred; color: white;
+                                    [{/if}]">
+                                <label for="MainExecute">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECUTE2"}][{if $oSet->hasDebugMode()}]<br><span id="debugnote">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECUTE_DEBUG"}]</span>[{/if}]</label>
+                            </td>
+                            <td class="edittext">
+                                <input type="hidden" name="value[blItemExecute]" value="1">
+                                <input id="MainExecute" type="checkbox" [{if $oSet->hasDebugMode()}]disabled[{/if}] class="edittext ext_edittext" name="value[blItemExecute]" value="0" [{if false == $edit->getValue('blItemExecute')}]checked[{/if}] [{$readonly}]>
+                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_EXECUTE_DESC"}]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="edittext" style="
+                                    [{if ($edit->getFieldData('oxactive') == 1 OR
+                            ($blUseTimeCheck && ($edit->getFieldData('oxactivefrom') != '0000-00-00 00:00:00' AND $edit->getFieldData('oxactiveto') != '0000-00-00 00:00:00')))
+                            AND !$edit->getValue('blItemExecute') AND !$edit->getValue('blItemMailSend')}]
+                                    font-weight: bold; background-color: darkred; color: white;
+                                    [{/if}]">
+                                <label for="MainMailsend">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_MAILSEND"}]</label>&nbsp;
+                            </td>
+                            <td class="edittext">
+                                <input type="hidden" name="value[blItemMailSend]" value="0">
+                                <input id="MainMailsend" type="checkbox" class="edittext ext_edittext" name="value[blItemMailSend]" value="1" [{if $edit->getValue('blItemMailSend')}]checked[{/if}] [{$readonly}]>
+                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_MAILSEND_DESC"}]
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+
+                <fieldset>
+                    <legend>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_FOLLOWUP"}]</legend>
+                    <table style="border: none; padding: 0;">
+                        <tr>
+                            <td class="edittext">
+                                <label for="MainMarkOrder">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_MARKORDER"}]</label>&nbsp;
+                            </td>
+                            <td class="edittext">
+                                <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_OM_MARKORDER')}]]" value="0">
+                                <input id="MainMarkOrder" type="checkbox" onclick="if(this.checked){document.getElementById('delayTime').style.display = 'table-row';}else{document.getElementById('delayTime').style.display = 'none';}" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_MARKORDER')}]]" value="1" [{if $edit->getFieldData('D3_OM_MARKORDER')}]checked[{/if}] [{$readonly}]>
+                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_MARKORDER_DESC"}]
+                            </td>
+                        </tr>
+
+                        <tr id="delayTime" style="display:[{if $edit->getFieldData('D3_OM_MARKORDER')}]table-row[{else}]none[{/if}];">
+                            <td class="edittext">
+                                <label for="MainMarkOrderDelay">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY"}]</label>&nbsp;
+                            </td>
+                            <td class="edittext">
+                                <input id="MainMarkOrderDelay" type="text" name="value[iUnmarkExecDelayTimeValue]" class="edittext ext_edittext" size="3" maxlength="5" value="[{if $edit->getValue('iUnmarkExecDelayTimeValue')}][{$edit->getValue('iUnmarkExecDelayTimeValue')}][{else}]1[{/if}]" [{$readonly}]>
+                                <label for="MainMarkOrderUnit" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDORDERUNIT"}]</label>
+                                <select id="MainMarkOrderUnit" name="value[sUnmarkExecDelayTimeUnit]" class="edittext ext_edittext" size="1" [{$readonly}]>
+                                    <option value="days" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'days'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_DAY"}]</option>
+                                    <option value="hours" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'hours'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_HOUR"}]</option>
+                                    <option value="minutes" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'minutes'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_MINUTE"}]</option>
+                                </select>
+                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_DESC"}]
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
             </td>
 <!-- Ende rechte Seite -->
         </tr>

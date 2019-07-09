@@ -11,30 +11,30 @@
     <!--
     function EditThis( sID)
     {
-        var oTransfer = parent.edit.document.getElementById("transfer");
+        let oTransfer = parent.edit.document.getElementById("transfer");
         oTransfer.oxid.value=sID;
         oTransfer.cl.value='[{if $actlocation}][{$actlocation}][{else}][{$default_edit}][{/if}]';
 
         //forcing edit frame to reload after submit
         top.forceReloadingEditFrame();
 
-        var oSearch = document.getElementById("search");
+        let oSearch = document.getElementById("search");
         oSearch.oxid.value=sID;
         oSearch.submit();
     }
 
     function DeleteThis( sID)
     {
-        var blCheck = confirm("[{oxmultilang ident="GENERAL_YOUWANTTODELETE"}]");
+        let blCheck = confirm("[{oxmultilang ident="GENERAL_YOUWANTTODELETE"}]");
         if( blCheck === true)
         {
-            var oSearch = document.getElementById("search");
+            let oSearch = document.getElementById("search");
             oSearch.oxid.value=sID;
             oSearch.fnc.value='deleteentry';
             oSearch.actedit.value=0;
             oSearch.submit();
 
-            var oTransfer = parent.edit.document.getElementById("transfer");
+            let oTransfer = parent.edit.document.getElementById("transfer");
             oTransfer.oxid.value='-1';
             oTransfer.cl.value='[{$default_edit}]';
 
@@ -45,11 +45,11 @@
 
     function ChangeEditBar( sLocation, sPos)
     {
-        var oSearch = document.getElementById("search");
+        let oSearch = document.getElementById("search");
         oSearch.actedit.value=sPos;
         oSearch.submit();
 
-        var oTransfer = parent.edit.document.getElementById("transfer");
+        let oTransfer = parent.edit.document.getElementById("transfer");
         oTransfer.cl.value=sLocation;
 
         //forcing edit frame to reload after submit
@@ -58,12 +58,12 @@
 
     function ChangeLanguage()
     {
-        var oSearch = document.getElementById("search");
+        let oSearch = document.getElementById("search");
         oSearch.language.value=oSearch.changelang.value;
         oSearch.editlanguage.value=oSearch.changelang.value;
         oSearch.submit();
 
-        var oTransfer = parent.edit.document.getElementById("transfer");
+        let oTransfer = parent.edit.document.getElementById("transfer");
         oTransfer.innerHTML += '<input type="hidden" name="language" value="'+oSearch.changelang.value+'">';
         oTransfer.innerHTML += '<input type="hidden" name="editlanguage" value="'+oSearch.changelang.value+'">';
 
@@ -90,45 +90,48 @@
         <form name="search" id="search" action="[{$oViewConf->getSelfLink()}]" method="post">
             [{include file="_formparams.tpl" cl=$oViewConf->getActiveClassName() lstrt=$lstrt actedit=$actedit oxid=$oxid fnc="" language=$actlang editlanguage=$actlang}]
 
-            <table cellspacing="0" cellpadding="0" border="0" style="width:100%;">
+            <table style="border: none; padding: 0; width:100%;">
                 <colgroup>
                     [{block name="admin_d3ordermanager_list_colgroup"}]
-                        <col width="3%">
-                        <col width="3%">
-                        <col width="14%">
-                        <col width="50%">
-                        <col width="20%">
-                        <col width="10%">
+                        <col style="width: 3%">
+                        <col style="width: 3%">
+                        <col style="width: 14%">
+                        <col style="width: 50%">
+                        <col style="width: 20%">
+                        <col style="width: 10%">
                     [{/block}]
                 </colgroup>
                 <tr class="listitem">
                     [{block name="admin_d3ordermanager_list_filter"}]
-                        <td height="20" valign="middle" class="listfilter first" nowrap>
+                        <td style="vertical-align: middle; height; 20px;" class="listfilter first" nowrap>
                             <div class="r1"><div class="b1">&nbsp;</div></div>
                         </td>
-                        <td height="20" valign="middle" class="listfilter" nowrap>
+                        <td style="vertical-align: middle; height; 20px;" class="listfilter" nowrap>
                             <div class="r1"><div class="b1">&nbsp;</div></div>
                         </td>
-                        <td height="20" valign="middle" class="listfilter" nowrap>
+                        <td style="vertical-align: middle; height; 20px;" class="listfilter" nowrap>
                             <div class="r1">
                                 <div class="b1">
-                                    <input title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_SORTING"}]" class="listedit" type="text" size="10" maxlength="128" name="where[[{$listTable}]][oxsort]" value="[{$where.$listTable.oxsort}]">
+                                    <label for="filtersorting" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_FILTER_SORTING"}]</label>
+                                    <input id="filtersorting" title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_SORTING"}]" class="listedit" type="text" size="10" maxlength="128" name="where[[{$listTable}]][oxsort]" value="[{$where.$listTable.oxsort}]">
                                 </div>
                             </div>
                         </td>
-                        <td valign="top" class="listfilter" nowrap>
+                        <td style="vertical-align: top;" class="listfilter" nowrap>
                             <div class="r1">
                                 <div class="b1">
-                                    <input class="listedit" title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_TITLE"}]" type="text" size="25" maxlength="128" name="where[[{$listTable}]][oxtitle]" value="[{$where.$listTable.oxtitle}]"
+                                    <label for="filtertitle" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_FILTER_TITLE"}]</label>
+                                    <input id="filtertitle" class="listedit" title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_TITLE"}]" type="text" size="25" maxlength="128" name="where[[{$listTable}]][oxtitle]" value="[{$where.$listTable.oxtitle}]"
                                 </div>
                             </div>
                         </td>
-                        <td height="20" valign="middle" colspan="2" class="listfilter" nowrap>
+                        <td style="vertical-align: middle; height; 20px;" colspan="2" class="listfilter" nowrap>
                             <div class="r1">
                                 <div class="b1">
                                     <div class="find">
                                         [{if $blShowLangSwitch}]
-                                            <select title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_LANGUAGE"}]" name="changelang" class="editinput" onChange="ChangeLanguage();">
+                                            <label for="langswitch" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_FILTER_LANGUAGE"}]</label>
+                                            <select id="langswitch" title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_LANGUAGE"}]" name="changelang" class="editinput" onChange="ChangeLanguage();">
                                                 [{foreach from=$languages item="lang"}]
                                                     <option value="[{$lang->id}]" [{if $lang->selected}]SELECTED[{/if}]>[{$lang->name}]</option>
                                                 [{/foreach}]
@@ -137,7 +140,8 @@
                                         <input class="listedit" type="submit" name="submitit" value="[{oxmultilang ident="GENERAL_SEARCH"}]" onClick="document.search.lstrt.value=0;">
                                     </div>
 
-                                    <select name="folder" title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_FOLDER"}]" class="folderselect" onChange="document.search.submit();" [{include file="help.tpl" helpid=searchfieldoxdynamic}]>
+                                    <label for="filterfolder" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_FILTER_FOLDER"}]</label>
+                                    <select id="filterfolder" name="folder" title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_FOLDER"}]" class="folderselect" onChange="document.search.submit();" [{include file="help.tpl" helpid=searchfieldoxdynamic}]>
                                         [{foreach from=$oView->getSelectableFolderList() key="sMLIdent" item="sTranslation"}]
                                             <option value="[{$sMLIdent}]" [{if $sMLIdent == $folder}]SELECTED[{/if}]>[{$sTranslation}]</option>
                                         [{/foreach}]
@@ -201,31 +205,31 @@
                             [{if $listitem->getId() == $oxid}]
                                 [{assign var="listclass" value="listitem4"}]
                             [{/if}]
-                            <td valign="top" class="[{$listclass}] [{$formatclass}] [{if $listitem->getFieldData('oxactive') == 1}] active[{/if}]" height="15">
+                            <td style="vertical-align: top;" class="[{$listclass}] [{$formatclass}] [{if $listitem->getFieldData('oxactive') == 1}] active[{/if}]" height="15">
                                 <div class="listitemfloating">
                                     &nbsp;
                                 </div>
                             </td>
-                            <td valign="top" class="[{$listclass}] [{$formatclass}] [{if $listitem->getFieldData('D3_OM_EXECMANUALLY')}] active[{/if}]" height="15">
+                            <td style="vertical-align: top;" class="[{$listclass}] [{$formatclass}] [{if $listitem->getFieldData('D3_OM_EXECMANUALLY')}] active[{/if}]" height="15">
                                 <div class="listitemfloating">
                                     &nbsp;
                                 </div>
                             </td>
-                            <td valign="top" class="[{$listclass}] [{$formatclass}] " height="15">
+                            <td style="vertical-align: top;" class="[{$listclass}] [{$formatclass}] " height="15">
                                 <div class="listitemfloating">&nbsp;
                                     <a href="Javascript:EditThis('[{$listitem->getId()}]');" class="[{$listclass}]">
                                         [{$listitem->getFieldData('oxsort')}]
                                     </a>
                                 </div>
                             </td>
-                            <td valign="top" class="[{$listclass}] [{$formatclass}] " height="15">
+                            <td style="vertical-align: top;" class="[{$listclass}] [{$formatclass}] " height="15">
                                 <div class="listitemfloating">&nbsp;
                                     <a href="Javascript:EditThis('[{$listitem->getId()}]');" class="[{$listclass}]">
                                         [{$listitem->getFieldData('oxtitle')|truncate:200:"..":false}]
                                     </a>
                                 </div>
                             </td>
-                            <td valign="top" class="[{$listclass}] [{$formatclass}] " height="15">
+                            <td style="vertical-align: top;" class="[{$listclass}] [{$formatclass}] " height="15">
                                 <div class="listitemfloating">&nbsp;
                                     <a href="Javascript:EditThis('[{$listitem->getId()}]');" class="[{$listclass}]">
                                         [{if $listitem->getFieldData('oxfolder')}][{oxmultilang ident=$listitem->getFieldData('oxfolder')}][{/if}]

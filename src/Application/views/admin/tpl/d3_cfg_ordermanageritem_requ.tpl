@@ -14,7 +14,7 @@
 
     function UpdateList( sID)
     {
-        var oSearch = parent.list.document.getElementById("search");
+        let oSearch = parent.list.document.getElementById("search");
         oSearch.oxid.value=sID;
         oSearch.fnc.value='';
         oSearch.submit();
@@ -22,12 +22,12 @@
 
     function EditThis( sID)
     {
-        var oTransfer = document.getElementById("transfer");
+        let oTransfer = document.getElementById("transfer");
         oTransfer.oxid.value=sID;
         oTransfer.cl.value='';
         oTransfer.submit();
 
-        var oSearch = parent.list.document.getElementById("search");
+        let oSearch = parent.list.document.getElementById("search");
         oSearch.actedit.value = 0;
         oSearch.oxid.value=sID;
         oSearch.submit();
@@ -35,7 +35,7 @@
 
     function _groupExp(el)
     {
-        var _cur = el.parentNode;
+        let _cur = el.parentNode;
 
         if (_cur.className === "exp") _cur.className = "";
           else _cur.className = "exp";
@@ -43,8 +43,8 @@
 
     function selectAllListElems(el)
     {
-        var aSelectLen = el.length;
-        for(var i = 0; i < aSelectLen; i++)
+        let aSelectLen = el.length;
+        for(let i = 0; i < aSelectLen; i++)
         {
             el.options[i].selected = true;
         }
@@ -52,8 +52,8 @@
 
     function selectNoListElems(el)
     {
-        var aSelectLen = el.length;
-        for(var i = 0; i < aSelectLen; i++)
+        let aSelectLen = el.length;
+        for(let i = 0; i < aSelectLen; i++)
         {
             el.options[i].selected = false;
         }
@@ -112,6 +112,17 @@
     .edittext select.editinput {
         width: auto;
     }
+
+    details {
+        margin: 0 0 15px;
+        padding: 6px 9px 2px 18px;
+        border: 1px solid silver;
+        color: silver;
+    }
+    details summary {
+        margin: 0 0 3px -12px;
+        cursor: pointer;
+    }
     -->
 </style>
 
@@ -137,7 +148,7 @@
     <input type="hidden" name="oxid" value="[{$oxid}]">
     <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('oxid')}]]" value="[{$oxid}]">
 
-    <table border="0" style="width:98%;">
+    <table style="border: none; width:98%;">
         [{if $edit->getId() && !$edit->getLicenseActive()}]
             <tr>
                 <td style="vertical-align: top;" class="edittext" colspan="2">
@@ -156,6 +167,11 @@
 
         <tr>
             <td style="vertical-align:top;" class="edittext">
+
+                <details>
+                    <summary>[{oxmultilang ident="D3_GENERAL_ORDERMANAGER_DESCRIPTION"}]</summary>
+                    [{oxmultilang ident="d3tbclordermanager_items_requ_desc"}]
+                </details>
 
                 [{assign var="blRestricted" value=false}]
                 [{foreach from=$oView->getGroupedRequirementList() key="sGroupId" item="oRequList"}]
@@ -188,7 +204,7 @@
 
                 <table style="width:100%;">
                     <tr>
-                        <td class="edittext ext_edittext" align="left"><br>
+                        <td class="edittext ext_edittext" style="text-align: left;"><br>
                             <span class="d3modcfg_btn icon d3color-green">
                                 <button type="submit" name="save" [{$readonly}]>
                                     <i class="fa fa-check-circle fa-inverse"></i>

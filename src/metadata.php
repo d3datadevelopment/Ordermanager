@@ -1,6 +1,10 @@
 <?php
 
 use D3\Ordermanager\Setup as ModuleSetup;
+use D3\Ordermanager\Modules\Application\Model as ModuleModel;
+use D3\Ordermanager\Application\Controller as OMController;
+use D3\Ordermanager\Application\Controller\Admin as OMControllerAdmin;
+use D3\Ordermanager\Modules\Application\Controller\Admin as ModuleControllerAdmin;
 use D3\ModCfg\Application\Model\d3utils;
 use OxidEsales\Eshop\Application\Controller as OxidController;
 use OxidEsales\Eshop\Application\Model as OxidModel;
@@ -23,44 +27,46 @@ $aModule = array(
         'de'    => 'Bearbeitet frei definierbare Auftr&auml;ge auf Basis von einstellbaren Bestellungslisten.',
         'en'    => ''),
     'thumbnail'     => 'picture.png',
-    'version'       => '3.0.2.0',
+    'version'       => '3.1.0.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'http://www.oxidmodule.com/',
     'extend'        => array(
-        OxidCore\Email::class                   => \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::class,
-        OxidModel\Order::class                  => \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::class,
-        OxidModel\User::class                   => \D3\Ordermanager\Modules\Application\Model\d3_oxuser_ordermanager::class,
-        OxidModel\Basket::class                 => \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::class,
-        OxidModel\BasketItem::class             => \D3\Ordermanager\Modules\Application\Model\d3_oxbasketitem_ordermanager::class,
-        OxidController\Admin\OrderRemark::class => \D3\Ordermanager\Modules\Application\Controller\Admin\d3_order_remark_ordermanager::class,
+        OxidCore\Email::class                   => ModuleModel\d3_oxemail_ordermanager::class,
+        OxidModel\Order::class                  => ModuleModel\d3_oxorder_ordermanager::class,
+        OxidModel\User::class                   => ModuleModel\d3_oxuser_ordermanager::class,
+        OxidModel\Basket::class                 => ModuleModel\d3_oxbasket_ordermanager::class,
+        OxidModel\BasketItem::class             => ModuleModel\d3_oxbasketitem_ordermanager::class,
+        OxidController\Admin\OrderRemark::class => ModuleControllerAdmin\d3_order_remark_ordermanager::class,
     ),
     'controllers'   => array(
-        'd3ordermanager_response'           => \D3\Ordermanager\Application\Controller\d3ordermanager_response::class,
+        'd3ordermanager_response'           => OMController\d3ordermanager_response::class,
         
-        'd3_cfg_ordermanagerset'            => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset::class,
-        'd3_cfg_ordermanagerset_list'       => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list::class,
-        'd3_cfg_ordermanagerset_main'       => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::class,
-        'd3_cfg_ordermanagerlog'            => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerlog::class,
-        'd3_cfg_ordermanagerlog_list'       => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerlog_list::class,
-        'd3_cfg_ordermanagerset_licence'    => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_licence::class,
-        'd3_cfg_ordermanageritem'           => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem::class,
-        'd3_cfg_ordermanageritem_list'      => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_list::class,
-        'd3_cfg_ordermanageritem_main'      => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main::class,
-        'd3_cfg_ordermanageritem_mall'      => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::class,
+        'd3_cfg_ordermanagerset'            => OMControllerAdmin\d3_cfg_ordermanagerset::class,
+        'd3_cfg_ordermanagerset_list'       => OMControllerAdmin\d3_cfg_ordermanagerset_list::class,
+        'd3_cfg_ordermanagerset_main'       => OMControllerAdmin\d3_cfg_ordermanagerset_main::class,
+        'd3_cfg_ordermanagerlog'            => OMControllerAdmin\d3_cfg_ordermanagerlog::class,
+        'd3_cfg_ordermanagerlog_list'       => OMControllerAdmin\d3_cfg_ordermanagerlog_list::class,
+        'd3_cfg_ordermanagerset_licence'    => OMControllerAdmin\d3_cfg_ordermanagerset_licence::class,
+        'd3_cfg_ordermanageritem'           => OMControllerAdmin\d3_cfg_ordermanageritem::class,
+        'd3_cfg_ordermanageritem_list'      => OMControllerAdmin\d3_cfg_ordermanageritem_list::class,
+        'd3_cfg_ordermanageritem_main'      => OMControllerAdmin\d3_cfg_ordermanageritem_main::class,
+        'd3_cfg_ordermanageritem_mall'      => OMControllerAdmin\d3_cfg_ordermanageritem_mall::class,
+        'd3_cfg_ordermanageritem_trigger'   => OMControllerAdmin\d3_cfg_ordermanageritem_trigger::class,
         'd3_cfg_ordermanageritem_overview'  =>
-            \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_overview::class,
+            OMControllerAdmin\d3_cfg_ordermanageritem_overview::class,
         'd3_cfg_ordermanageritem_settings'  =>
-            \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::class,
-        'd3_cfg_ordermanageritem_requ'      => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::class,
-        'd3_cfg_ordermanageritem_action'    => \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::class,
-        'd3_ordermanager_jobs'              => \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::class,
+            OMControllerAdmin\d3_cfg_ordermanageritem_settings::class,
+        'd3_cfg_ordermanageritem_requ'      => OMControllerAdmin\d3_cfg_ordermanageritem_requ::class,
+        'd3_cfg_ordermanageritem_action'    => OMControllerAdmin\d3_cfg_ordermanageritem_action::class,
+        'd3_ordermanager_jobs'              => OMControllerAdmin\d3_ordermanager_jobs::class,
     ),
     'templates'   => array(
         'd3_cfg_ordermanagerset_main.tpl'       => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanagerset_main.tpl',
         'd3_cfg_ordermanageritem_list.tpl'      => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_list.tpl',
         'd3_cfg_ordermanageritem_main.tpl'      => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_main.tpl',
         'd3_cfg_ordermanageritem_mall.tpl'      => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_mall.tpl',
+        'd3_cfg_ordermanageritem_trigger.tpl'   => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_trigger.tpl',
         'd3_cfg_ordermanageritem_overview.tpl'  =>
             'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_overview.tpl',
         'd3_cfg_ordermanageritem_requ.tpl'      => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_requ.tpl',
@@ -356,6 +362,7 @@ $aModule = array(
         'd3/ordermanager/tests/unit/Application/Controller/Admin/d3_cfg_ordermanagersetTest.php',
         'd3/ordermanager/tests/unit/Application/Controller/Admin/d3_cfg_ordermanageritem_mallTest.php',
         'd3/ordermanager/tests/unit/Application/Controller/Admin/d3_cfg_ordermanageritem_actionTest.php',
+        'd3/ordermanager/tests/unit/Application/Controller/Admin/d3_cfg_ordermanageritem_triggerTest.php',
         'd3/ordermanager/tests/unit/Application/Controller/Admin/d3_cfg_ordermanageritem_settingsTest.php',
         'd3/ordermanager/tests/unit/Application/Controller/Admin/d3_cfg_ordermanagerset_listTest.php',
         'd3/ordermanager/tests/unit/Application/Controller/Admin/d3_cfg_ordermanageritem_mainTest.php',

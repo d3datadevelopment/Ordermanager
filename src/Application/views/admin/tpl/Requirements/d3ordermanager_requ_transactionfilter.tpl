@@ -6,7 +6,8 @@
     </dt>
     <dd>
         [{if $oView->isEditMode()}]
-            <SELECT class="editinput" name="value[sOrderTransStatus]" size="1" [{$blActionRestriction}] [{$readonly}]>
+            <label for="sOrderTransStatus" style="position: absolute; left: -2000px">[{oxmultilang ident="sOrderTransStatus"}]</label>
+            <SELECT id="sOrderTransStatus" class="editinput" name="value[sOrderTransStatus]" size="1" [{$blActionRestriction}] [{$readonly}]>
                 [{foreach from=$oView->getTransStatusList() item="sStatus"}]
                     <option value="[{$sStatus}]" [{if $edit->getValue('sOrderTransStatus') == $sStatus}]selected[{/if}]>
                         [{assign var="sStatusMLIdent" value="D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_"|cat:$sStatus}]

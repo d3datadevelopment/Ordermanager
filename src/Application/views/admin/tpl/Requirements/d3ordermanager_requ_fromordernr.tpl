@@ -6,7 +6,8 @@
     </dt>
     <dd>
         [{if $oView->isEditMode()}]
-            <input style="text-align: right;" class="edittext ext_edittext" type="text" size="8" maxlength="10" name="value[sFromOrderNrValue]" value='[{$edit->getValue('sFromOrderNrValue')}]' [{$blActionRestriction}] [{$readonly}]>
+            <label for="sFromOrderNrValue" style="position: absolute; left: -2000px">[{oxmultilang ident="sFromOrderNrValue"}]</label>
+            <input id="sFromOrderNrValue" style="text-align: right;" class="edittext ext_edittext" type="text" size="8" maxlength="10" name="value[sFromOrderNrValue]" value='[{$edit->getValue('sFromOrderNrValue')}]' [{$blActionRestriction}] [{$readonly}]>
         [{else}]
             [{$edit->getValue('sFromOrderNrValue')}]
         [{/if}]

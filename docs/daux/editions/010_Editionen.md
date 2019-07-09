@@ -2,17 +2,28 @@
 title: Editionen
 ---
 
-Das Modul **{$modulename}** erhalten Sie in verschiedenen Editionen mit unterschiedlichem Funktionsumfang. Hierbei unterscheiden sich ausschließlich die verwendbaren Filter und Aktionen zwischen den Editionen. Die grundsätzliche Modulfunktion ist immer gleich.
+Das Modul **{$modulename}** erhalten Sie in verschiedenen Editionen mit unterschiedlichem Funktionsumfang. Die hier nicht genannten Modulfunktionen sind in allen Editionen gleich.
 
-Anzahl möglicher Aufgaben:
+## Funktionsumfang
 
-| Free-Edition	| Standard-Edition	| Premium-Edition	|
-|:-------------:|:-----------------:|:-----------------:|
-| 5				| 25				| beliebig			|
+|                                   | Free-Edition	| Standard-Edition	| Premium-Edition	|
+|-----------------------------------|:-------------:|:-----------------:|:-----------------:|
+| Anzahl möglicher Aufgaben         | 5				| 25				| beliebig			|
+| vor-Ausführung-Script möglich     |               |                   | X                 |
+| nach-Ausführung-Script möglich    |               |                   | X                 |
 
-Bedingungen:
+## Aufgabenauslöser
 
-| Bedingungen										| Free-Edition	| Standard-Edition	| Premium-Edition	|
+|                                               | Free-Edition  | Standard-Edition  | Premium-Edition   |
+|-----------------------------------------------|:-------------:|:-----------------:|:-----------------:|
+| periodischer Start per Cronjob                | X             | X                 | X                 |
+| manueller Start direkt an den Bestellungen    | X             | X                 | X                 |
+| beim Bestellabschluss durch den Kunden        | X             | X                 | X                 |
+| beim Speichern der Bestellung                 | X             | X                 | X                 |
+
+## Bedingungen
+
+|           										| Free-Edition	| Standard-Edition	| Premium-Edition	|
 |---------------------------------------------------|:-------------:|:-----------------:|:-----------------:|
 | ab (inklusive) Bestellnummer						| X				| X					| X					|
 | bis (inklusive) Bestellnummer						| X				| X					| X					|
@@ -45,9 +56,9 @@ Bedingungen:
 | Bestellungsfeld auf Wert prüfen					|				|					| X					|
 | andere Aufgabe									|				|					| X					|
 
-Aufgaben:
+## Aktionen
 
-| Aufgaben										| Free-Edition	| Standard-Edition	| Premium-Edition	|
+|       										| Free-Edition	| Standard-Edition	| Premium-Edition	|
 |-----------------------------------------------|:-------------:|:-----------------:|:-----------------:|
 | E-Mail senden									| X				| X					| X					|
 | Aufträge in Ordner verschieben				| X				| X					| X					|

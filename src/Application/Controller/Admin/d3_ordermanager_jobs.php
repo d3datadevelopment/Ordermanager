@@ -17,6 +17,8 @@
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
+use D3\ModCfg\Application\Model\d3filesystem;
+use D3\ModCfg\Application\Model\d3str;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
@@ -25,7 +27,6 @@ use D3\Ordermanager\Application\Model\d3ordermanagerlist;
 use D3\Ordermanager\Application\Model\d3ordermanager_execute;
 use D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
-use D3\ModCfg\Application\Model\d3filesystem;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Application\Model\Order;
@@ -155,7 +156,20 @@ class d3_ordermanager_jobs extends AdminDetailsController
     protected function _d3GetManuallyManagerJobs($sFolderId)
     {
         $oManagerList = $this->getManagerList();
-        return $oManagerList->d3GetManuallyManagerJobsByFolder($sFolderId);
+        $oList = $oManagerList->d3GetManuallyManagerJobsByFolder($sFolderId);
+
+        /** @var d3ordermanager $oManager */
+        foreach ($oList as $sId => $oManager) {
+            $oManagerExecute = $this->getManagerExecute($oManager);
+
+            if ($oManager->getValue('sManuallyExecMeetCondition') &&
+                false == $oManagerExecute->orderMeetsConditions($this->getEditObjectId())
+            ) {
+                $oList->offsetUnset($sId);
+            }
+        }
+
+        return $oList;
     }
 
     /**
@@ -207,8 +221,13 @@ class d3_ordermanager_jobs extends AdminDetailsController
         $oManager = $this->getManager();
         $oManager->load($request->getRequestEscapedParameter('ordermanagerid'));
         $oManagerExec = $this->getManagerExecute($oManager);
-        $oManagerExec->exec4order($request->getRequestEscapedParameter('oxid'));
-        $oManagerExec->finishJobExecution();
+
+        if (false == $oManager->getValue('sManuallyExecMeetCondition') ||
+            $oManagerExec->orderMeetsConditions($this->getEditObjectId())
+        ) {
+            $oManagerExec->exec4order($this->getEditObjectId());
+            $oManagerExec->finishJobExecution();
+        }
     }
 
     /**
@@ -229,8 +248,13 @@ class d3_ordermanager_jobs extends AdminDetailsController
         $oManager->load($request->getRequestEscapedParameter('ordermanagerid'));
         $oManager->setEditedValues($request->getRequestEscapedParameter('aContent'));
         $oManagerExec = $this->getManagerExecute($oManager);
-        $oManagerExec->exec4order($request->getRequestEscapedParameter('oxid'));
-        $oManagerExec->finishJobExecution();
+
+        if (false == $oManager->getValue('sManuallyExecMeetCondition') ||
+            $oManagerExec->orderMeetsConditions($this->getEditObjectId())
+        ) {
+            $oManagerExec->exec4order($this->getEditObjectId());
+            $oManagerExec->finishJobExecution();
+        }
     }
 
     /**
@@ -262,7 +286,7 @@ class d3_ordermanager_jobs extends AdminDetailsController
         $oAssignment = $this->getOrderManagerAssignment($oManager);
         $oAssignment->resetAssignment(
             $request->getRequestEscapedParameter('ordermanagerid'),
-            $request->getRequestEscapedParameter('oxid')
+            $this->getEditObjectId()
         );
     }
 
@@ -291,7 +315,7 @@ class d3_ordermanager_jobs extends AdminDetailsController
     {
         /** @var Request $request */
         $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
-        $sItemId = $request->getRequestEscapedParameter('oxid');
+        $sItemId = $this->getEditObjectId();
         $oManager = $this->getManager();
         $oManager->load($request->getRequestEscapedParameter('ordermanagerid'));
         $this->addTplParam('aMailContent', $oManager->getEditableContent($sItemId));
@@ -305,15 +329,6 @@ class d3_ordermanager_jobs extends AdminDetailsController
     public function getUserMessages()
     {
         return array();
-    }
-
-    /**
-     * @return d3filesystem
-     * @throws Exception
-     */
-    public function getFileSystem()
-    {
-        return d3GetModCfgDIC()->get(d3filesystem::class);
     }
 
     /**
@@ -332,17 +347,20 @@ class d3_ordermanager_jobs extends AdminDetailsController
     public function getHelpURL()
     {
         $sUrl = $this->d3GetSet()->getHelpURL();
-        $oFS = $this->getFileSystem();
+        /** @var d3str $oD3Str */
+        $oD3Str = d3GetModCfgDIC()->get(d3str::class);
 
         if ($this->_sHelpLinkMLAdd) {
-            $sUrl .= $oFS->unprefixedslashit($this->getLang()->translateString($this->_sHelpLinkMLAdd));
+            $sUrl .= $oD3Str->unprefixedslashit($this->getLang()->translateString($this->_sHelpLinkMLAdd));
         }
 
+        /** @var d3filesystem $oFS */
+        $oFS = d3GetModCfgDIC()->get(d3filesystem::class);
         $aFileName = $oFS->splitFilename($sUrl);
 
         // has no extension
         if (false == $aFileName['ext']) {
-            $sUrl = $oFS->trailingslashit($sUrl);
+            $sUrl = $oD3Str->trailingslashit($sUrl);
         }
 
         return $sUrl;

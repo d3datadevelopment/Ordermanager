@@ -7,6 +7,7 @@
     <dd>
         [{if $oView->isEditMode()}]
             <input type="hidden" name="value[sInLanguageId]" value="">
+            <label for="sInLanguageId" style="position: absolute; left: -2000px">[{oxmultilang ident="sInLanguageId"}]</label>
             <SELECT class="editinput" name="value[sInLanguageId][]" id="sInLanguageId" multiple [{$blActionRestriction}] [{$readonly}]>
                 [{foreach from=$oView->getLanguageList() item="oLang"}]
                     <option value="[{$oLang->id}]" [{if is_array($edit->getValue('sInLanguageId')) && in_array($oLang->id, $edit->getValue('sInLanguageId'))}]selected[{/if}]>[{$oLang->name}]</option>

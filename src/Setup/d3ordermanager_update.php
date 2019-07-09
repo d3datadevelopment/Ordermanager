@@ -41,15 +41,15 @@ class d3ordermanager_update extends d3install_updatebase
 {
     public $sModKey = 'd3_ordermanager';
     public $sModName = 'Auftragsmanager';
-    public $sModVersion = '3.0.2.0';
-    public $sModRevision = '3020';
+    public $sModVersion = '3.1.0.0';
+    public $sModRevision = '3100';
     public $sBaseConf =
-    'lNwv2==bE9WeVNhaUNQVGd4Y1lQbzNlUW5ZSmJOckw1MzlHMEpFMXJOeGpwSTNVb3UzdlFDeWtMTy9Rc
-nlIZnBVV2tqVGc1UCtWQjNJbHRlNEtGeGlmaTdVRXZRdkVSUkplZ3pqWUEveFluY1E2czArZDkzNjZtS
-DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
-1pMdkNSckNlRGpTWW9QUmc4UUw3bTZZTEtaSzJZaWJMb3pUTUpUM3VDaXE2c21iakNBdHhWbURPa2tST
-1IzYjkvN2lpL1JiUTF0b24wRFRpWWFaNFFFSThBWG93UE9jc2kvdWxYemZGajRxMEN1WnRobklYK2t0T
-3NqZGtHbCt5V2VJT2FObTZLK0p4UExPRmpqTzc5WUpDcWxhTGhNMnZEbVJVaTV3PT0=';
+    'nsSv2==NTFhS2VYN3pLL2lLbEU5WHJ2Zkd1NUpFd1hpdi9OV000UERKb0twaHl3QTNqOUNyazIzQUl1M
+FdPZXp5bFF2Wll4eElEbVBUUkhHRThrZWpPZmxTZUZQem8yWFArR1VTRHBkMlRiVFQ4YUhPYWZ0aXZlK
+1F3Skd6UVZSTEZxckdVbjJLQjFjN1RQRDRjMlg3UEhpUFkwWWFScjk0cHRMQnhkUlJpOWxFZ2poQm80b
+2NDb2RUWmJ6c1lERG9NT1lrTHdhTnl1dG16dTZtOEZyODBKUUhRR09VWGdJRXhWRk5NZUJDQVVXVUtlU
+ExZVFNrb0VjSitwdVFzTDZ1enY0QnZHYm94ZDg3R01aeE9GaG91K3pNYWpGWVBJQUhFNHpWSFhzT1d1e
+lZVQnI4UmRESHFtdTBFUHpFMmI3LzN5N0pqNGNHS3ljSTVuN3JyWm9VTGR0VHl3PT0=';
     public $sRequirements = '';
     public $sBaseValue = 'TyUzQTglM0ElMjJzdGRDbGFzcyUyMiUzQTQlM0ElN0JzJTNBMjMlM0ElMjJkM19jZmdfbW9kX19hRm9sZGVyTGlzdCUyMiUzQmElM0E1JTNBJTdCaSUzQTAlM0JzJTNBMjUlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfTkVXJTIyJTNCaSUzQTElM0JzJTNBMzIlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfUEFZQURWQU5DRSUyMiUzQmklM0EyJTNCcyUzQTM2JTNBJTIyRDNfT1JERVJNQU5BR0VSX09SREVSX1BBWVNUQVRVU0NIRUNLJTIyJTNCaSUzQTMlM0JzJTNBMzYlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfREVMSVZFUllTVEFUVVMlMjIlM0JpJTNBNCUzQnMlM0EzNyUzQSUyMkQzX09SREVSTUFOQUdFUl9PUkRFUl9PUkRFUlBST0NFU1NJTkclMjIlM0IlN0RzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19ibENyb25BY3RpdmUlMjIlM0JzJTNBMSUzQSUyMjAlMjIlM0JzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19pTWF4T3JkZXJDbnQlMjIlM0JzJTNBMiUzQSUyMjUwJTIyJTNCcyUzQTI1JTNBJTIyZDNfY2ZnX21vZF9fc0Nyb25QYXNzd29yZCUyMiUzQnMlM0E4JTNBJTIyNW5kYnJCM1IlMjIlM0IlN0Q=';
 
@@ -91,6 +91,26 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
             'blNull'      => false,
             'sDefault'    => '0',
             'sComment'    => 'order manager: job is manually executable',
+            'sExtra'      => '',
+            'blMultilang' => false,
+        ),
+        'PROF_ORDERSAVETRIGGERED'        => array(
+            'sTableName'  => 'd3modprofile',
+            'sFieldName'  => 'D3_OM_ORDERSAVETRIGGERED',
+            'sType'       => 'TINYINT(1)',
+            'blNull'      => false,
+            'sDefault'    => '0',
+            'sComment'    => 'order manager: job will executed on order::save',
+            'sExtra'      => '',
+            'blMultilang' => false,
+        ),
+        'PROF_ORDERFINISHTRIGGERED'        => array(
+            'sTableName'  => 'd3modprofile',
+            'sFieldName'  => 'D3_OM_ORDERFINISHTRIGGERED',
+            'sType'       => 'TINYINT(1)',
+            'blNull'      => false,
+            'sDefault'    => '0',
+            'sComment'    => 'order manager: job will executed after order::finalizeOrder',
             'sExtra'      => '',
             'blMultilang' => false,
         ),
@@ -198,6 +218,30 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
     );
 
     public $aIndizes = array(
+        'MP_D3_OM_EXECMANUALLY' => array(
+            'sTableName' => 'd3modprofile',
+            'sType'      => d3database::INDEX_TYPE_INDEX,
+            'sName'      => 'D3_OM_EXECMANUALLY',
+            'aFields'    => array(
+                'D3_OM_EXECMANUALLY' => 'D3_OM_EXECMANUALLY',
+            ),
+        ),
+        'MP_D3_OM_ORDERSAVETRIGGERED' => array(
+            'sTableName' => 'd3modprofile',
+            'sType'      => d3database::INDEX_TYPE_INDEX,
+            'sName'      => 'D3_OM_ORDERSAVETRIGGERED',
+            'aFields'    => array(
+                'D3_OM_ORDERSAVETRIGGERED' => 'D3_OM_ORDERSAVETRIGGERED',
+            ),
+        ),
+        'MP_D3_OM_ORDERFINISHTRIGGERED' => array(
+            'sTableName' => 'd3modprofile',
+            'sType'      => d3database::INDEX_TYPE_INDEX,
+            'sName'      => 'D3_OM_ORDERFINISHTRIGGERED',
+            'aFields'    => array(
+                'D3_OM_ORDERFINISHTRIGGERED' => 'D3_OM_ORDERFINISHTRIGGERED',
+            ),
+        ),
         'O_OXID' => array(
             'sTableName' => 'd3order2ordermanager',
             'sType'      => d3database::INDEX_TYPE_PRIMARY,
@@ -888,6 +932,7 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
 
     /**
      * @return d3bitmask
+     * @throws Exception
      */
     public function getD3BitMask()
     {
@@ -901,6 +946,7 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getExampleJobItem1InsertFields(Shop $oShop)
     {
@@ -1088,6 +1134,7 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getExampleJobItem2InsertFields(Shop $oShop)
     {
@@ -1273,6 +1320,7 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getExampleJobItem3InsertFields(Shop $oShop)
     {
@@ -1458,6 +1506,7 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getExampleJobItem4InsertFields(Shop $oShop)
     {
@@ -1643,6 +1692,7 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getExampleJobItem5InsertFields(Shop $oShop)
     {
@@ -1828,6 +1878,7 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getExampleJobItem6InsertFields(Shop $oShop)
     {
@@ -2013,6 +2064,7 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getExampleJobItem7InsertFields(Shop $oShop)
     {
@@ -2198,6 +2250,7 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getExampleJobItem8InsertFields(Shop $oShop)
     {
@@ -2383,6 +2436,7 @@ DAxbDNqR1YrNHo0NzFyb2hRaGNwb3lGM1lCc3FIVnNsVS9maW9JaFBSdEFiOEovTnZjVFhSWTFZRnBTR
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function getExampleJobItem9InsertFields(Shop $oShop)
     {

@@ -15,6 +15,8 @@ und diese Felder in bestehenden Tabellen:
 * in Tabelle `d3modprofile`:  
   * das Feld `D3_OM_EXECMANUALLY`
   * das Feld `D3_OM_MARKORDER`
+  * das Feld `D3_OM_ORDERSAVETRIGGERED`
+  * das Feld `D3_OM_ORDERFINISHTRIGGERED`
   
 sowie diese Einträge in bestehenden Tabellen:
 

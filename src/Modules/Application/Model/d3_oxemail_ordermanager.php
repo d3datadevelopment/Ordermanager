@@ -80,6 +80,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         startProfile(__METHOD__);
 
         $oShop = $this->_getShop();
+        /** @var Smarty $oSmarty */
         $oSmarty = $this->_getSmarty();
 
         /** @var Config $config */
@@ -327,6 +328,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         $oShop = $this->_getShop();
         $this->_setMailParams($oShop);
 
+        /** @var Smarty $oSmarty */
         $oSmarty = $this->_getSmarty();
 
         /** @var $oBasket Basket */
