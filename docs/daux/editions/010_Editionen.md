@@ -18,8 +18,8 @@ Das Modul **{$modulename}** erhalten Sie in verschiedenen Editionen mit untersch
 |-----------------------------------------------|:-------------:|:-----------------:|:-----------------:|
 | periodischer Start per Cronjob                | X             | X                 | X                 |
 | manueller Start direkt an den Bestellungen    | X             | X                 | X                 |
-| beim Bestellabschluss durch den Kunden        | X             | X                 | X                 |
-| beim Speichern der Bestellung                 | X             | X                 | X                 |
+| beim Bestellabschluss durch den Kunden        |               | X                 | X                 |
+| beim Speichern der Bestellung                 |               | X                 | X                 |
 
 ## Bedingungen
 

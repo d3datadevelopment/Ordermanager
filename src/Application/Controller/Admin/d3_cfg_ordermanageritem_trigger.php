@@ -102,7 +102,25 @@ class d3_cfg_ordermanageritem_trigger extends d3_cfg_mod_main
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
      */
-    public function isAllowed()
+    public function triggersAreAllowed()
+    {
+        return $this->d3GetSet()->isDemo() ||
+            in_array(
+                true,
+                array_map(array($this->d3GetSet(),'getLicenseConfigData'),array(d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION))
+            );
+    }
+
+    /**
+     * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     */
+    public function scriptsAreAllowed()
     {
         return $this->d3GetSet()->isDemo() ||
             in_array(

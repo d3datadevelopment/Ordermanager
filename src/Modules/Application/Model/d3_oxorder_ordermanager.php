@@ -21,6 +21,7 @@ use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Application\Model\d3ordermanager_conf;
 use D3\Ordermanager\Application\Model\d3ordermanager_execute;
 use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
@@ -186,7 +187,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
      * @return null|string
      * @throws Exception
      */
-    public function d3generatePdf($sFilename, $iSelLang = 0, $sDocType = 'invoice', $sDestination = 'S')
+    public function d3generatePdf($sFilename, $iSelLang = 0, $sDocType = d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_INVOICE, $sDestination = 'S')
     {
         // setting pdf language
         $this->_iSelectedLang = $iSelLang;
@@ -207,16 +208,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
 
             // adding header
             $this->pdfHeader($oPdf);
-
-            // adding info data
-            switch ($sDocType) {
-                case 'dnote':
-                    $this->exportDeliveryNote($oPdf);
-                    break;
-                default:
-                    $this->exportStandart($oPdf);
-            }
-
+            $this->d3generatePdfBody( $sDocType, $oPdf );
             // adding footer
             $this->pdfFooter($oPdf);
 
@@ -251,7 +243,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
             /** @var d3ordermanager_execute $oManagerExecute */
             $oManagerExecute = $this->getManagerExecute($oManager);
             if ($oManagerExecute->orderMeetsConditions($this->getId())) {
-                $oManagerExecute->exec4order($this->getId(), d3ordermanager_execute::EXECTYPE_ORDERFINISHTRIGGERED);
+                $oManagerExecute->exec4order($this->getId(), d3ordermanager_conf::EXECTYPE_ORDERFINISHTRIGGERED);
             }
         };
 
@@ -279,7 +271,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
             /** @var d3ordermanager_execute $oManagerExecute */
             $oManagerExecute = $this->getManagerExecute($oManager);
             if ($oManagerExecute->orderMeetsConditions($this->getId())) {
-                $oManagerExecute->exec4order($this->getId(), d3ordermanager_execute::EXECTYPE_ORDERSAVETRIGGERED);
+                $oManagerExecute->exec4order($this->getId(), d3ordermanager_conf::EXECTYPE_ORDERSAVETRIGGERED);
             }
         };
 
@@ -299,5 +291,20 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
         );
 
         return d3GetModCfgDIC()->get(d3ordermanager_execute::class);
+    }
+
+    /**
+     * @param               $sDocType
+     * @param InvoicepdfPDF $oPdf
+     */
+    public function d3generatePdfBody( $sDocType, InvoicepdfPDF $oPdf )
+    {
+        switch ( $sDocType ) {
+            case d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_DELIVERYNOTE:
+                $this->exportDeliveryNote( $oPdf );
+                break;
+            case d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_INVOICE:
+                $this->exportStandart( $oPdf );
+        }
     }
 }

@@ -22,6 +22,7 @@ use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\ModCfg\Application\Model\Log\d3LogInterface;
 use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Application\Model\d3ordermanager_conf;
 use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
@@ -669,16 +670,16 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
             && $oPDFHandler->canGeneratePdf()
         ) {
             if ($oOrderManager->getValue('blActionOrderPdfTypeInvoice')) {
-                $oPDFHandler->createPdf('invoice', 'attach');
-                $sFileName = $oPDFHandler->getPdfFileName('invoice');
-                $sFilePath = $oPDFHandler->getPdfSaveDir('attach') . $sFileName;
+                $oPDFHandler->createPdf(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_INVOICE, d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH);
+                $sFileName = $oPDFHandler->getPdfFileName(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_INVOICE);
+                $sFilePath = $oPDFHandler->getPdfSaveDir(d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH) . $sFileName;
                 $this->addAttachment($sFilePath, $sFileName, 'base64', 'application/pdf');
             }
 
             if ($oOrderManager->getValue('blActionOrderPdfTypeDelnote')) {
-                $oPDFHandler->createPdf('dnote', 'attach');
-                $sFileName = $oPDFHandler->getPdfFileName('dnote');
-                $sFilePath = $oPDFHandler->getPdfSaveDir('attach') . $sFileName;
+                $oPDFHandler->createPdf(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_DELIVERYNOTE, d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH);
+                $sFileName = $oPDFHandler->getPdfFileName(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_DELIVERYNOTE);
+                $sFilePath = $oPDFHandler->getPdfSaveDir(d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH) . $sFileName;
                 $this->addAttachment($sFilePath, $sFileName, 'base64', 'application/pdf');
             }
         }

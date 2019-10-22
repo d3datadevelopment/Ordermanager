@@ -17,6 +17,7 @@
 
 namespace D3\Ordermanager\Application\Model;
 
+use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Configuration\d3modprofilelist;
 use D3\ModCfg\Application\Model\d3utils;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -84,21 +85,28 @@ class d3ordermanagerlist extends d3modprofilelist
      */
     public function d3GetOrderSaveTriggeredManagerTasks()
     {
-        /** @var d3ordermanager $oListObject */
-        $oListObject = $this->getBaseObject();
-        $sFieldList = $oListObject->getSelectFields();
-        $sQ = "select $sFieldList from " . $oListObject->getViewName();
+        if ($this->d3GetSet()->isDemo() ||
+            in_array(
+                true,
+                array_map(array($this->d3GetSet(),'getLicenseConfigData'),array(d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION))
+            )
+        ) {
+            /** @var d3ordermanager $oListObject */
+            $oListObject = $this->getBaseObject();
+            $sFieldList = $oListObject->getSelectFields();
+            $sQ = "select $sFieldList from " . $oListObject->getViewName();
 
-        $sQ .= " where ";
-        $sQ = $this->d3AddActiveSnippet($oListObject, $sQ, true, false);
-        $sQ .= ' AND '.$oListObject->getViewName().'.D3_OM_ORDERSAVETRIGGERED = 1';
-        $sQ .= " ORDER BY ".$oListObject->getViewName().".oxsort ASC, ".$oListObject->getViewName().".oxfolder ASC";
-        $this->selectString($sQ);
+            $sQ .= " where ";
+            $sQ = $this->d3AddActiveSnippet($oListObject, $sQ, true, false);
+            $sQ .= ' AND ' . $oListObject->getViewName() . '.D3_OM_ORDERSAVETRIGGERED = 1';
+            $sQ .= " ORDER BY " . $oListObject->getViewName() . ".oxsort ASC, " . $oListObject->getViewName() . ".oxfolder ASC";
+            $this->selectString($sQ);
 
-        /** @var $oManager d3ordermanager */
-        foreach ($this->getArray() as $sKey => $oManager) {
-            if (false == $oManager->getLicenseActive()) {
-                $this->offsetUnset($sKey);
+            /** @var $oManager d3ordermanager */
+            foreach ($this->getArray() as $sKey => $oManager) {
+                if (false == $oManager->getLicenseActive()) {
+                    $this->offsetUnset($sKey);
+                }
             }
         }
 
@@ -113,24 +121,32 @@ class d3ordermanagerlist extends d3modprofilelist
      * @throws StandardException
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
+     * @throws Exception
      */
     public function d3GetOrderFinishTriggeredManagerTasks()
     {
-        /** @var d3ordermanager $oListObject */
-        $oListObject = $this->getBaseObject();
-        $sFieldList = $oListObject->getSelectFields();
-        $sQ = "select $sFieldList from " . $oListObject->getViewName();
+        if ($this->d3GetSet()->isDemo() ||
+            in_array(
+                true,
+                array_map(array($this->d3GetSet(),'getLicenseConfigData'),array(d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION))
+            )
+        ) {
+            /** @var d3ordermanager $oListObject */
+            $oListObject = $this->getBaseObject();
+            $sFieldList = $oListObject->getSelectFields();
+            $sQ = "select $sFieldList from " . $oListObject->getViewName();
 
-        $sQ .= " where ";
-        $sQ = $this->d3AddActiveSnippet($oListObject, $sQ, true, false);
-        $sQ .= ' AND '.$oListObject->getViewName().'.D3_OM_ORDERFINISHTRIGGERED = 1';
-        $sQ .= " ORDER BY ".$oListObject->getViewName().".oxsort ASC, ".$oListObject->getViewName().".oxfolder ASC";
-        $this->selectString($sQ);
+            $sQ .= " where ";
+            $sQ = $this->d3AddActiveSnippet($oListObject, $sQ, true, false);
+            $sQ .= ' AND ' . $oListObject->getViewName() . '.D3_OM_ORDERFINISHTRIGGERED = 1';
+            $sQ .= " ORDER BY " . $oListObject->getViewName() . ".oxsort ASC, " . $oListObject->getViewName() . ".oxfolder ASC";
+            $this->selectString($sQ);
 
-        /** @var $oManager d3ordermanager */
-        foreach ($this->getArray() as $sKey => $oManager) {
-            if (false == $oManager->getLicenseActive()) {
-                $this->offsetUnset($sKey);
+            /** @var $oManager d3ordermanager */
+            foreach ($this->getArray() as $sKey => $oManager) {
+                if (false == $oManager->getLicenseActive()) {
+                    $this->offsetUnset($sKey);
+                }
             }
         }
 
@@ -224,5 +240,14 @@ class d3ordermanagerlist extends d3modprofilelist
         /** @var d3ordermanager $oBaseObject */
         $oBaseObject = $this->getBaseObject();
         $oBaseObject->setCronJobIdFilter($iCronJobId);
+    }
+
+    /**
+     * @return d3_cfg_mod
+     * @throws \Exception
+     */
+    public function d3GetSet()
+    {
+        return d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
     }
 }

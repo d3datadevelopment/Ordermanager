@@ -1,224 +1,476 @@
-<?php //006ef
-// This Software is the property of D³ Data Development and is protected by copyright law - it is NOT Freeware.  Any unauthorized use of this software without a valid license key is a violation of the license agreement and will be prosecuted by civil and criminal law.  Inhaber: Thomas Dartsch Alle Rechte vorbehalten  @package Auftragsmanager @version 3.1.0.0 PHP71 (09.07.2019) @author  Daniel Seifert support@shopmodule.com @copyright (C) 2019, D3 Data Development @see http://www.shopmodule.com
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+
+/**
+ * This Software is the property of Data Development and is protected
+ * by copyright law - it is NOT Freeware.
+ *
+ * Any unauthorized use of this software without a valid license
+ * is a violation of the license agreement and will be prosecuted by
+ * civil and criminal law.
+ *
+ * http://www.shopmodule.com
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+ * @link      http://www.oxidmodule.com
+ */
+namespace D3\Ordermanager\tests\integration\Actions;
+
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
+use D3\Ordermanager\Application\Model\d3ordermanager;
+use Doctrine\DBAL\DBALException;
+use Exception;
+use OxidEsales\Eshop\Application\Model\Object2Group;
+use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\Eshop\Core\Model\ListModel;
+
+class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
+{
+    public $sManagerId = 'managerTestId';
+    public $aOrderIdList = array(
+        'orderTestIdNo1',
+        'orderTestIdNo2',
+    );
+    public $aUserIdList = array(
+        'orderUserTestIdNo1',
+        'orderUserTestIdNo2',
+    );
+    public $aO2GroupIdList = array(
+        'o2groupTestIdNo1',
+        'o2groupTestIdNo2',
+        'o2groupTestIdNo3',
+    );
+    public $aGroupsIdList = array(
+        'groupTestIdNo1',
+        'groupTestIdNo2',
+    );
+
+    /**
+     * @throws Exception
+     */
+    public function createTestData()
+    {
+        $this->createManager($this->sManagerId);
+
+        $this->createGroup($this->aGroupsIdList[0]);
+        $this->createGroup($this->aGroupsIdList[1]);
+
+        $this->createOrder(
+            $this->aOrderIdList[0],
+            array(
+                'oxorderdate'   => '2018-01-01 00:00:00',
+                'oxuserid'     => $this->aUserIdList[0],
+                'oxcurrate'     => 1,
+                'oxbillcompany' => __CLASS__,
+            )
+        );
+
+        $this->createUser($this->aUserIdList[0]);
+
+        $this->createOrder(
+            $this->aOrderIdList[1],
+            array(
+                'oxorderdate'   => '2018-01-01 00:00:00',
+                'oxuserid'     => $this->aUserIdList[1],
+                'oxcurrate'     => 1,
+                'oxbillcompany' => __CLASS__,
+            )
+        );
+
+        $this->createUser($this->aUserIdList[1]);
+    }
+
+    /**
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function cleanTestData()
+    {
+        $this->deleteManager($this->sManagerId);
+        $this->deleteOrder($this->aOrderIdList[0]);
+        $this->deleteOrder($this->aOrderIdList[1]);
+        $this->deleteUser($this->aUserIdList[0]);
+        $this->deleteUser($this->aUserIdList[1]);
+        $this->deleteObject('d3ox.ordermanager.'.Object2Group::class, $this->aO2GroupIdList[0]);
+
+        $aQueries = [
+            "DELETE FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}'",
+            "DELETE FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}'",
+        ];
+        foreach ($aQueries as $sQuery) {
+            DatabaseProvider::getDb()->execute($sQuery);
+        }
+    }
+
+    /**
+     * @return d3ordermanager
+     * @throws Exception
+     */
+    public function getConfiguredManagerSingleGroupsExists()
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blActionCustFromGroup_status', true);
+        $oManager->setValue('sCustRemoveGroup', array($this->aGroupsIdList[0]));
+        $oManager->setValue('blItemExecute', true);
+
+        return $oManager;
+    }
+
+    /**
+     * @return d3ordermanager
+     * @throws Exception
+     */
+    public function getConfiguredManagerMultiGroupsExists()
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blActionCustFromGroup_status', true);
+        $oManager->setValue('sCustRemoveGroup', array($this->aGroupsIdList[0], $this->aGroupsIdList[1]));
+        $oManager->setValue('blItemExecute', true);
+
+        return $oManager;
+    }
+
+    /**
+     * @return d3ordermanager
+     * @throws Exception
+     */
+    public function getConfiguredManagerSingleGroupsNotExists()
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blActionCustFromGroup_status', true);
+        $oManager->setValue('sCustRemoveGroup', array('unknownGroupId'));
+        $oManager->setValue('blItemExecute', true);
+
+        return $oManager;
+    }
+
+    /**
+     * @return d3ordermanager
+     * @throws Exception
+     */
+    public function getConfiguredManagerNoGroups()
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blActionCustFromGroup_status', true);
+        $oManager->setValue('sCustRemoveGroup', array());
+        $oManager->setValue('blItemExecute', true);
+
+        return $oManager;
+    }
+
+    /**
+     * @return ListModel
+     * @throws Exception
+     */
+    public function getFilledResultList()
+    {
+        return $this->getResultList(array($this->aOrderIdList[0]));
+    }
+
+    /**
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     */
+    public function actionChangeConcernedOrderSingleGroupsExistsAssigned()
+    {
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[0],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[0],
+                'oxgroupsid'    => $this->aGroupsIdList[0],
+            )
+        );
+
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[1],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[0],
+                'oxgroupsid'    => $this->aGroupsIdList[1],
+            )
+        );
+
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[3],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[1],
+                'oxgroupsid'    => $this->aGroupsIdList[0],
+            )
+        );
+
+        $oExecute = $this->getExecuteMock($this->getConfiguredManagerSingleGroupsExists());
+        $oExecute->startJobItemExecution();
+
+        // check assignment pass
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('{$this->aGroupsIdList[1]}') AND oxgroupsid NOT IN ('{$this->aGroupsIdList[0]}')";
+
+        $this->assertSame(
+            1,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+
+        // check other assignments
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}')";
+        $this->assertSame(
+            1,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+    }
+
+    /**
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     */
+    public function actionChangeConcernedOrderMultiGroupsExistsAssigned()
+    {
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[0],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[0],
+                'oxgroupsid'    => $this->aGroupsIdList[0],
+            )
+        );
+
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[1],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[0],
+                'oxgroupsid'    => $this->aGroupsIdList[1],
+            )
+        );
+
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[2],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[1],
+                'oxgroupsid'    => $this->aGroupsIdList[0],
+            )
+        );
+
+        $oExecute = $this->getExecuteMock($this->getConfiguredManagerMultiGroupsExists());
+        $oExecute->startJobItemExecution();
+
+        // check assignment pass
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}', '{$this->aGroupsIdList[1]}')";
+        $this->assertSame(
+            0,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+
+        // check other assignments
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}')";
+        $this->assertSame(
+            1,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+    }
+
+    /**
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     */
+    public function actionChangeConcernedOrderSingleGroupsExistsNotAssigned()
+    {
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[0],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[0],
+                'oxgroupsid'    => $this->aGroupsIdList[1],
+            )
+        );
+
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[1],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[1],
+                'oxgroupsid'    => $this->aGroupsIdList[0],
+            )
+        );
+
+        $oExecute = $this->getExecuteMock($this->getConfiguredManagerSingleGroupsExists());
+        $oExecute->startJobItemExecution();
+
+        // check assignment pass
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}', '{$this->aGroupsIdList[1]}')";
+        $this->assertSame(
+            1,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+
+        // check other assignments
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}')";
+        $this->assertSame(
+            1,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+    }
+
+    /**
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     */
+    public function actionChangeConcernedOrderSingleGroupsNotExistsNotAssigned()
+    {
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[0],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[0],
+                'oxgroupsid'    => $this->aGroupsIdList[0],
+            )
+        );
+
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[1],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[0],
+                'oxgroupsid'    => $this->aGroupsIdList[1],
+            )
+        );
+
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[2],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[1],
+                'oxgroupsid'    => $this->aGroupsIdList[0],
+            )
+        );
+
+        $oExecute = $this->getExecuteMock($this->getConfiguredManagerSingleGroupsNotExists());
+        $oExecute->startJobItemExecution();
+
+        // check assignment pass
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}', '{$this->aGroupsIdList[1]}')";
+        $this->assertSame(
+            2,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+
+        // check other assignments
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('unknownGroupId')";
+        $this->assertSame(
+            0,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid != '{$this->aUserIdList[0]}' AND oxgroupsid IN ('unknownGroupId')";
+        $this->assertSame(
+            0,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}')";
+        $this->assertSame(
+            1,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+    }
+
+    /**
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     */
+    public function actionChangeConcernedOrderNoGroups()
+    {
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[0],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[0],
+                'oxgroupsid'    => $this->aGroupsIdList[0],
+            )
+        );
+
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[1],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[0],
+                'oxgroupsid'    => $this->aGroupsIdList[1],
+            )
+        );
+
+        $this->createObject(
+            'd3ox.ordermanager.'.Object2Group::class,
+            $this->aO2GroupIdList[2],
+            array(
+                'oxshopid'      => 1,
+                'oxobjectid'    => $this->aUserIdList[1],
+                'oxgroupsid'    => $this->aGroupsIdList[0],
+            )
+        );
+
+        $oExecute = $this->getExecuteMock($this->getConfiguredManagerNoGroups());
+        $oExecute->startJobItemExecution();
+
+        // check assignment pass
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}', '{$this->aGroupsIdList[1]}')";
+        $this->assertSame(
+            2,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}')";
+        $this->assertSame(
+            1,
+            (int) DatabaseProvider::getDb()->getOne($sSelect)
+        );
+    }
+}
