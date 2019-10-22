@@ -2,6 +2,19 @@
 title: Changelog
 --- 
 
+## 3.1.1.0 - (2019-10-21)
+### Added
+- Trigger-Dokumentation ergänzt
+- neue Templateblöcke für die Templates der Bedingungen und Aktionen eingefügt
+- PDF-Typen und PDF-Aktionen als Konstanten definiert
+- UnitTests ergänzt
+
+### Changed
+- HelpCenter Link aktualisiert
+- d3modprofile::oxupdate als Nicht-Multilang-Feld definiert
+
+---
+
 ## 3.1.0.0 - (2019-07-08)
 ### Added
 - neue Auslöser "onOrderSave" und "onOrderFinalize"

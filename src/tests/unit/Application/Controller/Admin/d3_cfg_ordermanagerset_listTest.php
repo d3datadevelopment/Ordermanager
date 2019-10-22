@@ -1,56 +1,86 @@
-<?php //006ef
-// This Software is the property of D³ Data Development and is protected by copyright law - it is NOT Freeware.  Any unauthorized use of this software without a valid license key is a violation of the license agreement and will be prosecuted by civil and criminal law.  Inhaber: Thomas Dartsch Alle Rechte vorbehalten  @package Auftragsmanager @version 3.1.0.0 PHP56 (09.07.2019) @author  Daniel Seifert support@shopmodule.com @copyright (C) 2019, D3 Data Development @see http://www.shopmodule.com
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+/**
+ * This Software is the property of Data Development and is protected
+ * by copyright law - it is NOT Freeware.
+ *
+ * Any unauthorized use of this software without a valid license
+ * is a violation of the license agreement and will be prosecuted by
+ * civil and criminal law.
+ *
+ * http://www.shopmodule.com
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+ * @link      http://www.oxidmodule.com
+ */
+
+namespace D3\Ordermanager\Tests\unit\Application\Controller\Admin;
+
+use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list;
+use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
+use Doctrine\DBAL\DBALException;
+use Exception;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use PHPUnit_Framework_MockObject_MockObject;
+use ReflectionException;
+
+class d3_cfg_ordermanagerset_listTest extends d3OrdermanagerUnitTestCase
+{
+    /** @var d3_cfg_ordermanagerset_list */
+    protected $_oController;
+
+    /**
+     * setup basic requirements
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws Exception
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanagerset_list::class);
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        unset($this->_oController);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function renderPass()
+    {
+        /** @var d3_cfg_ordermanagerset_list|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_list::class, array(
+            'd3FixNamespaceNavigation',
+        ));
+        $oControllerMock->method('d3FixNamespaceNavigation')->willReturn(true);
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertContains(
+            '.tpl',
+            $this->callMethod($this->_oController, 'render')
+        );
+
+        $this->assertNotEmpty($this->_oController->getViewDataElement('default_edit'));
+    }
+
+    /**
+     * @param $sLicenseKey
+     * @param d3ordermanager $oManager
+     * @return null
+     */
+    protected function _setModuleLicenseKey($sLicenseKey, $oManager = null)
+    {
+        return null;
+    }
+}

@@ -1,78 +1,152 @@
-<?php //006ef
-// This Software is the property of D³ Data Development and is protected by copyright law - it is NOT Freeware.  Any unauthorized use of this software without a valid license key is a violation of the license agreement and will be prosecuted by civil and criminal law.  Inhaber: Thomas Dartsch Alle Rechte vorbehalten  @package Auftragsmanager @version 3.1.0.0 PHP56 (09.07.2019) @author  Daniel Seifert support@shopmodule.com @copyright (C) 2019, D3 Data Development @see http://www.shopmodule.com
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
-hmW=
+<?php
+/**
+ * This Software is the property of Data Development and is protected
+ * by copyright law - it is NOT Freeware.
+ *
+ * Any unauthorized use of this software without a valid license
+ * is a violation of the license agreement and will be prosecuted by
+ * civil and criminal law.
+ *
+ * http://www.shopmodule.com
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+ * @link      http://www.oxidmodule.com
+ */
+
+namespace D3\Ordermanager\Tests\unit\Application\Controller\Admin;
+
+use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main;
+use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
+use Doctrine\DBAL\DBALException;
+use Exception;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use PHPUnit_Framework_MockObject_MockObject;
+use ReflectionException;
+
+class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
+{
+    /** @var d3_cfg_ordermanageritem_main */
+    protected $_oController;
+
+    /**
+     * setup basic requirements
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws Exception
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_main::class);
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        unset($this->_oController);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function renderPass()
+    {
+        $this->assertContains(
+            '.tpl',
+            $this->callMethod($this->_oController, 'render')
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function changeDefaultValuesPostPass()
+    {
+        $_POST = [
+            'editval' => ['d3modprofile__d3_cronjobid' => 'foo'],
+        ];
+
+        /** @var d3_cfg_ordermanageritem_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_main::class, array(
+            'fixCronjobId'
+        ));
+        $oControllerMock->method('fixCronjobId')->willReturn('newCjId');
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertSame(
+            array('foo' => 'bar'),
+            $this->callMethod($this->_oController, 'addDefaultValues', array(array('foo' => 'bar')))
+        );
+
+        $this->assertEquals('newCjId', $_POST['editval']['d3modprofile__d3_cronjobid']);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function changeDefaultValuesGetPass()
+    {
+        $_GET = [
+            'editval' => ['d3modprofile__d3_cronjobid' => 'foo'],
+        ];
+
+        /** @var d3_cfg_ordermanageritem_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_main::class, array(
+            'fixCronjobId'
+        ));
+        $oControllerMock->method('fixCronjobId')->willReturn('newCjId');
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertSame(
+            array('foo' => 'bar'),
+            $this->callMethod($this->_oController, 'addDefaultValues', array(array('foo' => 'bar')))
+        );
+
+        $this->assertEquals('newCjId', $_GET['editval']['d3modprofile__d3_cronjobid']);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function fixCronJobIdPass()
+    {
+        $this->assertEquals(
+            'test_Id',
+            $this->callMethod(
+                $this->_oController,
+                'fixCronjobId',
+                array('test Id')
+            )
+        );
+        $this->assertEquals(
+            'test-Id',
+            $this->callMethod(
+                $this->_oController,
+                'fixCronjobId',
+                array('test-Id')
+            )
+        );
+    }
+
+    /**
+     * @param $sLicenseKey
+     * @param d3ordermanager $oManager
+     * @return null
+     */
+    protected function _setModuleLicenseKey($sLicenseKey, $oManager = null)
+    {
+        return null;
+    }
+}

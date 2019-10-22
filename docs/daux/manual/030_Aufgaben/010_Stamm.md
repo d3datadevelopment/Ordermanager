@@ -2,7 +2,7 @@
 title: Stamm
 ---
 
-Beginnen Sie mit dem Erstellen Ihrer Aufgabe auf der rechten Seite der Stamm-Seite. Vergeben Sie dem Job einen Namen. Diesen können Sie später jederzeit ändern.
+Vergeben Sie dem Job einen Namen. Diesen können Sie später jederzeit ändern.
 
 Das [ Reihenfolge ]-Feld erwartet eine Zahl von Ihnen. Anhand derer wird bei der Ausführung festgelegt, in welcher Reihenfolge Ihre Aufgaben ausgeführt werden. Kleine Zahlen werden vor Aufgaben mit großer Sortierzahl ausgeführt. Dies kann wichtig sein, wenn eine Aufgabe auf den Veränderungen einer anderen Aufgabe basiert.
 
@@ -11,14 +11,7 @@ verwalten.
 
 Darunter können Sie zusätzlich ablesen, wann diese Aufgabe das letzte Mal ausgeführt wurde. Bei der Neuanlage ist dieser Eintrag natürlich noch leer.
 
-Nun widmen wir uns den Einstellungen auf der linken Seite:
-
-Der [ Aktiv für automatische Ausführung ]-Haken definiert, ob diese Aufgabe über
-die Cronjobs ausgeführt werden darf. 
-
-Der Einstellung der Cronjob-ID widmet sich das Kapitel [Cronjobs für unterschiedlich zu steuernde Aufgaben](../060_Cronjobs_fuer_unterschiedlich_zu_steuernde_Aufgaben.md) ausführlich.
-
-Alle Aufgaben können auch manuell für jede Bestellung ausgeführt werden. Ob dies für die Aufgabe sinnvoll erscheint, können Sie mit dem Haken [ Aktiv für manuelle Ausführung an Bestellung ] festlegen. Haben Sie den Haken nicht gesetzt, wird diese Aufgabe an den Bestellungen nicht angezeigt. (siehe auch [Aufgaben manuell ausführen](../070_Aufgaben_fuer_alle_relevanten_Bestellungen_manuell_ausfuehren.md)).
+Nun widmen wir uns den Einstellungen auf der rechten Seite:
 
 Mit [ Aufgabenausführung nur simulieren ] geben Sie an, ob diese Aufgabe Änderungen an Ihren Bestelldaten vornehmen darf. Ist der Haken gesetzt, sind alle Einstellungen ohne Auswirkungen.
 

@@ -1,170 +1,372 @@
-<?php //006ef
-// This Software is the property of D³ Data Development and is protected by copyright law - it is NOT Freeware.  Any unauthorized use of this software without a valid license key is a violation of the license agreement and will be prosecuted by civil and criminal law.  Inhaber: Thomas Dartsch Alle Rechte vorbehalten  @package Auftragsmanager @version 3.1.0.0 PHP56 (09.07.2019) @author  Daniel Seifert support@shopmodule.com @copyright (C) 2019, D3 Data Development @see http://www.shopmodule.com
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+/**
+ * This Software is the property of Data Development and is protected
+ * by copyright law - it is NOT Freeware.
+ *
+ * Any unauthorized use of this software without a valid license
+ * is a violation of the license agreement and will be prosecuted by
+ * civil and criminal law.
+ *
+ * http://www.shopmodule.com
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+ * @link      http://www.oxidmodule.com
+ */
+
+namespace D3\Ordermanager\Tests\unit\Application\Controller\Admin;
+
+use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ;
+use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Application\Model\d3ordermanager_conf;
+use D3\Ordermanager\Application\Model\d3ordermanagerlist;
+use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist;
+use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist;
+use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
+use Exception;
+use OxidEsales\Eshop\Application\Model\CountryList;
+use OxidEsales\Eshop\Application\Model\Delivery;
+use OxidEsales\Eshop\Application\Model\DeliveryList;
+use OxidEsales\Eshop\Application\Model\PaymentList;
+use PHPUnit_Framework_MockObject_MockObject;
+use ReflectionException;
+
+class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
+{
+    /** @var d3_cfg_ordermanageritem_requ */
+    protected $_oController;
+
+    /**
+     * setup basic requirements
+     * @throws Exception
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_requ::class);
+
+        $oSampleManager = d3GetModCfgDIC()->get(d3ordermanager::class);
+        $oSampleManager->setId('testId');
+        $oSampleManager->save();
+
+        $oTestDelivery = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Delivery::class);
+        $oTestDelivery->setId('testId');
+        $oTestDelivery->save();
+
+        $aViewData = array_merge(
+            $this->_oController->getViewData(),
+            array('edit' => $oSampleManager)
+        );
+
+        $this->_oController->setViewData($aViewData);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        unset($this->_oController);
+
+        $oSampleManager = d3GetModCfgDIC()->get(d3ordermanager::class);
+        $oSampleManager->delete('testId');
+
+        $oTestDelivery = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Delivery::class);
+        $oTestDelivery->delete('testId');
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function canSaveNoMissingValues()
+    {
+        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
+        $oProfileMock = $this->getMock(d3ordermanager::class, array(
+            'getValue'
+        ));
+        $getValueMap = [['blCheckTrackcode_status', true]];
+        $oProfileMock->method('getValue')->willReturnMap($getValueMap);
+
+        /** @var d3_cfg_ordermanageritem_requ|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_requ::class, array(
+            'getProfile'
+        ));
+        $oControllerMock->method('getProfile')->willReturn($oProfileMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->callMethod($this->_oController, 'save');
+        $this->assertNull($this->_oController->getViewDataElement('missingRequValuesActions'));
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function canSaveMissingValues()
+    {
+        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
+        $oProfileMock = $this->getMock(d3ordermanager::class, array(
+            'getValue'
+        ));
+        $getValueMap = [['blCheckDelivery_status', true]];
+        $oProfileMock->method('getValue')->willReturnMap($getValueMap);
+
+        /** @var d3_cfg_ordermanageritem_requ|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_requ::class, array(
+            'getProfile'
+        ));
+        $oControllerMock->method('getProfile')->willReturn($oProfileMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->callMethod($this->_oController, 'save');
+        $aMissing = $this->_oController->getViewDataElement('missingRequValuesActions');
+        $this->assertInternalType('array', $aMissing);
+        $this->assertCount(1, $aMissing);
+        $this->assertContains('deliveryFilter', $aMissing);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function getPaymentListPass()
+    {
+        /** @var PaymentList $oList */
+        $oList = $this->callMethod(
+            $this->_oController,
+            'getPaymentList'
+        );
+
+        $this->assertInstanceOf(
+            PaymentList::class,
+            $oList
+        );
+        $this->assertTrue(count($oList) > 0);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function getDeliveryListPass()
+    {
+        /** @var DeliveryList $oList */
+        $oList = $this->callMethod(
+            $this->_oController,
+            'getDeliveryList'
+        );
+
+        $this->assertInstanceOf(
+            DeliveryList::class,
+            $oList
+        );
+        $this->assertTrue(count($oList) > 0);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function getCountryListPass()
+    {
+        /** @var CountryList $oList */
+        $oList = $this->callMethod(
+            $this->_oController,
+            'getCountryList'
+        );
+
+        $this->assertInstanceOf(
+            CountryList::class,
+            $oList
+        );
+        $this->assertTrue(count($oList) > 0);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function getOrdermanagerJobListPass()
+    {
+        /** @var d3ordermanagerlist $oList */
+        $oList = $this->callMethod(
+            $this->_oController,
+            'getJobList'
+        );
+
+        $this->assertInstanceOf(
+            d3ordermanagerlist::class,
+            $oList
+        );
+        $this->assertTrue(count($oList) > 0, 'ordermanager job list shouldn\t empty');
+        $this->assertFalse($oList->offsetExists('testId'), 'current object shouldn\'t contain in job list');
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function getLanguageListPass()
+    {
+        /** @var array $aList */
+        $aList = $this->callMethod(
+            $this->_oController,
+            'getLanguageList'
+        );
+
+        $this->assertInternalType(
+            "array",
+            $aList
+        );
+        $this->assertTrue(count($aList) > 0);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function getTransStatusListPass()
+    {
+        /** @var array $aTransStatusList */
+        $aTransStatusList = $this->callMethod(
+            $this->_oController,
+            'getTransStatusList'
+        );
+
+        $this->assertInternalType(
+            "array",
+            $aTransStatusList
+        );
+        $this->assertTrue(count($aTransStatusList) > 0);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function addDefaultValuesReturnValues()
+    {
+        $aValues = array(
+            'key1'  => 'value1',
+            'key2'  => 'value2',
+        );
+
+        $this->assertSame(
+            $aValues,
+            $this->callMethod(
+                $this->_oController,
+                'addDefaultValues',
+                array($aValues)
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function getRequirementGroupListReturnsRightInstance()
+    {
+        $oManager = d3GetModCfgDIC()->get(d3ordermanager::class);
+
+        $this->assertInstanceOf(
+            d3ordermanager_requirementgrouplist::class,
+            $this->callMethod(
+                $this->_oController,
+                'getRequirementGroupList',
+                array($oManager)
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function canGetRequirementListObject()
+    {
+        $this->assertInstanceOf(
+            d3ordermanager_requirementlist::class,
+            $this->callMethod($this->_oController, 'getRequirementListObject', array(d3GetModCfgDIC()->get(d3ordermanager::class)))
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function canGetRequirementList()
+    {
+        $aRequList = $this->callMethod($this->_oController, 'getRequirementList');
+        $this->assertInternalType(
+            'array',
+            $aRequList
+        );
+        $this->assertTrue(count($aRequList) > 0);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function getGroupedRequirementListPass()
+    {
+        $mExpected = array('item1', 'item2');
+
+        /** @var d3ordermanager_conf|PHPUnit_Framework_MockObject_MockObject $oManagerConfMock */
+        $oManagerConfMock = $this->getMock(d3ordermanager_conf::class, array(
+            'getGroupedRequirementIdList'
+        ));
+        $oManagerConfMock->method('getGroupedRequirementIdList')->willReturn(true);
+
+        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
+        $oProfileMock = $this->getMock(d3ordermanager::class, array(
+            'getConfiguration'
+        ));
+        $oProfileMock->method('getConfiguration')->willReturn($oManagerConfMock);
+
+        /** @var d3ordermanager_requirementgrouplist|PHPUnit_Framework_MockObject_MockObject $oRequGroupListMock */
+        $oRequGroupListMock = $this->getMock(d3ordermanager_requirementgrouplist::class, array(
+            'setGroups',
+            'getGroupList'
+        ), array($oProfileMock));
+        $oRequGroupListMock->method('setGroups')->willReturn(true);
+        $oRequGroupListMock->method('getGroupList')->willReturn($mExpected);
+
+        /** @var d3_cfg_ordermanageritem_requ|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_requ::class, array(
+            'getProfile',
+            'getRequirementGroupList',
+        ));
+        $oControllerMock->method('getProfile')->willReturn($oProfileMock);
+        $oControllerMock->method('getRequirementGroupList')->willReturn($oRequGroupListMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertSame(
+            $mExpected,
+            $this->callMethod(
+                $this->_oController,
+                'getGroupedRequirementList'
+            )
+        );
+    }
+
+    /**
+     * @param $sLicenseKey
+     * @param d3ordermanager $oManager
+     * @return null
+     */
+    protected function _setModuleLicenseKey($sLicenseKey, $oManager = null)
+    {
+        return null;
+    }
+}

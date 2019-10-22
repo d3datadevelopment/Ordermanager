@@ -137,10 +137,17 @@
             </tr>
         [{/if}]
 
-        [{if $oView->isAllowed()}]
-            [{assign var="blActionRestriction" value=""}]
+        [{if $oView->triggersAreAllowed()}]
+            [{assign var="blActionTriggersRestriction" value=""}]
         [{else}]
-            [{assign var="blActionRestriction" value="readonly disabled"}]
+            [{assign var="blActionTriggersRestriction" value="readonly disabled"}]
+            [{assign var="blRestricted" value=true}]
+        [{/if}]
+
+        [{if $oView->scriptsAreAllowed()}]
+            [{assign var="blActionScriptsRestriction" value=""}]
+        [{else}]
+            [{assign var="blActionScriptsRestriction" value="readonly disabled"}]
             [{assign var="blRestricted" value=true}]
         [{/if}]
 
@@ -162,7 +169,7 @@
                         </a>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl>
                                 <dt>
                                     <label for="MainActive">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_ACTIVE"}]</label>
                                 </dt>
@@ -177,7 +184,7 @@
 
                         [{if $blUseTimeCheck}]
                             <div>
-                                <dl class="[{$blActionRestriction}]">
+                                <dl>
                                     <dt>
                                         [{oxmultilang ident="D3_ORDERMANAGER_MAIN_ACTIVFROMTILL"}]&nbsp;
                                     </dt>
@@ -191,7 +198,7 @@
                         [{/if}]
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl>
                                 <dt>
                                     <label for="MainCJID">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_CRONJOBID"}]</label>&nbsp;
                                 </dt>
@@ -205,12 +212,12 @@
                         </div>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl class="[{$blActionScriptsRestriction}]">
                                 <dt>
                                     <label for="MainCronPreExecScript">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT"}]</label>&nbsp;
                                 </dt>
                                 <dd>
-                                    <input id="MainCronPreExecScript" type="text" class="edittext ext_edittext" name="value[sCronjobPreExecuteScript]" value="[{$edit->getValue('sCronjobPreExecuteScript')}]" [{$readonly}] [{$blActionRestriction}]>
+                                    <input id="MainCronPreExecScript" type="text" class="edittext ext_edittext" name="value[sCronjobPreExecuteScript]" value="[{$edit->getValue('sCronjobPreExecuteScript')}]" [{$readonly}] [{$blActionScriptsRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>
@@ -218,12 +225,12 @@
                         </div>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl class="[{$blActionScriptsRestriction}]">
                                 <dt>
                                     <label for="MainCronPostExecScript">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT"}]</label>&nbsp;
                                 </dt>
                                 <dd>
-                                    <input id="MainCronPostExecScript" type="text" class="edittext ext_edittext" name="value[sCronjobPostExecuteScript]" value="[{$edit->getValue('sCronjobPostExecuteScript')}]" [{$readonly}] [{$blActionRestriction}]>
+                                    <input id="MainCronPostExecScript" type="text" class="edittext ext_edittext" name="value[sCronjobPostExecuteScript]" value="[{$edit->getValue('sCronjobPostExecuteScript')}]" [{$readonly}] [{$blActionScriptsRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>
@@ -243,7 +250,7 @@
                         </a>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl>
                                 <dt>
                                     <label for="MainExecManually">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECMANUALLY"}]</label>&nbsp;
                                 </dt>
@@ -257,12 +264,12 @@
                         </div>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl class="[{$blActionScriptsRestriction}]">
                                 <dt>
                                     <label for="MainManuallyPreExecScript">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT"}]</label>&nbsp;
                                 </dt>
                                 <dd>
-                                    <input id="MainManuallyPreExecScript" type="text" class="edittext ext_edittext" name="value[sManuallyPreExecuteScript]" value="[{$edit->getValue('sManuallyPreExecuteScript')}]" [{$readonly}] [{$blActionRestriction}]>
+                                    <input id="MainManuallyPreExecScript" type="text" class="edittext ext_edittext" name="value[sManuallyPreExecuteScript]" value="[{$edit->getValue('sManuallyPreExecuteScript')}]" [{$readonly}] [{$blActionScriptsRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>
@@ -270,12 +277,12 @@
                         </div>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl class="[{$blActionScriptsRestriction}]">
                                 <dt>
                                     <label for="MainManuallyPostExecScript">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT"}]</label>&nbsp;
                                 </dt>
                                 <dd>
-                                    <input id="MainManuallyPostExecScript" type="text" class="edittext ext_edittext" name="value[sManuallyPostExecuteScript]" value="[{$edit->getValue('sManuallyPostExecuteScript')}]" [{$readonly}] [{$blActionRestriction}]>
+                                    <input id="MainManuallyPostExecScript" type="text" class="edittext ext_edittext" name="value[sManuallyPostExecuteScript]" value="[{$edit->getValue('sManuallyPostExecuteScript')}]" [{$readonly}] [{$blActionScriptsRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>
@@ -283,7 +290,7 @@
                         </div>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl>
                                 <dt>
                                     <label for="MainExecManuallyMeetCondition">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECMANUALLYMEETCONDITION"}]</label>&nbsp;
                                 </dt>
@@ -309,13 +316,13 @@
                         </a>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl class="[{$blActionTriggersRestriction}]">
                                 <dt>
                                     <label for="MainExecOrderFinishTriggered">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECORDERFINISHTRIGGERED"}]</label>
                                 </dt>
                                 <dd>
-                                    <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_OM_ORDERFINISHTRIGGERED')}]]" value="0">
-                                    <input id="MainExecOrderFinishTriggered" type="checkbox" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_ORDERFINISHTRIGGERED')}]]" value="1" [{if $edit->getFieldData('D3_OM_ORDERFINISHTRIGGERED')}]checked[{/if}] [{$readonly}]>
+                                    <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_OM_ORDERFINISHTRIGGERED')}]]" value="0" [{$blActionTriggersRestriction}]>
+                                    <input id="MainExecOrderFinishTriggered" type="checkbox" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_ORDERFINISHTRIGGERED')}]]" value="1" [{if $edit->getFieldData('D3_OM_ORDERFINISHTRIGGERED')}]checked[{/if}] [{$readonly}] [{$blActionTriggersRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_EXECORDERFINISHTRIGGERED_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>
@@ -323,12 +330,12 @@
                         </div>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl class="[{$blActionScriptsRestriction}]">
                                 <dt>
                                     <label for="MainFinishPreExecScript">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT"}]</label>&nbsp;
                                 </dt>
                                 <dd>
-                                    <input id="MainFinishPreExecScript" type="text" class="edittext ext_edittext" name="value[sOrderFinishTriggeredPreExecuteScript]" value="[{$edit->getValue('sOrderFinishTriggeredPreExecuteScript')}]" [{$readonly}] [{$blActionRestriction}]>
+                                    <input id="MainFinishPreExecScript" type="text" class="edittext ext_edittext" name="value[sOrderFinishTriggeredPreExecuteScript]" value="[{$edit->getValue('sOrderFinishTriggeredPreExecuteScript')}]" [{$readonly}] [{$blActionScriptsRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>
@@ -336,12 +343,12 @@
                         </div>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl class="[{$blActionScriptsRestriction}]">
                                 <dt>
                                     <label for="MainFinishPostExecScript">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT"}]</label>&nbsp;
                                 </dt>
                                 <dd>
-                                    <input id="MainFinishPostExecScript" type="text" class="edittext ext_edittext" name="value[sOrderFinishTriggeredPostExecuteScript]" value="[{$edit->getValue('sOrderFinishTriggeredPostExecuteScript')}]" [{$readonly}] [{$blActionRestriction}]>
+                                    <input id="MainFinishPostExecScript" type="text" class="edittext ext_edittext" name="value[sOrderFinishTriggeredPostExecuteScript]" value="[{$edit->getValue('sOrderFinishTriggeredPostExecuteScript')}]" [{$readonly}] [{$blActionScriptsRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>
@@ -361,13 +368,13 @@
                         </a>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl class="[{$blActionTriggersRestriction}]">
                                 <dt>
                                     <label for="MainExecOrderFinishTriggered">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECORDERSAVETRIGGERED"}]</label>
                                 </dt>
                                 <dd>
-                                    <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_OM_ORDERSAVETRIGGERED')}]]" value="0">
-                                    <input id="MainExecOrderFinishTriggered" type="checkbox" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_ORDERSAVETRIGGERED')}]]" value="1" [{if $edit->getFieldData('D3_OM_ORDERSAVETRIGGERED')}]checked[{/if}] [{$readonly}]>
+                                    <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_OM_ORDERSAVETRIGGERED')}]]" value="0" [{$blActionTriggersRestriction}]>
+                                    <input id="MainExecOrderFinishTriggered" type="checkbox" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_ORDERSAVETRIGGERED')}]]" value="1" [{if $edit->getFieldData('D3_OM_ORDERSAVETRIGGERED')}]checked[{/if}] [{$readonly}] [{$blActionTriggersRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_EXECORDERSAVETRIGGERED_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>
@@ -375,12 +382,12 @@
                         </div>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl class="[{$blActionScriptsRestriction}]">
                                 <dt>
                                     <label for="MainSavePreExecScript">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT"}]</label>&nbsp;
                                 </dt>
                                 <dd>
-                                    <input id="MainSavePreExecScript" type="text" class="edittext ext_edittext" name="value[sOrderSaveTriggeredPreExecuteScript]" value="[{$edit->getValue('sOrderSaveTriggeredPreExecuteScript')}]" [{$readonly}] [{$blActionRestriction}]>
+                                    <input id="MainSavePreExecScript" type="text" class="edittext ext_edittext" name="value[sOrderSaveTriggeredPreExecuteScript]" value="[{$edit->getValue('sOrderSaveTriggeredPreExecuteScript')}]" [{$readonly}] [{$blActionScriptsRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>
@@ -388,12 +395,12 @@
                         </div>
 
                         <div>
-                            <dl class="[{$blActionRestriction}]">
+                            <dl class="[{$blActionScriptsRestriction}]">
                                 <dt>
                                     <label for="MainSavePostExecScript">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT"}]</label>&nbsp;
                                 </dt>
                                 <dd>
-                                    <input id="MainSavePostExecScript" type="text" class="edittext ext_edittext" name="value[sOrderSaveTriggeredPostExecuteScript]" value="[{$edit->getValue('sOrderSaveTriggeredPostExecuteScript')}]" [{$readonly}] [{$blActionRestriction}]>
+                                    <input id="MainSavePostExecScript" type="text" class="edittext ext_edittext" name="value[sOrderSaveTriggeredPostExecuteScript]" value="[{$edit->getValue('sOrderSaveTriggeredPostExecuteScript')}]" [{$readonly}] [{$blActionScriptsRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>

@@ -1,108 +1,239 @@
-<?php //006ef
-// This Software is the property of D³ Data Development and is protected by copyright law - it is NOT Freeware.  Any unauthorized use of this software without a valid license key is a violation of the license agreement and will be prosecuted by civil and criminal law.  Inhaber: Thomas Dartsch Alle Rechte vorbehalten  @package Auftragsmanager @version 3.1.0.0 PHP56 (09.07.2019) @author  Daniel Seifert support@shopmodule.com @copyright (C) 2019, D3 Data Development @see http://www.shopmodule.com
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
-xrN7
+<?php
+
+/**
+ * This Software is the property of Data Development and is protected
+ * by copyright law - it is NOT Freeware.
+ *
+ * Any unauthorized use of this software without a valid license
+ * is a violation of the license agreement and will be prosecuted by
+ * civil and criminal law.
+ *
+ * http://www.shopmodule.com
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+ * @link      http://www.oxidmodule.com
+ */
+namespace D3\Ordermanager\tests\integration\Requirements;
+
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
+use D3\Ordermanager\Application\Model\d3ordermanager;
+use Doctrine\DBAL\DBALException;
+use Exception;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
+
+class requirementInGroupFilterTest extends d3OrdermanagerRequirementIntegrationTestCase
+{
+    public $sManagerId = 'managerTestId';
+    public $aOrderIdList = array(
+        'orderTestIdNo1',
+        'orderTestIdNo2',
+        'orderTestIdNo3',
+    );
+    public $aOrderArticleIdList = array(
+        'orderTestIdNo1Article1',
+        'orderTestIdNo2Article1',
+        'orderTestIdNo3Article1',
+    );
+    public $aGroupAssignIdList = array(
+        'groupAssignIdNo1',
+        'groupAssignIdNo2',
+        'groupAssignIdNo3',
+    );
+
+    /**
+     * Set up fixture.
+     * @throws Exception
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->createTestData();
+    }
+
+    /**
+     * Tear down fixture.
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function tearDown()
+    {
+        $this->cleanTestData();
+
+        parent::tearDown();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function createTestData()
+    {
+        $this->createManager(
+            $this->sManagerId
+        );
+
+        $this->createOrder(
+            $this->aOrderIdList[0],
+            array(
+                'oxorderdate'   => '2018-01-01 00:00:00',
+                'oxbillcompany' => __CLASS__,
+                'oxuserid'      => 'sUserIdNo1',
+            ),
+            array(
+                $this->aOrderArticleIdList[0] => array(
+                    'oxtitle'           => __CLASS__,
+                )
+            )
+        );
+
+        $this->createBaseModelObject(
+            'oxobject2group',
+            $this->aGroupAssignIdList[0],
+            array(
+                'oxobjectid'    => 'sUserIdNo1',
+                'oxgroupsid'    => 'sGroupId1Pass',
+            )
+        );
+
+        $this->createOrder(
+            $this->aOrderIdList[1],
+            array(
+                'oxorderdate'   => '2018-01-01 00:00:00',
+                'oxbillcompany' => __CLASS__,
+                'oxuserid'      => 'sUserIdNo2',
+            ),
+            array(
+                $this->aOrderArticleIdList[1] => array(
+                    'oxtitle'       => __CLASS__,
+                )
+            )
+        );
+
+        $this->createBaseModelObject(
+            'oxobject2group',
+            $this->aGroupAssignIdList[1],
+            array(
+                'oxobjectid'    => 'sUserIdNo2',
+                'oxgroupsid'    => 'sGroupId2Pass',
+            )
+        );
+
+        $this->createOrder(
+            $this->aOrderIdList[2],
+            array(
+                'oxorderdate'   => '2018-01-01 00:00:00',
+                'oxbillcompany' => __CLASS__,
+                'oxuserid'      => 'sUserIdNo3',
+            ),
+            array(
+                $this->aOrderArticleIdList[2] => array(
+                    'oxtitle'       => __CLASS__,
+                )
+            )
+        );
+
+        $this->createBaseModelObject(
+            'oxobject2group',
+            $this->aGroupAssignIdList[2],
+            array(
+                'oxobjectid'    => 'sUserIdNo3',
+                'oxgroupsid'    => 'sGroupId3Pass',
+            )
+        );
+    }
+
+    /**
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function cleanTestData()
+    {
+        $this->deleteManager($this->sManagerId);
+
+        foreach ($this->aOrderIdList as $sOrderId) {
+            $this->deleteOrder($sOrderId);
+        }
+
+        foreach ($this->aGroupAssignIdList as $sGroupAssignId) {
+            $this->deleteBaseModelObject('oxobject2group', $sGroupAssignId);
+        }
+    }
+
+    /**
+     * @return d3ordermanager
+     * @throws Exception
+     */
+    public function getConfiguredManagerSingle()
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blCheckInGroup_status', true);
+        $oManager->setValue('sCustInGroupId', array('sGroupId1Pass'));
+
+        return $oManager;
+    }
+
+    /**
+     * @return d3ordermanager
+     * @throws Exception
+     */
+    public function getConfiguredManagerMulti()
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blCheckInGroup_status', true);
+        $oManager->setValue('sCustInGroupId', array('sGroupId1Pass', 'sGroupId2Pass'));
+
+        return $oManager;
+    }
+
+    /**
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     */
+    public function requirementsSelectsRightOrdersSingle()
+    {
+        $oListGenerator = $this->getListGenerator($this->getConfiguredManagerSingle());
+        $oOrderList = $oListGenerator->getConcernedOrders();
+
+        $this->assertTrue(
+            $oOrderList->count() === 1
+            && $oOrderList->offsetExists($this->aOrderIdList[0])
+            && false == $oOrderList->offsetExists($this->aOrderIdList[1])
+            && false == $oOrderList->offsetExists($this->aOrderIdList[2])
+        );
+    }
+
+    /**
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     */
+    public function requirementsSelectsRightOrdersMulti()
+    {
+        $oListGenerator = $this->getListGenerator($this->getConfiguredManagerMulti());
+        $oOrderList = $oListGenerator->getConcernedOrders();
+
+        $this->assertTrue(
+            $oOrderList->count() === 2
+            && $oOrderList->offsetExists($this->aOrderIdList[0])
+            && $oOrderList->offsetExists($this->aOrderIdList[1])
+            && false == $oOrderList->offsetExists($this->aOrderIdList[2])
+        );
+    }
+}
