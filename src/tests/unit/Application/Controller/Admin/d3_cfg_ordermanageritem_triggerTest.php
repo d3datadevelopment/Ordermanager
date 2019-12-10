@@ -146,7 +146,7 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
      * @test
      * @throws ReflectionException
      */
-    public function isAllowedPass()
+    public function triggersAreAllowedPass()
     {
         /** @var PHPUnit_Framework_MockObject_MockObject|d3_cfg_mod $oModCfgMock */
         $oModCfgMock = $this->getMock(stdClass::class, array(
@@ -171,7 +171,41 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
         $this->assertTrue(
             $this->callMethod(
                 $this->_oController,
-                'isAllowed'
+                'triggersAreAllowed'
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function scriptsAreAllowedPass()
+    {
+        /** @var PHPUnit_Framework_MockObject_MockObject|d3_cfg_mod $oModCfgMock */
+        $oModCfgMock = $this->getMock(stdClass::class, array(
+            'isDemo'
+        ));
+        $oModCfgMock->method('isDemo')->willReturn(true);
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|d3ordermanager $oManagerMock */
+        $oManagerMock = $this->getMock(d3ordermanager::class, array(
+            'd3getModCfg',
+        ));
+        $oManagerMock->expects($this->any())->method('d3getModCfg')->willReturn($oModCfgMock);
+
+        /** @var d3_cfg_ordermanageritem_trigger|PHPUnit_Framework_MockObject_MockObject $oActionMock */
+        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_trigger::class, array(
+            'getManager',
+        ), array($oManagerMock));
+        $oControllerMock->method('getManager')->willReturn($oManagerMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertTrue(
+            $this->callMethod(
+                $this->_oController,
+                'scriptsAreAllowed'
             )
         );
     }

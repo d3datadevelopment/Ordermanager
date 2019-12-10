@@ -199,6 +199,38 @@ function showFormatSettings(sElemId, visible, blUseOldElem)
                             </a>
                             <dl>
                                 <dt>
+                                    [{oxmultilang ident="D3_ORDERMANAGER_SET_CRON_PATH"}]
+                                </dt>
+                                <dd>
+                                    [{$oView->getCronPath($aCronJobIds.id)}]
+                                    [{oxinputhelp ident="D3_ORDERMANAGER_SET_CRON_PATH_DESC"}]
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="shcrontype_[{$aCronJobIds.id}]">[{oxmultilang ident="D3_SHGENERATOR_CRON_SHGENERATOR"}]</label>
+                                </dt>
+                                <dd>
+                                    <select style="float: left; margin-right: 10px;" id="shcrontype_[{$aCronJobIds.id}]">
+                                        [{foreach from=$oView->getCronProviderList() item="sProviderName" key="sProviderId"}]
+                                            <option value="[{$sProviderId}]">
+                                                [{$sProviderName}]
+                                            </option>
+                                        [{/foreach}]
+                                    </select>
+                                    <span class="d3modcfg_btn icon d3color-blue">
+                                        <button name="save" onclick="oForm = document.getElementById('myedit'); oForm.crontype.value = document.getElementById('shcrontype_[{$aCronJobIds.id}]').value; oForm.cronid.value='[{$aCronJobIds.id}]'; oForm.fnc.value='generateCronShFile'; oForm.submit();">
+                                            <i class="fa fa-download fa-inverse"></i>
+                                            [{oxmultilang ident="D3_SHGENERATOR_CRON_SHGENERATOR_GENERATE"}]
+                                        </button>
+                                    </span>
+                                    [{oxinputhelp ident="D3_SHGENERATOR_CRON_SHGENERATOR_DESC"}]
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                            <dl>
+                                <dt>
                                     [{oxmultilang ident="D3_ORDERMANAGER_SET_CRON_EXTLINK"}]
                                 </dt>
                                 <dd>
@@ -217,28 +249,6 @@ function showFormatSettings(sElemId, visible, blUseOldElem)
                                 <dd>
                                     [{$oView->getCronLink(false, $aCronJobIds.id)}]
                                     [{oxinputhelp ident="D3_ORDERMANAGER_SET_CRON_CRONLINK_DESC"}]
-                                </dd>
-                                <div class="spacer"></div>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="cronProviderList">[{oxmultilang ident="D3_SHGENERATOR_CRON_SHGENERATOR"}]</label>
-                                </dt>
-                                <dd>
-                                    <select id="cronProviderList" style="float: left; margin-right: 10px;" id="shcrontype_[{$aCronJobIds.id}]">
-                                        [{foreach from=$oView->getCronProviderList() item="sProviderName" key="sProviderId"}]
-                                            <option value="[{$sProviderId}]">
-                                                [{$sProviderName}]
-                                            </option>
-                                        [{/foreach}]
-                                    </select>
-                                    <span class="d3modcfg_btn icon d3color-blue">
-                                        <button name="save" onclick="oForm = document.getElementById('myedit'); oForm.crontype.value = document.getElementById('shcrontype_[{$aCronJobIds.id}]').value; oForm.cronid.value='[{$aCronJobIds.id}]'; oForm.fnc.value='generateCronShFile'; oForm.submit();">
-                                            <i class="fa fa-download fa-inverse"></i>
-                                            [{oxmultilang ident="D3_SHGENERATOR_CRON_SHGENERATOR_GENERATE"}]
-                                        </button>
-                                    </span>
-                                    [{oxinputhelp ident="D3_SHGENERATOR_CRON_SHGENERATOR_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>
                             </dl>

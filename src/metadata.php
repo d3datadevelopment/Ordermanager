@@ -27,7 +27,7 @@ $aModule = array(
         'de'    => 'Bearbeitet frei definierbare Auftr&auml;ge auf Basis von einstellbaren Bestellungslisten.',
         'en'    => ''),
     'thumbnail'     => 'picture.png',
-    'version'       => '3.1.1.0',
+    'version'       => '3.2.0.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'http://www.oxidmodule.com/',
@@ -36,8 +36,7 @@ $aModule = array(
         OxidModel\Order::class                  => ModuleModel\d3_oxorder_ordermanager::class,
         OxidModel\User::class                   => ModuleModel\d3_oxuser_ordermanager::class,
         OxidModel\Basket::class                 => ModuleModel\d3_oxbasket_ordermanager::class,
-        OxidModel\BasketItem::class             => ModuleModel\d3_oxbasketitem_ordermanager::class,
-        OxidController\Admin\OrderRemark::class => ModuleControllerAdmin\d3_order_remark_ordermanager::class,
+        OxidModel\BasketItem::class             => ModuleModel\d3_oxbasketitem_ordermanager::class
     ),
     'controllers'   => array(
         'd3ordermanager_response'           => OMController\d3ordermanager_response::class,
@@ -77,8 +76,6 @@ $aModule = array(
             'd3/ordermanager/Application/views/admin/tpl/email/html/d3ordermanager_info_html.tpl',
         'd3ordermanager_info_plain.tpl'         =>
             'd3/ordermanager/Application/views/admin/tpl/email/plain/d3ordermanager_info_plain.tpl',
-        'd3_ordermanager_order_remark.tpl'         =>
-            'd3/ordermanager/Application/views/admin/tpl/d3_ordermanager_order_remark.tpl',
 
         'd3ordermanager_requ_fromordernr.tpl'           =>
             'd3/ordermanager/Application/views/admin/tpl/Requirements/d3ordermanager_requ_fromordernr.tpl',
@@ -293,6 +290,7 @@ $aModule = array(
         'd3/ordermanager/tests/additional.inc.php',
         'd3/ordermanager/tests/d3ordermanager_config.php',
         'd3/ordermanager/tests/unit/d3OrdermanagerUnitTestCase.php',
+        'd3/ordermanager/tests/unit/Application/Controller/Admin/d3_cfg_ordermanageritem_listTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractiongeneratepdfTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractionchangediscountTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractionchangedelcostsTest.php',
@@ -373,6 +371,7 @@ $aModule = array(
         'd3/ordermanager/tests/unit/Modules/Application/Model/d3_oxuser_ordermanagerTest.php',
         'd3/ordermanager/tests/unit/Modules/Application/Model/d3_oxorder_ordermanagerTest.php',
         'd3/ordermanager/tests/unit/Modules/Application/Model/d3_oxemail_ordermanagerTest.php',
+        'd3/ordermanager/tests/unit/public/d3_ordermanager_cronTest.php',
         'd3/ordermanager/tests/unit/Setup/d3ordermanager_updateTest.php',
         'd3/ordermanager/tests/integration/Requirements/d3OrdermanagerRequirementIntegrationTestCase.php'.
         'd3/ordermanager/tests/integration/Requirements/requirementOrderSumTest.php',

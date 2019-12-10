@@ -75,15 +75,17 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
         /** @var $oGroupsList ListModel */
         $oGroupsList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.ListModel::class);
         $oGroupsList->init('oxgroups');
-        return $this->_getObjectList($oGroupsList);
+        return $this->_getObjectList($oGroupsList, null, 'oxtitle ASC');
     }
 
     /**
      * @param ListModel $oObjectList
+     * @param null|string $sWhere
+     * @param null|string $sOrderBy
+     *
      * @return ListModel
-     * @throws Exception
      */
-    protected function _getObjectList($oObjectList)
+    protected function _getObjectList($oObjectList, $sWhere = null, $sOrderBy = null)
     {
         startProfile(__METHOD__);
 
@@ -97,6 +99,8 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
         }
         $sFieldList = $oObject->getSelectFields();
         $sQ = "select {$sFieldList} from {$oObject->getViewName()}";
+        $sQ .= $sWhere ? " WHERE {$sWhere} ":"";
+        $sQ .= $sOrderBy ? " ORDER BY {$sOrderBy} ":"";
         $oObjectList->selectString($sQ);
 
         stopProfile(__METHOD__);

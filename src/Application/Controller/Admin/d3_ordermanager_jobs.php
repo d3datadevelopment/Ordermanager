@@ -34,7 +34,9 @@ use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Language;
+use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\Request;
 use OxidEsales\Eshop\Core\Session;
 
@@ -319,6 +321,17 @@ class d3_ordermanager_jobs extends AdminDetailsController
         $oManager = $this->getManager();
         $oManager->load($request->getRequestEscapedParameter('ordermanagerid'));
         $this->addTplParam('aMailContent', $oManager->getEditableContent($sItemId));
+
+        $contents = $oManager->getEditableContent($sItemId);
+        $field = oxNew(Field::class);
+        $field->setValue($contents['html']);
+        $object = oxNew(BaseModel::class);
+        $object->__set(
+            'aContent[mail][html]',
+            $field
+        );
+        $this->addTplParam("htmleditor", $this->generateTextEditor("95%", 180, $object, "aContent[mail][html]", "list.tpl.css"));
+
         $this->addTplParam('sAction', __FUNCTION__);
         $this->addTplParam('oOrderManager', $oManager);
     }

@@ -744,7 +744,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
             'getEditableContent',
         ));
         $oManagerMock->expects($this->once())->method('load')->willReturn(true);
-        $oManagerMock->expects($this->once())->method('getEditableContent')->with(
+        $oManagerMock->expects($this->exactly(2))->method('getEditableContent')->with(
             $this->stringContains('testItemId')
         )->willReturn(true);
 

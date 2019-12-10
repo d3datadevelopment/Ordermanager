@@ -60,7 +60,7 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     {
         /** @var PaymentList $oPaymentList */
         $oPaymentList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.PaymentList::class);
-        return $this->_getObjectList($oPaymentList);
+        return $this->_getObjectList($oPaymentList, null, 'oxdesc ASC');
     }
 
     /**
@@ -71,7 +71,7 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     {
         /** @var DeliveryList $oDeliveryList */
         $oDeliveryList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.DeliveryList::class);
-        return $this->_getObjectList($oDeliveryList);
+        return $this->_getObjectList($oDeliveryList, null, 'oxtitle ASC');
     }
 
     /**
@@ -82,7 +82,7 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     {
         /** @var CountryList $oCountryList */
         $oCountryList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.CountryList::class);
-        return $this->_getObjectList($oCountryList);
+        return $this->_getObjectList($oCountryList, null, 'oxtitle ASC');
     }
 
     /**

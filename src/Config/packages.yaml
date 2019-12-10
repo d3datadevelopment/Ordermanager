@@ -17,6 +17,7 @@ parameters:
   League\Flysystem\Adapter\Local.args.writeFlags:
   League\Flysystem\Adapter\Local.args.linkHandling:
   League\Flysystem\Adapter\Local.args.permissions: []
+  Html2Text\Html2Text.args.html:
 
 services:
   League\Flysystem\Filesystem:
@@ -36,3 +37,9 @@ services:
       - '%League\Flysystem\Adapter\Local.args.writeFlags%'
       - '%League\Flysystem\Adapter\Local.args.linkHandling%'
       - '%League\Flysystem\Adapter\Local.args.permissions%'
+
+  Html2Text\Html2Text:
+    class:      Html2Text\Html2Text
+    shared:     false
+    arguments:
+      - '%Html2Text\Html2Text.args.html%'
