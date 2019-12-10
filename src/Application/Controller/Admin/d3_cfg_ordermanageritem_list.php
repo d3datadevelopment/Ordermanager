@@ -29,4 +29,21 @@ class d3_cfg_ordermanageritem_list extends d3_cfg_mod_list
     protected $_sThisTemplate = 'd3_cfg_ordermanageritem_list.tpl';
     protected $_sMenuItemTitle = 'd3mxordermanager';
     protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
+
+    public function buildWhere()
+    {
+        $aWhere = parent::buildWhere();
+
+        $baseObject = $this->getItemListBaseObject();
+        foreach ($aWhere as $key => $value) {
+            $aWhere[str_replace(
+                getViewName($baseObject->getCoreTableName()),
+                $baseObject->getCoreTableName(),
+                $key
+            )] = $value;
+            unset($aWhere[$key]);
+        }
+
+        return $aWhere;
+    }
 }

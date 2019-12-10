@@ -43,6 +43,14 @@ services:
       - D3\Ordermanager\Application\Model\d3ordermanagerlist
       - '%D3\Ordermanager\Application\Model\d3ordermanagerlist.args.objectname%'
 
+  # d3_cfg_ordermanageritem_list
+  D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_list:
+    class:      D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_list
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_list
+
   # d3_cfg_ordermanageritem_action
   D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action:
     class:      D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action

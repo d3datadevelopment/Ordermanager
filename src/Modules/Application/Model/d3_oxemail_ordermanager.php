@@ -29,6 +29,7 @@ use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHand
 use D3\ModCfg\Application\Model\d3str;
 use Doctrine\DBAL\DBALException;
 use Exception;
+use Html2Text\Html2Text;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\Shop;
 use OxidEsales\Eshop\Application\Model\Remark;
@@ -205,9 +206,9 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         if ($this->_d3hasOrderManagerCustomerRecipient()) {
             $oRemark = $this->_d3sendOrderManagerMailToCustomer($oShop);
         } elseif ($this->_d3hasOrderManagerOwnerRecipient()) {
-            $this->_d3sendOrderManagerMailToOwner($oShop);
+            $oRemark = $this->_d3sendOrderManagerMailToOwner($oShop);
         } elseif ($this->_d3hasOrderManagerCustomRecipient()) {
-            $this->_d3sendOrderManagerMailToCustom();
+            $oRemark = $this->_d3sendOrderManagerMailToCustom();
         }
 
         return $oRemark;
@@ -471,6 +472,10 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
 
         if ($this->d3HasOrderManagerEditorMailContent($aEditedValues)) {
             $aContent = $aEditedValues['mail'];
+
+            if ($aContent['genplain']) {
+                $aContent['plain'] = $this->d3generatePlainContent($aContent['html']);
+            }
         } elseif ($this->oOrderManager->getValue('sSendMailFromSource') == 'cms') {
             $iOrderLangId = $this->oOrderManager->getCurrentItem()->getFieldData('oxlang');
             $iCurrentLang = $this->d3GetLang()->getTplLanguage();
@@ -513,7 +518,10 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         return $this->isArrayEditorMailContent($aEditedValues) &&
                $aEditedValues['mail']['subject'] &&
                $aEditedValues['mail']['html'] &&
-               $aEditedValues['mail']['plain'];
+                (
+                    $aEditedValues['mail']['genplain'] ||
+                    $aEditedValues['mail']['plain']
+                );
     }
 
     /**
@@ -527,12 +535,28 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
     }
 
     /**
+     * @param $html
+     * @return string
+     */
+    public function d3generatePlainContent($html)
+    {
+        d3GetModCfgDIC()->setParameter(Html2Text::class.'.args.html', $html);
+
+        /** @var Html2Text $html */
+        $html = d3GetModCfgDIC()->get(Html2Text::class);
+        return $html->getText();
+    }
+
+    /**
      * @return Remark
      * @throws Exception
      */
     public function d3GetRemark()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Remark::class);
+        /** @var Remark $remark */
+        $remark = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Remark::class);
+
+        return $remark;
     }
 
     /**
@@ -566,20 +590,15 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
             }
         }
 
-        // add user history
-        $oRemark                       = $this->d3GetRemark();
-        $aRemarkContent = array(
-            'oxtext'        => $this->getAltBody(),
-            'oxparentid'    => $this->oOrderManager->getCurrentItem()->getId(),
-            'oxtype'        => 'o',
-        );
-        $oRemark->assign($aRemarkContent);
-        return $oRemark;
+        return $this->d3generateRemark();
     }
 
     /**
      * @param Shop $oShop
+     *
+     * @return Remark
      * @throws d3ParameterNotFoundException
+     * @throws \Exception
      */
     protected function _d3sendOrderManagerMailToOwner(Shop $oShop)
     {
@@ -591,6 +610,8 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
                 $this->addBCC(trim($sMailAdr), trim($sMailAdr));
             }
         }
+
+        return $this->d3generateRemark();
     }
 
     /**
@@ -603,6 +624,8 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
                 $this->setRecipient(trim($sMailAdr), trim($sMailAdr));
             }
         }
+
+        return $this->d3generateRemark();
     }
 
     /**
@@ -700,5 +723,41 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         } else {
             $this->setReplyTo($oShop->getFieldData('oxinfoemail'), $oShop->__get('oxshops__oxname')->getRawValue());
         }
+    }
+
+    /**
+     * add user history
+     * @return Remark
+     * @throws d3ParameterNotFoundException
+     * @throws \Exception
+     */
+    public function d3generateRemark() {
+        $oRemark        = $this->d3GetRemark();
+        $aRemarkContent = array(
+            'oxtext'     => $this->d3getRemarkText(),
+            'oxparentid' => $this->oOrderManager->getCurrentItem()->getOrderUser()->getId(),
+            'oxtype'     => 'd3om',
+        );
+        $oRemark->assign( $aRemarkContent );
+
+        return $oRemark;
+    }
+
+    /**
+     * @return string
+     */
+    public function d3getRemarkText()
+    {
+        return implode(
+            PHP_EOL.'---'.PHP_EOL,
+           [
+               'Recipients:',
+               implode(', ', array_keys($this->getAllRecipientAddresses())),
+               'HTML:',
+               $this->getBody(),
+               'Plain',
+               $this->getAltBody()
+           ]
+        );
     }
 }

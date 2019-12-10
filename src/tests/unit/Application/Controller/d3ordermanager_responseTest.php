@@ -28,6 +28,7 @@ use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\Eshop\Core\Language;
 use PHPUnit_Framework_MockObject_MockObject;
 use ReflectionException;
 use stdClass;
@@ -1001,6 +1002,115 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $sReturn = $this->callMethod($this->_oController, '_getCronTimestampVarName');
         $this->assertContains('Timestamp', $sReturn);
         $this->assertContains('testJobId', $sReturn);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function getLastExecDatePassed()
+    {
+        $testValue = 'testValue';
+
+        /** @var stdClass|PHPUnit_Framework_MockObject_MockObject $oModCfgMock */
+        $oModCfgMock = $this->getMock(stdClass::class, array(
+            'getValue',
+        ));
+        $map = [
+            ['tsVarName', $testValue]
+        ];
+        $oModCfgMock->method('getValue')->willReturnMap($map);
+
+        /** @var d3ordermanager_response|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3ordermanager_response::class, array(
+            '_getCronTimestampVarName',
+            '_getSet',
+        ));
+        $oControllerMock->expects($this->once())->method('_getCronTimestampVarName')->willReturn('tsVarName');
+        $oControllerMock->expects($this->once())->method('_getSet')->willReturn($oModCfgMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertSame(
+            $testValue,
+            $this->callMethod(
+                $this->_oController, 'getLastExecDate'
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function getLastExecDateInfoPassed()
+    {
+        /** @var Language|PHPUnit_Framework_MockObject_MockObject $oLangMock */
+        $oLangMock = $this->getMock(Language::class, array(
+            'translateString',
+        ));
+        $oLangMock->method('translateString')->willReturn('%1$s -- %2$s');
+
+        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
+        $oManagerMock = $this->getMock(d3ordermanager::class, array(
+            'getAvailableCronjobIds',
+        ));
+        $oManagerMock->method('getAvailableCronjobIds')->willReturn(
+            [
+                [
+                    'id'    => 0,
+                    'count' => 5
+                ],
+                [
+                    'id'    => 1,
+                    'count' => 9
+                ],
+                [
+                    'id'    => 4,
+                    'count' => 12
+                ]
+            ]
+        );
+
+        /** @var d3ordermanager_response|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3ordermanager_response::class, array(
+            '_getCronJobIdParameter',
+            'getManager',
+            'getLastExecDate',
+            'getLang',
+        ));
+        $oControllerMock->expects($this->once())->method('_getCronJobIdParameter')->willReturn('1');
+        $oControllerMock->method('getManager')->willReturn($oManagerMock);
+        $oControllerMock->method('getLastExecDate')->willReturn('2020-02-02');
+        $oControllerMock->method('getLang')->willReturn($oLangMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertSame(
+            [
+                0 => '1 -- 9',
+                1 => '1 -- 2020-02-02'
+            ],
+            $this->callMethod(
+                $this->_oController,
+                'getLastExecDateInfo'
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function getLangReturnsRightInstance()
+    {
+        $this->assertInstanceOf(
+            Language::class,
+            $this->callMethod(
+                $this->_oController,
+                'getLang'
+            )
+        );
     }
 
     /**

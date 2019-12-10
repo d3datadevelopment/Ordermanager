@@ -36,7 +36,9 @@
     "oxid-esales/oxideshop-metapackage-ce": "~6.0.0 || ~6.1.0",
     "d3/modcfg": "^5.2.0.000",
     "oxid-projects/pdf-invoice-module": "*",
-    "league/flysystem": "^1.0"
+    "league/flysystem": "^1.0",
+    "splitbrain/php-cli": "^1.1",
+    "html2text/html2text": "^4.2"
   },
   "require-dev": {
     "mikey179/vfsstream": "^1.4"
@@ -45,5 +47,6 @@
     "psr-4": {
       "D3\\Ordermanager\\": "../../../source/modules/d3/ordermanager"
     }
-  }
+  },
+  "bin": ["src/bin/d3_ordermanager_cron"]
 }

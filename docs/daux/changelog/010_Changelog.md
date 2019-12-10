@@ -2,6 +2,26 @@
 title: Changelog
 --- 
 
+## 3.2.0.0 - (2019-12-10)
+### Added
+- bearbeitbare E-Mails haben nun einen WYSIWYG-Editor, wenn einer im Shop installiert ist
+- Selectlisten sind nun alphabetisch sortiert (Payments, Deliveries, Countries, Groups)
+- Mail-Editor kann aus HTML-Inhalt automatisch Plain generieren (für jeden Fall einstellbar)
+- CLI-Aufrufe erfolgen nun über entsprechendes Framework -> optimiertes Handling
+- Cron-Aufrufe können über ./vendor/bin/d3_ordermanager_cron gestartet werden, alte Aufrufe sind weiterhin möglich
+- verkürzter Cron-Pfad wird auch im Admin gezeigt
+
+### Changed
+- Tests angepasst
+- Workaround für früher fehlenden TPL-Block entfernt
+
+### Fixed
+- History-Einträge aus Mailversand verwendet manuell bearbeite Mailinhalte, wenn diese angepasst wurden
+- History-Einträge werden in jeder verfügbaren Empfänger-Konstellation angelegt
+- Fehler im Aufgabenfilter der Adminansicht korrigiert
+
+---
+
 ## 3.1.1.0 - (2019-10-21)
 ### Added
 - Trigger-Dokumentation ergänzt

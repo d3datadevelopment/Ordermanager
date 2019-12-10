@@ -296,6 +296,60 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
      * @test
      * @throws ReflectionException
      */
+    public function cronPathWithCronjobIdPass()
+    {
+        /** @var ViewConfig|PHPUnit_Framework_MockObject_MockObject $oViewConfMock */
+        $oViewConfMock = $this->getMock(ViewConfig::class, array(
+            'getActiveShopId',
+        ));
+        $oViewConfMock->method('getActiveShopId')->willReturn(1);
+
+        /** @var d3_cfg_ordermanagerset_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_main::class, array(
+            'getViewConfig',
+        ));
+        $oControllerMock->method('getViewConfig')->willReturn($oViewConfMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertRegExp(
+            '/(?!http).*\/d3_ordermanager_cron\s[0-9]\stestCjId/i',
+            $this->callMethod($this->_oController, 'getCronPath', array('testCjId'))
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function cronPathWithNoCronjobIdPass()
+    {
+        define(VENDOR_PATH, 'TESTPATH');
+
+        /** @var ViewConfig|PHPUnit_Framework_MockObject_MockObject $oViewConfMock */
+        $oViewConfMock = $this->getMock(ViewConfig::class, array(
+            'getActiveShopId',
+        ));
+        $oViewConfMock->method('getActiveShopId')->willReturn(1);
+
+        /** @var d3_cfg_ordermanagerset_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_main::class, array(
+            'getViewConfig',
+        ));
+        $oControllerMock->method('getViewConfig')->willReturn($oViewConfMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertRegExp(
+            '/(?!http).*\/d3_ordermanager_cron\s[0-9]/i',
+            $this->callMethod($this->_oController, 'getCronPath', array())
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
     public function canGetAvailableCronjobIds()
     {
         /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */

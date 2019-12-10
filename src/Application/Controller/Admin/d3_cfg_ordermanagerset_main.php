@@ -22,7 +22,6 @@ use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
 use D3\ModCfg\Application\Model\d3str;
-use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Filegenerator\d3filegeneratorcronsh;
 use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
 use Doctrine\DBAL\DBALException;
@@ -35,7 +34,6 @@ use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Request;
 use OxidEsales\Eshop\Application\Model\Shop;
-use OxidEsales\Eshop\Core\Module\Module;
 use OxidEsales\Eshop\Core\ViewConfig;
 
 class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
@@ -133,6 +131,34 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         $sURL   = $this->getD3Str()->generateParameterUrl($sBaseUrl, $aParameters);
 
         return $sURL;
+    }
+
+    /**
+     * @param bool $blUsePw
+     * @param bool|int $iCronJobId
+     *
+     * @return string
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws FileException
+     * @throws Exception
+     */
+    public function getCronPath($iCronJobId = false)
+    {
+        $sScriptPath = VENDOR_PATH.'bin/d3_ordermanager_cron';
+
+        $aParameters = array(
+            'shp' => $this->getViewConfig()->getActiveShopId(),
+        );
+
+        if ($iCronJobId !== false) {
+            $aParameters['cjid'] = $iCronJobId;
+        }
+
+        $sPath   = $sScriptPath." ".implode(' ', $aParameters);
+
+        return $sPath;
     }
 
     /**
@@ -236,19 +262,7 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
      */
     public function generateCronShFile()
     {
-        /** @var Module $oModule */
-        $oModule = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Module::class);
-
-        /** @var d3_cfg_mod $oModCfg */
-        $oModCfg =  d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
-
-        $oD3CompatibilityAdapterHandler = $this->getCompatibilityAdapterHandler();
-        $sModulePath = $oD3CompatibilityAdapterHandler->call(
-            'oxmodule__getModuleFullPath',
-            array($oModule, $oModCfg->getMetaModuleId())
-        );
-
-        $sScriptPath = $sModulePath . "/public/d3_ordermanager_cron.php";
+        $sScriptPath = VENDOR_PATH.'bin/d3_ordermanager_cron';
 
         /** @var Request $request */
         $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);

@@ -31,6 +31,8 @@ use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\DatabaseException;
+use OxidEsales\Eshop\Core\Language;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 use OxidEsales\Eshop\Core\Base;
 use OxidEsales\Eshop\Core\Exception\StandardException;
@@ -347,7 +349,7 @@ class d3ordermanager_response extends Base
         $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
         $iCjId = $request->getRequestEscapedParameter('cjid');
 
-        if (false === $iCjId || null === $iCjId) {
+        if (false === $iCjId || null === $iCjId || $iCjId === '') {
             $iCjId = 0;
         }
 
@@ -367,5 +369,50 @@ class d3ordermanager_response extends Base
         }
 
         return $sVarName;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getLastExecDate()
+    {
+        return $this->_getSet()->getValue($this->_getCronTimestampVarName());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getLastExecDateInfo()
+    {
+        $sCronJobId = $this->_getCronJobIdParameter();
+        $taskCount = current(
+            array_filter(
+                $this->getManager()->getAvailableCronjobIds(),
+                function($entry) use ($sCronJobId) {
+                    return ($entry['id'] == $sCronJobId) ? true : false;
+                }
+            )
+        )['count'];
+
+        return [
+            sprintf(
+                $this->getLang()->translateString('D3_GENERAL_ORDERMANAGER_TASKCOUNT_CRONID'),
+                $sCronJobId,
+                $taskCount
+            ),
+            sprintf(
+                $this->getLang()->translateString('D3_GENERAL_ORDERMANAGER_LASTEXEC_CRONID'),
+                $sCronJobId,
+                $this->getLastExecDate()
+            )
+        ];
+    }
+
+    /**
+     * @return Language
+     */
+    public function getLang()
+    {
+        return Registry::getLang();
     }
 }

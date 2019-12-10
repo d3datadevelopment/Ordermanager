@@ -86,6 +86,9 @@
 
 [{if $oView->d3getShowListItems()}]
 
+    [{assign var="baseObject" value=$mylist->getBaseObject()}]
+    [{assign var="coreTableName" value=$baseObject->getCoreTableName()}]
+
     <div id="liste">
         <form name="search" id="search" action="[{$oViewConf->getSelfLink()}]" method="post">
             [{include file="_formparams.tpl" cl=$oViewConf->getActiveClassName() lstrt=$lstrt actedit=$actedit oxid=$oxid fnc="" language=$actlang editlanguage=$actlang}]
@@ -113,7 +116,7 @@
                             <div class="r1">
                                 <div class="b1">
                                     <label for="filtersorting" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_FILTER_SORTING"}]</label>
-                                    <input id="filtersorting" title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_SORTING"}]" class="listedit" type="text" size="10" maxlength="128" name="where[[{$listTable}]][oxsort]" value="[{$where.$listTable.oxsort}]">
+                                    <input id="filtersorting" title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_SORTING"}]" class="listedit" type="text" size="10" maxlength="128" name="where[[{$coreTableName}]][oxsort]" value="[{$where.$coreTableName.oxsort}]">
                                 </div>
                             </div>
                         </td>
@@ -121,7 +124,7 @@
                             <div class="r1">
                                 <div class="b1">
                                     <label for="filtertitle" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_FILTER_TITLE"}]</label>
-                                    <input id="filtertitle" class="listedit" title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_TITLE"}]" type="text" size="25" maxlength="128" name="where[[{$listTable}]][oxtitle]" value="[{$where.$listTable.oxtitle}]"
+                                    <input id="filtertitle" class="listedit" title="[{oxmultilang ident="D3_ORDERMANAGER_FILTER_TITLE"}]" type="text" size="25" maxlength="128" name="where[[{$coreTableName}]][oxtitle]" value="[{$where.$coreTableName.oxtitle}]"
                                 </div>
                             </div>
                         </td>
@@ -154,32 +157,32 @@
                 <tr>
                     [{block name="admin_d3ordermanager_list_sorting"}]
                         <td class="listheader first" height="15">&nbsp;
-                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'oxactive', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader" title="[{oxmultilang ident="D3_ORDERMANAGER_GENERAL_ACTIVTITLE_DESC"}]">
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$coreTableName}]', 'oxactive', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader" title="[{oxmultilang ident="D3_ORDERMANAGER_GENERAL_ACTIVTITLE_DESC"}]">
                                 [{oxmultilang ident="D3_ORDERMANAGER_GENERAL_ACTIVTITLE"}]
                             </a>
                         </td>
                         <td class="listheader first" height="15">&nbsp;
-                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'd3_om_execmanually', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader" title="[{oxmultilang ident="D3_ORDERMANAGER_GENERAL_ACTIVMANTITLE_DESC"}]">
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$coreTableName}]', 'd3_om_execmanually', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader" title="[{oxmultilang ident="D3_ORDERMANAGER_GENERAL_ACTIVMANTITLE_DESC"}]">
                                 [{oxmultilang ident="D3_ORDERMANAGER_GENERAL_ACTIVMANTITLE"}]
                             </a>
                         </td>
                         <td class="listheader" height="15">&nbsp;
-                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'oxsort', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader">
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$coreTableName}]', 'oxsort', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader">
                                 [{oxmultilang ident="D3_GENERAL_ORDERMANAGER_SORT"}]
                             </a>
                         </td>
                         <td class="listheader">
-                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'oxtitle', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader">
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$coreTableName}]', 'oxtitle', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader">
                                 [{oxmultilang ident="D3_GENERAL_MODPROFILE_TITLE"}]
                             </a>
                         </td>
                         <td class="listheader">
-                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'oxfolder', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader">
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$coreTableName}]', 'oxfolder', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader">
                                 [{oxmultilang ident="D3_GENERAL_MODPROFILE_FOLDER"}]
                             </a>
                         </td>
                         <td class="listheader">
-                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'd3_cronjobid', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader">
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$coreTableName}]', 'd3_cronjobid', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader">
                                 [{oxmultilang ident="D3_GENERAL_ORDERMANAGER_CRONID"}]
                             </a>
                         </td>

@@ -19,7 +19,31 @@
     .box tr:nth-child(even) td {
         background-color: #fafafa;
     }
+    textarea {
+        width: 95%;
+        height: 180px;
+        padding: 5px;
+    }
+    body #ddoew .note-editor.note-frame {
+        width: 96%;
+        float: left;
+        margin-bottom: 0;
+    }
+    body #ddoew .note-editor.note-frame .note-editable.panel-body {
+        min-height: 180px !important;
+    }
 </style>
+
+[{capture name="d3script"}]
+function d3TogglePlain(checkelement) {
+    if (checkelement.checked) {
+        document.getElementById('mailplaintr').style.display = 'none';
+    } else {
+        document.getElementById('mailplaintr').style.display = 'table-row';
+    }
+}
+[{/capture}]
+[{oxscript add=$smarty.capture.d3script}]
 
 [{assign var="oCurr" value=$edit->getOrderCurrency()}]
 
@@ -103,15 +127,24 @@
                                     <label for="mailhtml">[{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_HTML"}]</label>
                                 </td>
                                 <td class="listitem" style="padding: 5px; height: auto;">
-                                    <textarea id="mailhtml" name="aContent[mail][html]" style="width: 95%; height: 180px; padding: 5px;">[{$aMailContent.html}]</textarea>
+                                    [{$htmleditor}]
                                 </td>
                             </tr>
                             <tr>
                                 <td class="listitem2" style="padding: 5px; height: auto;">
+                                </td>
+                                <td class="listitem2" style="padding: 5px; height: auto;">
+                                    <input type="hidden" name="aContent[mail][genplain]" value="0">
+                                    <input id="mailgenplain" type="checkbox" name="aContent[mail][genplain]" value="1" [{if !$aMailContent.plain}]checked="checked"[{/if}] onclick="d3TogglePlain(this);">&nbsp;
+                                    <label for="mailgenplain">[{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_GENPLAIN"}]</label> [{oxinputhelp ident="D3_ORDERMANAGER_ORDERMAIN_GENPLAIN_DESC"}]
+                                </td>
+                            </tr>
+                            <tr id="mailplaintr" style="display: [{if $aMailContent.plain}]table-row[{else}]none[{/if}];">
+                                <td class="listitem2" style="padding: 5px; height: auto;">
                                     <label for="mailplain">[{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_PLAIN"}]</label>
                                 </td>
                                 <td class="listitem2" style="padding: 5px; height: auto;">
-                                    <textarea id="mailplain" name="aContent[mail][plain]" style="width: 95%; height: 180px; padding: 5px;">[{$aMailContent.plain}]</textarea>
+                                    <textarea id="mailplain" name="aContent[mail][plain]">[{$aMailContent.plain}]</textarea>
                                 </td>
                             </tr>
                         </table>
