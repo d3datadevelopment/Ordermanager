@@ -68,6 +68,7 @@ class actionMoveOrderToFolderTest extends d3OrdermanagerActionIntegrationTestCas
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

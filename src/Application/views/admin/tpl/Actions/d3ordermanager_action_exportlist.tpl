@@ -29,7 +29,7 @@
                     <input style="margin-left: 20px;" id="FromThemeFrontend" type="radio" name="value[sExportListFromTheme]" value="frontend" [{if $edit->getValue('sExportListFromTheme') == 'frontend'}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]> <label for="FromThemeFrontend">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_FRONTEND"}] ([{$oView->getManagerTemplateDirs(0)}])</label><br>
                     <input style="margin-left: 20px;" id="FromModule" type="radio" name="value[sExportListFromTheme]" value="module" [{if $edit->getValue('sExportListFromTheme') == 'module'}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
                     <label for="FromModule">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_MODULE"}]</label>
-                    <label for="FromModuleId" style="position: absolute; left: -2000px">[{oxmultilang ident="FromModuleId"}]</label>
+                    <label for="FromModuleId" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_EXPORT"}]</label>
                     <select id="FromModuleId" class="editinput" name="value[sExportListFromModulePath]" size="1" [{$blActionRestriction}] [{$readonly}]>
                         [{foreach from=$oView->getModulePathList() key="sId" item="sModulePath"}]
                             <option value="[{$sId}]" [{if $edit->getValue('sExportListFromModulePath') == $sId}]selected[{/if}]>[{$sModulePath}]</option>

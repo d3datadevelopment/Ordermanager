@@ -118,6 +118,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

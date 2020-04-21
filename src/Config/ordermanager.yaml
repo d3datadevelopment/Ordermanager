@@ -16,6 +16,7 @@ parameters:
   D3\Ordermanager\Application\Model\d3ordermanager_export.args.filename:
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.message:
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.code:
+  D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.message:
 
 services:
   # ordermanager
@@ -214,7 +215,7 @@ services:
       - '%D3\Ordermanager\Application\Model\d3ordermanager_export.args.filename%'
       - @D3\Ordermanager\Application\Model\d3ordermanager_export.args.ordermanager
       - @D3\Ordermanager\Application\Model\d3ordermanager_export.args.parametercontainer
-    # arg #2 ordermanager
+    # arg #1 ordermanager
   D3\Ordermanager\Application\Model\d3ordermanager_export.args.ordermanager:
     synthetic:  true
     shared:     false
@@ -241,6 +242,21 @@ services:
  #   synthetic:  true
  #   shared:     false
  #   public:     false
+
+  # d3ordermanager_requirementException
+  D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException:
+    class:      D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException
+      - '%D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.message%'
+      - @D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.requirementobject
+    # arg #2 requirement object
+  D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.requirementobject:
+    synthetic:  true
+    shared:     false
+    public:     false
 
   # d3ordermanager_toorderassignment
   D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment:
@@ -269,13 +285,6 @@ services:
     shared:   false
     arguments:
       - D3\Ordermanager\Setup\d3ordermanager_update
-
-  D3\Ordermanager\Modules\Application\Controller\Admin\d3_order_remark_ordermanager:
-    class:    D3\Ordermanager\Modules\Application\Controller\Admin\d3_order_remark_ordermanager
-    factory:  'oxNew'
-    shared:   false
-    arguments:
-      - D3\Ordermanager\Modules\Application\Controller\Admin\d3_order_remark_ordermanager
 
   D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall:
     class:    D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall

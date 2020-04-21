@@ -33,10 +33,3 @@ namespace D3\Ordermanager\Modules\Application\Model
 
     class d3_oxuser_ordermanager_parent extends User {}
 }
-
-namespace D3\Ordermanager\Modules\Application\Controller\Admin
-{
-    use OxidEsales\Eshop\Application\Controller\Admin\OrderRemark;
-
-    class d3_order_remark_ordermanager_parent extends OrderRemark {}
-}

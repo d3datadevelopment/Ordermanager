@@ -132,6 +132,7 @@ class executeCronTest extends d3OrdermanagerIntegrationTestCase
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

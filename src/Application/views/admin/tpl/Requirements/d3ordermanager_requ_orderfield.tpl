@@ -13,7 +13,7 @@
                     [{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_VALUE"}] <br>
                     <input id="RequOrderFieldTypeContent" type="radio" style="margin-left: 30px;" name="value[sCheckOrderFieldType]" value="content" [{if $edit->getValue('sCheckOrderFieldType') == 'content' || $edit->getValue('sCheckOrderFieldType') == ''}]checked[{/if}] [{$readonly}] [{$blActionRestriction}]>
                     <label for="RequOrderFieldTypeContent">[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_CONTENT"}]</label>
-                    <label for="sOrderFieldValue" style="position: absolute; left: -2000px">[{oxmultilang ident="sOrderFieldValue"}]</label>
+                    <label for="sOrderFieldValue" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERFIELDVALUE"}]</label>
                     <input id="sOrderFieldValue" class="editinput" type="text" size="30" maxlength="100" name="value[sOrderField_FieldValue]" value="[{$edit->getValue('sOrderField_FieldValue')}]" [{$readonly}] [{$blActionRestriction}]>
                     [{oxinputhelp ident="D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC"}]<br>
                     <input id="RequOrderFieldTypeEmpty" type="radio" style="margin-left: 30px;" name="value[sCheckOrderFieldType]" value="empty" [{if $edit->getValue('sCheckOrderFieldType') == 'empty'}]checked[{/if}] [{$readonly}] [{$blActionRestriction}]>

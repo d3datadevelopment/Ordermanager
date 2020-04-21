@@ -9,7 +9,7 @@
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_action_custaddtogroup_editor"}]
                     <input type="hidden" name="value[sCustAddGroup]" value="">
-                    <label for="sCustAddGroup" style="position: absolute; left: -2000px">[{oxmultilang ident="sCustAddGroup"}]</label>
+                    <label for="sCustAddGroup" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_CUSTOMERADD2GROUP"}]</label>
                     <SELECT class="editinput" name="value[sCustAddGroup][]" id="sCustAddGroup" size="7" multiple [{$blActionRestriction}] [{$readonly}]>
                         [{foreach from=$oView->getGroupsList() item="oGroup"}]
                             <option value="[{$oGroup->getId()}]" [{if is_array($edit->getValue('sCustAddGroup')) && in_array($oGroup->getId(), $edit->getValue('sCustAddGroup'))}]selected[{/if}]>[{$oGroup->getFieldData('oxtitle')}]</option>

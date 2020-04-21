@@ -9,7 +9,7 @@
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_countryfilter_editor"}]
                     <input type="hidden" name="value[sCustCountryId]" value="">
-                    <label for="sCustCountryId" style="position: absolute; left: -2000px">[{oxmultilang ident="sCustCountryId"}]</label>
+                    <label for="sCustCountryId" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_COUNTRY"}]</label>
                     <SELECT id="sCustCountryId" class="editinput" name="value[sCustCountryId][]" id="sCustCountryId" size="5" multiple [{$blActionRestriction}] [{$readonly}]>
                         [{foreach from=$oView->getCountryList() item="oCountry"}]
                             <option value="[{$oCountry->getId()}]" [{if is_array($edit->getValue('sCustCountryId')) && in_array($oCountry->getId(), $edit->getValue('sCustCountryId'))}]selected[{/if}]>[{$oCountry->getFieldData('oxtitle')}]</option>

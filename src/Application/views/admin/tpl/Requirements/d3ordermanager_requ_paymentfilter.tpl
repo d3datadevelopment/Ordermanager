@@ -9,7 +9,7 @@
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_paymentfilter_editor"}]
                     <input type="hidden" name="value[sPaymentId]" value="">
-                    <label for="sPaymentId" style="position: absolute; left: -2000px">[{oxmultilang ident="sPaymentId"}]</label>
+                    <label for="sPaymentId" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_PAYMENT"}]</label>
                     <SELECT class="editinput" name="value[sPaymentId][]" id="sPaymentId" size="5" multiple [{$blActionRestriction}] [{$readonly}]>
                         [{foreach from=$oView->getPaymentList() item="oPayment"}]
                             <option value="[{$oPayment->getId()}]" [{if is_array($edit->getValue('sPaymentId')) && in_array($oPayment->getId(), $edit->getValue('sPaymentId'))}]selected[{/if}]>[{$oPayment->getFieldData('oxdesc')}]</option>

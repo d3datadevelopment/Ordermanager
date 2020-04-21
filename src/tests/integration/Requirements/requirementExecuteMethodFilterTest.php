@@ -103,6 +103,7 @@ class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegr
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

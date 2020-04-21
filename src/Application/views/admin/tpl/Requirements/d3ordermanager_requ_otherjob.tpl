@@ -23,7 +23,7 @@
                             <option value="[{$edit->getValue('sOtherJob_ID')}]" selected>[{oxmultilang ident="D3_ORDERMANAGER_REQU_OTHERJOB_UNKNOWNJOBID"}] "[{$edit->getValue('sOtherJob_ID')}]"</option>
                         [{/if}]
                     </SELECT>
-                    <label for="RequOtherJobType" style="position: absolute; left: -2000px">[{oxmultilang ident="RequOtherJobType"}]</label>
+                    <label for="RequOtherJobType" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_OTHERJOB"}]</label>
                     <SELECT class="editinput" name="value[sOtherJob_Type]" id="RequOtherJobType" [{$blActionRestriction}] [{$readonly}]>
                         <option value="exec" [{if "exec" == $edit->getValue('sOtherJob_Type')}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_OTHERJOB_EXECUTED"}]</option>
                         <option value="notexec" [{if "notexec" == $edit->getValue('sOtherJob_Type')}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_OTHERJOB_NOTEXECUTED"}]</option>

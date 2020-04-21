@@ -117,6 +117,7 @@ class requirementToOrderNrTest extends d3OrdermanagerRequirementIntegrationTestC
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

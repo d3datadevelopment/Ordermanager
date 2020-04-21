@@ -136,6 +136,7 @@ class requirementOtherJobTest extends d3OrdermanagerRequirementIntegrationTestCa
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

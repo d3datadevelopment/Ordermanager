@@ -32,9 +32,9 @@
     }
   },
   "require": {
-    "php": "7.1 - 7.2", "ext-ionCube-Loader": "*",
-    "oxid-esales/oxideshop-metapackage-ce": "~6.0.0 || ~6.1.0",
-    "d3/modcfg": "^5.2.0.000",
+    "php": "7.1 - 7.3", "ext-ionCube-Loader": "*",
+    "oxid-esales/oxideshop-ce": "6.0 - 6.3",
+    "d3/modcfg": "^5.3.1.000",
     "oxid-projects/pdf-invoice-module": "*",
     "league/flysystem": "^1.0",
     "splitbrain/php-cli": "^1.1",
