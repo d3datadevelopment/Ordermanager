@@ -16,6 +16,7 @@
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
+use D3\ModCfg\Application\Model\d3database;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
@@ -79,11 +80,12 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
     }
 
     /**
-     * @param ListModel $oObjectList
+     * @param ListModel   $oObjectList
      * @param null|string $sWhere
      * @param null|string $sOrderBy
      *
      * @return ListModel
+     * @throws DBALException
      */
     protected function _getObjectList($oObjectList, $sWhere = null, $sOrderBy = null)
     {
@@ -98,10 +100,21 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
             $oObject->setLanguage($oLang->getTplLanguage());
         }
         $sFieldList = $oObject->getSelectFields();
-        $sQ = "select {$sFieldList} from {$oObject->getViewName()}";
-        $sQ .= $sWhere ? " WHERE {$sWhere} ":"";
-        $sQ .= $sOrderBy ? " ORDER BY {$sOrderBy} ":"";
-        $oObjectList->selectString($sQ);
+
+        /** @var d3database $db */
+        $db = d3GetModCfgDIC()->get('d3.ordermanager.database');
+        $qb = $db->getQueryBuilder();
+        $qb->select($sFieldList)
+            ->from($oObject->getViewName());
+            
+        if ($sWhere) {
+            $qb->add('where', $sWhere);
+        }
+        if ($sOrderBy) {
+            $qb->add('orderBy', $sOrderBy);
+        }
+            
+        $oObjectList->selectString($qb->getSQL(), $qb->getParameters());
 
         stopProfile(__METHOD__);
 

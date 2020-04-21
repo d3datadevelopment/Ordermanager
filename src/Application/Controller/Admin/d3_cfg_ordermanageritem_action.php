@@ -50,7 +50,11 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
 
     public function save()
     {
-        parent::save();
+        // @codeCoverageIgnoreStart
+        if (!defined('OXID_PHP_UNIT')) {
+            parent::save();
+        }
+        // @codeCoverageIgnoreEnd
 
         $aMissingRequiredValues = array();
         /** @var d3ordermanager_action_abstract $oAction */

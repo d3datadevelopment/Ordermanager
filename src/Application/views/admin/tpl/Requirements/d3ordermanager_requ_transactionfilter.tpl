@@ -8,7 +8,7 @@
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_transactionfilter_editor"}]
-                    <label for="sOrderTransStatus" style="position: absolute; left: -2000px">[{oxmultilang ident="sOrderTransStatus"}]</label>
+                    <label for="sOrderTransStatus" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_TRANSACTION"}]</label>
                     <SELECT id="sOrderTransStatus" class="editinput" name="value[sOrderTransStatus]" size="1" [{$blActionRestriction}] [{$readonly}]>
                         [{foreach from=$oView->getTransStatusList() item="sStatus"}]
                             <option value="[{$sStatus}]" [{if $edit->getValue('sOrderTransStatus') == $sStatus}]selected[{/if}]>

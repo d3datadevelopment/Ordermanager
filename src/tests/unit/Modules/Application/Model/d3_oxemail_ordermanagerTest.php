@@ -1118,12 +1118,15 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
      */
     public function _d3GenerateOrderManagerMailContentFromEditor()
     {
+        $currLangId = 2;
+        $orderLangId = 3;
+
         /** @var Order|PHPUnit_Framework_MockObject_MockObject $oOrderMock */
         $oOrderMock = $this->getMock(Order::class, array(
             'getFieldData',
         ));
         $getFieldDataMap = [
-            ['oxlang', '1'],
+            ['oxlang', $orderLangId],
         ];
         $oOrderMock->method('getFieldData')->willReturnMap($getFieldDataMap);
         
@@ -1132,8 +1135,9 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             'getTplLanguage',
             'setTplLanguage',
         ));
-        $oLangMock->method('getTplLanguage')->willReturn(true);
-        $oLangMock->expects($this->never())->method('setTplLanguage')->willReturn(true);
+        $oLangMock->method('getTplLanguage')->willReturn($currLangId);
+        $oLangMock->expects($this->exactly(2))->method('setTplLanguage')
+            ->withConsecutive([$orderLangId], [$currLangId])->willReturn(true);
 
         // can't use a mock of UtilsView, because extension issue
         /** @var stdClass|PHPUnit_Framework_MockObject_MockObject $oUtilsViewMock */
@@ -1225,12 +1229,15 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
      */
     public function _d3GenerateOrderManagerMailContentFromEditorGeneratedPlain()
     {
+        $currLangId = 2;
+        $orderLangId = 3;
+
         /** @var Order|PHPUnit_Framework_MockObject_MockObject $oOrderMock */
         $oOrderMock = $this->getMock(Order::class, array(
             'getFieldData',
         ));
         $getFieldDataMap = [
-            ['oxlang', '1'],
+            ['oxlang', $orderLangId],
         ];
         $oOrderMock->method('getFieldData')->willReturnMap($getFieldDataMap);
 
@@ -1239,8 +1246,9 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             'getTplLanguage',
             'setTplLanguage',
         ));
-        $oLangMock->method('getTplLanguage')->willReturn(true);
-        $oLangMock->expects($this->never())->method('setTplLanguage')->willReturn(true);
+        $oLangMock->method('getTplLanguage')->willReturn($currLangId);
+        $oLangMock->expects($this->exactly(2))->method('setTplLanguage')
+            ->withConsecutive([$orderLangId], [$currLangId])->willReturn(true);
 
         // can't use a mock of UtilsView, because extension issue
         /** @var stdClass|PHPUnit_Framework_MockObject_MockObject $oUtilsViewMock */
@@ -1333,12 +1341,15 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
      */
     public function _d3GenerateOrderManagerMailContentFromCms()
     {
+        $currLangId = 2;
+        $orderLangId = 3;
+
         /** @var Order|PHPUnit_Framework_MockObject_MockObject $oOrderMock */
         $oOrderMock = $this->getMock(Order::class, array(
             'getFieldData',
         ));
         $getFieldDataMap = [
-            ['oxlang', '1'],
+            ['oxlang', $orderLangId],
         ];
         $oOrderMock->method('getFieldData')->willReturnMap($getFieldDataMap);
 
@@ -1347,8 +1358,9 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             'getTplLanguage',
             'setTplLanguage',
         ));
-        $oLangMock->method('getTplLanguage')->willReturn(true);
-        $oLangMock->expects($this->exactly(2))->method('setTplLanguage')->willReturn(true);
+        $oLangMock->method('getTplLanguage')->willReturn($currLangId);
+        $oLangMock->expects($this->exactly(2))->method('setTplLanguage')
+            ->withConsecutive([$orderLangId], [$currLangId])->willReturn(true);
 
         // can't use a mock of UtilsView, because extension issue
         /** @var stdClass|PHPUnit_Framework_MockObject_MockObject $oUtilsViewMock */
@@ -1438,12 +1450,15 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
      */
     public function _d3GenerateOrderManagerMailContentFromTpl()
     {
+        $currLangId = 2;
+        $orderLangId = 3;
+
         /** @var Order|PHPUnit_Framework_MockObject_MockObject $oOrderMock */
         $oOrderMock = $this->getMock(Order::class, array(
             'getFieldData',
         ));
         $getFieldDataMap = [
-            ['oxlang', '1'],
+            ['oxlang', $orderLangId],
         ];
         $oOrderMock->method('getFieldData')->willReturnMap($getFieldDataMap);
 
@@ -1452,8 +1467,9 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             'getTplLanguage',
             'setTplLanguage',
         ));
-        $oLangMock->method('getTplLanguage')->willReturn(true);
-        $oLangMock->expects($this->never())->method('setTplLanguage')->willReturn(true);
+        $oLangMock->method('getTplLanguage')->willReturn($currLangId);
+        $oLangMock->expects($this->exactly(2))->method('setTplLanguage')
+            ->withConsecutive([$orderLangId], [$currLangId])->willReturn(true);
 
         // can't use a mock of UtilsView, because extension issue
         /** @var stdClass|PHPUnit_Framework_MockObject_MockObject $oUtilsViewMock */

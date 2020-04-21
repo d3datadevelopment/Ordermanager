@@ -117,6 +117,7 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

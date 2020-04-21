@@ -28,3 +28,9 @@ services:
     factory:
       - '@d3.ordermanager.modcfg'
       - 'd3getLog'
+
+  d3.ordermanager.database:
+    class:      'D3\ModCfg\Application\Model\d3database'
+    factory:
+      - 'D3\ModCfg\Application\Model\d3database'
+      - 'getInstance'

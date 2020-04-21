@@ -446,6 +446,8 @@ $aLang = array(
     'D3_ORDERMANAGER_FILTER_LANGUAGE'                    => 'nach Sprache filtern',
     'D3_ORDERMANAGER_FILTER_FOLDER'                      => 'nach Ordner filtern',
 
+    'D3_ORDERMANAGER_GENERAL_ORDER'                      => 'Auftrag:',
+
     'D3_ORDERMANAGER_CLI_HELP'                           => 'Ermöglicht die Ausführung von Auftragsmanageraufgaben.',
     'D3_ORDERMANAGER_CLI_OPTION_VERSION'                 => 'zeigt Version',
     'D3_ORDERMANAGER_CLI_OPTION_QUIET'                   => 'verhindert die Anzeige der Ausgabe',

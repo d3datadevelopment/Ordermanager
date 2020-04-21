@@ -9,7 +9,7 @@
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_folderfilter_editor"}]
                     <input type="hidden" name="value[sInFolderId]" value="">
-                    <label for="sInFolderId" style="position: absolute; left: -2000px">[{oxmultilang ident="sInFolderId"}]</label>
+                    <label for="sInFolderId" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_INFOLDER"}]</label>
                     <SELECT class="editinput" name="value[sInFolderId][]" id="sInFolderId" multiple [{$blActionRestriction}] [{$readonly}]>
                         [{foreach from=$oView->getItemFolders() key="field" item="color"}]
                             <option value="[{$field}]" [{if is_array($edit->getValue('sInFolderId')) && in_array($field, $edit->getValue('sInFolderId'))}]selected[{/if}] style="color: [{$color}];">[{oxmultilang ident=$field noerror=true}]</option>

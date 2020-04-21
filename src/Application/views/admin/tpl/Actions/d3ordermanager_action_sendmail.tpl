@@ -20,7 +20,7 @@
                     <input style="margin-left: 20px;" id="FromThemeFrontend" type="radio" name="value[sSendMailFromTheme]" value="frontend" [{if $edit->getValue('sSendMailFromTheme') == 'frontend'}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]> <label for="FromThemeFrontend">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_FRONTEND"}] ([{$oView->getManagerTemplateDirs(0)}])</label><br>
                     <input style="margin-left: 20px;" id="FromModule" type="radio" name="value[sSendMailFromTheme]" value="module" [{if $edit->getValue('sSendMailFromTheme') == 'module'}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
                     <label for="FromModule">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_MODULE"}]</label>
-                    <label for="FromModuleId" style="position: absolute; left: -2000px">[{oxmultilang ident="FromModuleId"}]</label>
+                    <label for="FromModuleId" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND"}]</label>
                         <select id="FromModuleId" class="editinput" name="value[sSendMailFromModulePath]" size="1" [{$blActionRestriction}] [{$readonly}]>
                             [{foreach from=$oView->getModulePathList() key="sId" item="sModulePath"}]
                                 <option value="[{$sId}]" [{if $edit->getValue('sSendMailFromModulePath') == $sId}]selected[{/if}]>[{$sModulePath}]</option>
@@ -57,7 +57,7 @@
                     <input type="hidden" name="value[blSendMailToCustom]" value="0">
                     <input id="ToMail" class="edittext ext_edittext" type="checkbox" name="value[blSendMailToCustom]" value='1' [{if $edit->getValue('blSendMailToCustom') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
                     <label for="ToMail">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL"}]</label>
-                    <label for="ToMailInput" style="position: absolute; left: -2000px">[{oxmultilang ident="ToMailInput"}]</label>
+                    <label for="ToMailInput" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND"}]</label>
                     <input id="ToMailInput" type="text" name="value[sSendMailToCustomAddress]" size="30" maxlength="60" value="[{$edit->getValue('sSendMailToCustomAddress')}]" [{$blActionRestriction}] [{$readonly}]>
                     [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL_DESC"}]
 

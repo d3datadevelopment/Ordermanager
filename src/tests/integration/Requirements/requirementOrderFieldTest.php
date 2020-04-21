@@ -101,6 +101,7 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

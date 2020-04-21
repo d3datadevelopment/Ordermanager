@@ -69,7 +69,7 @@ function d3TogglePlain(checkelement) {
                         <table  style="border: none; padding: 0; width: 100%;">
                             <tr>
                                 <td class="listitem" style="padding: 5px; height: auto;">
-                                    Auftrag:
+                                    [{oxmultilang ident="D3_ORDERMANAGER_GENERAL_ORDER"}]
                                 </td>
                                 <td class="listitem" style="padding: 5px; height: auto;">
                                     [{$oOrderManager->getFieldData('oxtitle')}] &nbsp;
@@ -110,7 +110,7 @@ function d3TogglePlain(checkelement) {
                                     <input id="ToMail" class="edittext ext_edittext" type="checkbox" name="aContent[blSendMailToCustom]" value='1' [{if $oOrderManager->getValue('blSendMailToCustom') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
                                     <label for="ToMail">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL"}]</label>
                                     <input id="ToMailInput" type="text" name="aContent[sSendMailToCustomAddress]" size="30" maxlength="60" value="[{$oOrderManager->getValue('sSendMailToCustomAddress')}]" [{$blActionRestriction}] [{$readonly}]>
-                                    <label for="ToMailInput" style="position: absolute; left: -2000px">[{oxmultilang ident="sSendMailToCustomAddress"}]</label>
+                                    <label for="ToMailInput" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL"}]</label>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL_DESC"}]
                                 </td>
                             </tr>
@@ -161,7 +161,7 @@ function d3TogglePlain(checkelement) {
                                 <input type="hidden" name="editval[oxorder__oxid]" value="[{$oxid}]">
                                 <input type="hidden" name="ordermanagerid" value="-1">
                                 <input type="hidden" name="fnc" value="changeFolder">
-                                <label for="folderselector" style="position: absolute; left: -2000px">[{oxmultilang ident="jobfolder"}]</label>
+                                <label for="folderselector" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_FIELDTITLE_OXFOLDER"}]</label>
                                 <select id="folderselector" size="1" class="editinput" name="jobfolder" onchange="document.getElementById('d3folderselector').submit();">
                                     [{foreach from=$oView->getFolderList() key="sMLItem" item="sTranslation"}]
                                         <option value="[{$sMLItem}]" [{if $sMLItem == $jobfolder}] selected[{/if}]>[{$sTranslation}]</option>

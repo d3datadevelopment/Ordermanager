@@ -22,6 +22,7 @@ parameters:
 services:
   League\Flysystem\Filesystem:
     class:      League\Flysystem\Filesystem
+    shared:     false
     arguments:
       - @League\Flysystem\Filesystem.args.adapter
       - '%League\Flysystem\Filesystem.args.config%'
@@ -32,6 +33,7 @@ services:
 
   League\Flysystem\Adapter\Local:
     class:      League\Flysystem\Adapter\Local
+    shared:     false
     arguments:
       - '%League\Flysystem\Adapter\Local.args.root%'
       - '%League\Flysystem\Adapter\Local.args.writeFlags%'

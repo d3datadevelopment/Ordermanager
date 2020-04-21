@@ -9,7 +9,7 @@
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_languagefilter_editor"}]
                     <input type="hidden" name="value[sInLanguageId]" value="">
-                    <label for="sInLanguageId" style="position: absolute; left: -2000px">[{oxmultilang ident="sInLanguageId"}]</label>
+                    <label for="sInLanguageId" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_LANGUAGE"}]</label>
                     <SELECT class="editinput" name="value[sInLanguageId][]" id="sInLanguageId" multiple [{$blActionRestriction}] [{$readonly}]>
                         [{foreach from=$oView->getLanguageList() item="oLang"}]
                             <option value="[{$oLang->id}]" [{if is_array($edit->getValue('sInLanguageId')) && in_array($oLang->id, $edit->getValue('sInLanguageId'))}]selected[{/if}]>[{$oLang->name}]</option>

@@ -46,6 +46,7 @@ use OxidEsales\Eshop\Core\Exception\NoArticleException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Module\Module;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\UtilsView;
 use Smarty;
 
@@ -365,7 +366,6 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         }
 
         $aContent = $this->_d3GenerateOrderManagerMailContent($aContent, $oSmarty);
-
         $oConfig->setAdminMode(true);
 
         return $aContent;
@@ -470,6 +470,13 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
     {
         $aEditedValues = $this->oOrderManager->getEditedValues();
 
+        $iOrderLangId = $this->oOrderManager->getCurrentItem()->getFieldData('oxlang');
+        $oLang        = $this->d3GetLang();
+        $iCurrentTplLang = $oLang->getTplLanguage();
+        $iCurrentBaseLang = $oLang->getBaseLanguage();
+        $oLang->setTplLanguage($iOrderLangId);
+        $oLang->setBaseLanguage($iOrderLangId);
+
         if ($this->d3HasOrderManagerEditorMailContent($aEditedValues)) {
             $aContent = $aEditedValues['mail'];
 
@@ -477,10 +484,6 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
                 $aContent['plain'] = $this->d3generatePlainContent($aContent['html']);
             }
         } elseif ($this->oOrderManager->getValue('sSendMailFromSource') == 'cms') {
-            $iOrderLangId = $this->oOrderManager->getCurrentItem()->getFieldData('oxlang');
-            $iCurrentLang = $this->d3GetLang()->getTplLanguage();
-            $this->d3GetLang()->setTplLanguage($iOrderLangId);
-
             $oUtilsView = $this->d3GetUtilsView();
             /** @var $oContent Content */
             $oContent = $this->d3GetContent();
@@ -498,12 +501,14 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
                 $oContent->getFieldData('oxcontent'),
                 $oContent->getId() . 'oxcontent'
             );
-            $this->d3GetLang()->setTplLanguage($iCurrentLang);
         } elseif ($this->oOrderManager->getValue('sSendMailFromSource') == 'template') {
             $aContent['html']    = $oSmarty->fetch($this->oOrderManager->getValue('sSendMailFromTemplatename'));
             $aContent['plain']   = $oSmarty->fetch($this->oOrderManager->getValue('sSendMailFromTemplatenamePlain'));
             $aContent['subject'] = $oSmarty->fetch($this->oOrderManager->getValue('sSendMailFromSubject'));
         }
+
+        $oLang->setTplLanguage($iCurrentTplLang);
+        $oLang->setBaseLanguage($iCurrentBaseLang);
 
         return $aContent;
     }

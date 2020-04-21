@@ -111,14 +111,20 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
         $oListMock->expects($this->once())->method('selectString')->with(
             $this->logicalAnd(
                 $this->stringContains('oxid, oxtitle'),
-                $this->stringContains('testViewTableName')
+                $this->stringContains('testViewTableName'),
+                $this->stringContains('testWhere'),
+                $this->stringContains('testOrderBy')
             )
         )->willReturn(true);
         $oListMock->method('getBaseObject')->willReturn($oBaseMock);
 
         $this->assertSame(
             $oListMock,
-            $this->callMethod($this->_oController, '_getObjectList', array($oListMock))
+            $this->callMethod(
+                $this->_oController,
+                '_getObjectList',
+                array($oListMock, 'testwhere', 'testorderby')
+            )
         );
     }
 

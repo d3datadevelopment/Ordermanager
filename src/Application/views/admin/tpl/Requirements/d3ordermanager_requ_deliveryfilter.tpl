@@ -9,7 +9,7 @@
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_deliveryfilter_editor"}]
                     <input type="hidden" name="value[sDeliveryId]" value="">
-                    <label for="sDeliveryId" style="position: absolute; left: -2000px">[{oxmultilang ident="sDeliveryId"}]</label>
+                    <label for="sDeliveryId" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_DELIVERY"}]</label>
                     <SELECT class="editinput" name="value[sDeliveryId][]" id="sDeliveryId" size="5" multiple [{$blActionRestriction}] [{$readonly}]>
                         [{foreach from=$oView->getDeliveryList() item="oDelivery"}]
                             <option value="[{$oDelivery->getId()}]" [{if is_array($edit->getValue('sDeliveryId')) && in_array($oDelivery->getId(), $edit->getValue('sDeliveryId'))}]selected[{/if}]>[{$oDelivery->getFieldData('oxtitle')}]</option>

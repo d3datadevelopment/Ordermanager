@@ -87,6 +87,7 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

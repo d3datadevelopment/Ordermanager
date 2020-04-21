@@ -9,7 +9,7 @@
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_notingroup_editor"}]
                     <input type="hidden" name="value[sCustNotInGroupId]" value="">
-                    <label for="sCustNotInGroupId" style="position: absolute; left: -2000px">[{oxmultilang ident="sCustNotInGroupId"}]</label>
+                    <label for="sCustNotInGroupId" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_NOTINGROUP"}]</label>
                     <SELECT class="editinput" name="value[sCustNotInGroupId][]" id="sCustNotInGroupId" size="5" multiple [{$blActionRestriction}] [{$readonly}]>
                         [{foreach from=$oView->getGroupsList() item="oGroup"}]
                             <option value="[{$oGroup->getId()}]" [{if is_array($edit->getValue('sCustNotInGroupId')) && in_array($oGroup->getId(), $edit->getValue('sCustNotInGroupId'))}]selected[{/if}]>[{$oGroup->getFieldData('oxtitle')}]</option>

@@ -117,6 +117,7 @@ class requirementNotInFolderFilterTest extends d3OrdermanagerRequirementIntegrat
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

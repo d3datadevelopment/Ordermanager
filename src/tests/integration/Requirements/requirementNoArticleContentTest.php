@@ -190,6 +190,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

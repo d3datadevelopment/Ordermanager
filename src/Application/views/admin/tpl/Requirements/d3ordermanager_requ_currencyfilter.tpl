@@ -8,7 +8,7 @@
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_currencyfilter_editor"}]
-                    <label for="sCuurencyISOValue" style="position: absolute; left: -2000px">[{oxmultilang ident="sCurrencyISOValue"}]</label>
+                    <label for="sCuurencyISOValue" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_CURRENCY"}]</label>
                     <input id="sCuurencyISOValue" class="editinput" type="text" size="4" maxlength="5" name="value[sCurrencyISOValue]" value="[{$edit->getValue('sCurrencyISOValue')}]" [{$blActionRestriction}] [{$readonly}]>
                 [{/block}]
             [{else}]

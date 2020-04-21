@@ -117,6 +117,7 @@ class requirementTransactionFilterTest extends d3OrdermanagerRequirementIntegrat
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

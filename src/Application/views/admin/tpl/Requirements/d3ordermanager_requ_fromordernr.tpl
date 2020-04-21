@@ -8,7 +8,7 @@
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_fromordernr_editor"}]
-                    <label for="sFromOrderNrValue" style="position: absolute; left: -2000px">[{oxmultilang ident="sFromOrderNrValue"}]</label>
+                    <label for="sFromOrderNrValue" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_FROMORDERNR"}]</label>
                     <input id="sFromOrderNrValue" style="text-align: right;" class="edittext ext_edittext" type="text" size="8" maxlength="10" name="value[sFromOrderNrValue]" value='[{$edit->getValue('sFromOrderNrValue')}]' [{$blActionRestriction}] [{$readonly}]>
                 [{/block}]
             [{else}]

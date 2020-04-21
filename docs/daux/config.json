@@ -1,10 +1,10 @@
 {
     "title": "<i class='fab fa-d3 d3fa-color-blue'></i> Auftragsmanager",
-    "moduleversion": "3.2.0.0",
+    "moduleversion": "3.2.0.2",
     "titledesc": "für den Oxid eShop",
     "author": "D³ Data Development",
-    "moduledate": "10.12.2019",
-    "editors": "DS",
+    "moduledate": "21.04.2020",
+    "editors": "",
     "tagline": "",
     "image": "",
     "ignore": {

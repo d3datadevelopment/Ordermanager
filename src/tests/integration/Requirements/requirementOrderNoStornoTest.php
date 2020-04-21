@@ -101,6 +101,7 @@ class requirementOrderNoStornoTest extends d3OrdermanagerRequirementIntegrationT
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function cleanTestData()
     {

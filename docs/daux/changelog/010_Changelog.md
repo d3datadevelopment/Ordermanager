@@ -2,6 +2,25 @@
 title: Changelog
 --- 
 
+## 3.2.0.2 - (2020-04-21)
+### Changed
+- Abhängigkeit von Metapacke zu Core-Shop für Installationen ohne Metapackage geändert
+- Einstellungsprüfungen für PDF-Generierung ergänzt
+- zeigt nur die Anzahl der Cronjobaufgaben, die auch für Cronjobausführung aktiviert sind
+
+### Fixed
+- Dateisystem-Klassen als "nicht geteilt" markiert für Mehrfachzugriffe mit unterschiedlichen Parametern 
+- QueryGenerator-Aufrufe korrigiert
+- verwendet subshopabhängigen View-Tabellennamen
+
+---
+
+## 3.2.0.1 - (2020-03-19)
+### Fixed
+- Mails aus HTML-Vorlagen werden in der Sprache generiert, in der die Bestellung aufgegeben wurde 
+
+---
+
 ## 3.2.0.0 - (2019-12-10)
 ### Added
 - bearbeitbare E-Mails haben nun einen WYSIWYG-Editor, wenn einer im Shop installiert ist

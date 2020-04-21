@@ -29,7 +29,7 @@
                         <label for="blActionOrderPdfSendAttach">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFATTACH"}]</label> [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFATTACH_DESC"}]<br>
                         <input type="hidden" name="value[blActionOrderPdfSendSave]" value="0">
                         <input id="blActionOrderPdfSendSave" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfSendSave]" value='1' [{if $edit->getValue('blActionOrderPdfSendSave') == 1}]checked[{/if}] [{$blActionRestriction}] [{$blNoPdf}] [{$readonly}]>
-                        <label for="blActionOrderPdfSendSave">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFFILESAVE"}]</label> [{$edit->getShopDir()}]<label for="sActionOrderPdfSaveDir" style="position: absolute; left: -2000px">[{oxmultilang ident="sActionOrderPdfSaveDir"}]</label>
+                        <label for="blActionOrderPdfSendSave">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFFILESAVE"}]</label> [{$edit->getShopDir()}]<label for="sActionOrderPdfSaveDir" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERGENERATEPDF"}]</label>
                         <input id="sActionOrderPdfSaveDir" type="text" size="30" maxlength="50" name="value[sActionOrderPdfSaveDir]" value="[{$edit->getValue('sActionOrderPdfSaveDir')}]" [{$blActionRestriction}] [{$blNoPdf}] [{$readonly}]>
                     [{/block}]
                 [{/block}]

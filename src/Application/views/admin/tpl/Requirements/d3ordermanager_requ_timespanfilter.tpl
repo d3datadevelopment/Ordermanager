@@ -14,7 +14,7 @@
                 [{block name="ordermanager_admin_requ_timespanfilter_editor"}]
                     <label for="RequTimespan[{$oRequ->getSlotId()}]Min">[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_MINIMUM"}]</label>
                     <input id="RequTimespan[{$oRequ->getSlotId()}]Min" style="text-align: right;" class="edittext ext_edittext" type="text" size="4" maxlength="3" name="value[sTimespan[{$oRequ->getSlotId()}]Value]" value='[{$edit->getValue($sValueVarName)}]' [{$blActionRestriction}] [{$readonly}]>
-                    <label for="RequTimespan[{$oRequ->getSlotId()}]Unit" style="position: absolute; left: -2000px">[{oxmultilang ident="RequTimespanUnit"}]</label>
+                    <label for="RequTimespan[{$oRequ->getSlotId()}]Unit" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN"}]</label>
                     <SELECT id="RequTimespan[{$oRequ->getSlotId()}]Unit" class="editinput" name="value[sTimespan[{$oRequ->getSlotId()}]Unit]" size="1" [{$blActionRestriction}] [{$readonly}]>
                         <option value="minute" [{if $edit->getValue($sUnitVarName) == 'minute'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_MINUTE"}]</option>
                         <option value="hour" [{if $edit->getValue($sUnitVarName) == 'hour'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_HOUR"}]</option>
