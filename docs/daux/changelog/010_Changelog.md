@@ -2,9 +2,20 @@
 title: Changelog
 --- 
 
+## 3.2.0.3 - (2020-04-24)
+### Changed
+- Demoprofile werden nicht pauschal im ersten Shopmandanten installiert, sondern im 1. Mandanten mit aktiviertem Modul
+
+### Fixed
+- Verwendung des Core-Tabellennamens gegen Viewnamen getauscht 
+- fehlende Einträge im Fileregister nachgetragen
+- exportiertes Rechnungs-/Lieferschein-PDF zeigt Logo
+
+---
+
 ## 3.2.0.2 - (2020-04-21)
 ### Changed
-- Abhängigkeit von Metapacke zu Core-Shop für Installationen ohne Metapackage geändert
+- Abhängigkeit von Metapackage zu Core-Shop für Installationen ohne Metapackage geändert
 - Einstellungsprüfungen für PDF-Generierung ergänzt
 - zeigt nur die Anzahl der Cronjobaufgaben, die auch für Cronjobausführung aktiviert sind
 

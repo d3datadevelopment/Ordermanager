@@ -38,7 +38,7 @@ class d3_cfg_ordermanageritem_list extends d3_cfg_mod_list
         foreach ($aWhere as $key => $value) {
             $aWhere[str_replace(
                 getViewName($baseObject->getCoreTableName()),
-                $baseObject->getCoreTableName(),
+                $baseObject->getViewName(),
                 $key
             )] = $value;
             unset($aWhere[$key]);
