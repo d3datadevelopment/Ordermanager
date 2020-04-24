@@ -41,15 +41,15 @@ class d3ordermanager_update extends d3install_updatebase
 {
     public $sModKey = 'd3_ordermanager';
     public $sModName = 'Auftragsmanager';
-    public $sModVersion = '3.2.0.2';
-    public $sModRevision = '3202';
+    public $sModVersion = '3.2.0.3';
+    public $sModRevision = '3203';
     public $sBaseConf =
-    'XjTv2==WCtTMmk0OTZoZENManpSeTlWUEhZU3JQblJwT1FxTk8wTUtuTWoyeWcvUU5hY0hxUmQrdXRkR
-UZScWk3d2sxRjRkeGx2Y3NmbWM0c0RxNGprMkp0Vmo3Tk5BRmpaZWZTYUF3azRKcmlLaTBGSzM2a2xaT
-FQ4a2pad0lRU3JLRThZMGJOV012MTg1b0tlQVJUVis0aFJKVm9TTkxHblRVbjRSOTB5MjF4V1hSMTBFW
-Tk5clRRcjdsUjh2M0VkRHVtNHZ4c21BdkdXaDVBdFJISi8wVWIxYlVqZmVZcVRDYWg5UnZQQys4UDhxM
-k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
-3ZLWXVMblROcXpjZTVMK3JHLzdUUjlTSk51NklDaTVaUFQwOU5zSDNRK1d6SkJBPT0=';
+    'BP6v2==aCtrMEpxREVwazFHNHRvbnNGTnZVQkV6cllnQVlHMWxORzRWN3BPMlU0c1Z5T0VtVGs4a2pBU
+UZXZEMvYmlLK1p2UGNsL20wS1VsUUZYRm4yM1hoc3IxTjJvUGg4QVViVmpZNDhwRENDL1FLcjJrbWNYd
+mtXVTVSTDAzQXB1R3dnSEZ3bDVlYXhNUVRqMzgrVHpzVEZyWHNCYmJTL0JwQWpNU1A2TnJoNkhtSE9ne
+VdIYVZkMFYyVk13SXR4SzhXbks3a1ZUOUd2Rm81VTBqRkVOazI4OVhHMHBka1BKd3QwbFdDd0ZTVktTU
+ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
+2FiV3pTc29jSWxZN2hKa3hiYml4WUVCencxRDljRmFCVzZPRVJ5TldYSWVpMENBPT0=';
     public $sRequirements = '';
     public $sBaseValue = 'TyUzQTglM0ElMjJzdGRDbGFzcyUyMiUzQTQlM0ElN0JzJTNBMjMlM0ElMjJkM19jZmdfbW9kX19hRm9sZGVyTGlzdCUyMiUzQmElM0E1JTNBJTdCaSUzQTAlM0JzJTNBMjUlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfTkVXJTIyJTNCaSUzQTElM0JzJTNBMzIlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfUEFZQURWQU5DRSUyMiUzQmklM0EyJTNCcyUzQTM2JTNBJTIyRDNfT1JERVJNQU5BR0VSX09SREVSX1BBWVNUQVRVU0NIRUNLJTIyJTNCaSUzQTMlM0JzJTNBMzYlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfREVMSVZFUllTVEFUVVMlMjIlM0JpJTNBNCUzQnMlM0EzNyUzQSUyMkQzX09SREVSTUFOQUdFUl9PUkRFUl9PUkRFUlBST0NFU1NJTkclMjIlM0IlN0RzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19ibENyb25BY3RpdmUlMjIlM0JzJTNBMSUzQSUyMjAlMjIlM0JzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19pTWF4T3JkZXJDbnQlMjIlM0JzJTNBMiUzQSUyMjUwJTIyJTNCcyUzQTI1JTNBJTIyZDNfY2ZnX21vZF9fc0Nyb25QYXNzd29yZCUyMiUzQnMlM0E4JTNBJTIyNW5kYnJCM1IlMjIlM0IlN0Q=';
 
@@ -827,7 +827,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
         foreach ($this->getExampleJobInsertList() as $aJobContentInfos) {
             $sGetFieldContentMethodName = $aJobContentInfos['content'];
             /** @var $oShop Shop */
-            foreach ($this->getShopList() as $oShop) {
+            foreach ($this->getShopListByActiveModule('d3ordermanager') as $oShop) {
                 $aCheckFields = $this->{$sGetFieldContentMethodName}($oShop);
 
                 if ($this->_require2ShopRelation($aJobContentInfos['table'], $aCheckFields)) {
@@ -854,7 +854,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
         foreach ($this->getExampleJobInsertList() as $aJobContentInfos) {
             $sGetFieldContentMethodName = $aJobContentInfos['content'];
             /** @var $oShop Shop */
-            foreach ($this->getShopList() as $oShop) {
+            foreach ($this->getShopListByActiveModule('d3ordermanager') as $oShop) {
                 $aInsertFields = $this->{$sGetFieldContentMethodName}($oShop);
                 $blRet = $this->_add2ShopRelation($aJobContentInfos['table'], $aInsertFields);
             }
@@ -952,7 +952,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
     public function getExampleJobItem1InsertFields(Shop $oShop)
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId - 1) : '1';
+        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return array(
             array (
@@ -1140,7 +1140,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
     public function getExampleJobItem2InsertFields(Shop $oShop)
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId - 1) : '1';
+        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return array(
             array (
@@ -1326,7 +1326,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
     public function getExampleJobItem3InsertFields(Shop $oShop)
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId - 1) : '1';
+        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return array(
             array (
@@ -1512,7 +1512,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
     public function getExampleJobItem4InsertFields(Shop $oShop)
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId - 1) : '1';
+        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return array(
             array (
@@ -1698,7 +1698,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
     public function getExampleJobItem5InsertFields(Shop $oShop)
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId - 1) : '1';
+        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return array(
             array (
@@ -1884,7 +1884,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
     public function getExampleJobItem6InsertFields(Shop $oShop)
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId - 1) : '1';
+        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return array(
             array (
@@ -2070,7 +2070,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
     public function getExampleJobItem7InsertFields(Shop $oShop)
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId - 1) : '1';
+        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return array(
             array (
@@ -2256,7 +2256,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
     public function getExampleJobItem8InsertFields(Shop $oShop)
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId - 1) : '1';
+        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return array(
             array (
@@ -2442,7 +2442,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
     public function getExampleJobItem9InsertFields(Shop $oShop)
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId - 1) : '1';
+        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return array(
             array (
@@ -2845,7 +2845,7 @@ k9WVXVuMW9MVTAyR0RSb1dGUnA5cm1TTGk4YUJ4S1BrQzRib093MlNkbFpmT0hTby85Q01LcWVReFZhb
         $blRet = false;
 
         /** @var $oShop Shop */
-        foreach ($this->getShopList() as $oShop) {
+        foreach ($this->getShopListByActiveModule('d3ordermanager') as $oShop) {
             $aWhere = array();
             $aInsertFields = $this->{$sGetFieldContentMethodName}($oShop);
             $aInsertFields = $this->_convertExampleJobItems($aInsertFields);
