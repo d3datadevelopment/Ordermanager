@@ -158,6 +158,7 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -181,6 +182,7 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

@@ -35,9 +35,12 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use OxidEsales\Eshop\Core\Module\Module;
-use OxidEsales\Eshop\Core\Module\ModuleInstaller;
-use PHPUnit_Framework_MockObject_MockObject;
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridge;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridgeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use stdClass;
 
@@ -51,6 +54,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function setUp()
     {
@@ -67,6 +71,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::__get
      * @test
      * @throws ReflectionException
      */
@@ -95,8 +100,11 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3getBasket4OrderManager
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3setBasket4OrderManager
      * @test
      * @throws ReflectionException
+     * @throws Exception
      */
     public function canSetAndGetBasket()
     {
@@ -116,8 +124,11 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3getPayment4OrderManager
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3setPayment4OrderManager
      * @test
      * @throws ReflectionException
+     * @throws Exception
      */
     public function canSetAndGetPayment()
     {
@@ -137,21 +148,23 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3getOrderBasket4OrderManager
      * @test
      * @throws ReflectionException
+     * @throws Exception
      */
     public function canGetOrderBasket4OrderManagerWithStornoArticlesNotEmptyList()
     {
-        /** @var Voucher|PHPUnit_Framework_MockObject_MockObject $oVoucherMock */
-        $oVoucherMock = $this->getMock(Voucher::class, array(
-            'load',
-        ));
+        /** @var Voucher|MockObject $oVoucherMock */
+        $oVoucherMock = $this->getMockBuilder(Voucher::class)
+            ->setMethods(['load'])
+            ->getMock();
         $oVoucherMock->expects($this->exactly(2))->method('load')->willReturn(true);
         
-        /** @var ListModel|PHPUnit_Framework_MockObject_MockObject $oOrderArticleMock */
-        $oOrderArticleMock = $this->getMock(ListModel::class, array(
-            'count',
-        ));
+        /** @var ListModel|MockObject $oOrderArticleMock */
+        $oOrderArticleMock = $this->getMockBuilder(ListModel::class)
+            ->setMethods(['count'])
+            ->getMock();
         $oOrderArticleMock->method('count')->willReturn(5);
         /** @var BaseModel $oBaseModel */
         $oBaseModel = d3GetModCfgDIC()->get('d3ox.ordermanager.'.BaseModel::class);
@@ -161,12 +174,14 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oOrderArticleMock->offsetSet('itemNo4', $oBaseModel);
         $oOrderArticleMock->offsetSet('itemNo5', $oBaseModel);
 
-        /** @var Basket|PHPUnit_Framework_MockObject_MockObject $oBasketMock */
-        $oBasketMock = $this->getMock(Basket::class, array(
-            'addOrderArticleToBasket4OrderManager',
-            'calculateBasket4OrderManager',
-            'getVouchers',
-        ));
+        /** @var Basket|MockObject $oBasketMock */
+        $oBasketMock = $this->getMockBuilder(Basket::class)
+            ->setMethods([
+                'addOrderArticleToBasket4OrderManager',
+                'calculateBasket4OrderManager',
+                'getVouchers'
+            ])
+            ->getMock();
         $oBasketMock->expects($this->exactly(5))->method('addOrderArticleToBasket4OrderManager')->willReturn(true);
         $oBasketMock->expects($this->once())->method('calculateBasket4OrderManager')->willReturn(true);
         $oBasketMock->method('getVouchers')->willReturn(array(
@@ -174,21 +189,23 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
             'voucherNo2' => 'voucherNo2'
         ));
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'getValue',
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getValue'])
+            ->getMock();
         $getValueMap = [['blGetStornoArticles', true]];
         $oManagerMock->method('getValue')->willReturnMap($getValueMap);
         
-        /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(Order::class, array(
-            'reloadDelivery',
-            'reloadDiscount',
-            '_getOrderBasket',
-            'getOrderArticles',
-            'd3GetVoucher',
-        ));
+        /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Order::class)
+            ->setMethods([
+                'reloadDelivery',
+                'reloadDiscount',
+                '_getOrderBasket',
+                'getOrderArticles',
+                'd3GetVoucher'
+            ])
+            ->getMock();
         $oModelMock->method('reloadDelivery')->willReturn(true);
         $oModelMock->method('reloadDiscount')->willReturn(true);
         $oModelMock->expects($this->once())->method('_getOrderBasket')->willReturn($oBasketMock);
@@ -210,21 +227,23 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3getOrderBasket4OrderManager
      * @test
      * @throws ReflectionException
+     * @throws Exception
      */
     public function canGetOrderBasket4OrderManagerWithoutStornoArticlesNotEmptyList()
     {
-        /** @var Voucher|PHPUnit_Framework_MockObject_MockObject $oVoucherMock */
-        $oVoucherMock = $this->getMock(Voucher::class, array(
-            'load',
-        ));
+        /** @var Voucher|MockObject $oVoucherMock */
+        $oVoucherMock = $this->getMockBuilder(Voucher::class)
+            ->setMethods(['load'])
+            ->getMock();
         $oVoucherMock->expects($this->exactly(2))->method('load')->willReturn(true);
 
-        /** @var ListModel|PHPUnit_Framework_MockObject_MockObject $oOrderArticleMock */
-        $oOrderArticleMock = $this->getMock(ListModel::class, array(
-            'count',
-        ));
+        /** @var ListModel|MockObject $oOrderArticleMock */
+        $oOrderArticleMock = $this->getMockBuilder(ListModel::class)
+            ->setMethods(['count'])
+            ->getMock();
         $oOrderArticleMock->method('count')->willReturn(5);
         /** @var BaseModel $oBaseModel */
         $oBaseModel = d3GetModCfgDIC()->get('d3ox.ordermanager.'.BaseModel::class);
@@ -234,12 +253,14 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oOrderArticleMock->offsetSet('itemNo4', $oBaseModel);
         $oOrderArticleMock->offsetSet('itemNo5', $oBaseModel);
 
-        /** @var Basket|PHPUnit_Framework_MockObject_MockObject $oBasketMock */
-        $oBasketMock = $this->getMock(Basket::class, array(
-            'addOrderArticleToBasket4OrderManager',
-            'calculateBasket4OrderManager',
-            'getVouchers',
-        ));
+        /** @var Basket|MockObject $oBasketMock */
+        $oBasketMock = $this->getMockBuilder(Basket::class)
+            ->setMethods([
+                'addOrderArticleToBasket4OrderManager',
+                'calculateBasket4OrderManager',
+                'getVouchers'
+            ])
+            ->getMock();
         $oBasketMock->expects($this->exactly(5))->method('addOrderArticleToBasket4OrderManager')->willReturn(true);
         $oBasketMock->expects($this->once())->method('calculateBasket4OrderManager')->willReturn(true);
         $oBasketMock->method('getVouchers')->willReturn(array(
@@ -247,21 +268,23 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
             'voucherNo2' => 'voucherNo2'
         ));
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'getValue',
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getValue'])
+            ->getMock();
         $getValueMap = [['blGetStornoArticles', false]];
         $oManagerMock->method('getValue')->willReturnMap($getValueMap);
 
-        /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(Order::class, array(
-            'reloadDelivery',
-            'reloadDiscount',
-            '_getOrderBasket',
-            'getOrderArticles',
-            'd3GetVoucher',
-        ));
+        /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Order::class)
+            ->setMethods([
+                'reloadDelivery',
+                'reloadDiscount',
+                '_getOrderBasket',
+                'getOrderArticles',
+                'd3GetVoucher'
+            ])
+            ->getMock();
         $oModelMock->method('reloadDelivery')->willReturn(true);
         $oModelMock->method('reloadDiscount')->willReturn(true);
         $oModelMock->expects($this->once())->method('_getOrderBasket')->willReturn($oBasketMock);
@@ -283,29 +306,32 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3getOrderBasket4OrderManager
      * @test
      * @throws ReflectionException
      */
     public function canGetOrderBasket4OrderManagerEmptyList()
     {
-        /** @var Voucher|PHPUnit_Framework_MockObject_MockObject $oVoucherMock */
-        $oVoucherMock = $this->getMock(Voucher::class, array(
-            'load',
-        ));
+        /** @var Voucher|MockObject $oVoucherMock */
+        $oVoucherMock = $this->getMockBuilder(Voucher::class)
+            ->setMethods(['load'])
+            ->getMock();
         $oVoucherMock->expects($this->exactly(2))->method('load')->willReturn(true);
 
-        /** @var ListModel|PHPUnit_Framework_MockObject_MockObject $oOrderArticleMock */
-        $oOrderArticleMock = $this->getMock(ListModel::class, array(
-            'count',
-        ));
+        /** @var ListModel|MockObject $oOrderArticleMock */
+        $oOrderArticleMock = $this->getMockBuilder(ListModel::class)
+            ->setMethods(['count'])
+            ->getMock();
         $oOrderArticleMock->method('count')->willReturn(0);
 
-        /** @var Basket|PHPUnit_Framework_MockObject_MockObject $oBasketMock */
-        $oBasketMock = $this->getMock(Basket::class, array(
-            'addOrderArticleToBasket4OrderManager',
-            'calculateBasket4OrderManager',
-            'getVouchers',
-        ));
+        /** @var Basket|MockObject $oBasketMock */
+        $oBasketMock = $this->getMockBuilder(Basket::class)
+            ->setMethods([
+                'addOrderArticleToBasket4OrderManager',
+                'calculateBasket4OrderManager',
+                'getVouchers'
+            ])
+            ->getMock();
         $oBasketMock->expects($this->never())->method('addOrderArticleToBasket4OrderManager')->willReturn(true);
         $oBasketMock->expects($this->once())->method('calculateBasket4OrderManager')->willReturn(true);
         $oBasketMock->method('getVouchers')->willReturn(array(
@@ -313,21 +339,23 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
             'voucherNo2' => 'voucherNo2'
         ));
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'getValue',
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getValue'])
+            ->getMock();
         $getValueMap = [['blGetStornoArticles', false]];
         $oManagerMock->method('getValue')->willReturnMap($getValueMap);
 
-        /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(Order::class, array(
-            'reloadDelivery',
-            'reloadDiscount',
-            '_getOrderBasket',
-            'getOrderArticles',
-            'd3GetVoucher',
-        ));
+        /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Order::class)
+            ->setMethods([
+                'reloadDelivery',
+                'reloadDiscount',
+                '_getOrderBasket',
+                'getOrderArticles',
+                'd3GetVoucher'
+            ])
+            ->getMock();
         $oModelMock->method('reloadDelivery')->willReturn(true);
         $oModelMock->method('reloadDiscount')->willReturn(true);
         $oModelMock->expects($this->once())->method('_getOrderBasket')->willReturn($oBasketMock);
@@ -349,6 +377,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3GetVoucher
      * @test
      * @throws ReflectionException
      */
@@ -364,6 +393,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3GetPdfHandler
      * @test
      * @throws ReflectionException
      */
@@ -379,68 +409,102 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3GetInvoicePdf
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function d3GetInvoicePdfHasRightInstance()
     {
-        $oModule = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Module::class);
-        $oModule->load('invoicepdf');
-        $oModuleInstaller = d3GetModCfgDIC()->get('d3ox.ordermanager.'.ModuleInstaller::class);
-        $oModuleInstaller->activate($oModule);
+        $moduleId = 'invoicepdf';
 
-        $this->assertInstanceOf(
-            InvoicepdfPDF::class,
-            $this->callMethod(
-                $this->_oModel,
-                'd3GetInvoicePdf'
-            )
-        );
+        $container = ContainerFactory::getInstance()->getContainer();
+        $shopConfiguration = $container->get(ShopConfigurationDaoBridgeInterface::class)->get();
 
-        $oModuleInstaller->deactivate($oModule);
+        // Module isn't installed
+        if (false === $shopConfiguration->hasModuleConfiguration($moduleId)) {
+            $this->markTestSkipped('no InvoicePdf module installed');
+        }
+
+        $shopId = Registry::getConfig()->getShopId();
+
+        /** @var ModuleActivationBridge $moduleActivationBridge */
+        $moduleActivationBridge = ContainerFactory::getInstance()->getContainer()->get(ModuleActivationBridgeInterface::class);
+        $blIsActive = $moduleActivationBridge->isActive($moduleId, $shopId);
+
+        try {
+            if (false == $blIsActive) {
+                $moduleActivationBridge->activate( $moduleId, $shopId);
+            }
+
+            $this->assertInstanceOf(
+                InvoicepdfPDF::class,
+                $this->callMethod(
+                    $this->_oModel,
+                    'd3GetInvoicePdf'
+                )
+            );
+        } catch (Exception $exception) {
+            Registry::getLogger()->error($exception->getMessage(), [$exception]);
+        } finally {
+            if (!$blIsActive) {
+                $moduleActivationBridge->deactivate( $moduleId, $shopId);
+            }
+        }
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3generatePdf
      * @test
      * @throws ReflectionException
+     * @throws Exception
      */
     public function canStartGeneratingInvoicePdf()
     {
         $expected = 'returnValue';
+        $moduleId = 'invoicepdf';
 
-        if (false == class_exists('invoicepdfPDF')) {
+        $container = ContainerFactory::getInstance()->getContainer();
+        $shopConfiguration = $container->get(ShopConfigurationDaoBridgeInterface::class)->get();
+
+        // Module isn't installed
+        if (false === $shopConfiguration->hasModuleConfiguration($moduleId)) {
             $this->markTestSkipped('unavailable invoicePdf class');
         }
 
-        /** @var invoicepdfPDF|PHPUnit_Framework_MockObject_MockObject $oInvoicePdfMock */
-        $oInvoicePdfMock = $this->getMock(invoicepdfPDF::class, array(
-            'setPrintHeader',
-            'open',
-            'output',
-        ));
+        /** @var invoicepdfPDF|MockObject $oInvoicePdfMock */
+        $oInvoicePdfMock = $this->getMockBuilder(invoicepdfPDF::class)
+            ->setMethods([
+                'setPrintHeader',
+                'open',
+                'output'
+            ])
+            ->getMock();
         $oInvoicePdfMock->method('setPrintHeader')->willReturn(true);
         $oInvoicePdfMock->method('open')->willReturn(true);
         $oInvoicePdfMock->expects($this->once())->method('output')->willReturn($expected);
 
-        /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
-        $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
-            'canGeneratePdf',
-        ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
+        /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
+        $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
+            ->setMethods(['canGeneratePdf'])
+            ->setConstructorArgs([d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)])
+            ->getMock();
         $oPdfHandlerMock->method('canGeneratePdf')->willReturn(true);
         
-        /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(Order::class, array(
-            'getFieldData',
-            '_setFieldData',
-            'getNextBillNum',
-            'save',
-            'd3GetPdfHandler',
-            'd3GetInvoicePdf',
-            'pdfHeader',
-            'd3generatePdfBody',
-            'pdfFooter',
-        ));
+        /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Order::class)
+            ->setMethods([
+                'getFieldData',
+                '_setFieldData',
+                'getNextBillNum',
+                'save',
+                'd3GetPdfHandler',
+                'd3GetInvoicePdf',
+                'pdfHeader',
+                'd3generatePdfBody',
+                'pdfFooter'
+            ])
+            ->getMock();
         $oModelMock->method('getFieldData')->willReturn(false);
         $oModelMock->expects($this->exactly(2))->method('_setFieldData')->willReturn(true);
         $oModelMock->method('getNextBillNum')->willReturn(true);
@@ -464,45 +528,57 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3generatePdf
      * @test
      * @throws ReflectionException
+     * @throws Exception
      */
     public function canStartGeneratingDNotePdf()
     {
         $expected = 'returnValue';
+        $moduleId = 'invoicepdf';
 
-        if (false == class_exists('invoicepdfPDF')) {
+        $container = ContainerFactory::getInstance()->getContainer();
+        $shopConfiguration = $container->get(ShopConfigurationDaoBridgeInterface::class)->get();
+
+        // Module isn't installed
+        if (false === $shopConfiguration->hasModuleConfiguration($moduleId)) {
             $this->markTestSkipped('unavailable invoicePdf class');
         }
 
-        /** @var invoicepdfPDF|PHPUnit_Framework_MockObject_MockObject $oInvoicePdfMock */
-        $oInvoicePdfMock = $this->getMock(invoicepdfPDF::class, array(
-            'setPrintHeader',
-            'open',
-            'output',
-        ));
+        /** @var invoicepdfPDF|MockObject $oInvoicePdfMock */
+        $oInvoicePdfMock = $this->getMockBuilder(invoicepdfPDF::class)
+            ->setMethods([
+                'setPrintHeader',
+                'open',
+                'output'
+            ])
+            ->getMock();
         $oInvoicePdfMock->method('setPrintHeader')->willReturn(true);
         $oInvoicePdfMock->method('open')->willReturn(true);
         $oInvoicePdfMock->expects($this->once())->method('output')->willReturn($expected);
 
-        /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
-        $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
-            'canGeneratePdf',
-        ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
+        /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
+        $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
+            ->setMethods(['canGeneratePdf'])
+            ->setConstructorArgs([d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)])
+            ->getMock();
         $oPdfHandlerMock->method('canGeneratePdf')->willReturn(true);
 
-        /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(Order::class, array(
-            'getFieldData',
-            '_setFieldData',
-            'getNextBillNum',
-            'save',
-            'd3GetPdfHandler',
-            'd3GetInvoicePdf',
-            'pdfHeader',
-            'd3generatePdfBody',
-            'pdfFooter',
-        ));
+        /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Order::class)
+            ->setMethods([
+                'getFieldData',
+                '_setFieldData',
+                'getNextBillNum',
+                'save',
+                'd3GetPdfHandler',
+                'd3GetInvoicePdf',
+                'pdfHeader',
+                'd3generatePdfBody',
+                'pdfFooter'
+            ])
+            ->getMock();
         $oModelMock->method('getFieldData')->willReturn(false);
         $oModelMock->expects($this->exactly(2))->method('_setFieldData')->willReturn(true);
         $oModelMock->method('getNextBillNum')->willReturn(true);
@@ -526,42 +602,49 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3generatePdf
      * @test
      * @throws ReflectionException
+     * @throws Exception
      */
     public function canStartGeneratingNoPdfGenerator()
     {
         $expected = 'returnValue';
 
         // use stdClass instead of InvoicepdfPDF, because of possible inactive pdf module
-        /** @var stdClass|PHPUnit_Framework_MockObject_MockObject $oInvoicePdfMock */
-        $oInvoicePdfMock = $this->getMock(stdClass::class, array(
-            'setPrintHeader',
-            'open',
-            'output',
-        ));
+        /** @var stdClass|MockObject $oInvoicePdfMock */
+        $oInvoicePdfMock = $this->getMockBuilder(stdClass::class)
+            ->setMethods([
+                'setPrintHeader',
+                'open',
+                'output'
+            ])
+            ->getMock();
         $oInvoicePdfMock->method('setPrintHeader')->willReturn(true);
         $oInvoicePdfMock->method('open')->willReturn(true);
         $oInvoicePdfMock->expects($this->never())->method('output')->willReturn($expected);
 
-        /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
-        $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
-            'canGeneratePdf',
-        ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
+        /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
+        $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
+            ->setMethods(['canGeneratePdf'])
+            ->setConstructorArgs([d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)])
+            ->getMock();
         $oPdfHandlerMock->method('canGeneratePdf')->willReturn(false);
 
-        /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(Order::class, array(
-            'getFieldData',
-            '_setFieldData',
-            'getNextBillNum',
-            'save',
-            'd3GetPdfHandler',
-            'd3GetInvoicePdf',
-            'pdfHeader',
-            'd3generatePdfBody',
-            'pdfFooter',
-        ));
+        /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Order::class)
+            ->setMethods([
+                'getFieldData',
+                '_setFieldData',
+                'getNextBillNum',
+                'save',
+                'd3GetPdfHandler',
+                'd3GetInvoicePdf',
+                'pdfHeader',
+                'd3generatePdfBody',
+                'pdfFooter'
+            ])
+            ->getMock();
         $oModelMock->method('getFieldData')->willReturn(false);
         $oModelMock->expects($this->exactly(2))->method('_setFieldData')->willReturn(true);
         $oModelMock->method('getNextBillNum')->willReturn(true);
@@ -584,14 +667,16 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::finalizeOrder
      * @test
      * @throws ReflectionException
      */
     public function canFinalizeOrder()
     {
-        $oOrderManagerListMock = $this->getMock(d3ordermanagerlist::class, array(
-            'd3GetOrderFinishTriggeredManagerTasks'
-        ));
+        /** @var d3ordermanagerlist|MockObject $oOrderManagerListMock */
+        $oOrderManagerListMock = $this->getMockBuilder(d3ordermanagerlist::class)
+            ->setMethods(['d3GetOrderFinishTriggeredManagerTasks'])
+            ->getMock();
         $oOrderManagerListMock->method('d3GetOrderFinishTriggeredManagerTasks')->willReturn(
             [
                 oxNew(d3ordermanager::class),
@@ -601,21 +686,21 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         d3GetModCfgDIC()->set(d3ordermanagerlist::class, $oOrderManagerListMock);
 
-        $oManagerExecuteMock = $this->getMock(d3ordermanager_execute::class, array(
+        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
+        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager_execute::class)
+            ->setMethods([
                 'orderMeetsConditions',
                 'exec4order'
-            ),
-            array(
-                oxNew(d3ordermanager::class)
-            )
-        );
+            ])
+            ->setConstructorArgs([oxNew(d3ordermanager::class)])
+            ->getMock();
         $oManagerExecuteMock->expects($this->exactly(2))->method('orderMeetsConditions')->willReturn(true);
         $oManagerExecuteMock->expects($this->exactly(2))->method('exec4order')->willReturn(true);
 
-        /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(Order::class, array(
-            'getManagerExecute'
-        ));
+        /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Order::class)
+            ->setMethods(['getManagerExecute'])
+            ->getMock();
         $oModelMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
 
         $this->_oModel = $oModelMock;
@@ -631,14 +716,16 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::save
      * @test
      * @throws ReflectionException
      */
     public function canSave()
     {
-        $oOrderManagerListMock = $this->getMock(d3ordermanagerlist::class, array(
-            'd3GetOrderSaveTriggeredManagerTasks'
-        ));
+        /** @var d3ordermanagerlist|MockObject $oOrderManagerListMock */
+        $oOrderManagerListMock = $this->getMockBuilder(d3ordermanagerlist::class)
+            ->setMethods(['d3GetOrderSaveTriggeredManagerTasks'])
+            ->getMock();
         $oOrderManagerListMock->method('d3GetOrderSaveTriggeredManagerTasks')->willReturn(
             [
                 oxNew(d3ordermanager::class),
@@ -648,21 +735,21 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         d3GetModCfgDIC()->set(d3ordermanagerlist::class, $oOrderManagerListMock);
 
-        $oManagerExecuteMock = $this->getMock(d3ordermanager_execute::class, array(
+        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
+        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager_execute::class)
+            ->setMethods([
                 'orderMeetsConditions',
                 'exec4order'
-            ),
-            array(
-                oxNew(d3ordermanager::class)
-            )
-        );
+            ])
+            ->setConstructorArgs([oxNew(d3ordermanager::class)])
+            ->getMock();
         $oManagerExecuteMock->expects($this->exactly(2))->method('orderMeetsConditions')->willReturn(true);
         $oManagerExecuteMock->expects($this->exactly(2))->method('exec4order')->willReturn(true);
 
-        /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(Order::class, array(
-            'getManagerExecute'
-        ));
+        /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Order::class)
+            ->setMethods(['getManagerExecute'])
+            ->getMock();
         $oModelMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
 
         $this->_oModel = $oModelMock;
@@ -674,8 +761,10 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::getManagerExecute
      * @test
      * @throws ReflectionException
+     * @throws Exception
      */
     public function canGetManagerExecute()
     {
@@ -694,6 +783,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3generatePdfBody
      * @test
      * @throws ReflectionException
      */
@@ -705,11 +795,13 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         $oPDF = oxNew('invoicepdfPDF');
 
-        /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(Order::class, array(
-            'exportDeliveryNote',
-            'exportStandart',
-        ));
+        /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Order::class)
+            ->setMethods([
+                'exportDeliveryNote',
+                'exportStandart'
+            ])
+            ->getMock();
         $oModelMock->expects($this->never())->method('exportDeliveryNote')->willReturn(true);
         $oModelMock->expects($this->once())->method('exportStandart')->willReturn(true);
 
@@ -726,6 +818,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3generatePdfBody
      * @test
      * @throws ReflectionException
      */
@@ -737,11 +830,13 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         $oPDF = oxNew('invoicepdfPDF');
 
-        /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(Order::class, array(
-            'exportDeliveryNote',
-            'exportStandart',
-        ));
+        /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Order::class)
+            ->setMethods([
+                'exportDeliveryNote',
+                'exportStandart'
+            ])
+            ->getMock();
         $oModelMock->expects($this->once())->method('exportDeliveryNote')->willReturn(true);
         $oModelMock->expects($this->never())->method('exportStandart')->willReturn(true);
 

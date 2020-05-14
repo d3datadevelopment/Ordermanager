@@ -116,7 +116,8 @@ class d3ordermanager_response extends Base
             $blExc = true;
         } catch (StandardException $oEx) {
             /** @var StandardException $oEx */
-            $oEx->debugOut();
+            $logger = Registry::getLogger();
+            $logger->error($oEx);
             $blExc = true;
         }
 
@@ -389,7 +390,7 @@ class d3ordermanager_response extends Base
             array_filter(
                 $this->getManager()->getAvailableCronjobIds(),
                 function($entry) use ($sCronJobId) {
-                    return ($entry['id'] == $sCronJobId) ? true : false;
+                    return $entry['id'] == $sCronJobId;
                 }
             )
         )['count'];

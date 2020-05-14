@@ -20,6 +20,7 @@ use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Modules\Application\Model\d3_oxuser_ordermanager;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
 use Doctrine\DBAL\DBALException;
+use Exception;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
@@ -35,6 +36,7 @@ class d3_oxuser_ordermanagerTest extends d3OrdermanagerUnitTestCase
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function setUp()
     {
@@ -51,6 +53,7 @@ class d3_oxuser_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxuser_ordermanager::__get
      * @test
      * @throws ReflectionException
      */

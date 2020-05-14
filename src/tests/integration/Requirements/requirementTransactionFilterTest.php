@@ -144,6 +144,7 @@ class requirementTransactionFilterTest extends d3OrdermanagerRequirementIntegrat
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -181,6 +182,7 @@ class requirementTransactionFilterTest extends d3OrdermanagerRequirementIntegrat
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

@@ -83,7 +83,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\d3ordermanager_listgenerator
-      - @D3\Ordermanager\Application\Model\d3ordermanager_listgenerator.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\d3ordermanager_listgenerator.args.ordermanager'
   D3\Ordermanager\Application\Model\d3ordermanager_listgenerator.args.ordermanager:
     synthetic:  true
     shared:     false
@@ -96,8 +96,8 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist
-      - @D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist.args.ordermanager
-      - @D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist.args.order
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist.args.order'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist.args.ordermanager:
     synthetic:  true
@@ -116,8 +116,8 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler
-      - @D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler.args.ordermanager
-      - @D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler.args.order
+      - '@D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler.args.order'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler.args.ordermanager:
     synthetic:  true
@@ -136,7 +136,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\d3ordermanager_remark
-      - @D3\Ordermanager\Application\Model\d3ordermanager_remark.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\d3ordermanager_remark.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\d3ordermanager_remark.args.ordermanager:
     synthetic:  true
@@ -150,7 +150,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist.args.ordermanager:
     synthetic:  true
@@ -164,7 +164,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist.args.ordermanager:
     synthetic:  true
@@ -178,8 +178,8 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist
-      - @D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist.args.ordermanager
-      - @D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist.args.order
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist.args.order'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist.args.ordermanager:
     synthetic:  true
@@ -198,7 +198,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\d3ordermanager_execute
-      - @D3\Ordermanager\Application\Model\d3ordermanager_execute.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\d3ordermanager_execute.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\d3ordermanager_execute.args.ordermanager:
     synthetic:  true
@@ -213,8 +213,8 @@ services:
     arguments:
       - D3\Ordermanager\Application\Model\d3ordermanager_export
       - '%D3\Ordermanager\Application\Model\d3ordermanager_export.args.filename%'
-      - @D3\Ordermanager\Application\Model\d3ordermanager_export.args.ordermanager
-      - @D3\Ordermanager\Application\Model\d3ordermanager_export.args.parametercontainer
+      - '@D3\Ordermanager\Application\Model\d3ordermanager_export.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\d3ordermanager_export.args.parametercontainer'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\d3ordermanager_export.args.ordermanager:
     synthetic:  true
@@ -251,7 +251,7 @@ services:
     arguments:
       - D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException
       - '%D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.message%'
-      - @D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.requirementobject
+      - '@D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.requirementobject'
     # arg #2 requirement object
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.requirementobject:
     synthetic:  true
@@ -265,7 +265,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment
-      - @D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment.args.ordermanager:
     synthetic:  true

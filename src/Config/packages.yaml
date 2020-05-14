@@ -24,7 +24,7 @@ services:
     class:      League\Flysystem\Filesystem
     shared:     false
     arguments:
-      - @League\Flysystem\Filesystem.args.adapter
+      - '@League\Flysystem\Filesystem.args.adapter'
       - '%League\Flysystem\Filesystem.args.config%'
   League\Flysystem\Filesystem.args.adapter:
     synthetic:  true

@@ -21,23 +21,23 @@ use D3\Ordermanager\tests\integration\d3OrdermanagerIntegrationTestCase;
 use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 abstract class d3OrdermanagerRequirementIntegrationTestCase extends d3OrdermanagerIntegrationTestCase
 {
     /**
      * @param $sManagerId
-     * @return d3ordermanager|PHPUnit_Framework_MockObject_MockObject
+     * @return d3ordermanager|MockObject
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
     public function getManagerMock($sManagerId)
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManager */
-        $oManager = $this->getMock(d3ordermanager::class, array(
-            'd3getLog',
-        ));
+        /** @var d3ordermanager|MockObject $oManager */
+        $oManager = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['d3getLog'])
+            ->getMock();
         $oManager->method('d3getLog')->willReturn($this->getD3LogMock());
         $oManager->load($sManagerId);
 

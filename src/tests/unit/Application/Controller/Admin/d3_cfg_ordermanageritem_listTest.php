@@ -23,6 +23,7 @@ use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Model\ListModel;
 use PHPUnit_Framework_MockObject_MockObject;
 use ReflectionException;
 
@@ -53,15 +54,19 @@ class d3_cfg_ordermanageritem_listTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_list::buildWhere
      * @test
      * @throws ReflectionException
      */
     public function canBuildWhere()
     {
         /** @var d3_cfg_ordermanageritem_list|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_list::class, array(
-            'getListFilter',
-        ));
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_list::class)
+            ->setMethods([
+                'getListFilter',
+                'getItemList'
+            ])
+            ->getMock();
         $oControllerMock->method('getListFilter')->willReturn(
             array(
                 'd3modprofile' => array(
@@ -70,15 +75,25 @@ class d3_cfg_ordermanageritem_listTest extends d3OrdermanagerUnitTestCase
                 )
             )
         );
+        $oControllerMock->method('getItemList')->willReturn(oxNew(ListModel::class));
 
         $this->_oController = $oControllerMock;
 
+        $return = $this->callMethod($this->_oController, 'buildWhere');
+
+        // key check
+        $this->assertRegExp(
+            '@oxv_d3modprofile_(\d+_)?de.oxsort--oxv_d3modprofile_(\d+_)?de.oxtitle@is',
+            implode('--', array_keys($return))
+        );
+
+        // value check
         $this->assertSame(
-            array(
-                'd3modprofile.oxsort' => '%5000%',
-                'd3modprofile.oxtitle' => '%foo%'
-            ),
-            $this->callMethod($this->_oController, 'buildWhere')
+            [
+                0 => '%5000%',
+                1 => '%foo%'
+            ],
+            array_values($return)
         );
     }
 

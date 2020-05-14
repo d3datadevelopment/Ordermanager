@@ -25,6 +25,7 @@ use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\ModCfg\Application\Model\Install\d3install_updatebase;
 use D3\ModCfg\Application\Model\Installwizzard\d3installdbrecord;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\FetchMode;
 use Exception;
 use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\ConnectionException;
@@ -41,19 +42,19 @@ class d3ordermanager_update extends d3install_updatebase
 {
     public $sModKey = 'd3_ordermanager';
     public $sModName = 'Auftragsmanager';
-    public $sModVersion = '3.2.0.3';
-    public $sModRevision = '3203';
+    public $sModVersion = '4.0.0.0';
+    public $sModRevision = '4000';
     public $sBaseConf =
-    'BP6v2==aCtrMEpxREVwazFHNHRvbnNGTnZVQkV6cllnQVlHMWxORzRWN3BPMlU0c1Z5T0VtVGs4a2pBU
-UZXZEMvYmlLK1p2UGNsL20wS1VsUUZYRm4yM1hoc3IxTjJvUGg4QVViVmpZNDhwRENDL1FLcjJrbWNYd
-mtXVTVSTDAzQXB1R3dnSEZ3bDVlYXhNUVRqMzgrVHpzVEZyWHNCYmJTL0JwQWpNU1A2TnJoNkhtSE9ne
-VdIYVZkMFYyVk13SXR4SzhXbks3a1ZUOUd2Rm81VTBqRkVOazI4OVhHMHBka1BKd3QwbFdDd0ZTVktTU
-ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
-2FiV3pTc29jSWxZN2hKa3hiYml4WUVCencxRDljRmFCVzZPRVJ5TldYSWVpMENBPT0=';
+    'YJiv2==L3cyYU0xTm9qYUFBUStWSXdKdmx4ZUJ4bzVMMHBmN0tKbmNkS0VkWENZbmRMR25TNUpJbEd1Y
+UNNdDFVQlplQytVTG1uSVB2V2VENWJnUGZkNFNyQkh1SHNrblB3MXgvMG8yUUlJeEdwNVRFd1pnbVdhZ
+EY1aEcvMzhCTUhMK2lrZzNLUHFxV0tEMDNWc2xRc214WUo1ZnV4OEI3NzRrYVR6cW9RM0RxcXYwbzV5Q
+3hOQXY0K1NYUXlRSW81VG9kcHBKZmdYTDhpc2hjZ3l1VVdVQnB1TnYrQjRpbWtUak5aalNqSWlrdkc5V
+kNCNWp6UDVJZEZuS2pZRzRNNno5QlpzMzZ3Ym5mL1h3YUNaSkRHOEt5WCtEb1dlTm1NdVJmYTFYSWExM
+kJURjlBVmpGMEJJcDlxTExaZWRKQ3VyaDNKM3Zjc1dUMmo0VlQ0L2lEYmd5endnPT0=';
     public $sRequirements = '';
     public $sBaseValue = 'TyUzQTglM0ElMjJzdGRDbGFzcyUyMiUzQTQlM0ElN0JzJTNBMjMlM0ElMjJkM19jZmdfbW9kX19hRm9sZGVyTGlzdCUyMiUzQmElM0E1JTNBJTdCaSUzQTAlM0JzJTNBMjUlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfTkVXJTIyJTNCaSUzQTElM0JzJTNBMzIlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfUEFZQURWQU5DRSUyMiUzQmklM0EyJTNCcyUzQTM2JTNBJTIyRDNfT1JERVJNQU5BR0VSX09SREVSX1BBWVNUQVRVU0NIRUNLJTIyJTNCaSUzQTMlM0JzJTNBMzYlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfREVMSVZFUllTVEFUVVMlMjIlM0JpJTNBNCUzQnMlM0EzNyUzQSUyMkQzX09SREVSTUFOQUdFUl9PUkRFUl9PUkRFUlBST0NFU1NJTkclMjIlM0IlN0RzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19ibENyb25BY3RpdmUlMjIlM0JzJTNBMSUzQSUyMjAlMjIlM0JzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19pTWF4T3JkZXJDbnQlMjIlM0JzJTNBMiUzQSUyMjUwJTIyJTNCcyUzQTI1JTNBJTIyZDNfY2ZnX21vZF9fc0Nyb25QYXNzd29yZCUyMiUzQnMlM0E4JTNBJTIyNW5kYnJCM1IlMjIlM0IlN0Q=';
 
-    public $sMinModCfgVersion = '5.2.0.0';
+    public $sMinModCfgVersion = '5.3.1.1';
     
     protected $_aUpdateMethods = array(
         array('check' => 'doesOrder2OrderManagerTableNotExist',
@@ -347,7 +348,7 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
      */
     protected function _getConvertAssignments()
     {
-        $aFieldAssignments = array(
+        return array(
             'oxid'   =>  array(
                 'from'      => 'oxid',
                 'to'        => 'oxid',
@@ -438,8 +439,6 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
                 'from_content'    => '1',
                 'from_use_quote'  => 0),
         );
-
-        return $aFieldAssignments;
     }
 
     /**
@@ -448,17 +447,23 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     protected function _changeItemContent($sOldKey, $sNewKey)
     {
         $iMaxLanguages = $this->getMaxLanguages();
+        /** @var d3database $db */
+        $db = d3GetModCfgDIC()->get('d3.ordermanager.database');
 
         for ($i = 0; $i < $iMaxLanguages; $i++) {
             $sFieldName = $this->_addMultiLangAddOn('oxvalue', $i);
-            if ($this->_getDatabaseHandler()->checkFieldExist('d3ordermanager', $sFieldName)) {
-                $sSelect = "SELECT oxid, ".$sFieldName." AS value FROM d3ordermanager WHERE 1";
+            if ($db->checkTableExist('d3ordermanager') && $db->checkFieldExist('d3ordermanager', $sFieldName)) {
+                $qb = $db->getQueryBuilder();
+                $qb->select(['oxid', $sFieldName.' AS value'])
+                    ->from('d3ordermanager')
+                    ->where('1');
 
-                $aRecords = $this->getDb()->getAll($sSelect);
+                $aRecords = $qb->execute()->fetchAll(FetchMode::ASSOCIATIVE);
                 if ($aRecords && is_array($aRecords) && count($aRecords)) {
                     foreach ($aRecords as $aRecord) {
                         $aRecord = array_change_key_case($aRecord, CASE_UPPER);
@@ -473,13 +478,16 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
 
                             $aSaveValues = base64_encode(rawurlencode(serialize($aNewValues)));
 
-                            $sQuery = "UPDATE d3ordermanager ".
-                                       "SET ".$sFieldName." = '".$aSaveValues."' ".
-                                       "WHERE oxid = '".$aRecord['OXID']."'";
+                            $qb1 = $db->getQueryBuilder();
+                            $qb1->update('d3ordermanager')
+                                ->set($sFieldName, $qb->expr()->literal($aSaveValues))
+                                ->where(
+                                    $qb->expr()->eq('oxid', $aRecord['OXID'])
+                                );
 
                             if ($this->hasExecute()) {
                                 try {
-                                    $this->getDb()->execute($sQuery);
+                                    $qb1->execute();
                                 } catch  (PDOException $exception) {
                                     if ($exception->errorInfo[1]) {
                                         $this->setErrorMessage($exception->errorInfo[2]);
@@ -489,9 +497,7 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
 
                             $this->setUpdateBreak(false);
 
-                            if ($sQuery) {
-                                $this->setActionLog('SQL', $sQuery, __METHOD__);
-                            }
+                            $this->setActionLog('SQL', $db->getPreparedStatementQuery($qb1->getSQL(), $qb1->getParameters()), __METHOD__);
                         }
                     }
                 }
@@ -717,17 +723,21 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
     /**
      * @return bool true, if update is required
      * @throws DBALException
-     * @throws DatabaseConnectionException
+     * @throws Exception
      */
     public function needExampleJobList()
     {
         $blRet = false;
 
+        /** @var d3database $db */
+        $db = d3GetModCfgDIC()->get('d3.ordermanager.database');
+        $qb = $db->getQueryBuilder();
         // change this to your inividual check criterias
-        $sSql  = "SELECT count(`oxid`) ";
-        $sSql .= "FROM `d3modprofile` WHERE oxmodid = 'd3_ordermanager' LIMIT 1;";
+        $qb->select('count(oxid) ')->from('d3modprofile')
+           ->where('oxmodid = '.$qb->createNamedParameter('d3_ordermanager'))
+           ->setMaxResults(1);
 
-        if ($this->getDb()->getOne($sSql) == 0) {
+        if ($qb->execute()->fetchColumn() == 0) {
             $blRet = true;
         }
 
@@ -760,7 +770,6 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
 
     /**
      * @return bool true, if update is required
-     * @throws DatabaseConnectionException
      * @throws Exception
      */
     public function isExampleContentMissingInDatabase()
@@ -779,10 +788,22 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
 
         if (count($aIdentList)) {
             // change this to your inividual check criterias
-            $sSql = "SELECT count(`oxid`) < " . count($aIdentList) . " ";
-            $sSql .= "FROM `oxcontents` WHERE oxloadid IN ('" . implode("', '", $aIdentList) . "') LIMIT 1;";
+            /** @var d3database $db */
+            $db = d3GetModCfgDIC()->get('d3.ordermanager.database');
+            $qb = $db->getQueryBuilder();
+            $qb->select('count(oxid) < '.count($aIdentList))
+                ->from('oxcontents')
+                ->where(
+                        $qb->expr()->in('oxloadid', implode(', ', array_map(
+                            function($value) use ($qb) {
+                                return $qb->createNamedParameter($value);
+                            },
+                            $aIdentList
+                        )))
+                    )
+                ->setMaxResults(1);
 
-            return (bool)$this->getDb()->getOne($sSql);
+            return (bool) $qb->execute()->fetchColumn();
         }
 
         return $blRet;
@@ -817,6 +838,7 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @throws d3ParameterNotFoundException
+     * @throws ConnectionException
      */
     public function requireExample2ShopRelation()
     {
@@ -846,6 +868,7 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @throws d3ParameterNotFoundException
+     * @throws ConnectionException
      */
     public function addExample2ShopRelation()
     {
@@ -2701,7 +2724,7 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
             ),
             array (
                 'fieldname'     => 'OXCONTENT',
-                'content'       => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><title>[{$oShop->oxshops__oxordersubject->value}]</title><meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]"></head><body style="font-family: Verdana,Geneva,Arial,Helvetica,sans-serif; font-size: 10px;" alink="#355222" vlink="#355222" link="#355222" bgcolor="#FFFFFF"><img src="[{$oViewConf->getNoSslImageDir()}]/logo_white.gif" alt="[{$oShop->oxshops__oxname->value}]" border="0" hspace="0" vspace="0" align="texttop"><br><br>Hallo [{$oOrder->oxorder__oxbillsal->value|oxmultilangsal}][{$oOrder->oxorder__oxbilllname->getRawValue()}],<br>'.PHP_EOL.'<br>'.PHP_EOL.'zur Bestellung[{$oOrder->oxorder__oxordernr->getRawValue()}] liegt uns noch keine Bezahlung vor.<br>'.PHP_EOL.'<br>'.PHP_EOL.'Ihr [{$oShop->oxshops__oxname->getRawValue()}]-Team.',
+                'content'       => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html lang="de"><head><title>[{$oShop->oxshops__oxordersubject->value}]</title><meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]"></head><body style="font-family: Verdana,Geneva,Arial,Helvetica,sans-serif; font-size: 10px;" alink="#355222" vlink="#355222" link="#355222" bgcolor="#FFFFFF"><img src="[{$oViewConf->getNoSslImageDir()}]/logo_white.gif" alt="[{$oShop->oxshops__oxname->value}]" border="0" hspace="0" vspace="0" align="texttop"><br><br>Hallo [{$oOrder->oxorder__oxbillsal->value|oxmultilangsal}][{$oOrder->oxorder__oxbilllname->getRawValue()}],<br>'.PHP_EOL.'<br>'.PHP_EOL.'zur Bestellung[{$oOrder->oxorder__oxordernr->getRawValue()}] liegt uns noch keine Bezahlung vor.<br>'.PHP_EOL.'<br>'.PHP_EOL.'Ihr [{$oShop->oxshops__oxname->getRawValue()}]-Team.',
                 'force_update'  => false,
                 'use_quote'     => true,
                 'use_multilang' => true,
@@ -2848,7 +2871,6 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
         foreach ($this->getShopListByActiveModule('d3ordermanager') as $oShop) {
             $aWhere = array();
             $aInsertFields = $this->{$sGetFieldContentMethodName}($oShop);
-            $aInsertFields = $this->_convertExampleJobItems($aInsertFields);
 
             $this->setInitialExecMethod(__METHOD__);
             $blRet  = $this->_updateTableItem2($sTableName, $aInsertFields, $aWhere);
@@ -2862,51 +2884,63 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
     }
 
     /**
-     * @param array $aInsertFields
-     *
-     * @return array
+     * @return bool
+     * @throws DBALException
+     * @throws Exception
      */
-    protected function _convertExampleJobItems($aInsertFields)
+    public function hasNotOrderArticlesParentId()
     {
-        foreach ($aInsertFields as $sFieldKey => $aField) {
-            foreach ($aField as $sKey => $mContent) {
-                if (is_string($mContent) && mb_detect_encoding($mContent) != 'ASCII') {
-                    $aInsertFields[$sFieldKey][$sKey] = utf8_encode($mContent);
-                }
-            }
-        }
+        /** @var d3database $db */
+        $db = d3GetModCfgDIC()->get('d3.ordermanager.database');
+        $qb = $db->getQueryBuilder();
 
-        return $aInsertFields;
+        $qb->select('ooa.oxparentid != oa.oxparentid')
+            ->from('oxorderarticles', 'ooa')
+            ->leftJoin('ooa', 'oxarticles', 'oa', 'ooa.oxartid = oa.oxid')
+            ->where(
+                $qb->expr()->isNotNull('oa.oxparentid')
+            )
+            ->setMaxResults(1);
+
+        return (bool) $qb->execute()->fetchColumn();
     }
 
     /**
      * @return bool
      * @throws DBALException
      * @throws DatabaseConnectionException
-     */
-    public function hasNotOrderArticlesParentId()
-    {
-        $sSelect = "SELECT oxorderarticles.oxparentid != oxarticles.oxparentid ".
-            "FROM oxorderarticles ".
-            "LEFT JOIN oxarticles ON oxorderarticles.oxartid = oxarticles.oxid ".
-            "WHERE oxarticles.oxparentid LIMIT 1";
-
-        return (bool) $this->getDb()->getOne($sSelect);
-    }
-
-    /**
-     * @return bool
-     * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
      */
     public function addOrderArticlesParentId()
     {
-        $sSelect = "UPDATE oxorderarticles ".
-            "SET oxparentid = ( ".
-                "SELECT oxarticles.oxparentid FROM oxarticles WHERE oxarticles.oxid = oxorderarticles.oxartid ".
-            ") WHERE oxorderarticles.oxparentid = '';";
+        /** @var d3database $db */
+        $db = d3GetModCfgDIC()->get('d3.ordermanager.database');
+        $qbsub = $db->getQueryBuilder();
 
-        return $this->_tableSqlExecute($sSelect, 'oxorderarticles', true);
+        $qbsub->select('oxarticles.oxparentid')
+            ->from('oxarticles')
+            ->where(
+                $qbsub->expr()->eq(
+                    'oxarticles.oxid',
+                    'oxorderarticles.oxartid'
+                )
+            );
+
+        $qb = $db->getQueryBuilder();
+        $qb->update('oxorderarticles')
+            ->set(
+                'oxparentid',
+                $qbsub->getSQL()
+            )
+            ->where(
+                $qb->expr()->eq(
+                    'oxorderarticles.oxparentid',
+                    ""
+                )
+            );
+
+        return $this->_tableSqlExecute($qb->getSQL(), 'oxorderarticles', true);
     }
 
     /**

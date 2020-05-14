@@ -24,7 +24,7 @@ use D3\Ordermanager\tests\integration\d3OrdermanagerIntegrationTestCase;
 use Exception;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 abstract class d3OrdermanagerActionIntegrationTestCase extends d3OrdermanagerIntegrationTestCase
 {
@@ -36,7 +36,7 @@ abstract class d3OrdermanagerActionIntegrationTestCase extends d3OrdermanagerInt
     public function getResultList($aOrderIdList = array())
     {
         /** @var ListModel $oList */
-        $oList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.ListModel::class);;
+        $oList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.ListModel::class);
         $oList->init(Order::class);
 
         foreach ($aOrderIdList as $sId) {
@@ -51,14 +51,15 @@ abstract class d3OrdermanagerActionIntegrationTestCase extends d3OrdermanagerInt
 
     /**
      * @param d3ordermanager $oManager
-     * @return d3ordermanager_listgenerator|PHPUnit_Framework_MockObject_MockObject
+     * @return d3ordermanager_listgenerator|MockObject
      */
     public function getListGenerator(d3ordermanager $oManager)
     {
-        /** @var d3ordermanager_listgenerator|PHPUnit_Framework_MockObject_MockObject $oListGeneratorMock */
-        $oListGeneratorMock = $this->getMock(d3ordermanager_listgenerator::class, array(
-            'getConcernedOrders',
-        ), array($oManager));
+        /** @var d3ordermanager_listgenerator|MockObject $oListGeneratorMock */
+        $oListGeneratorMock = $this->getMockBuilder(d3ordermanager_listgenerator::class)
+            ->setMethods(['getConcernedOrders'])
+            ->setConstructorArgs([$oManager])
+            ->getMock();
         $oListGeneratorMock->method('getConcernedOrders')->willReturn($this->getFilledResultList());
 
         return $oListGeneratorMock;
@@ -68,13 +69,15 @@ abstract class d3OrdermanagerActionIntegrationTestCase extends d3OrdermanagerInt
 
     /**
      * @param d3ordermanager $oManager
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return d3ordermanager_toorderassignment|MockObject
      */
     public function getManagerAssignmentMock(d3ordermanager $oManager)
     {
-        $oAssignmentMock = $this->getMock(d3ordermanager_toorderassignment::class, array(
-            'setAssignment'
-        ), array($oManager));
+        /** @var d3ordermanager_toorderassignment|MockObject $oExecute */
+        $oAssignmentMock = $this->getMockBuilder(d3ordermanager_toorderassignment::class)
+            ->setMethods(['setAssignment'])
+            ->setConstructorArgs([$oManager])
+            ->getMock();
         $oAssignmentMock->method('setAssignment')->willReturn(true);
 
         return $oAssignmentMock;
@@ -82,14 +85,15 @@ abstract class d3OrdermanagerActionIntegrationTestCase extends d3OrdermanagerInt
 
     /**
      * @param d3ordermanager $oConfiguredManager
-     * @return d3ordermanager_execute|PHPUnit_Framework_MockObject_MockObject
+     * @return d3ordermanager_execute|MockObject
      */
     public function getExecuteMock(d3ordermanager $oConfiguredManager)
     {
-        /** @var d3ordermanager_execute|PHPUnit_Framework_MockObject_MockObject $oExecute */
-        $oExecute = $this->getMock(d3ordermanager_execute::class, array(
-            'getManagerAssignmentInstance',
-        ), array($oConfiguredManager));
+        /** @var d3ordermanager_execute|MockObject $oExecute */
+        $oExecute = $this->getMockBuilder(d3ordermanager_execute::class)
+            ->setMethods(['getManagerAssignmentInstance'])
+            ->setConstructorArgs([$oConfiguredManager])
+            ->getMock();
         $oExecute->method('getManagerAssignmentInstance')->willReturn($this->getManagerAssignmentMock($oExecute->getManager()));
 
         return $oExecute;

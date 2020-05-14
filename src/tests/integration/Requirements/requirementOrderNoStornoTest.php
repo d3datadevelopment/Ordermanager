@@ -127,6 +127,7 @@ class requirementOrderNoStornoTest extends d3OrdermanagerRequirementIntegrationT
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

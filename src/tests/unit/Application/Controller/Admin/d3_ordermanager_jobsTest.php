@@ -33,7 +33,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use stdClass;
 
@@ -64,6 +64,19 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::__construct
+     * @test
+     */
+    public function constructorPass()
+    {
+        $this->assertSame(
+            'd3_ordermanager',
+            d3GetModCfgDIC()->getParameter('d3.ordermanager.modcfgid')
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getItemObject
      * @test
      * @throws ReflectionException
      */
@@ -76,6 +89,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3GetSession
      * @test
      * @throws ReflectionException
      */
@@ -88,23 +102,26 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::render
      * @test
      * @throws ReflectionException
      */
     public function renderPass()
     {
-        /** @var Order|PHPUnit_Framework_MockObject_MockObject $oOrderMock */
-        $oOrderMock = $this->getMock(Order::class, array(
-            'load',
-        ));
+        /** @var Order|MockObject $oOrderMock */
+        $oOrderMock = $this->getMockBuilder(Order::class)
+            ->setMethods(['load'])
+            ->getMock();
         $oOrderMock->expects($this->once())->method('load')->willReturn(true);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getEditObjectId',
-            'getItemObject',
-            '_d3GetManuallyManagerJobs',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'getEditObjectId',
+                'getItemObject',
+                '_d3GetManuallyManagerJobs'
+            ])
+            ->getMock();
         $oControllerMock->method('getEditObjectId')->willReturn('testOxId');
         $oControllerMock->method('getItemObject')->willReturn($oOrderMock);
         $oControllerMock->method('_d3GetManuallyManagerJobs')->willReturn($oOrderMock);
@@ -118,6 +135,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::changeFolder
      * @test
      * @throws ReflectionException
      */
@@ -125,16 +143,16 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     {
         $_POST['jobfolder'] = 'newSelectedFolder';
 
-        /** @var Session|PHPUnit_Framework_MockObject_MockObject $oSessionMock */
-        $oSessionMock = $this->getMock(Session::class, array(
-            'setVariable'
-        ));
+        /** @var Session|MockObject $oSessionMock */
+        $oSessionMock = $this->getMockBuilder(Session::class)
+            ->setMethods(['setVariable'])
+            ->getMock();
         $oSessionMock->expects($this->once())->method('setVariable')->willReturn(true);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'd3GetSession',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods(['d3GetSession'])
+            ->getMock();
         $oControllerMock->method('d3GetSession')->willReturn($oSessionMock);
 
         $this->_oController = $oControllerMock;
@@ -146,6 +164,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getManagerList
      * @test
      * @throws ReflectionException
      */
@@ -158,21 +177,22 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3GetManagerJobs
      * @test
      * @throws ReflectionException
      */
     public function canGetManagerJobs()
     {
-        /** @var d3ordermanagerlist|PHPUnit_Framework_MockObject_MockObject $oManagerListMock */
-        $oManagerListMock = $this->getMock(d3ordermanagerlist::class, array(
-            'getList',
-        ));
+        /** @var d3ordermanagerlist|MockObject $oManagerListMock */
+        $oManagerListMock = $this->getMockBuilder(d3ordermanagerlist::class)
+            ->setMethods(['getList'])
+            ->getMock();
         $oManagerListMock->expects($this->once())->method('getList')->willReturn(true);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManagerList',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods(['getManagerList'])
+            ->getMock();
         $oControllerMock->method('getManagerList')->willReturn($oManagerListMock);
 
         $this->_oController = $oControllerMock;
@@ -184,52 +204,57 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::_d3GetManuallyManagerJobs
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function canGetManuallyExecutableManagerJobsNoConditionCheck()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'getValue'
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getValue'])
+            ->getMock();
         $oManagerMock->method('getValue')->willReturn(false);
 
-        $oManagerExecuteMock = $this->getMock(d3ordermanager_execute::class, array(
-                'orderMeetsConditions'
-            ),
-            array(
-                $oManagerMock
-            )
-        );
+        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
+        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager_execute::class)
+            ->setMethods(['orderMeetsConditions'])
+            ->setConstructorArgs([$oManagerMock])
+            ->getMock();
         $oManagerExecuteMock->method('orderMeetsConditions')->willReturn(true);
 
-        /** @var ListModel|PHPUnit_Framework_MockObject_MockObject $oListMock */
-        $oListMock = $this->getMock(ListModel::class, array(
-            'offsetUnset'
-        ));
+        /** @var ListModel|MockObject $oListMock */
+        $oListMock = $this->getMockBuilder(ListModel::class)
+            ->setMethods(['offsetUnset'])
+            ->getMock();
         $oListMock->expects($this->never())->method('offsetUnset');
         $oListMock->offsetSet('No1', $oManagerMock);
         $oListMock->offsetSet('No2', $oManagerMock);
 
-        /** @var d3ordermanagerlist|PHPUnit_Framework_MockObject_MockObject $oManagerListMock */
-        $oManagerListMock = $this->getMock(d3ordermanagerlist::class, array(
-            'd3GetManuallyManagerJobsByFolder',
-        ));
+        /** @var d3ordermanagerlist|MockObject $oManagerListMock */
+        $oManagerListMock = $this->getMockBuilder(d3ordermanagerlist::class)
+            ->setMethods(['d3GetManuallyManagerJobsByFolder'])
+            ->getMock();
         $oManagerListMock->expects($this->once())->method('d3GetManuallyManagerJobsByFolder')->willReturn($oListMock);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManagerList',
-            'getManagerExecute',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'getManagerList',
+                'getManagerExecute'
+            ])
+            ->getMock();
         $oControllerMock->method('getManagerList')->willReturn($oManagerListMock);
         $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
 
         $this->_oController = $oControllerMock;
 
-        $generatedList = $this->callMethod($this->_oController, '_d3GetManuallyManagerJobs', array('sTestFolderId'));
+        $generatedList = $this->callMethod(
+            $this->_oController,
+            '_d3GetManuallyManagerJobs',
+            array('sTestFolderId')
+        );
         $this->assertInstanceOf(
             ListModel::class,
             $generatedList
@@ -238,52 +263,57 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::_d3GetManuallyManagerJobs
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function canGetManuallyExecutableManagerJobsConditionCheckPass()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'getValue'
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getValue'])
+            ->getMock();
         $oManagerMock->method('getValue')->willReturn(false);
 
-        $oManagerExecuteMock = $this->getMock(d3ordermanager_execute::class, array(
-                'orderMeetsConditions'
-            ),
-            array(
-                $oManagerMock
-            )
-        );
+        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
+        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager_execute::class)
+            ->setMethods(['orderMeetsConditions'])
+            ->setConstructorArgs([$oManagerMock])
+            ->getMock();
         $oManagerExecuteMock->method('orderMeetsConditions')->will($this->onConsecutiveCalls(false, true));
 
-        /** @var ListModel|PHPUnit_Framework_MockObject_MockObject $oListMock */
-        $oListMock = $this->getMock(ListModel::class, array(
-            'offsetUnset'
-        ));
+        /** @var ListModel|MockObject $oListMock */
+        $oListMock = $this->getMockBuilder(ListModel::class)
+            ->setMethods(['offsetUnset'])
+            ->getMock();
         $oListMock->expects($this->never())->method('offsetUnset');
         $oListMock->offsetSet('No1', $oManagerMock);
         $oListMock->offsetSet('No2', $oManagerMock);
 
-        /** @var d3ordermanagerlist|PHPUnit_Framework_MockObject_MockObject $oManagerListMock */
-        $oManagerListMock = $this->getMock(d3ordermanagerlist::class, array(
-            'd3GetManuallyManagerJobsByFolder',
-        ));
+        /** @var d3ordermanagerlist|MockObject $oManagerListMock */
+        $oManagerListMock = $this->getMockBuilder(d3ordermanagerlist::class)
+            ->setMethods(['d3GetManuallyManagerJobsByFolder'])
+            ->getMock();
         $oManagerListMock->expects($this->once())->method('d3GetManuallyManagerJobsByFolder')->willReturn($oListMock);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManagerList',
-            'getManagerExecute',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'getManagerList',
+                'getManagerExecute'
+            ])
+            ->getMock();
         $oControllerMock->method('getManagerList')->willReturn($oManagerListMock);
         $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
 
         $this->_oController = $oControllerMock;
 
-        $generatedList = $this->callMethod($this->_oController, '_d3GetManuallyManagerJobs', array('sTestFolderId'));
+        $generatedList = $this->callMethod(
+            $this->_oController,
+            '_d3GetManuallyManagerJobs',
+            array('sTestFolderId')
+        );
         $this->assertInstanceOf(
             ListModel::class,
             $generatedList
@@ -292,52 +322,57 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::_d3GetManuallyManagerJobs
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function canGetManuallyExecutableManagerJobsConditionCheckFailed()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'getValue'
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getValue'])
+            ->getMock();
         $oManagerMock->method('getValue')->willReturn(true);
 
-        $oManagerExecuteMock = $this->getMock(d3ordermanager_execute::class, array(
-                'orderMeetsConditions'
-            ),
-            array(
-                $oManagerMock
-            )
-        );
+        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
+        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager_execute::class)
+            ->setMethods(['orderMeetsConditions'])
+            ->setConstructorArgs([$oManagerMock])
+            ->getMock();
         $oManagerExecuteMock->method('orderMeetsConditions')->will($this->onConsecutiveCalls(false, true));
 
-        /** @var ListModel|PHPUnit_Framework_MockObject_MockObject $oListMock */
-        $oListMock = $this->getMock(ListModel::class, array(
-            'offsetUnset'
-        ));
+        /** @var ListModel|MockObject $oListMock */
+        $oListMock = $this->getMockBuilder(ListModel::class)
+            ->setMethods(['offsetUnset'])
+            ->getMock();
         $oListMock->expects($this->once())->method('offsetUnset');
         $oListMock->offsetSet('No1', $oManagerMock);
         $oListMock->offsetSet('No2', $oManagerMock);
 
-        /** @var d3ordermanagerlist|PHPUnit_Framework_MockObject_MockObject $oManagerListMock */
-        $oManagerListMock = $this->getMock(d3ordermanagerlist::class, array(
-            'd3GetManuallyManagerJobsByFolder',
-        ));
+        /** @var d3ordermanagerlist|MockObject $oManagerListMock */
+        $oManagerListMock = $this->getMockBuilder(d3ordermanagerlist::class)
+            ->setMethods(['d3GetManuallyManagerJobsByFolder'])
+            ->getMock();
         $oManagerListMock->expects($this->once())->method('d3GetManuallyManagerJobsByFolder')->willReturn($oListMock);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManagerList',
-            'getManagerExecute',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'getManagerList',
+                'getManagerExecute'
+            ])
+            ->getMock();
         $oControllerMock->method('getManagerList')->willReturn($oManagerListMock);
         $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
 
         $this->_oController = $oControllerMock;
 
-        $generatedList = $this->callMethod($this->_oController, '_d3GetManuallyManagerJobs', array('sTestFolderId'));
+        $generatedList = $this->callMethod(
+            $this->_oController,
+            '_d3GetManuallyManagerJobs',
+            array('sTestFolderId')
+        );
         $this->assertInstanceOf(
             ListModel::class,
             $generatedList
@@ -347,6 +382,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3GetJobList
      * @test
      * @throws ReflectionException
      */
@@ -356,10 +392,10 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
             '1' => '2',
         );
 
-        /** @var ListModel|PHPUnit_Framework_MockObject_MockObject $oJobListMock */
-        $oJobListMock = $this->getMock(ListModel::class, array(
-            'getArray',
-        ));
+        /** @var ListModel|MockObject $oJobListMock */
+        $oJobListMock = $this->getMockBuilder(ListModel::class)
+            ->setMethods(['getArray'])
+            ->getMock();
         $oJobListMock->method('getArray')->willReturn($aArray);
 
         $this->setValue($this->_oController, '_aJobList', $oJobListMock);
@@ -374,6 +410,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getManager
      * @test
      * @throws ReflectionException
      */
@@ -386,6 +423,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getManagerExecute
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -394,41 +432,52 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     {
         $this->assertInstanceOf(
             d3ordermanager_execute::class,
-            $this->callMethod($this->_oController, 'getManagerExecute', array(d3GetModCfgDIC()->get(d3ordermanager::class)))
+            $this->callMethod(
+                $this->_oController,
+                'getManagerExecute',
+                array(d3GetModCfgDIC()->get(d3ordermanager::class))
+            )
         );
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3execordermanager
      * @test
      * @throws ReflectionException
      */
     public function ordermanagerStartExecutionNoConditionCheck()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'load',
-            'setEditedValues',
-            'getValue'
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'load',
+                'setEditedValues',
+                'getValue'
+            ])
+            ->getMock();
         $oManagerMock->expects($this->once())->method('load')->willReturn(true);
         $oManagerMock->expects($this->never())->method('setEditedValues')->willReturn(true);
         $oManagerMock->method('getValue')->willReturn(false);
 
-        /** @var d3ordermanager_execute|PHPUnit_Framework_MockObject_MockObject $oManagerExecuteMock */
-        $oManagerExecuteMock = $this->getMock(d3ordermanager::class, array(
-            'exec4order',
-            'finishJobExecution',
-            'orderMeetsConditions',
-        ));
+        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
+        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'exec4order',
+                'finishJobExecution',
+                'orderMeetsConditions'
+            ])
+            ->getMock();
         $oManagerExecuteMock->expects($this->once())->method('exec4order')->willReturn(true);
         $oManagerExecuteMock->expects($this->once())->method('finishJobExecution')->willReturn(true);
         $oManagerExecuteMock->method('orderMeetsConditions')->willReturn(false);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManager',
-            'getManagerExecute',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'getManager',
+                'getManagerExecute'
+            ])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
         $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
 
@@ -441,36 +490,43 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3execordermanager
      * @test
      * @throws ReflectionException
      */
     public function ordermanagerStartExecutionConditionCheckPass()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'load',
-            'setEditedValues',
-            'getValue'
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'load',
+                'setEditedValues',
+                'getValue'
+            ])
+            ->getMock();
         $oManagerMock->expects($this->once())->method('load')->willReturn(true);
         $oManagerMock->expects($this->never())->method('setEditedValues')->willReturn(true);
         $oManagerMock->method('getValue')->willReturn(true);
 
-        /** @var d3ordermanager_execute|PHPUnit_Framework_MockObject_MockObject $oManagerExecuteMock */
-        $oManagerExecuteMock = $this->getMock(d3ordermanager::class, array(
-            'exec4order',
-            'finishJobExecution',
-            'orderMeetsConditions',
-        ));
+        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
+        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'exec4order',
+                'finishJobExecution',
+                'orderMeetsConditions'
+            ])
+            ->getMock();
         $oManagerExecuteMock->expects($this->once())->method('exec4order')->willReturn(true);
         $oManagerExecuteMock->expects($this->once())->method('finishJobExecution')->willReturn(true);
         $oManagerExecuteMock->method('orderMeetsConditions')->willReturn(true);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManager',
-            'getManagerExecute',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'getManager',
+                'getManagerExecute'
+            ])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
         $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
 
@@ -483,36 +539,43 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3execordermanager
      * @test
      * @throws ReflectionException
      */
     public function ordermanagerStartExecutionConditionCheckFailed()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'load',
-            'setEditedValues',
-            'getValue'
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'load',
+                'setEditedValues',
+                'getValue'
+            ])
+            ->getMock();
         $oManagerMock->expects($this->once())->method('load')->willReturn(true);
         $oManagerMock->expects($this->never())->method('setEditedValues')->willReturn(true);
         $oManagerMock->method('getValue')->willReturn(true);
 
-        /** @var d3ordermanager_execute|PHPUnit_Framework_MockObject_MockObject $oManagerExecuteMock */
-        $oManagerExecuteMock = $this->getMock(d3ordermanager::class, array(
-            'exec4order',
-            'finishJobExecution',
-            'orderMeetsConditions',
-        ));
+        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
+        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'exec4order',
+                'finishJobExecution',
+                'orderMeetsConditions'
+            ])
+            ->getMock();
         $oManagerExecuteMock->expects($this->never())->method('exec4order')->willReturn(true);
         $oManagerExecuteMock->expects($this->never())->method('finishJobExecution')->willReturn(true);
         $oManagerExecuteMock->method('orderMeetsConditions')->willReturn(false);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManager',
-            'getManagerExecute',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'getManager',
+                'getManagerExecute'
+            ])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
         $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
 
@@ -525,36 +588,43 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3ExecChangedOrderManager
      * @test
      * @throws ReflectionException
      */
     public function changedOrdermanagerStartExecutionNoConditionCheck()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'load',
-            'setEditedValues',
-            'getValue'
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'load',
+                'setEditedValues',
+                'getValue'
+            ])
+            ->getMock();
         $oManagerMock->expects($this->once())->method('load')->willReturn(true);
         $oManagerMock->expects($this->once())->method('setEditedValues')->willReturn(true);
         $oManagerMock->method('getValue')->willReturn(false);
 
-        /** @var d3ordermanager_execute|PHPUnit_Framework_MockObject_MockObject $oManagerExecuteMock */
-        $oManagerExecuteMock = $this->getMock(d3ordermanager::class, array(
-            'exec4order',
-            'finishJobExecution',
-            'orderMeetsConditions',
-        ));
+        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
+        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'exec4order',
+                'finishJobExecution',
+                'orderMeetsConditions'
+            ])
+            ->getMock();
         $oManagerExecuteMock->expects($this->once())->method('exec4order')->willReturn(true);
         $oManagerExecuteMock->expects($this->once())->method('finishJobExecution')->willReturn(true);
         $oManagerExecuteMock->method('orderMeetsConditions')->willReturn(false);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManager',
-            'getManagerExecute',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'getManager',
+                'getManagerExecute'
+            ])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
         $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
 
@@ -567,36 +637,43 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3ExecChangedOrderManager
      * @test
      * @throws ReflectionException
      */
     public function changedOrdermanagerStartExecutionConditionCheckPass()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'load',
-            'setEditedValues',
-            'getValue'
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'load',
+                'setEditedValues',
+                'getValue'
+            ])
+            ->getMock();
         $oManagerMock->expects($this->once())->method('load')->willReturn(true);
         $oManagerMock->expects($this->once())->method('setEditedValues')->willReturn(true);
         $oManagerMock->method('getValue')->willReturn(true);
 
-        /** @var d3ordermanager_execute|PHPUnit_Framework_MockObject_MockObject $oManagerExecuteMock */
-        $oManagerExecuteMock = $this->getMock(d3ordermanager::class, array(
-            'exec4order',
-            'finishJobExecution',
-            'orderMeetsConditions',
-        ));
+        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
+        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'exec4order',
+                'finishJobExecution',
+                'orderMeetsConditions'
+            ])
+            ->getMock();
         $oManagerExecuteMock->expects($this->once())->method('exec4order')->willReturn(true);
         $oManagerExecuteMock->expects($this->once())->method('finishJobExecution')->willReturn(true);
         $oManagerExecuteMock->method('orderMeetsConditions')->willReturn(true);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManager',
-            'getManagerExecute',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'getManager',
+                'getManagerExecute'
+            ])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
         $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
 
@@ -609,36 +686,43 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3ExecChangedOrderManager
      * @test
      * @throws ReflectionException
      */
     public function changedOrdermanagerStartExecutionConditionCheckFailed()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'load',
-            'setEditedValues',
-            'getValue'
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'load',
+                'setEditedValues',
+                'getValue'
+            ])
+            ->getMock();
         $oManagerMock->expects($this->once())->method('load')->willReturn(true);
         $oManagerMock->expects($this->once())->method('setEditedValues')->willReturn(true);
         $oManagerMock->method('getValue')->willReturn(true);
 
-        /** @var d3ordermanager_execute|PHPUnit_Framework_MockObject_MockObject $oManagerExecuteMock */
-        $oManagerExecuteMock = $this->getMock(d3ordermanager::class, array(
-            'exec4order',
-            'finishJobExecution',
-            'orderMeetsConditions',
-        ));
+        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
+        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'exec4order',
+                'finishJobExecution',
+                'orderMeetsConditions'
+            ])
+            ->getMock();
         $oManagerExecuteMock->expects($this->never())->method('exec4order')->willReturn(true);
         $oManagerExecuteMock->expects($this->never())->method('finishJobExecution')->willReturn(true);
         $oManagerExecuteMock->method('orderMeetsConditions')->willReturn(false);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManager',
-            'getManagerExecute',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'getManager',
+                'getManagerExecute'
+            ])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
         $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
 
@@ -651,6 +735,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getOrderManagerAssignment
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -668,23 +753,27 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3resetOrderManagerAssignment
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function canStartResettingOrderManagerAssignment()
     {
-        /** @var d3ordermanager_execute|PHPUnit_Framework_MockObject_MockObject $oManagerAssignmentMock */
-        $oManagerAssignmentMock = $this->getMock(d3ordermanager_toorderassignment::class, array(
-            'resetAssignment',
-        ), array(d3GetModCfgDIC()->get(d3ordermanager::class)));
+        /** @var d3ordermanager_execute|MockObject $oManagerAssignmentMock */
+        $oManagerAssignmentMock = $this->getMockBuilder(d3ordermanager_toorderassignment::class)
+            ->setMethods(['resetAssignment'])
+            ->setConstructorArgs([d3GetModCfgDIC()->get(d3ordermanager::class)])
+            ->getMock();
         $oManagerAssignmentMock->expects($this->once())->method('resetAssignment')->willReturn(true);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManager',
-            'getOrderManagerAssignment',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'getManager',
+                'getOrderManagerAssignment'
+            ])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn(d3GetModCfgDIC()->get(d3ordermanager::class));
         $oControllerMock->method('getOrderManagerAssignment')->willReturn($oManagerAssignmentMock);
 
@@ -697,6 +786,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getFolderList
      * @test
      * @throws ReflectionException
      */
@@ -707,16 +797,16 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
             'Folder#2',
         );
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'd3getSelectableFolderList',
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['d3getSelectableFolderList'])
+            ->getMock();
         $oManagerMock->expects($this->once())->method('d3getSelectableFolderList')->willReturn($aFolderList);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManager',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods(['getManager'])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
 
         $this->_oController = $oControllerMock;
@@ -731,6 +821,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::execChangedContents
      * @test
      * @throws ReflectionException
      */
@@ -738,20 +829,22 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     {
         $_POST['oxid'] = 'testItemId';
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'load',
-            'getEditableContent',
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'load',
+                'getEditableContent'
+            ])
+            ->getMock();
         $oManagerMock->expects($this->once())->method('load')->willReturn(true);
         $oManagerMock->expects($this->exactly(2))->method('getEditableContent')->with(
             $this->stringContains('testItemId')
         )->willReturn(true);
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'getManager',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods(['getManager'])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
 
         $this->_oController = $oControllerMock;
@@ -763,6 +856,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getUserMessages
      * @test
      * @throws ReflectionException
      */
@@ -778,6 +872,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getLang
      * @test
      * @throws ReflectionException
      */
@@ -793,48 +888,53 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getHelpURL
      * @test
      * @throws ReflectionException
      */
     public function canGetHelpUrlWithExtension()
     {
-        /** @var d3filesystem|PHPUnit_Framework_MockObject_MockObject $oFileSystemMock */
-        $oFileSystemMock = $this->getMock(d3filesystem::class, array(
-            'splitFilename',
-        ));
+        /** @var d3filesystem|MockObject $oFileSystemMock */
+        $oFileSystemMock = $this->getMockBuilder(d3filesystem::class)
+            ->setMethods(['splitFilename'])
+            ->getMock();
         $oFileSystemMock->method('splitFilename')->willReturn(
             array('name' => 'filename', 'ext' => 'html')
         );
 
         d3GetModCfgDIC()->set(d3filesystem::class, $oFileSystemMock);
 
-        /** @var d3str|PHPUnit_Framework_MockObject_MockObject $oD3StrMock */
-        $oD3StrMock = $this->getMock(d3str::class, array(
-            'unprefixedslashit',
-            'trailingslashit',
-        ));
+        /** @var d3str|MockObject $oD3StrMock */
+        $oD3StrMock = $this->getMockBuilder(d3str::class)
+            ->setMethods([
+                'unprefixedslashit',
+                'trailingslashit'
+            ])
+            ->getMock();
         $oD3StrMock->method('unprefixedslashit')->willReturnCallback(array($this, 'firstArgumentReturnCallback'));
         $oD3StrMock->expects($this->never())->method('trailingslashit')->willReturnCallback(array($this, 'firstArgumentReturnCallback'));
 
         d3GetModCfgDIC()->set(d3str::class, $oD3StrMock);
 
-        /** @var Language|PHPUnit_Framework_MockObject_MockObject $oLangMock */
-        $oLangMock = $this->getMock(Language::class, array(
-            'translateString',
-        ));
+        /** @var Language|MockObject $oLangMock */
+        $oLangMock = $this->getMockBuilder(Language::class)
+            ->setMethods(['translateString'])
+            ->getMock();
         $oLangMock->method('translateString')->willReturn('modulepath');
 
-        /** @var stdClass|PHPUnit_Framework_MockObject_MockObject $oModCfgMock */
-        $oModCfgMock = $this->getMock(stdClass::class, array(
-            'getHelpURL'
-        ));
+        /** @var stdClass|MockObject $oModCfgMock */
+        $oModCfgMock = $this->getMockBuilder(stdClass::class)
+            ->setMethods(['getHelpURL'])
+            ->getMock();
         $oModCfgMock->method('getHelpURL')->willReturn('https://faq.d3data.de/module/');
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'd3GetSet',
-            'getLang',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'd3GetSet',
+                'getLang'
+            ])
+            ->getMock();
         $oControllerMock->method('d3GetSet')->willReturn($oModCfgMock);
         $oControllerMock->method('getLang')->willReturn($oLangMock);
 
@@ -849,48 +949,53 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getHelpURL
      * @test
      * @throws ReflectionException
      */
     public function canGetHelpUrlWithoutExtension()
     {
-        /** @var d3filesystem|PHPUnit_Framework_MockObject_MockObject $oFileSystemMock */
-        $oFileSystemMock = $this->getMock(d3filesystem::class, array(
-            'splitFilename',
-        ));
+        /** @var d3filesystem|MockObject $oFileSystemMock */
+        $oFileSystemMock = $this->getMockBuilder(d3filesystem::class)
+            ->setMethods(['splitFilename'])
+            ->getMock();
         $oFileSystemMock->method('splitFilename')->willReturn(
             array('name' => 'filename', 'ext' => '')
         );
 
         d3GetModCfgDIC()->set(d3filesystem::class, $oFileSystemMock);
 
-        /** @var d3str|PHPUnit_Framework_MockObject_MockObject $oD3StrMock */
-        $oD3StrMock = $this->getMock(d3str::class, array(
-            'unprefixedslashit',
-            'trailingslashit',
-        ));
+        /** @var d3str|MockObject $oD3StrMock */
+        $oD3StrMock = $this->getMockBuilder(d3str::class)
+            ->setMethods([
+                'unprefixedslashit',
+                'trailingslashit'
+            ])
+            ->getMock();
         $oD3StrMock->method('unprefixedslashit')->willReturnCallback(array($this, 'firstArgumentReturnCallback'));
         $oD3StrMock->expects($this->once())->method('trailingslashit')->willReturnCallback(array($this, 'firstArgumentReturnCallback'));
 
         d3GetModCfgDIC()->set(d3str::class, $oD3StrMock);
 
-        /** @var Language|PHPUnit_Framework_MockObject_MockObject $oLangMock */
-        $oLangMock = $this->getMock(Language::class, array(
-            'translateString',
-        ));
+        /** @var Language|MockObject $oLangMock */
+        $oLangMock = $this->getMockBuilder(Language::class)
+            ->setMethods(['translateString'])
+            ->getMock();
         $oLangMock->method('translateString')->willReturn('modulepath');
 
-        /** @var stdClass|PHPUnit_Framework_MockObject_MockObject $oModCfgMock */
-        $oModCfgMock = $this->getMock(stdClass::class, array(
-            'getHelpURL'
-        ));
+        /** @var stdClass|MockObject $oModCfgMock */
+        $oModCfgMock = $this->getMockBuilder(stdClass::class)
+            ->setMethods(['getHelpURL'])
+            ->getMock();
         $oModCfgMock->method('getHelpURL')->willReturn('https://faq.d3data.de/module/');
 
-        /** @var d3_ordermanager_jobs|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_ordermanager_jobs::class, array(
-            'd3GetSet',
-            'getLang',
-        ));
+        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
+            ->setMethods([
+                'd3GetSet',
+                'getLang'
+            ])
+            ->getMock();
         $oControllerMock->method('d3GetSet')->willReturn($oModCfgMock);
         $oControllerMock->method('getLang')->willReturn($oLangMock);
 
@@ -914,6 +1019,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3GetSet
      * @test
      * @throws ReflectionException
      */
@@ -926,6 +1032,7 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getLink
      * @test
      * @throws ReflectionException
      */

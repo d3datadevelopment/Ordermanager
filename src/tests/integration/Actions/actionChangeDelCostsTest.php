@@ -184,6 +184,7 @@ class actionChangeDelCostsTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -216,6 +217,7 @@ class actionChangeDelCostsTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -248,6 +250,7 @@ class actionChangeDelCostsTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

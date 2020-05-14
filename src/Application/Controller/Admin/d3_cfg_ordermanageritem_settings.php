@@ -86,6 +86,7 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
      *
      * @return ListModel
      * @throws DBALException
+     * @throws Exception
      */
     protected function _getObjectList($oObjectList, $sWhere = null, $sOrderBy = null)
     {
@@ -94,7 +95,7 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
         /** @var Language $oLang */
         $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
 
-        /** @var $oObject MultiLanguageModel */
+        /** @var MultiLanguageModel $oObject */
         $oObject = $oObjectList->getBaseObject();
         if ($oObject->isMultilang()) {
             $oObject->setLanguage($oLang->getTplLanguage());

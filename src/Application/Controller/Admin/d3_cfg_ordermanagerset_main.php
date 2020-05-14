@@ -128,20 +128,13 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
                 $this->getBaseCronPW();
         }
 
-        $sURL   = $this->getD3Str()->generateParameterUrl($sBaseUrl, $aParameters);
-
-        return $sURL;
+        return $this->getD3Str()->generateParameterUrl($sBaseUrl, $aParameters);
     }
 
     /**
-     * @param bool $blUsePw
      * @param bool|int $iCronJobId
      *
      * @return string
-     * @throws DBALException
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     * @throws FileException
      * @throws Exception
      */
     public function getCronPath($iCronJobId = false)
@@ -156,9 +149,7 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
             $aParameters['cjid'] = $iCronJobId;
         }
 
-        $sPath   = $sScriptPath." ".implode(' ', $aParameters);
-
-        return $sPath;
+        return $sScriptPath." ".implode(' ', $aParameters);
     }
 
     /**
@@ -268,7 +259,6 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
         $sCronId = $request->getRequestEscapedParameter('cronid');
 
-        /** @var Shop $oShop */
         $oShop = $this->d3GetActiveShop();
         $aParameters = array(
             0 => $oShop->getId(),

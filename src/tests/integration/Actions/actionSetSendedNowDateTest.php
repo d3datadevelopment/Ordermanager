@@ -100,6 +100,7 @@ class actionSetSendedNowDateTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

@@ -16,7 +16,6 @@
 
 namespace D3\Ordermanager\Tests\unit\Application\Controller\Admin;
 
-use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action;
 use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist;
 use D3\Ordermanager\Application\Model\d3ordermanager;
@@ -32,9 +31,10 @@ use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Language;
-use OxidEsales\Eshop\Core\Module\Module;
-use OxidEsales\Eshop\Core\Module\ModuleList;
-use PHPUnit_Framework_MockObject_MockObject;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\DataObject\ModuleConfiguration;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use D3\Ordermanager\Application\Model\Actions as Actions;
 
@@ -65,22 +65,23 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::save
      * @test
      * @throws ReflectionException
      */
     public function canSaveNoMissingValues()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
-        $oProfileMock = $this->getMock(d3ordermanager::class, array(
-            'getValue'
-        ));
+        /** @var d3ordermanager|MockObject $oProfileMock */
+        $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getValue'])
+            ->getMock();
         $getValueMap = [['blActionOrderStorno_status', true]];
         $oProfileMock->method('getValue')->willReturnMap($getValueMap);
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getProfile'
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['getProfile'])
+            ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);
 
         $this->_oController = $oControllerMock;
@@ -90,22 +91,23 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::save
      * @test
      * @throws ReflectionException
      */
     public function canSaveMissingValues()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
-        $oProfileMock = $this->getMock(d3ordermanager::class, array(
-            'getValue'
-        ));
+        /** @var d3ordermanager|MockObject $oProfileMock */
+        $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getValue'])
+            ->getMock();
         $getValueMap = [['blActionOrder2Folder_status', true]];
         $oProfileMock->method('getValue')->willReturnMap($getValueMap);
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getProfile'
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['getProfile'])
+            ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);
 
         $this->_oController = $oControllerMock;
@@ -118,6 +120,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getContentList
      * @test
      * @throws ReflectionException
      */
@@ -130,6 +133,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::d3GetConfig
      * @test
      * @throws ReflectionException
      */
@@ -145,6 +149,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getManagerTemplateDirs
      * @test
      * @throws ReflectionException
      */
@@ -152,18 +157,18 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     {
         $sExpected = '/var/www/html/source/Application/views/admin/tpl/';
 
-        /** @var Config|PHPUnit_Framework_MockObject_MockObject $oConfigMock */
-        $oConfigMock = $this->getMock(Config::class, array(
-            'getTemplateDir',
-        ));
+        /** @var Config|MockObject $oConfigMock */
+        $oConfigMock = $this->getMockBuilder(Config::class)
+            ->setMethods(['getTemplateDir'])
+            ->getMock();
         $oConfigMock->expects($this->any())->method('getTemplateDir')->with(
             $this->isTrue()
         )->willReturn($sExpected);
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'd3GetConfig',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['d3GetConfig'])
+            ->getMock();
         $oControllerMock->method('d3GetConfig')->willReturn($oConfigMock);
 
         $this->_oController = $oControllerMock;
@@ -177,6 +182,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
 
     /**
      * in case of error, check if a active theme is defined
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getManagerTemplateDirs
      * @test
      * @throws ReflectionException
      */
@@ -184,18 +190,18 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     {
         $sExpected = '/var/www/html/source/Application/views/flow/tpl/';
 
-        /** @var Config|PHPUnit_Framework_MockObject_MockObject $oConfigMock */
-        $oConfigMock = $this->getMock(Config::class, array(
-            'getTemplateDir',
-        ));
+        /** @var Config|MockObject $oConfigMock */
+        $oConfigMock = $this->getMockBuilder(Config::class)
+            ->setMethods(['getTemplateDir'])
+            ->getMock();
         $oConfigMock->expects($this->any())->method('getTemplateDir')->with(
             $this->isFalse()
         )->willReturn($sExpected);
         
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'd3GetConfig',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['d3GetConfig'])
+            ->getMock();
         $oControllerMock->method('d3GetConfig')->willReturn($oConfigMock);
 
         $this->_oController = $oControllerMock;
@@ -208,6 +214,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getItemFieldNames
      * @test
      * @throws ReflectionException
      */
@@ -219,6 +226,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getProfile
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -229,10 +237,10 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $oProfile->setId('newProfileId');
         $oProfile->save();
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getEditObjectId',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['getEditObjectId'])
+            ->getMock();
         $oControllerMock->method('getEditObjectId')->willReturn('newProfileId');
 
         $this->_oController = $oControllerMock;
@@ -249,6 +257,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getProfile
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -259,10 +268,10 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $oProfile->setId('newProfileId');
         $oProfile->save();
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getEditObjectId',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['getEditObjectId'])
+            ->getMock();
         $oControllerMock->method('getEditObjectId')->willReturn('newProfileId');
 
         $this->_oController = $oControllerMock;
@@ -280,6 +289,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getExportExamplePath
      * @test
      * @throws ReflectionException
      */
@@ -287,21 +297,25 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     {
         $_POST['oxid'] = 'foobar';
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
-        $oProfileMock = $this->getMock(d3ordermanager::class, array(
-            'loadInLang',
-            'getStartTime',
-            'getListExportFilePath',
-        ));
+        /** @var d3ordermanager|MockObject $oProfileMock */
+        $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'loadInLang',
+                'getStartTime',
+                'getListExportFilePath'
+            ])
+            ->getMock();
         $oProfileMock->expects($this->once())->method('loadInLang')->willReturn(true);
         $oProfileMock->method('getStartTime')->willReturn(1420716228);
         $oProfileMock->method('getListExportFilePath')->willReturn('/var/www/html/shop/source/export/d3ordermananger_profileName_2015-01-08_12-23-48.csv');
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getProfile',
-            '_d3LoadInOtherLang',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods([
+                'getProfile',
+                '_d3LoadInOtherLang'
+            ])
+            ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);
         $oControllerMock->method('_d3LoadInOtherLang')->willReturn($oProfileMock);
 
@@ -313,6 +327,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getLang
      * @test
      * @throws ReflectionException
      */
@@ -325,22 +340,25 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getFieldNameDescription
      * @test
      * @throws ReflectionException
      */
     public function fieldNameDescriptionCanTranslated()
     {
-        /** @var Language|PHPUnit_Framework_MockObject_MockObject $oLangMock */
-        $oLangMock = $this->getMock(Language::class, array(
-            'translateString',
-        ));
+        /** @var Language|MockObject $oLangMock */
+        $oLangMock = $this->getMockBuilder(Language::class)
+            ->setMethods(['translateString'])
+            ->getMock();
         $oLangMock->expects($this->once())->method('translateString')->willReturn('%1$s (%2$s)');
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getFieldNameTitle',
-            'getLang',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods([
+                'getFieldNameTitle',
+                'getLang'
+            ])
+            ->getMock();
         $oControllerMock->method('getFieldNameTitle')->willReturn('barfoo');
         $oControllerMock->method('getLang')->willReturn($oLangMock);
 
@@ -353,15 +371,16 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getFieldNameDescription
      * @test
      * @throws ReflectionException
      */
     public function fieldNameDescriptionCantTranslated()
     {
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getFieldNameTitle',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['getFieldNameTitle'])
+            ->getMock();
         $oControllerMock->method('getFieldNameTitle')->willReturn(null);
 
         $this->_oController = $oControllerMock;
@@ -373,15 +392,16 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getFieldNameTitle
      * @test
      * @throws ReflectionException
      */
     public function canGetFieldNameTitleWithLangIdent()
     {
-        /** @var Language|PHPUnit_Framework_MockObject_MockObject $oLangMock */
-        $oLangMock = $this->getMock(Language::class, array(
-            'translateString',
-        ));
+        /** @var Language|MockObject $oLangMock */
+        $oLangMock = $this->getMockBuilder(Language::class)
+            ->setMethods(['translateString'])
+            ->getMock();
         $oLangMock->expects($this->exactly(2))->method('translateString')->with(
             $this->logicalOr(
                 $this->stringContains('D3_ORDERMANAGER'),
@@ -394,10 +414,10 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
             )
         )->willReturn('Sprache %u ');
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getLang',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['getLang'])
+            ->getMock();
         $oControllerMock->method('getLang')->willReturn($oLangMock);
 
         $this->_oController = $oControllerMock;
@@ -409,23 +429,24 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getFieldNameTitle
      * @test
      * @throws ReflectionException
      */
     public function canGetFieldNameTitleWithoutLangIdent()
     {
-        /** @var Language|PHPUnit_Framework_MockObject_MockObject $oLangMock */
-        $oLangMock = $this->getMock(Language::class, array(
-            'translateString',
-        ));
+        /** @var Language|MockObject $oLangMock */
+        $oLangMock = $this->getMockBuilder(Language::class)
+            ->setMethods(['translateString'])
+            ->getMock();
         $oLangMock->expects($this->once())->method('translateString')->with(
             $this->stringContains('foobar')
         )->willReturn('Sprache %u ');
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getLang',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['getLang'])
+            ->getMock();
         $oControllerMock->method('getLang')->willReturn($oLangMock);
 
         $this->_oController = $oControllerMock;
@@ -437,21 +458,22 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getFieldNameTitle
      * @test
      * @throws ReflectionException
      */
     public function canGetFieldNameTitleWithNotExistingTranslation()
     {
-        /** @var Language|PHPUnit_Framework_MockObject_MockObject $oLangMock */
-        $oLangMock = $this->getMock(Language::class, array(
-            'translateString',
-        ));
+        /** @var Language|MockObject $oLangMock */
+        $oLangMock = $this->getMockBuilder(Language::class)
+            ->setMethods(['translateString'])
+            ->getMock();
         $oLangMock->expects($this->once())->method('translateString')->willReturn('FOOBAR');
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getLang',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['getLang'])
+            ->getMock();
         $oControllerMock->method('getLang')->willReturn($oLangMock);
 
         $this->setValue($oControllerMock, '_sExportFieldTitleBaseMLIdent', '');
@@ -464,6 +486,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getPdfHandler
      * @test
      * @throws ReflectionException
      */
@@ -476,22 +499,24 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::canGeneratePdf
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function canGeneratePdfStatusPass()
     {
-        /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
-        $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
-            'canGeneratePdf',
-        ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
+        /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
+        $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
+            ->setMethods(['canGeneratePdf'])
+            ->setConstructorArgs([d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)])
+            ->getMock();
         $oPdfHandlerMock->method('canGeneratePdf')->willReturn(true);
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getPdfHandler',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['getPdfHandler'])
+            ->getMock();
         $oControllerMock->method('getPdfHandler')->willReturn($oPdfHandlerMock);
 
         $this->_oController = $oControllerMock;
@@ -502,22 +527,24 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::canGeneratePdf
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function canGeneratePdfStatusDontPass()
     {
-        /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
-        $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
-            'canGeneratePdf',
-        ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
+        /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
+        $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
+            ->setMethods(['canGeneratePdf'])
+            ->setConstructorArgs([d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)])
+            ->getMock();
         $oPdfHandlerMock->method('canGeneratePdf')->willReturn(false);
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getPdfHandler',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['getPdfHandler'])
+            ->getMock();
         $oControllerMock->method('getPdfHandler')->willReturn($oPdfHandlerMock);
 
         $this->_oController = $oControllerMock;
@@ -528,6 +555,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getActionGroupList
      * @test
      * @throws ReflectionException
      * @throws ExceptionAlias
@@ -544,6 +572,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getActionListObject
      * @test
      * @throws ReflectionException
      */
@@ -556,6 +585,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getActionList
      * @test
      * @throws ReflectionException
      */
@@ -570,6 +600,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getGroupedActionList
      * @test
      * @throws ReflectionException
      * @throws ExceptionAlias
@@ -586,31 +617,36 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
             )
         );
 
-        /** @var d3ordermanager_actiongrouplist|PHPUnit_Framework_MockObject_MockObject $oActionGroupListMock */
-        $oActionGroupListMock = $this->getMock(d3ordermanager_actiongrouplist::class, array(
-            'setGroups',
-            'getGroupList'
-        ), array($this->_oController->getProfile(), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
+        /** @var d3ordermanager_actiongrouplist|MockObject $oActionGroupListMock */
+        $oActionGroupListMock = $this->getMockBuilder(d3ordermanager_actiongrouplist::class)
+            ->setMethods([
+                'setGroups',
+                'getGroupList'
+            ])
+            ->setConstructorArgs([$this->_oController->getProfile(), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)])
+            ->getMock();
         $oActionGroupListMock->method('setGroups')->willReturn(true);
         $oActionGroupListMock->method('getGroupList')->willReturn($groupedList);
 
-        /** @var d3ordermanager_conf|PHPUnit_Framework_MockObject_MockObject $oConfigurationMock */
-        $oConfigurationMock = $this->getMock(d3ordermanager_conf::class, array(
-            'getGroupedActionIdList'
-        ));
+        /** @var d3ordermanager_conf|MockObject $oConfigurationMock */
+        $oConfigurationMock = $this->getMockBuilder(d3ordermanager_conf::class)
+            ->setMethods(['getGroupedActionIdList'])
+            ->getMock();
         $oConfigurationMock->method('getGroupedActionIdList')->willReturn($groupedList);
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
-        $oProfileMock = $this->getMock(d3ordermanager::class, array(
-            'getConfiguration'
-        ));
+        /** @var d3ordermanager|MockObject $oProfileMock */
+        $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getConfiguration'])
+            ->getMock();
         $oProfileMock->method('getConfiguration')->willReturn($oConfigurationMock);
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getProfile',
-            'getActionList',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods([
+                'getProfile',
+                'getActionList'
+            ])
+            ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);
         $oControllerMock->method('getActionList')->willReturn($oActionGroupListMock);
 
@@ -623,16 +659,19 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::_d3LoadInOtherLang
      * @test
      * @throws ReflectionException
      */
     public function canLoadInOtherLanguages()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
-        $oProfileMock = $this->getMock(d3ordermanager::class, array(
-            'getAvailableInLangs',
-            'loadInLang',
-        ));
+        /** @var d3ordermanager|MockObject $oProfileMock */
+        $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'getAvailableInLangs',
+                'loadInLang'
+            ])
+            ->getMock();
         $oProfileMock->method('getAvailableInLangs')->willReturn(array('de' => 'deutsch'));
         $oProfileMock->expects($this->once())->method('loadInLang')->willReturn(true);
 
@@ -649,16 +688,19 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::_d3LoadInOtherLang
      * @test
      * @throws ReflectionException
      */
     public function dontNeedLoadInOtherLanguages()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
-        $oProfileMock = $this->getMock(d3ordermanager::class, array(
-            'getAvailableInLangs',
-            'loadInLang',
-        ));
+        /** @var d3ordermanager|MockObject $oProfileMock */
+        $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'getAvailableInLangs',
+                'loadInLang'
+            ])
+            ->getMock();
         $oProfileMock->method('getAvailableInLangs')->willReturn(array('de' => 'deutsch'));
         $oProfileMock->expects($this->never())->method('loadInLang')->willReturn(true);
 
@@ -675,74 +717,59 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @test
-     * @throws ReflectionException
-     */
-    public  function moduleListHasRightInstance()
-    {
-        $this->assertInstanceOf(
-            ModuleList::class,
-            $this->callMethod($this->_oController, 'getModuleList')
-        );
-    }
-
-    /**
-     * @test
-     * @throws ReflectionException
-     */
-    public function shopCompatibilityAdapterHandlerHasRightInstance()
-    {
-        $this->assertInstanceOf(
-            d3ShopCompatibilityAdapterHandler::class,
-            $this->callMethod($this->_oController, 'getShopCompatibilityAdapterHandler')
-        );
-    }
-
-    /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getModulePathList
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function canGetModulePathList()
     {
-        /** @var d3ShopCompatibilityAdapterHandler|PHPUnit_Framework_MockObject_MockObject $oShopCompatibilityAdapterHandlerMock */
-        $oShopCompatibilityAdapterHandlerMock = $this->getMock(d3ShopCompatibilityAdapterHandler::class, array(
-            'call'
-        ));
-        $oShopCompatibilityAdapterHandlerMock->method('call')->willReturnCallback(array($this, 'shopCompatHandlerCallback'));
+        $container = ContainerFactory::getInstance()->getContainer();
+        $shopConfiguration = $container->get(ShopConfigurationDaoBridgeInterface::class)->get();
 
-        $aModulesList = array(
-            'd3module1' => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Module::class),
-            'd3module2' => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Module::class)
-        );
+        $moduleA = new ModuleConfiguration();
+        $moduleA
+            ->setId('d3module1')
+            ->setPath('d3module1Path')
+            ->setTitle([
+                'de' => 'TestModule A '.__METHOD__,
+                'en' => 'TestModule A '.__METHOD__
+            ]);
 
-        /** @var ModuleList|PHPUnit_Framework_MockObject_MockObject $oModuleListMock */
-        $oModuleListMock = $this->getMock(ModuleList::class, array(
-            'getModulesFromDir'
-        ));
-        $oModuleListMock->method('getModulesFromDir')->willReturn($aModulesList);
+        $moduleB = new ModuleConfiguration();
+        $moduleB
+            ->setId('d3module2')
+            ->setPath('d3module2Path')
+            ->setTitle([
+                'de' => 'TestModule B '.__METHOD__,
+                'en' => 'TestModule B '.__METHOD__
+            ]);
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getModuleList',
-            'getShopCompatibilityAdapterHandler',
-        ));
-        $oControllerMock->method('getModuleList')->willReturn($oModuleListMock);
-        $oControllerMock->method('getShopCompatibilityAdapterHandler')->willReturn($oShopCompatibilityAdapterHandlerMock);
+        $shopConfiguration->addModuleConfiguration($moduleB);
+        $shopConfiguration->addModuleConfiguration($moduleA);
 
-        $this->_oController = $oControllerMock;
+        $container->get(ShopConfigurationDaoBridgeInterface::class)->save($shopConfiguration);
 
-        $aList = $this->callMethod($this->_oController, 'getModulePathList');
+        try {
+            $aList = $this->callMethod( $this->_oController, 'getModulePathList' );
 
-        $this->assertSame(
-            array(
-                'd3module1' => '/module/path/d3module1',
-                'd3module2' => '/module/path/d3module2',
-            ),
-            $aList
-        );
+            $this->assertArrayHasKey( 'd3module1', $aList );
+            $this->assertArrayHasKey( 'd3module2', $aList );
+            $this->assertArrayNotHasKey( 'd3module3', $aList );
+            $this->assertContains( 'source/modules/d3module1Path', implode('', $aList));
+            $this->assertContains( 'source/modules/d3module2Path', implode('', $aList));
+            $this->assertNotContains( 'source/modules/d3module3Path', implode('', $aList));
+        } finally {
+            $shopConfiguration->deleteModuleConfiguration($moduleA->getId());
+            $shopConfiguration->deleteModuleConfiguration($moduleB->getId());
+
+            $container->get(ShopConfigurationDaoBridgeInterface::class)->save($shopConfiguration);
+        }
     }
 
+    /**
+     * @return string
+     */
     public function shopCompatHandlerCallback()
     {
         $args = func_get_args();
@@ -750,21 +777,22 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::markAsFinished
      * @test
      * @throws ReflectionException
      */
     public function canMarkedAsFinished()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
-        $oProfileMock = $this->getMock(d3ordermanager::class, array(
-            'markConcernedItemsAsFinished'
-        ));
+        /** @var d3ordermanager|MockObject $oProfileMock */
+        $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['markConcernedItemsAsFinished'])
+            ->getMock();
         $oProfileMock->expects($this->once())->method('markConcernedItemsAsFinished')->willReturn(25);
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
-            'getProfile',
-        ));
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
+            ->setMethods(['getProfile'])
+            ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);
 
         $this->_oController = $oControllerMock;

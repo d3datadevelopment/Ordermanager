@@ -27,7 +27,7 @@ use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Language;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use stdClass;
 
@@ -58,6 +58,19 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::__construct
+     * @test
+     */
+    public function constructorPass()
+    {
+        $this->assertSame(
+            'd3_ordermanager',
+            d3GetModCfgDIC()->getParameter('d3.ordermanager.modcfgid')
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getProfile
      * @test
      * @throws ReflectionException
      */
@@ -70,6 +83,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::render
      * @test
      * @throws ReflectionException
      */
@@ -77,18 +91,20 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     {
         $_POST['oxid'] = 'foobar';
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
-        $oProfileMock = $this->getMock(d3ordermanager::class, array(
-            'loadInLang',
-        ));
+        /** @var d3ordermanager|MockObject $oProfileMock */
+        $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['loadInLang'])
+            ->getMock();
         $oProfileMock->expects($this->once())->method('loadInLang')->willReturn(true);
 
-        /** @var d3_cfg_ordermanageritem_mall|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_mall::class, array(
-            'getProfile',
-            '_d3LoadInOtherLang',
-            '_isSetOxid'
-        ));
+        /** @var d3_cfg_ordermanageritem_mall|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_mall::class)
+            ->setMethods([
+                'getProfile',
+                '_d3LoadInOtherLang',
+                '_isSetOxid'
+            ])
+            ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);
         $oControllerMock->method('_d3LoadInOtherLang')->willReturn($oProfileMock);
         $oControllerMock->method('_isSetOxid')->willReturn(true);
@@ -102,6 +118,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::render
      * @test
      * @throws ReflectionException
      */
@@ -109,18 +126,20 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     {
         $_POST['oxid'] = null;
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
-        $oProfileMock = $this->getMock(d3ordermanager::class, array(
-            'loadInLang',
-        ));
+        /** @var d3ordermanager|MockObject $oProfileMock */
+        $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['loadInLang'])
+            ->getMock();
         $oProfileMock->expects($this->never())->method('loadInLang')->willReturn(true);
 
-        /** @var d3_cfg_ordermanageritem_mall|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_mall::class, array(
-            'getProfile',
-            '_d3LoadInOtherLang',
-            '_isSetOxid'
-        ));
+        /** @var d3_cfg_ordermanageritem_mall|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_mall::class)
+            ->setMethods([
+                'getProfile',
+                '_d3LoadInOtherLang',
+                '_isSetOxid'
+            ])
+            ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);
         $oControllerMock->method('_d3LoadInOtherLang')->willReturn($oProfileMock);
         $oControllerMock->method('_isSetOxid')->willReturn(false);
@@ -134,6 +153,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getUserMessages
      * @test
      * @throws ReflectionException
      */
@@ -146,6 +166,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getLang
      * @test
      * @throws ReflectionException
      */
@@ -158,39 +179,44 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getHelpURL
      * @test
      * @throws ReflectionException
      */
     public function canGetHelpUrlWithExtension()
     {
-        /** @var d3filesystem|PHPUnit_Framework_MockObject_MockObject $oFileSystemMock */
-        $oFileSystemMock = $this->getMock(d3filesystem::class, array(
-            'unprefixedslashit',
-            'splitFilename',
-        ));
+        /** @var d3filesystem|MockObject $oFileSystemMock */
+        $oFileSystemMock = $this->getMockBuilder(d3filesystem::class)
+            ->setMethods([
+                'unprefixedslashit',
+                'splitFilename'
+            ])
+            ->getMock();
         $oFileSystemMock->method('unprefixedslashit')->willReturnCallback(array($this, 'firstArgumentReturnCallback'));
         $oFileSystemMock->method('splitFilename')->willReturn(
             array('name' => 'filename', 'ext' => 'html')
         );
         d3GetModCfgDIC()->set(d3filesystem::class, $oFileSystemMock);
 
-        /** @var Language|PHPUnit_Framework_MockObject_MockObject $oLangMock */
-        $oLangMock = $this->getMock(Language::class, array(
-            'TranslateString',
-        ));
+        /** @var Language|MockObject $oLangMock */
+        $oLangMock = $this->getMockBuilder(Language::class)
+            ->setMethods(['TranslateString'])
+            ->getMock();
         $oLangMock->method('TranslateString')->willReturn('modulepath');
 
-        /** @var stdClass|PHPUnit_Framework_MockObject_MockObject $oModCfgMock */
-        $oModCfgMock = $this->getMock(stdClass::class, array(
-            'getHelpURL'
-        ));
+        /** @var stdClass|MockObject $oModCfgMock */
+        $oModCfgMock = $this->getMockBuilder(stdClass::class)
+            ->setMethods(['getHelpURL'])
+            ->getMock();
         $oModCfgMock->method('getHelpURL')->willReturn('https://faq.d3data.de/module/');
 
-        /** @var d3_cfg_ordermanageritem_mall|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_mall::class, array(
-            'd3GetSet',
-            'getLang',
-        ));
+        /** @var d3_cfg_ordermanageritem_mall|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_mall::class)
+            ->setMethods([
+                'd3GetSet',
+                'getLang'
+            ])
+            ->getMock();
         $oControllerMock->method('d3GetSet')->willReturn($oModCfgMock);
         $oControllerMock->method('getLang')->willReturn($oLangMock);
 
@@ -205,48 +231,53 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getHelpURL
      * @test
      * @throws ReflectionException
      */
     public function canGetHelpUrlWithoutExtension()
     {
-        /** @var d3filesystem|PHPUnit_Framework_MockObject_MockObject $oFileSystemMock */
-        $oFileSystemMock = $this->getMock(d3filesystem::class, array(
-            'splitFilename',
-        ));
+        /** @var d3filesystem|MockObject $oFileSystemMock */
+        $oFileSystemMock = $this->getMockBuilder(d3filesystem::class)
+            ->setMethods(['splitFilename'])
+            ->getMock();
         $oFileSystemMock->method('splitFilename')->willReturn(
             array('name' => 'filename', 'ext' => '')
         );
 
         d3GetModCfgDIC()->set(d3filesystem::class, $oFileSystemMock);
 
-        /** @var d3str|PHPUnit_Framework_MockObject_MockObject $oD3StrMock */
-        $oD3StrMock = $this->getMock(d3str::class, array(
-            'unprefixedslashit',
-            'trailingslashit',
-        ));
+        /** @var d3str|MockObject $oD3StrMock */
+        $oD3StrMock = $this->getMockBuilder(d3str::class)
+            ->setMethods([
+                'unprefixedslashit',
+                'trailingslashit'
+            ])
+            ->getMock();
         $oD3StrMock->method('unprefixedslashit')->willReturnCallback(array($this, 'firstArgumentReturnCallback'));
         $oD3StrMock->expects($this->once())->method('trailingslashit')->willReturnCallback(array($this, 'firstArgumentReturnCallback'));
 
         d3GetModCfgDIC()->set(d3str::class, $oD3StrMock);
 
-        /** @var Language|PHPUnit_Framework_MockObject_MockObject $oLangMock */
-        $oLangMock = $this->getMock(Language::class, array(
-            'TranslateString',
-        ));
+        /** @var Language|MockObject $oLangMock */
+        $oLangMock = $this->getMockBuilder(Language::class)
+            ->setMethods(['TranslateString'])
+            ->getMock();
         $oLangMock->method('TranslateString')->willReturn('modulepath');
 
-        /** @var stdClass|PHPUnit_Framework_MockObject_MockObject $oModCfgMock */
-        $oModCfgMock = $this->getMock(stdClass::class, array(
-            'getHelpURL'
-        ));
+        /** @var stdClass|MockObject $oModCfgMock */
+        $oModCfgMock = $this->getMockBuilder(stdClass::class)
+            ->setMethods(['getHelpURL'])
+            ->getMock();
         $oModCfgMock->method('getHelpURL')->willReturn('https://faq.d3data.de/module/');
 
-        /** @var d3_cfg_ordermanageritem_mall|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_mall::class, array(
-            'd3GetSet',
-            'getLang',
-        ));
+        /** @var d3_cfg_ordermanageritem_mall|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_mall::class)
+            ->setMethods([
+                'd3GetSet',
+                'getLang'
+            ])
+            ->getMock();
         $oControllerMock->method('d3GetSet')->willReturn($oModCfgMock);
         $oControllerMock->method('getLang')->willReturn($oLangMock);
 
@@ -270,6 +301,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::d3GetSet
      * @test
      * @throws ReflectionException
      */
@@ -282,6 +314,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getNaviItems
      * @test
      * @throws ReflectionException
      */
@@ -294,6 +327,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::d3GetMenuItemTitle
      * @test
      * @throws ReflectionException
      */
@@ -306,6 +340,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::d3GetMenuSubItemTitle
      * @test
      * @throws ReflectionException
      */
@@ -318,6 +353,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::_isSetOxid
      * @test
      * @throws ReflectionException
      */
@@ -329,6 +365,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::_isSetOxid
      * @test
      * @throws ReflectionException
      */
@@ -343,16 +380,19 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::_d3LoadInOtherLang
      * @test
      * @throws ReflectionException
      */
     public function canLoadInOtherLang()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
-        $oProfileMock = $this->getMock(d3ordermanager::class, array(
-            'getAvailableInLangs',
-            'loadInLang',
-        ));
+        /** @var d3ordermanager|MockObject $oProfileMock */
+        $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods([
+                'getAvailableInLangs',
+                'loadInLang'
+            ])
+            ->getMock();
         $oProfileMock->method('getAvailableInLangs')->willReturn(array('en' => 'english'));
         $oProfileMock->expects($this->once())->method('loadInLang')->willReturn(true);
 

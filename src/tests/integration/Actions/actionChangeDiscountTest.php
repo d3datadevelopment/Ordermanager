@@ -160,6 +160,7 @@ class actionChangeDiscountTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -192,6 +193,7 @@ class actionChangeDiscountTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -224,6 +226,7 @@ class actionChangeDiscountTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

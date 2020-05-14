@@ -128,6 +128,7 @@ class requirementMailRegexpFilterTest extends d3OrdermanagerRequirementIntegrati
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

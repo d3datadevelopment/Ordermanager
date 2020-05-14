@@ -223,6 +223,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -246,6 +247,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -269,6 +271,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -292,6 +295,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -315,6 +319,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -338,6 +343,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

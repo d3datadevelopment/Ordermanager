@@ -2,6 +2,22 @@
 title: Changelog
 --- 
 
+## 4.0.0.0 - (2020-04-29)
+
+** Hinweis für kleinere Versions-Upgrades: Es gibt einige rückwärts-inkompatible Änderungen an dieser Version. **
+
+** Mit dieser Modulversion wurde das InvoicePDF-Modul aus den Anforderungen des Auftragsmanagers entfernt. Das PDF-Modul wird weitherin unterstützt, ist jedoch keine Bedingung mehr. Wenn das PDF-Modul benötigt wird, kann es mit `php composer require oxid-projects/pdf-invoice-module` wieder zur Installation hinzugefügt werden. **
+
+### Added
+- Kompatibilität zu OXID 6.2 hergestellt
+- Tests vervollständigt
+- Sonderzeichen in Demoprofilen werden passend dargestellt
+
+### Changed
+- InvoicePDF-Modul aus den Requirements entfernt
+
+---
+
 ## 3.2.0.3 - (2020-04-24)
 ### Changed
 - Demoprofile werden nicht pauschal im ersten Shopmandanten installiert, sondern im 1. Mandanten mit aktiviertem Modul

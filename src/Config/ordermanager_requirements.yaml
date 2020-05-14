@@ -18,7 +18,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent1
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent1.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent1.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent1.args.ordermanager:
     synthetic:  true
@@ -31,7 +31,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent2
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent2.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent2.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent2.args.ordermanager:
     synthetic:  true
@@ -44,7 +44,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlestorno
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlestorno.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlestorno.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlestorno.args.ordermanager:
     synthetic:  true
@@ -57,7 +57,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_countryfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_countryfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_countryfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_countryfilter.args.ordermanager:
     synthetic:  true
@@ -70,7 +70,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_currencyfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_currencyfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_currencyfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_currencyfilter.args.ordermanager:
     synthetic:  true
@@ -83,7 +83,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_datenotset
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_datenotset.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_datenotset.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_datenotset.args.ordermanager:
     synthetic:  true
@@ -96,7 +96,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_deliveryfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_deliveryfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_deliveryfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_deliveryfilter.args.ordermanager:
     synthetic:  true
@@ -109,7 +109,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_executemethodfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_executemethodfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_executemethodfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_executemethodfilter.args.ordermanager:
     synthetic:  true
@@ -122,7 +122,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_folderfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_folderfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_folderfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_folderfilter.args.ordermanager:
     synthetic:  true
@@ -135,7 +135,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_fromordernr
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_fromordernr.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_fromordernr.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_fromordernr.args.ordermanager:
     synthetic:  true
@@ -148,7 +148,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ingroupfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ingroupfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ingroupfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ingroupfilter.args.ordermanager:
     synthetic:  true
@@ -161,7 +161,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_invoiceno
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_invoiceno.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_invoiceno.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_invoiceno.args.ordermanager:
     synthetic:  true
@@ -174,7 +174,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_languagefilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_languagefilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_languagefilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_languagefilter.args.ordermanager:
     synthetic:  true
@@ -187,7 +187,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_mailregexpfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_mailregexpfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_mailregexpfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_mailregexpfilter.args.ordermanager:
     synthetic:  true
@@ -200,7 +200,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent1
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent1.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent1.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent1.args.ordermanager:
     synthetic:  true
@@ -213,7 +213,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent2
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent2.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent2.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent2.args.ordermanager:
     synthetic:  true
@@ -226,7 +226,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notinfolderfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notinfolderfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notinfolderfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notinfolderfilter.args.ordermanager:
     synthetic:  true
@@ -239,7 +239,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notingroupfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notingroupfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notingroupfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notingroupfilter.args.ordermanager:
     synthetic:  true
@@ -252,7 +252,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderfield
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderfield.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderfield.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderfield.args.ordermanager:
     synthetic:  true
@@ -265,7 +265,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordernonstorno
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordernonstorno.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordernonstorno.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordernonstorno.args.ordermanager:
     synthetic:  true
@@ -278,7 +278,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderstorno
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderstorno.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderstorno.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderstorno.args.ordermanager:
     synthetic:  true
@@ -291,7 +291,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordersum
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordersum.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordersum.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordersum.args.ordermanager:
     synthetic:  true
@@ -304,7 +304,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_otherjob
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_otherjob.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_otherjob.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_otherjob.args.ordermanager:
     synthetic:  true
@@ -317,7 +317,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_paymentfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_paymentfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_paymentfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_paymentfilter.args.ordermanager:
     synthetic:  true
@@ -330,7 +330,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter1
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter1.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter1.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter1.args.ordermanager:
     synthetic:  true
@@ -343,7 +343,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter2
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter2.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter2.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter2.args.ordermanager:
     synthetic:  true
@@ -356,7 +356,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_toordernr
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_toordernr.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_toordernr.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_toordernr.args.ordermanager:
     synthetic:  true
@@ -369,7 +369,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_trackcodefilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_trackcodefilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_trackcodefilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_trackcodefilter.args.ordermanager:
     synthetic:  true
@@ -382,7 +382,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_transactionfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_transactionfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_transactionfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_transactionfilter.args.ordermanager:
     synthetic:  true
@@ -395,7 +395,7 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_weekdayfilter
-      - @D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_weekdayfilter.args.ordermanager
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_weekdayfilter.args.ordermanager'
     # arg #1 ordermanager
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_weekdayfilter.args.ordermanager:
     synthetic:  true

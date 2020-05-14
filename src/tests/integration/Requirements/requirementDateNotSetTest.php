@@ -178,6 +178,7 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -202,6 +203,7 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

@@ -118,6 +118,7 @@ class actionMoveOrderToFolderTest extends d3OrdermanagerActionIntegrationTestCas
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -160,6 +161,7 @@ class actionMoveOrderToFolderTest extends d3OrdermanagerActionIntegrationTestCas
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

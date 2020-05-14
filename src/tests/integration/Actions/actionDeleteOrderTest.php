@@ -16,12 +16,12 @@
  */
 namespace D3\Ordermanager\tests\integration\Actions;
 
+use D3\ModCfg\Application\Model\d3database;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use Doctrine\DBAL\DBALException;
 use Exception;
-use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
@@ -140,6 +140,7 @@ class actionDeleteOrderTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -153,16 +154,40 @@ class actionDeleteOrderTest extends d3OrdermanagerActionIntegrationTestCase
         $oExecute = $this->getExecuteMock($this->getConfiguredManager());
         $oExecute->startJobItemExecution();
 
-        $sSelect = "SELECT count(*) FROM oxorder WHERE oxid IN ('{$this->aOrderIdList[0]}')";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxorder')
+            ->where(
+                $qb->expr()->in('oxid', implode(', ', array_map(
+                    function($value) use ($qb) {
+                        return $qb->createNamedParameter($value);
+                    },
+                    [
+                        $this->aOrderIdList[0]
+                    ]
+                )))
+            );
         $this->assertSame(
             0,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
 
-        $sSelect = "SELECT count(*) FROM oxorder WHERE oxid IN ('{$this->aOrderIdList[1]}')";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxorder')
+            ->where(
+                $qb->expr()->in('oxid', implode(', ', array_map(
+                    function($value) use ($qb) {
+                        return $qb->createNamedParameter($value);
+                    },
+                    [
+                        $this->aOrderIdList[1]
+                    ]
+                )))
+            );
         $this->assertSame(
             1,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
 
     }

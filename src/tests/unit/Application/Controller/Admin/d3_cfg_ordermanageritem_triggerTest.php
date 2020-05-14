@@ -24,7 +24,7 @@ use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use stdClass;
 
@@ -55,6 +55,7 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::render
      * @test
      * @throws ReflectionException
      */
@@ -67,6 +68,7 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::addDefaultValues
      * @test
      * @throws ReflectionException
      */
@@ -76,10 +78,10 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
             'editval' => ['d3modprofile__d3_cronjobid' => 'foo'],
         ];
 
-        /** @var d3_cfg_ordermanageritem_trigger|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_trigger::class, array(
-            'fixCronjobId'
-        ));
+        /** @var d3_cfg_ordermanageritem_trigger|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_trigger::class)
+            ->setMethods(['fixCronjobId'])
+            ->getMock();
         $oControllerMock->method('fixCronjobId')->willReturn('newCjId');
 
         $this->_oController = $oControllerMock;
@@ -93,6 +95,7 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::addDefaultValues
      * @test
      * @throws ReflectionException
      */
@@ -102,10 +105,10 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
             'editval' => ['d3modprofile__d3_cronjobid' => 'foo'],
         ];
 
-        /** @var d3_cfg_ordermanageritem_trigger|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_trigger::class, array(
-            'fixCronjobId'
-        ));
+        /** @var d3_cfg_ordermanageritem_trigger|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_trigger::class)
+            ->setMethods(['fixCronjobId'])
+            ->getMock();
         $oControllerMock->method('fixCronjobId')->willReturn('newCjId');
 
         $this->_oController = $oControllerMock;
@@ -119,6 +122,7 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::fixCronjobId
      * @test
      * @throws ReflectionException
      */
@@ -143,27 +147,29 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::triggersAreAllowed
      * @test
      * @throws ReflectionException
      */
     public function triggersAreAllowedPass()
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|d3_cfg_mod $oModCfgMock */
-        $oModCfgMock = $this->getMock(stdClass::class, array(
-            'isDemo'
-        ));
+        /** @var MockObject|d3_cfg_mod $oModCfgMock */
+        $oModCfgMock = $this->getMockBuilder(stdClass::class)
+            ->setMethods(['isDemo'])
+            ->getMock();
         $oModCfgMock->method('isDemo')->willReturn(true);
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|d3ordermanager $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'd3getModCfg',
-        ));
+        /** @var MockObject|d3ordermanager $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['d3getModCfg'])
+            ->getMock();
         $oManagerMock->expects($this->any())->method('d3getModCfg')->willReturn($oModCfgMock);
 
-        /** @var d3_cfg_ordermanageritem_trigger|PHPUnit_Framework_MockObject_MockObject $oActionMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_trigger::class, array(
-            'getManager',
-        ), array($oManagerMock));
+        /** @var d3_cfg_ordermanageritem_trigger|MockObject $oActionMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_trigger::class)
+            ->setMethods(['getManager'])
+            ->setConstructorArgs([$oManagerMock])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
 
         $this->_oController = $oControllerMock;
@@ -177,27 +183,29 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::scriptsAreAllowed
      * @test
      * @throws ReflectionException
      */
     public function scriptsAreAllowedPass()
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|d3_cfg_mod $oModCfgMock */
-        $oModCfgMock = $this->getMock(stdClass::class, array(
-            'isDemo'
-        ));
+        /** @var MockObject|d3_cfg_mod $oModCfgMock */
+        $oModCfgMock = $this->getMockBuilder(stdClass::class)
+            ->setMethods(['isDemo'])
+            ->getMock();
         $oModCfgMock->method('isDemo')->willReturn(true);
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|d3ordermanager $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'd3getModCfg',
-        ));
+        /** @var MockObject|d3ordermanager $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['d3getModCfg'])
+            ->getMock();
         $oManagerMock->expects($this->any())->method('d3getModCfg')->willReturn($oModCfgMock);
 
-        /** @var d3_cfg_ordermanageritem_trigger|PHPUnit_Framework_MockObject_MockObject $oActionMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_trigger::class, array(
-            'getManager',
-        ), array($oManagerMock));
+        /** @var d3_cfg_ordermanageritem_trigger|MockObject $oActionMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_trigger::class)
+            ->setMethods(['getManager'])
+            ->setConstructorArgs([$oManagerMock])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
 
         $this->_oController = $oControllerMock;

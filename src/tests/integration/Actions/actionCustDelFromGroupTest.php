@@ -16,13 +16,13 @@
  */
 namespace D3\Ordermanager\tests\integration\Actions;
 
+use D3\ModCfg\Application\Model\d3database;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Application\Model\Object2Group;
-use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
@@ -85,6 +85,7 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
     }
 
     /**
+     * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @throws Exception
@@ -98,13 +99,15 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $this->deleteUser($this->aUserIdList[1]);
         $this->deleteObject('d3ox.ordermanager.'.Object2Group::class, $this->aO2GroupIdList[0]);
 
-        $aQueries = [
-            "DELETE FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}'",
-            "DELETE FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}'",
-        ];
-        foreach ($aQueries as $sQuery) {
-            DatabaseProvider::getDb()->execute($sQuery);
-        }
+        $qb1 = d3database::getInstance()->getQueryBuilder();
+        $qb1->delete('oxobject2group')
+            ->where('oxobjectid = '.$qb1->createNamedParameter($this->aUserIdList[0]))
+            ->execute();
+
+        $qb2 = d3database::getInstance()->getQueryBuilder();
+        $qb2->delete('oxobject2group')
+            ->where('oxobjectid = '.$qb2->createNamedParameter($this->aUserIdList[1]))
+            ->execute();
     }
 
     /**
@@ -178,6 +181,7 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -222,23 +226,63 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $oExecute->startJobItemExecution();
 
         // check assignment pass
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('{$this->aGroupsIdList[1]}') AND oxgroupsid NOT IN ('{$this->aGroupsIdList[0]}')";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            $this->aGroupsIdList[1]
+                        ]
+                    ))),
+                    $qb->expr()->notIn('oxgroupsid', implode(', ', array_map(
+                        function ($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            $this->aGroupsIdList[0]
+                        ]
+                    )))
+                )
+            );
 
         $this->assertSame(
             1,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
 
         // check other assignments
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}')";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[1])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            $this->aGroupsIdList[0]
+                        ]
+                    )))
+                )
+            );
+
         $this->assertSame(
             1,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
     }
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -283,22 +327,54 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $oExecute->startJobItemExecution();
 
         // check assignment pass
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}', '{$this->aGroupsIdList[1]}')";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            $this->aGroupsIdList[0],
+                            $this->aGroupsIdList[1]
+                        ]
+                    )))
+                )
+            );
         $this->assertSame(
             0,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
 
         // check other assignments
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}')";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[1])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            $this->aGroupsIdList[0]
+                        ]
+                    )))
+                )
+            );
         $this->assertSame(
             1,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
     }
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -333,22 +409,56 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $oExecute->startJobItemExecution();
 
         // check assignment pass
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}', '{$this->aGroupsIdList[1]}')";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            $this->aGroupsIdList[0],
+                            $this->aGroupsIdList[1]
+                        ]
+                    )))
+                )
+            );
+
         $this->assertSame(
             1,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
 
         // check other assignments
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}')";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[1])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            $this->aGroupsIdList[0]
+                        ]
+                    )))
+                )
+            );
+
         $this->assertSame(
             1,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
     }
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -393,32 +503,96 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $oExecute->startJobItemExecution();
 
         // check assignment pass
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}', '{$this->aGroupsIdList[1]}')";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            $this->aGroupsIdList[0],
+                            $this->aGroupsIdList[1]
+                        ]
+                    )))
+                )
+            );
         $this->assertSame(
             2,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
 
         // check other assignments
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('unknownGroupId')";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            'unknownGroupId'
+                        ]
+                    )))
+                )
+            );
         $this->assertSame(
             0,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid != '{$this->aUserIdList[0]}' AND oxgroupsid IN ('unknownGroupId')";
+
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->neq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            'unknownGroupId'
+                        ]
+                    )))
+                )
+            );
         $this->assertSame(
             0,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}')";
+
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[1])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            $this->aGroupsIdList[0]
+                        ]
+                    )))
+                )
+            );
         $this->assertSame(
             1,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
     }
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -463,15 +637,47 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $oExecute->startJobItemExecution();
 
         // check assignment pass
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[0]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}', '{$this->aGroupsIdList[1]}')";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            $this->aGroupsIdList[0],
+                            $this->aGroupsIdList[1]
+                        ]
+                    )))
+                )
+            );
         $this->assertSame(
             2,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
-        $sSelect = "SELECT count(*) FROM oxobject2group WHERE oxobjectid = '{$this->aUserIdList[1]}' AND oxgroupsid IN ('{$this->aGroupsIdList[0]}')";
+
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from('oxobject2group')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[1])),
+                    $qb->expr()->in('oxgroupsid', implode(', ', array_map(
+                        function($value) use ($qb) {
+                            return $qb->createNamedParameter($value);
+                        },
+                        [
+                            $this->aGroupsIdList[0]
+                        ]
+                    )))
+                )
+            );
         $this->assertSame(
             1,
-            (int) DatabaseProvider::getDb()->getOne($sSelect)
+            (int) $qb->execute()->fetchColumn()
         );
     }
 }

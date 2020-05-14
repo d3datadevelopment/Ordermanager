@@ -29,7 +29,7 @@ use OxidEsales\Eshop\Application\Model\Shop;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\ViewConfig;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use stdClass;
 
@@ -60,6 +60,19 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::__construct
+     * @test
+     */
+    public function constructorPass()
+    {
+        $this->assertSame(
+            'd3_ordermanager',
+            d3GetModCfgDIC()->getParameter('d3.ordermanager.modcfgid')
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getManager
      * @test
      * @throws ReflectionException
      */
@@ -72,21 +85,22 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getBaseCronPW
      * @test
      * @throws ReflectionException
      */
     public function cronPwPass()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'getBaseCronPW'
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getBaseCronPW'])
+            ->getMock();
         $oManagerMock->method('getBaseCronPW')->willReturn('testBaseCronPw');
 
-        /** @var d3_cfg_ordermanagerset_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_main::class, array(
-            'getManager'
-        ));
+        /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
+            ->setMethods(['getManager'])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
 
         $this->_oController = $oControllerMock;
@@ -98,6 +112,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getViewConfig
      * @test
      * @throws ReflectionException
      */
@@ -110,6 +125,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getD3Str
      * @test
      * @throws ReflectionException
      */
@@ -122,24 +138,25 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronLink
      * @test
      * @throws ReflectionException
      */
     public function cronLinkWithCustPasswordAndCronjobIdPass()
     {
-        /** @var d3_cfg_mod|PHPUnit_Framework_MockObject_MockObject $oModCfgMock */
-        $oModCfgMock = $this->getMock(stdClass::class, array(
-            'getValue',
-        ));
+        /** @var d3_cfg_mod|MockObject $oModCfgMock */
+        $oModCfgMock = $this->getMockBuilder(stdClass::class)
+            ->setMethods(['getValue'])
+            ->getMock();
         $map = [
             ['sCronPassword', 'testCronPassword']
         ];
         $oModCfgMock->method('getValue')->willReturnMap($map);
 
-        /** @var d3str|PHPUnit_Framework_MockObject_MockObject $oD3StrMock */
-        $oD3StrMock = $this->getMock(d3str::class, array(
-            'generateParameterUrl',
-        ));
+        /** @var d3str|MockObject $oD3StrMock */
+        $oD3StrMock = $this->getMockBuilder(d3str::class)
+            ->setMethods(['generateParameterUrl'])
+            ->getMock();
         $oD3StrMock->method('generateParameterUrl')->with(
             $this->stringContains('http://www.example.net/modules/public/d3_ordermanager_cron.php'),
             $this->logicalAnd(
@@ -148,21 +165,24 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
             )
         )->willReturn('testUrl');
 
-        /** @var ViewConfig|PHPUnit_Framework_MockObject_MockObject $oViewConfMock */
-        $oViewConfMock = $this->getMock(ViewConfig::class, array(
-            'getModuleUrl',
-            'getActiveShopId',
-        ));
+        /** @var ViewConfig|MockObject $oViewConfMock */
+        $oViewConfMock = $this->getMockBuilder(ViewConfig::class)
+            ->setMethods([
+                'getModuleUrl',
+                'getActiveShopId'
+            ])
+            ->getMock();
         $oViewConfMock->method('getModuleUrl')->willReturn('http://www.example.net/modules/public/d3_ordermanager_cron.php');
         $oViewConfMock->method('getActiveShopId')->willReturn(1);
 
-        /** @var d3_cfg_ordermanagerset_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_main::class, array(
-            'getViewConfig',
-            'd3GetSet',
-            'getBaseCronPW',
-            'getD3Str',
-        ));
+        /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
+            ->setMethods([
+                'getViewConfig',
+                'd3GetSet',
+                'getBaseCronPW',
+                'getD3Str'])
+            ->getMock();
         $oControllerMock->method('getViewConfig')->willReturn($oViewConfMock);
         $oControllerMock->method('d3GetSet')->willReturn($oModCfgMock);
         $oControllerMock->method('getBaseCronPW')->willReturn('testBaseCronPassword');
@@ -177,24 +197,25 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronLink
      * @test
      * @throws ReflectionException
      */
     public function cronLinkWithBasePasswordAndNoCronjobIdPass()
     {
-        /** @var d3_cfg_mod|PHPUnit_Framework_MockObject_MockObject $oModCfgMock */
-        $oModCfgMock = $this->getMock(stdClass::class, array(
-            'getValue',
-        ));
+        /** @var d3_cfg_mod|MockObject $oModCfgMock */
+        $oModCfgMock = $this->getMockBuilder(stdClass::class)
+            ->setMethods(['getValue'])
+            ->getMock();
         $map = [
             ['sCronPassword', '']
         ];
         $oModCfgMock->method('getValue')->willReturnMap($map);
 
-        /** @var d3str|PHPUnit_Framework_MockObject_MockObject $oD3StrMock */
-        $oD3StrMock = $this->getMock(d3str::class, array(
-            'generateParameterUrl',
-        ));
+        /** @var d3str|MockObject $oD3StrMock */
+        $oD3StrMock = $this->getMockBuilder(d3str::class)
+            ->setMethods(['generateParameterUrl'])
+            ->getMock();
         $oD3StrMock->method('generateParameterUrl')->with(
             $this->stringContains('http://www.example.net/modules/public/d3_ordermanager_cron.php'),
             $this->logicalAnd(
@@ -205,21 +226,24 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
             )
         )->willReturn('testUrl');
 
-        /** @var ViewConfig|PHPUnit_Framework_MockObject_MockObject $oViewConfMock */
-        $oViewConfMock = $this->getMock(ViewConfig::class, array(
-            'getModuleUrl',
-            'getActiveShopId',
-        ));
+        /** @var ViewConfig|MockObject $oViewConfMock */
+        $oViewConfMock = $this->getMockBuilder(ViewConfig::class)
+            ->setMethods([
+                'getModuleUrl',
+                'getActiveShopId'
+            ])
+            ->getMock();
         $oViewConfMock->method('getModuleUrl')->willReturn('http://www.example.net/modules/public/d3_ordermanager_cron.php');
         $oViewConfMock->method('getActiveShopId')->willReturn(1);
 
-        /** @var d3_cfg_ordermanagerset_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_main::class, array(
-            'getViewConfig',
-            'd3GetSet',
-            'getBaseCronPW',
-            'getD3Str',
-        ));
+        /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
+            ->setMethods([
+                'getViewConfig',
+                'd3GetSet',
+                'getBaseCronPW',
+                'getD3Str'])
+            ->getMock();
         $oControllerMock->method('getViewConfig')->willReturn($oViewConfMock);
         $oControllerMock->method('d3GetSet')->willReturn($oModCfgMock);
         $oControllerMock->method('getBaseCronPW')->willReturn('testBaseCronPassword');
@@ -234,24 +258,25 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronLink
      * @test
      * @throws ReflectionException
      */
     public function cronLinkWithoutPasswordAndNoCronjobIdPass()
     {
-        /** @var d3_cfg_mod|PHPUnit_Framework_MockObject_MockObject $oModCfgMock */
-        $oModCfgMock = $this->getMock(stdClass::class, array(
-            'getValue',
-        ));
+        /** @var d3_cfg_mod|MockObject $oModCfgMock */
+        $oModCfgMock = $this->getMockBuilder(stdClass::class)
+            ->setMethods(['getValue'])
+            ->getMock();
         $map = [
             ['sCronPassword', '']
         ];
         $oModCfgMock->method('getValue')->willReturnMap($map);
 
-        /** @var d3str|PHPUnit_Framework_MockObject_MockObject $oD3StrMock */
-        $oD3StrMock = $this->getMock(d3str::class, array(
-            'generateParameterUrl',
-        ));
+        /** @var d3str|MockObject $oD3StrMock */
+        $oD3StrMock = $this->getMockBuilder(d3str::class)
+            ->setMethods(['generateParameterUrl'])
+            ->getMock();
         $oD3StrMock->method('generateParameterUrl')->with(
             $this->stringContains('http://www.example.net/modules/public/d3_ordermanager_cron.php'),
             $this->logicalAnd(
@@ -264,21 +289,24 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
             )
         )->willReturn('testUrl');
 
-        /** @var ViewConfig|PHPUnit_Framework_MockObject_MockObject $oViewConfMock */
-        $oViewConfMock = $this->getMock(ViewConfig::class, array(
-            'getModuleUrl',
-            'getActiveShopId',
-        ));
+        /** @var ViewConfig|MockObject $oViewConfMock */
+        $oViewConfMock = $this->getMockBuilder(ViewConfig::class)
+            ->setMethods([
+                'getModuleUrl',
+                'getActiveShopId'
+            ])
+            ->getMock();
         $oViewConfMock->method('getModuleUrl')->willReturn('http://www.example.net/modules/public/d3_ordermanager_cron.php');
         $oViewConfMock->method('getActiveShopId')->willReturn(1);
 
-        /** @var d3_cfg_ordermanagerset_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_main::class, array(
-            'getViewConfig',
-            'd3GetSet',
-            'getBaseCronPW',
-            'getD3Str',
-        ));
+        /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
+            ->setMethods([
+                'getViewConfig',
+                'd3GetSet',
+                'getBaseCronPW',
+                'getD3Str'])
+            ->getMock();
         $oControllerMock->method('getViewConfig')->willReturn($oViewConfMock);
         $oControllerMock->method('d3GetSet')->willReturn($oModCfgMock);
         $oControllerMock->method('getBaseCronPW')->willReturn('testBaseCronPassword');
@@ -293,21 +321,22 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronPath
      * @test
      * @throws ReflectionException
      */
     public function cronPathWithCronjobIdPass()
     {
-        /** @var ViewConfig|PHPUnit_Framework_MockObject_MockObject $oViewConfMock */
-        $oViewConfMock = $this->getMock(ViewConfig::class, array(
-            'getActiveShopId',
-        ));
+        /** @var ViewConfig|MockObject $oViewConfMock */
+        $oViewConfMock = $this->getMockBuilder(ViewConfig::class)
+            ->setMethods(['getActiveShopId'])
+            ->getMock();
         $oViewConfMock->method('getActiveShopId')->willReturn(1);
 
-        /** @var d3_cfg_ordermanagerset_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_main::class, array(
-            'getViewConfig',
-        ));
+        /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
+            ->setMethods(['getViewConfig'])
+            ->getMock();
         $oControllerMock->method('getViewConfig')->willReturn($oViewConfMock);
 
         $this->_oController = $oControllerMock;
@@ -319,6 +348,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronPath
      * @test
      * @throws ReflectionException
      */
@@ -326,16 +356,16 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     {
         define(VENDOR_PATH, 'TESTPATH');
 
-        /** @var ViewConfig|PHPUnit_Framework_MockObject_MockObject $oViewConfMock */
-        $oViewConfMock = $this->getMock(ViewConfig::class, array(
-            'getActiveShopId',
-        ));
+        /** @var ViewConfig|MockObject $oViewConfMock */
+        $oViewConfMock = $this->getMockBuilder(ViewConfig::class)
+            ->setMethods(['getActiveShopId'])
+            ->getMock();
         $oViewConfMock->method('getActiveShopId')->willReturn(1);
 
-        /** @var d3_cfg_ordermanagerset_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_main::class, array(
-            'getViewConfig',
-        ));
+        /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
+            ->setMethods(['getViewConfig'])
+            ->getMock();
         $oControllerMock->method('getViewConfig')->willReturn($oViewConfMock);
 
         $this->_oController = $oControllerMock;
@@ -347,21 +377,22 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getAvailableCronjobIds
      * @test
      * @throws ReflectionException
      */
     public function canGetAvailableCronjobIds()
     {
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
-        $oManagerMock = $this->getMock(d3ordermanager::class, array(
-            'getAvailableCronjobIds',
-        ));
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getAvailableCronjobIds'])
+            ->getMock();
         $oManagerMock->method('getAvailableCronjobIds')->willReturn(array(1,5,8,'foobar'));
 
-        /** @var d3_cfg_ordermanagerset_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_main::class, array(
-            'getManager',
-        ));
+        /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
+            ->setMethods(['getManager'])
+            ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
 
         $this->_oController = $oControllerMock;
@@ -373,6 +404,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCJIDDesc
      * @test
      * @throws ReflectionException
      */
@@ -390,6 +422,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCJIDDesc
      * @test
      * @throws ReflectionException
      */
@@ -407,6 +440,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronTimestampVarName
      * @test
      * @throws ReflectionException
      */
@@ -418,6 +452,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronTimestampVarName
      * @test
      * @throws ReflectionException
      */
@@ -430,6 +465,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getFileGeneratorCronSh
      * @test
      * @throws ReflectionException
      */
@@ -442,21 +478,22 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronProviderList
      * @test
      * @throws ReflectionException
      */
     public function canGetCronProviderList()
     {
-        /** @var d3filegeneratorcronsh|PHPUnit_Framework_MockObject_MockObject $oFileGeneratorCronShMock */
-        $oFileGeneratorCronShMock = $this->getMock(d3filegeneratorcronsh::class, array(
-            'getContentList'
-        ));
+        /** @var d3filegeneratorcronsh|MockObject $oFileGeneratorCronShMock */
+        $oFileGeneratorCronShMock = $this->getMockBuilder(d3filegeneratorcronsh::class)
+            ->setMethods(['getContentList'])
+            ->getMock();
         $oFileGeneratorCronShMock->method('getContentList')->willReturn('contentList');
 
-        /** @var d3_cfg_ordermanagerset_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_main::class, array(
-            'getFileGeneratorCronSh'
-        ));
+        /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
+            ->setMethods(['getFileGeneratorCronSh'])
+            ->getMock();
         $oControllerMock->method('getFileGeneratorCronSh')->willReturn($oFileGeneratorCronShMock);
 
         $this->_oController = $oControllerMock;
@@ -468,6 +505,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCompatibilityAdapterHandler
      * @test
      * @throws ReflectionException
      */
@@ -480,6 +518,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::d3GetActiveShop
      * @test
      * @throws ReflectionException
      */
@@ -492,6 +531,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::generateCronShFile
      * @test
      * @throws ReflectionException
      */
@@ -499,25 +539,26 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     {
         $_POST['cronid'] = 'testCronId';
 
-        /** @var d3ShopCompatibilityAdapterHandler|PHPUnit_Framework_MockObject_MockObject $oShopCompatibilityAdapterHandlerMock */
-        $oShopCompatibilityAdapterHandlerMock = $this->getMock(d3ShopCompatibilityAdapterHandler::class, array(
-            'call'
-        ));
+        /** @var d3ShopCompatibilityAdapterHandler|MockObject $oShopCompatibilityAdapterHandlerMock */
+        $oShopCompatibilityAdapterHandlerMock = $this->getMockBuilder(d3ShopCompatibilityAdapterHandler::class)
+            ->setMethods(['call'])
+            ->getMock();
         $oShopCompatibilityAdapterHandlerMock->method('call')->willReturnCallback(array($this, 'shopCompatHandlerCallback'));
 
-        /** @var Shop|PHPUnit_Framework_MockObject_MockObject $oShopMock */
-        $oShopMock = $this->getMock(Shop::class, array(
-            'getId'
-        ));
+        /** @var Shop|MockObject $oShopMock */
+        $oShopMock = $this->getMockBuilder(Shop::class)
+            ->setMethods(['getId'])
+            ->getMock();
         $oShopMock->method('getId')->willReturn('shopid');
 
-        /** @var d3filegeneratorcronsh|PHPUnit_Framework_MockObject_MockObject $oFileGeneratorCronShMock */
-        $oFileGeneratorCronShMock = $this->getMock(d3filegeneratorcronsh::class, array(
-            'setContentType',
-            'setScriptPath',
-            'setSortedParameterList',
-            'startDownload',
-        ));
+        /** @var d3filegeneratorcronsh|MockObject $oFileGeneratorCronShMock */
+        $oFileGeneratorCronShMock = $this->getMockBuilder(d3filegeneratorcronsh::class)
+            ->setMethods([
+                'setContentType',
+                'setScriptPath',
+                'setSortedParameterList',
+                'startDownload'])
+            ->getMock();
         $oFileGeneratorCronShMock->method('setContentType')->willReturn(true);
         $oFileGeneratorCronShMock->method('setScriptPath')->willReturn(true);
         $oFileGeneratorCronShMock->method('setSortedParameterList')->willReturn(true);
@@ -525,12 +566,14 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
             $this->stringContains('d3ordermanager_shopid_testCronId.sh')
         )->willReturn(true);
 
-        /** @var d3_cfg_ordermanagerset_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_main::class, array(
-            'getCompatibilityAdapterHandler',
-            'd3GetActiveShop',
-            'getFileGeneratorCronSh',
-        ));
+        /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
+            ->setMethods([
+                'getCompatibilityAdapterHandler',
+                'd3GetActiveShop',
+                'getFileGeneratorCronSh'
+            ])
+            ->getMock();
         $oControllerMock->method('getCompatibilityAdapterHandler')->willReturn($oShopCompatibilityAdapterHandlerMock);
         $oControllerMock->method('d3GetActiveShop')->willReturn($oShopMock);
         $oControllerMock->method('getFileGeneratorCronSh')->willReturn($oFileGeneratorCronShMock);
@@ -540,6 +583,9 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
         $this->callMethod($this->_oController, 'generateCronShFile');
     }
 
+    /**
+     * @return string
+     */
     public function shopCompatHandlerCallback()
     {
         $args = func_get_args();

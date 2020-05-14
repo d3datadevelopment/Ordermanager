@@ -130,6 +130,7 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -168,6 +169,7 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -206,6 +208,7 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

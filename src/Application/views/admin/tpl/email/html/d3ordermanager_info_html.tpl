@@ -1,6 +1,6 @@
 [{block name="d3ordermanager_infomail_main"}]
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<html lang="de">
   <head>
     <title>[{oxmultilang ident="D3_ORDERMANAGER_MAIL_ORDERSUBJECT"}]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=[{$oEmailView->getCharset()}]">

@@ -144,6 +144,7 @@ class requirementToOrderNrTest extends d3OrdermanagerRequirementIntegrationTestC
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -181,6 +182,7 @@ class requirementToOrderNrTest extends d3OrdermanagerRequirementIntegrationTestC
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

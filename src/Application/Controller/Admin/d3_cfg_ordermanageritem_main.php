@@ -47,7 +47,7 @@ class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
     protected $_sD3ObjectClass = d3ordermanager::class;
 
     /**
-     * Loads article parameters and passes them to Smarty engine, returns
+     * Loads article parameters and passes them to template engine, returns
      * name of template file "article_main.tpl".
      *
      * @return string

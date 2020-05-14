@@ -128,6 +128,7 @@ class requirementCurrencyFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

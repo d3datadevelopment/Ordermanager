@@ -25,7 +25,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
 class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
@@ -55,24 +55,41 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::__construct
+     * @test
+     */
+    public function constructorPass()
+    {
+        $this->assertSame(
+            'd3_ordermanager',
+            d3GetModCfgDIC()->getParameter('d3.ordermanager.modcfgid')
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::getItemFolders
      * @test
      * @throws ReflectionException
      */
     public function getItemFoldersReturnArray()
     {
-        $this->assertInternalType('array', $this->callMethod($this->_oController, 'getItemFolders'));
+        $this->assertInternalType(
+            'array',
+            $this->callMethod($this->_oController, 'getItemFolders')
+        );
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::getGroupsList
      * @test
      * @throws ReflectionException
      */
     public function getGroupsListReturnsRightInstance()
     {
-        /** @var d3_cfg_ordermanageritem_settings|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_settings::class, array(
-            '_getObjectList'
-        ));
+        /** @var d3_cfg_ordermanageritem_settings|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_settings::class)
+            ->setMethods(['_getObjectList'])
+            ->getMock();
         $oControllerMock->method('_getObjectList')->will($this->returnCallback(function ($arg1) {
             return $arg1;
         }));
@@ -86,28 +103,32 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::_getObjectList
      * @test
      * @throws ReflectionException
      */
     public function getObjectListWillGetAllItemsFromDb()
     {
-        /** @var BaseModel|PHPUnit_Framework_MockObject_MockObject $oBaseMock */
-        $oBaseMock = $this->getMock(BaseModel::class, array(
-            'isMultilang',
-            'setLanguage',
-            'getSelectFields',
-            'getViewName',
-        ));
+        /** @var BaseModel|MockObject $oBaseMock */
+        $oBaseMock = $this->getMockBuilder(BaseModel::class)
+            ->setMethods([
+                'isMultilang',
+                'setLanguage',
+                'getSelectFields',
+                'getViewName'])
+            ->getMock();
         $oBaseMock->method('isMultilang')->willReturn(true);
         $oBaseMock->method('setLanguage')->willReturn(true);
         $oBaseMock->method('getSelectFields')->willReturn('oxid, oxtitle');
         $oBaseMock->method('getViewName')->willReturn('testViewTableName');
 
-        /** @var ListModel|PHPUnit_Framework_MockObject_MockObject $oListMock */
-        $oListMock = $this->getMock(ListModel::class, array(
-            'selectString',
-            'getBaseObject',
-        ));
+        /** @var ListModel|MockObject $oListMock */
+        $oListMock = $this->getMockBuilder(ListModel::class)
+            ->setMethods([
+                'selectString',
+                'getBaseObject'
+            ])
+            ->getMock();
         $oListMock->expects($this->once())->method('selectString')->with(
             $this->logicalAnd(
                 $this->stringContains('oxid, oxtitle'),
@@ -129,6 +150,7 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::isEditMode
      * @test
      * @throws ReflectionException
      */
@@ -140,6 +162,7 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::getRestrictionMessage
      * @test
      * @throws ReflectionException
      */

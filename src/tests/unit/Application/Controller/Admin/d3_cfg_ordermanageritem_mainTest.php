@@ -23,7 +23,7 @@ use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
 class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
@@ -53,6 +53,7 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main::render
      * @test
      * @throws ReflectionException
      */
@@ -65,6 +66,7 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main::addDefaultValues
      * @test
      * @throws ReflectionException
      */
@@ -74,10 +76,10 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
             'editval' => ['d3modprofile__d3_cronjobid' => 'foo'],
         ];
 
-        /** @var d3_cfg_ordermanageritem_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_main::class, array(
-            'fixCronjobId'
-        ));
+        /** @var d3_cfg_ordermanageritem_main|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_main::class)
+            ->setMethods(['fixCronjobId'])
+            ->getMock();
         $oControllerMock->method('fixCronjobId')->willReturn('newCjId');
 
         $this->_oController = $oControllerMock;
@@ -91,6 +93,7 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main::addDefaultValues
      * @test
      * @throws ReflectionException
      */
@@ -100,10 +103,10 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
             'editval' => ['d3modprofile__d3_cronjobid' => 'foo'],
         ];
 
-        /** @var d3_cfg_ordermanageritem_main|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_main::class, array(
-            'fixCronjobId'
-        ));
+        /** @var d3_cfg_ordermanageritem_main|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_main::class)
+            ->setMethods(['fixCronjobId'])
+            ->getMock();
         $oControllerMock->method('fixCronjobId')->willReturn('newCjId');
 
         $this->_oController = $oControllerMock;
@@ -117,6 +120,7 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main::fixCronjobId
      * @test
      * @throws ReflectionException
      */

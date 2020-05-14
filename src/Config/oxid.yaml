@@ -378,31 +378,7 @@ services:
     arguments:
       - 'OxidEsales\Eshop\Application\Model\Delivery'
 
-  d3ox.ordermanager.Smarty:
-    class:      Smarty
-    factory:    'oxNew'
-    shared:     false
-    arguments:
-      - '\Smarty'
-
 ### Arguments
-
-  d3ox.ordermanager.OxidEsales\Eshop\Core\Module\ModuleInstaller:
-    class:      'OxidEsales\Eshop\Core\Module\ModuleInstaller'
-    factory:    'oxNew'
-    shared:     false
-    arguments:
-      - OxidEsales\Eshop\Core\Module\ModuleInstaller
-      - @?d3ox.ordermanager.OxidEsales\Eshop\Core\Module\ModuleInstaller.args.modulecache
-      - @?d3ox.ordermanager.OxidEsales\Eshop\Core\Module\ModuleInstaller.args.modulecleaner
-  # d3ox.ordermanager.OxidEsales\Eshop\Core\Module\ModuleInstaller.args.modulecache:
-  #  synthetic:  true
-  #  shared:     false
-  #  public:     false
-  # d3ox.ordermanager.OxidEsales\Eshop\Core\Module\ModuleInstaller.args.modulecleaner:
-  #  synthetic:  true
-  #  shared:     false
-  #  public:     false
 
   d3ox.ordermanager.OxidEsales\Eshop\Core\Exception\StandardException:
     class:      'OxidEsales\Eshop\Core\Exception\StandardException'

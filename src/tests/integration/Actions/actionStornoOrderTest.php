@@ -27,7 +27,6 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use PHPUnit_Framework_MockObject_Matcher_InvokedCount;
 
 class actionStornoOrderTest extends d3OrdermanagerActionIntegrationTestCase
 {
@@ -46,9 +45,6 @@ class actionStornoOrderTest extends d3OrdermanagerActionIntegrationTestCase
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
     );
-
-    /** @var PHPUnit_Framework_MockObject_Matcher_InvokedCount */
-    public $oCustomMethodSpy;
 
     /**
      * @throws Exception
@@ -147,6 +143,7 @@ class actionStornoOrderTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

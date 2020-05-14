@@ -28,7 +28,6 @@ use D3\Ordermanager\Application\Model\d3ordermanagerlist;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use InvoicepdfPDF;
-use oxarticleinputexception;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
 use OxidEsales\Eshop\Application\Model\Basket;
@@ -41,7 +40,6 @@ use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\NoArticleException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use oxnoarticleexception;
 
 class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
 {
@@ -112,8 +110,6 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
      * @throws ArticleException
      * @throws ArticleInputException
      * @throws NoArticleException
-     * @throws oxArticleInputException
-     * @throws oxNoArticleException
      * @throws Exception
      */
     public function d3getOrderBasket4OrderManager(d3ordermanager $oOrderManager)
@@ -240,12 +236,11 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
         $oOrderManagerList = d3GetModCfgDIC()->get(d3ordermanagerlist::class);
         /** @var d3ordermanager $oManager */
         foreach ($oOrderManagerList->d3GetOrderFinishTriggeredManagerTasks() as $oManager) {
-            /** @var d3ordermanager_execute $oManagerExecute */
             $oManagerExecute = $this->getManagerExecute($oManager);
             if ($oManagerExecute->orderMeetsConditions($this->getId())) {
                 $oManagerExecute->exec4order($this->getId(), d3ordermanager_conf::EXECTYPE_ORDERFINISHTRIGGERED);
             }
-        };
+        }
 
         return $iRet;
     }
@@ -268,12 +263,11 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
         $oOrderManagerList = d3GetModCfgDIC()->get(d3ordermanagerlist::class);
         /** @var d3ordermanager $oManager */
         foreach ($oOrderManagerList->d3GetOrderSaveTriggeredManagerTasks() as $oManager) {
-            /** @var d3ordermanager_execute $oManagerExecute */
             $oManagerExecute = $this->getManagerExecute($oManager);
             if ($oManagerExecute->orderMeetsConditions($this->getId())) {
                 $oManagerExecute->exec4order($this->getId(), d3ordermanager_conf::EXECTYPE_ORDERSAVETRIGGERED);
             }
-        };
+        }
 
         return $blSave;
     }

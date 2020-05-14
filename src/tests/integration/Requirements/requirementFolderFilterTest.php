@@ -158,6 +158,7 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -181,6 +182,7 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

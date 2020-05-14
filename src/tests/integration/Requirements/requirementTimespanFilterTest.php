@@ -52,10 +52,13 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * Tear down fixture.
+     *
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function tearDown()
     {
-        //$this->cleanTestData();
+        $this->cleanTestData();
 
         parent::tearDown();
     }
@@ -195,6 +198,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -218,6 +222,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -241,6 +246,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -264,6 +270,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -351,6 +358,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -374,6 +382,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -397,6 +406,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -420,6 +430,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -507,6 +518,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -530,6 +542,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -553,6 +566,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -576,6 +590,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

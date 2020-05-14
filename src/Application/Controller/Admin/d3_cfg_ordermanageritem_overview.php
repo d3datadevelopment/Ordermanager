@@ -29,7 +29,6 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Request;
-use oxsystemcomponentexception;
 
 class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 {
@@ -54,7 +53,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      */
     public function getActionAdminController()
     {
-        return d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_action::class);
+        /** @var d3_cfg_ordermanageritem_action $action */
+        $action = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_action::class);
+        return $action;
     }
 
     /**
@@ -63,7 +64,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      */
     public function getRequirementAdminController()
     {
-        return d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_requ::class);
+        /** @var d3_cfg_ordermanageritem_requ $requ */
+        $requ = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_requ::class);
+        return $requ;
     }
 
     /**
@@ -71,7 +74,6 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      * @param $aArguments
      *
      * @return mixed
-     * @throws oxSystemComponentException
      * @throws Exception
      */
     public function __call($sName, $aArguments)
@@ -101,7 +103,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
             $oManager
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_requirementlist::class);
+        /** @var d3ordermanager_requirementlist $requList */
+        $requList = d3GetModCfgDIC()->get(d3ordermanager_requirementlist::class);
+        return $requList;
     }
 
     /**
@@ -134,7 +138,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
             d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_actionlist::class);
+        /** @var d3ordermanager_actionlist $actionlist */
+        $actionlist = d3GetModCfgDIC()->get(d3ordermanager_actionlist::class);
+        return $actionlist;
     }
 
     /**
@@ -342,7 +348,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      */
     public function getManager()
     {
-        return d3GetModCfgDIC()->get(d3ordermanager::class);
+        /** @var d3ordermanager $manager */
+        $manager = d3GetModCfgDIC()->get(d3ordermanager::class);
+        return $manager;
     }
 
     /**
@@ -351,7 +359,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      */
     public function getLang()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        /** @var Language $lang */
+        $lang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        return $lang;
     }
 
     /**
@@ -364,7 +374,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         $oManager = $this->getManager();
         if ($oManager->load($sManagerId)) {
             return $oManager->getFieldData('oxtitle');
-        };
+        }
 
         return $this->getLang()->translateString('D3_ORDERMANAGER_REQU_OTHERJOB_UNKNOWNJOBID').' "'.$sManagerId.'"';
     }

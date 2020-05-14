@@ -3,11 +3,11 @@
 ## Requirements
 
 Both unit and acceptance tests require OXID Testing Library installed.
-See https://github.com/OXID-eSales/testing_library
+See https://github.com/OXID-eSales/testing_library.
 
 ### Configuration
 
-Make sure that the module has been activated with a valid license key.
+Make sure the module has been activated with a valid license key.
 
 Here is an example of Testing Library configuration file `oxideshop/test_config.yml`
 

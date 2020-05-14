@@ -224,6 +224,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -265,6 +266,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -306,6 +308,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -347,6 +350,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -388,6 +392,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

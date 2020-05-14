@@ -158,6 +158,7 @@ class requirementDeliveryFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -181,6 +182,7 @@ class requirementDeliveryFilterTest extends d3OrdermanagerRequirementIntegration
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

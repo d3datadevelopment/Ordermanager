@@ -18,7 +18,6 @@
 namespace D3\Ordermanager\Modules\Application\Model;
 
 use Exception;
-use oxarticleinputexception;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\BasketReservation;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
@@ -29,11 +28,9 @@ use OxidEsales\Eshop\Application\Model\Discount;
 use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\ArticleException;
 use OxidEsales\Eshop\Core\Exception\ArticleInputException;
-use OxidEsales\Eshop\Core\Exception\NoArticleException;
 use OxidEsales\Eshop\Core\Price;
 use OxidEsales\Eshop\Core\PriceList;
 use OxidEsales\Eshop\Core\Session;
-use oxnoarticleexception;
 use stdClass;
 
 /**
@@ -102,9 +99,6 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
      * @param      $oOrder
      * @throws ArticleException
      * @throws ArticleInputException
-     * @throws NoArticleException
-     * @throws oxArticleInputException
-     * @throws oxNoArticleException
      * @throws Exception
      */
     public function calculateBasket4OrderManager($blForceUpdate, $oOrder)
@@ -192,8 +186,6 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
     }
 
     /**
-     * @throws oxArticleInputException
-     * @throws oxNoArticleException
      * @throws Exception
      */
     protected function _calcItemsPrice4OrderManager()

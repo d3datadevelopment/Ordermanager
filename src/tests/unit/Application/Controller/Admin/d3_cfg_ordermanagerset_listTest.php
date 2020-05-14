@@ -23,7 +23,7 @@ use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
 class d3_cfg_ordermanagerset_listTest extends d3OrdermanagerUnitTestCase
@@ -53,15 +53,16 @@ class d3_cfg_ordermanagerset_listTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list::render
      * @test
      * @throws ReflectionException
      */
     public function renderPass()
     {
-        /** @var d3_cfg_ordermanagerset_list|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3_cfg_ordermanagerset_list::class, array(
-            'd3FixNamespaceNavigation',
-        ));
+        /** @var d3_cfg_ordermanagerset_list|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_list::class)
+            ->setMethods(['d3FixNamespaceNavigation'])
+            ->getMock();
         $oControllerMock->method('d3FixNamespaceNavigation')->willReturn(true);
 
         $this->_oController = $oControllerMock;

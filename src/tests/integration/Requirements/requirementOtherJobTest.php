@@ -168,6 +168,7 @@ class requirementOtherJobTest extends d3OrdermanagerRequirementIntegrationTestCa
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -206,6 +207,7 @@ class requirementOtherJobTest extends d3OrdermanagerRequirementIntegrationTestCa
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

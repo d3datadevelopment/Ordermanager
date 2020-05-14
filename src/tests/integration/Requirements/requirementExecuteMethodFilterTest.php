@@ -25,7 +25,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegrationTestCase
 {
@@ -131,6 +131,7 @@ class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegr
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -143,8 +144,10 @@ class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegr
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManager());
 
-        /** @var ListModel|PHPUnit_Framework_MockObject_MockObject $oListMock */
-        $oListMock = $this->getMock(ListModel::class, array('testChangeOrderList'));
+        /** @var ListModel|MockObject $oListMock */
+        $oListMock = $this->getMockBuilder(ListModel::class)
+            ->setMethods(['testChangeOrderList'])
+            ->getMock();
         $oListMock->expects($this->once())->method('testChangeOrderList')->willReturn(null);
         d3GetModCfgDIC()->set('d3ox.ordermanager.'.ListModel::class, $oListMock);
 

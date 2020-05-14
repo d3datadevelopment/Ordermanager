@@ -194,6 +194,7 @@ class requirementNotInGroupFilterTest extends d3OrdermanagerRequirementIntegrati
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -217,6 +218,7 @@ class requirementNotInGroupFilterTest extends d3OrdermanagerRequirementIntegrati
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

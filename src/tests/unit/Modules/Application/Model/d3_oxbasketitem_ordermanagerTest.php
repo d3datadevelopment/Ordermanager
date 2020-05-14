@@ -16,6 +16,7 @@
 
 namespace D3\Ordermanager\Tests\unit\Modules\Application\Model;
 
+use D3\ModCfg\Application\Model\d3database;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Modules\Application\Model\d3_oxbasketitem_ordermanager;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
@@ -24,7 +25,6 @@ use Exception;
 use OxidEsales\Eshop\Application\Model\Article;
 use OxidEsales\Eshop\Application\Model\BasketItem;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
-use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\ArticleException;
 use OxidEsales\Eshop\Core\Exception\ArticleInputException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -59,20 +59,24 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasketitem_ordermanager::d3ChangeOrderArticle2RealArticle
      * @test
      * @throws ArticleException
      * @throws ArticleInputException
-     * @throws DatabaseConnectionException
      * @throws NoArticleException
      * @throws ReflectionException
      * @throws Exception
      */
     public function orderArticlesCanConvertedToArticles()
     {
+        /** @var Article $oArticle */
         $oArticle = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Article::class);
-        $sSelect = "SELECT oxid FROM {$oArticle->getViewName()} WHERE 1";
+        $qb = d3database::getInstance()->getQueryBuilder();
+        $qb->select('oxid')
+            ->from($oArticle->getViewName())
+            ->where(1);
 
-        $sOXID = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getOne($sSelect);
+        $sOXID = $qb->execute()->fetchColumn();
 
         if ($sOXID) {
             /** @var OrderArticle $oOrderArticle */
@@ -92,6 +96,7 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasketitem_ordermanager::d3ChangeOrderArticle2RealArticle
      * @test
      * @throws ArticleException
      * @throws ArticleInputException

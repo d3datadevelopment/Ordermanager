@@ -52,6 +52,7 @@ class d3_cfg_ordermanageritemTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem::render
      * @test
      * @throws ReflectionException
      */

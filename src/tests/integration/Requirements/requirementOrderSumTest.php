@@ -134,6 +134,7 @@ class requirementOrderSumTest extends d3OrdermanagerRequirementIntegrationTestCa
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -172,6 +173,7 @@ class requirementOrderSumTest extends d3OrdermanagerRequirementIntegrationTestCa
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -210,6 +212,7 @@ class requirementOrderSumTest extends d3OrdermanagerRequirementIntegrationTestCa
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -248,6 +251,7 @@ class requirementOrderSumTest extends d3OrdermanagerRequirementIntegrationTestCa
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

@@ -18,12 +18,14 @@
 use D3\Ordermanager\Application\Controller\d3ordermanager_response;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use Doctrine\DBAL\DBALException;
+use Exception as ExceptionAlias;
 use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use OxidEsales\Eshop\Core\Module\Module;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Exception;
 use splitbrain\phpcli\Options;
@@ -59,10 +61,12 @@ if (!(file_exists($bootstrapFileName) && !is_dir($bootstrapFileName))) {
     die($message);
 }
 
-require_once($bootstrapFileName);
+if (false === defined('OXID_PHP_UNIT')) {
+    require_once($bootstrapFileName);
 
-// required for recalculating order and generating pdf
-define('OX_IS_ADMIN', true);
+    // required for recalculating order and generating pdf
+    define('OX_IS_ADMIN', true);
+}
 
 if (false == function_exists('isAdmin')) {
     /**
@@ -97,16 +101,26 @@ class d3_ordermanager_cron extends CLI
     public function __construct()
     {
         // there are argv setting in CLI mode only
-        if ('cli' == php_sapi_name()) {
+        if ($this->isCLI()) {
             parent::__construct();
         }
     }
-    
+
+    /**
+     * @return bool
+     */
+    public function isCLI()
+    {
+        return 'cli' == php_sapi_name();
+    }
+
     /**
      * @param Options $options
      *
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
+     * @throws ExceptionAlias
      */
     protected function setup(Options $options)
     {
@@ -164,15 +178,17 @@ class d3_ordermanager_cron extends CLI
 
     /**
      * @param Options $options
+     *
      * @throws DBALException
-     * @throws \Exception
+     * @throws ExceptionAlias
      */
     protected function main(Options $options)
     {
         if ( $options->getOpt( 'version' ) ) {
-            $oModule = oxNew( Module::class );
-            $oModule->load( 'd3ordermanager' );
-            $this->info( $oModule->getModuleData()['version'] );
+            $container = ContainerFactory::getInstance()->getContainer();
+            $shopConfiguration = $container->get(ShopConfigurationDaoBridgeInterface::class)->get();
+            $moduleConfiguration = $shopConfiguration->getModuleConfiguration('d3ordermanager');
+            $this->info($moduleConfiguration->getVersion());
 
             return;
         }
@@ -223,11 +239,12 @@ class d3_ordermanager_cron extends CLI
 
     /**
      * prevent code exit while coverage check
-     * @codeCoverageIgnore
      *
+     * @codeCoverageIgnore
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws ExceptionAlias
      */
     public function run()
     {
@@ -278,7 +295,7 @@ $cli = new d3_ordermanager_cron();
 if (false === defined('OXID_PHP_UNIT')) {
     try {
         $cli->run();
-    } catch (\Exception $e) {
+    } catch ( ExceptionAlias $e) {
         echo $e->getMessage();
     }
 }

@@ -224,6 +224,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -253,6 +254,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
      */
     public function getConfiguredManagerTitle()
     {
+        /** @var d3ordermanager $oManager */
         $oManager = d3GetModCfgDIC()->get(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
@@ -265,6 +267,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -294,6 +297,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
      */
     public function getConfiguredManagerShortDesc()
     {
+        /** @var d3ordermanager $oManager */
         $oManager = d3GetModCfgDIC()->get(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
@@ -306,6 +310,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -335,6 +340,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
      */
     public function getConfiguredManagerSelVariant()
     {
+        /** @var d3ordermanager $oManager */
         $oManager = d3GetModCfgDIC()->get(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
@@ -347,6 +353,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -376,6 +383,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
      */
     public function getConfiguredManagerPersParams()
     {
+        /** @var d3ordermanager $oManager */
         $oManager = d3GetModCfgDIC()->get(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
@@ -388,6 +396,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

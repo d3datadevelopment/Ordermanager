@@ -127,6 +127,7 @@ class requirementInvoiceNoTest extends d3OrdermanagerRequirementIntegrationTestC
 
     /**
      * @test
+     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
