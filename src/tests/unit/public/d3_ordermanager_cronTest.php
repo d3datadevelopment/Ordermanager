@@ -163,7 +163,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
      * @test
      * @throws ReflectionException
      */
-    public function mainUseQuietCmdDefault()
+    public function mainUseQuietCmdDefaultNoCJID()
     {
         /** @var Options|PHPUnit_Framework_MockObject_MockObject $oOptionsMock */
         $oOptionsMock = $this->getMock(Options::class, array(
@@ -199,6 +199,63 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             'translateFixedStrings',
         ));
         $oControllerMock->expects($this->once())->method('translateFixedStrings')->willReturn(false);
+
+        $this->_oController = $oControllerMock;
+
+        $this->callMethod(
+            $this->_oController,
+            'main',
+            array($oOptionsMock)
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function mainUseQuietCmdDefaultCJID()
+    {
+        /** @var Options|PHPUnit_Framework_MockObject_MockObject $oOptionsMock */
+        $oOptionsMock = $this->getMock(Options::class, array(
+            'getOpt',
+            'getCmd',
+            'getArgs'
+        ),
+            array($this->getValue($this->_oController, 'colors'))
+        );
+        $oOptionsMock->method('getOpt')->willReturn(false);
+        $oOptionsMock->method('getCmd')->willReturn(false);
+        $oOptionsMock->method('getArgs')->willReturn(['1', '10', 'key']);
+
+        $this->setValue(
+            $oOptionsMock,
+            'args',
+            ['1', '10', 'key']
+        );
+        $oOptionsMock->parseOptions();
+
+        /** @var Session|PHPUnit_Framework_MockObject_MockObject $oSessionMock */
+        $oSessionMock = $this->getMock(Session::class, array(
+            'setVariable'
+        ));
+        $oSessionMock->expects($this->never())->method('setVariable')
+            ->with($this->equalTo('d3ordermanager_quiet'))->willReturn(false);
+        d3GetModCfgDIC()->set('d3ox.ordermanager.'.Session::class, $oSessionMock);
+
+        /** @var d3ordermanager_response|PHPUnit_Framework_MockObject_MockObject $oResponseMock */
+        $oResponseMock = $this->getMock(d3ordermanager_response::class, array(
+            'init'
+        ));
+        $oResponseMock->expects($this->once())->method('init')->willReturn(true);
+        d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
+
+        /** @var d3_ordermanager_cron|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3_ordermanager_cron::class, array(
+            'translateFixedStrings',
+            'success'
+        ));
+        $oControllerMock->expects($this->never())->method('translateFixedStrings')->willReturn(false);
+        $oControllerMock->expects($this->once())->method('success')->willReturn(true);
 
         $this->_oController = $oControllerMock;
 

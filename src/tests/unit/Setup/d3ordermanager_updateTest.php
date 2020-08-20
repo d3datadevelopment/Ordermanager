@@ -1468,7 +1468,11 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             '_updateTableItem2',
             'getStepByStepMode',
         ));
-        $oModelMock->method('getShopList')->willReturn(array(1, 2));
+        $oModelMock->method('getShopList')->willReturn(
+            array(
+                1 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
+                2 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
+            ));;
         $oModelMock->method('jobFieldMethodName')->willReturn(true);
         $oModelMock->method('_convertExampleJobItems')->willReturn(true);
         $oModelMock->method('setInitialExecMethod')->willReturn(true);
@@ -1517,7 +1521,11 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             '_updateTableItem2',
             'getStepByStepMode',
         ));
-        $oModelMock->method('getShopList')->willReturn(array(1, 2));
+        $oModelMock->method('getShopList')->willReturn(
+            array(
+                1 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
+                2 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
+            ));
         $oModelMock->method('jobFieldMethodName')->willReturn(true);
         $oModelMock->method('_convertExampleJobItems')->willReturn(true);
         $oModelMock->method('setInitialExecMethod')->willReturn(true);
@@ -1562,28 +1570,113 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @dataProvider hasNotOrderArticlesParentIdDataProvider
      */
-    public function checkHasNotOrderArticlesParentId()
+    public function checkHasNotOrderArticlesParentId($blCheckStatus, $blExpected, $iArticleCount)
     {
         /** @var DatabaseInterface|PHPUnit_Framework_MockObject_MockObject $oDBInterfaceMock */
         $oDBInterfaceMock = $this->getMock(stdClass::class, array(
             'getOne',
         ));
-        $oDBInterfaceMock->expects($this->once())->method('getOne')->willReturn(2);
+        $oDBInterfaceMock->expects($this->exactly((int) $blCheckStatus))->method('getOne')->willReturn($iArticleCount);
 
         /** @var d3ordermanager_update|PHPUnit_Framework_MockObject_MockObject $oModelMock */
         $oModelMock = $this->getMock(d3ordermanager_update::class, array(
             'getDb',
+            'mustCheckOrderArticlesParentId',
+            'setDontCheckOrderArticlesParentId'
         ));
         $oModelMock->method('getDb')->willReturn($oDBInterfaceMock);
+        $oModelMock->method('mustCheckOrderArticlesParentId')->willReturn($blCheckStatus);
+        $oModelMock->expects($this->exactly(((int)!(bool) $iArticleCount)))->method('setDontCheckOrderArticlesParentId');
 
         $this->_oModel = $oModelMock;
 
-        $this->assertTrue(
+        $this->assertSame(
+            $blExpected,
             $this->callMethod(
                 $this->_oModel,
                 'hasNotOrderArticlesParentId'
             )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function hasNotOrderArticlesParentIdDataProvider()
+    {
+        return [
+            [true, true, 2], // first execution, must check
+            [true, false, 0], // first execution, must check
+            [false, false, 2] // later executions, mustn't check again
+        ];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @dataProvider mustCheckOrderArticlesParentIdPassDataProvider
+     */
+    public function mustCheckOrderArticlesParentIdPass($blConfig, $blExpected)
+    {
+        /** @var Config|PHPUnit_Framework_MockObject_MockObject $oConfigMock */
+        $oConfigMock = $this->getMock(Config::class, array(
+            'getShopConfVar',
+        ));
+        $oConfigMock->expects($this->once())->method('getShopConfVar')->willReturn($blConfig);
+
+        /** @var d3ordermanager_update|PHPUnit_Framework_MockObject_MockObject $oModelMock */
+        $oModelMock = $this->getMock(d3ordermanager_update::class, array(
+            'd3GetConfig'
+        ));
+        $oModelMock->method('d3GetConfig')->willReturn($oConfigMock);
+
+        $this->_oModel = $oModelMock;
+
+        $this->assertSame(
+            $blExpected,
+            $this->callMethod(
+                $this->_oModel,
+                'mustCheckOrderArticlesParentId'
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function mustCheckOrderArticlesParentIdPassDataProvider()
+    {
+        return [
+            [true, false],
+            [false, true]
+        ];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function setDontCheckOrderArticlesParentIdPass()
+    {
+        /** @var Config|PHPUnit_Framework_MockObject_MockObject $oConfigMock */
+        $oConfigMock = $this->getMock(Config::class, array(
+            'saveShopConfVar',
+        ));
+        $oConfigMock->expects($this->once())->method('saveShopConfVar')->willReturn(true);
+
+        /** @var d3ordermanager_update|PHPUnit_Framework_MockObject_MockObject $oModelMock */
+        $oModelMock = $this->getMock(d3ordermanager_update::class, array(
+            'd3GetConfig'
+        ));
+        $oModelMock->method('d3GetConfig')->willReturn($oConfigMock);
+
+        $this->_oModel = $oModelMock;
+
+        $this->callMethod(
+            $this->_oModel,
+            'setDontCheckOrderArticlesParentId'
         );
     }
 
@@ -1596,8 +1689,10 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
         /** @var d3ordermanager_update|PHPUnit_Framework_MockObject_MockObject $oModelMock */
         $oModelMock = $this->getMock(d3ordermanager_update::class, array(
             '_tableSqlExecute',
+            'setDontCheckOrderArticlesParentId'
         ));
         $oModelMock->expects($this->once())->method('_tableSqlExecute')->willReturn(true);
+        $oModelMock->expects($this->once())->method('setDontCheckOrderArticlesParentId')->willReturn(true);
 
         $this->_oModel = $oModelMock;
 

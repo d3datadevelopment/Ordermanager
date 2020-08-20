@@ -182,7 +182,7 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
         $oOrderList = $oListGenerator->getConcernedOrders();
 
         $this->assertTrue(
-            $oOrderList->count() === 1
+            $oOrderList->count() >= 1
             && $oOrderList->offsetExists($this->aOrderIdList[0])
             && false == $oOrderList->offsetExists($this->aOrderIdList[1])
         );

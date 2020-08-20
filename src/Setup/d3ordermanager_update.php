@@ -32,6 +32,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Application\Model\Shop;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Facts\Facts;
 use Doctrine\DBAL\Driver\PDOException;
 use ReflectionException;
@@ -41,19 +42,19 @@ class d3ordermanager_update extends d3install_updatebase
 {
     public $sModKey = 'd3_ordermanager';
     public $sModName = 'Auftragsmanager';
-    public $sModVersion = '3.2.0.3';
-    public $sModRevision = '3203';
+    public $sModVersion = '3.3.0.0';
+    public $sModRevision = '3300';
     public $sBaseConf =
-    'BP6v2==aCtrMEpxREVwazFHNHRvbnNGTnZVQkV6cllnQVlHMWxORzRWN3BPMlU0c1Z5T0VtVGs4a2pBU
-UZXZEMvYmlLK1p2UGNsL20wS1VsUUZYRm4yM1hoc3IxTjJvUGg4QVViVmpZNDhwRENDL1FLcjJrbWNYd
-mtXVTVSTDAzQXB1R3dnSEZ3bDVlYXhNUVRqMzgrVHpzVEZyWHNCYmJTL0JwQWpNU1A2TnJoNkhtSE9ne
-VdIYVZkMFYyVk13SXR4SzhXbks3a1ZUOUd2Rm81VTBqRkVOazI4OVhHMHBka1BKd3QwbFdDd0ZTVktTU
-ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
-2FiV3pTc29jSWxZN2hKa3hiYml4WUVCencxRDljRmFCVzZPRVJ5TldYSWVpMENBPT0=';
+    'Aoov2==RmJyRmszQVJjZkhPTjNLb3FuNFArdytDVXdBdTJsenRHVUFDa1hVS09MNmpKODBQY1FiVnV2Z
+2dMYTdpcGM0UzF2TGFrZm9Hb0RYM01EQmlYTG13RFZzTTk3TVNNeWlPMGRmVDJYY0w2SmlkQUZrMmR5T
+Dh0Um5rMFZiZHIyZHBLdm0rd1drYk9nZWxlQzBVZkVqL0xUTWlZZ0dVOHEyYVRIQkpoRlJEVm8wdDBXb
+UFZN0JlbThHaVVMRUdKb0hnTk1BTXl5M3NOc1VJZ1VQWXo2NUxTdHYyZEJ2WStlTHlYYjlvL2srakRtb
+ERQc2VDbXNtT2VKNzZXRzI2T2FLRkNlSC9ZTjVaenhsZFVKd1BzbHBNcCtrcG9HaFFNKzlkR2hURzJLL
+3hrc2l4TXJLWkhsTUpzelVmRU5UZmlrVVZMYlFyTXVDUzdyMTZOdUZFU2d6aS9BPT0=';
     public $sRequirements = '';
     public $sBaseValue = 'TyUzQTglM0ElMjJzdGRDbGFzcyUyMiUzQTQlM0ElN0JzJTNBMjMlM0ElMjJkM19jZmdfbW9kX19hRm9sZGVyTGlzdCUyMiUzQmElM0E1JTNBJTdCaSUzQTAlM0JzJTNBMjUlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfTkVXJTIyJTNCaSUzQTElM0JzJTNBMzIlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfUEFZQURWQU5DRSUyMiUzQmklM0EyJTNCcyUzQTM2JTNBJTIyRDNfT1JERVJNQU5BR0VSX09SREVSX1BBWVNUQVRVU0NIRUNLJTIyJTNCaSUzQTMlM0JzJTNBMzYlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfREVMSVZFUllTVEFUVVMlMjIlM0JpJTNBNCUzQnMlM0EzNyUzQSUyMkQzX09SREVSTUFOQUdFUl9PUkRFUl9PUkRFUlBST0NFU1NJTkclMjIlM0IlN0RzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19ibENyb25BY3RpdmUlMjIlM0JzJTNBMSUzQSUyMjAlMjIlM0JzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19pTWF4T3JkZXJDbnQlMjIlM0JzJTNBMiUzQSUyMjUwJTIyJTNCcyUzQTI1JTNBJTIyZDNfY2ZnX21vZF9fc0Nyb25QYXNzd29yZCUyMiUzQnMlM0E4JTNBJTIyNW5kYnJCM1IlMjIlM0IlN0Q=';
 
-    public $sMinModCfgVersion = '5.2.0.0';
+    public $sMinModCfgVersion = '5.3.0.0';
     
     protected $_aUpdateMethods = array(
         array('check' => 'doesOrder2OrderManagerTableNotExist',
@@ -2886,12 +2887,35 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
      */
     public function hasNotOrderArticlesParentId()
     {
+        if (false == $this->mustCheckOrderArticlesParentId()) {
+            return false;
+        }
+
         $sSelect = "SELECT oxorderarticles.oxparentid != oxarticles.oxparentid ".
             "FROM oxorderarticles ".
             "LEFT JOIN oxarticles ON oxorderarticles.oxartid = oxarticles.oxid ".
             "WHERE oxarticles.oxparentid LIMIT 1";
 
-        return (bool) $this->getDb()->getOne($sSelect);
+        $ret = (bool) $this->getDb()->getOne($sSelect);
+
+        if ($ret === false) {
+            $this->setDontCheckOrderArticlesParentId();
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @return bool
+     */
+    public function mustCheckOrderArticlesParentId()
+    {
+        return false === $this->d3GetConfig()->getShopConfVar('setupCheckOrderArticleParentId', null, 'd3ordermanager');
+    }
+
+    public function setDontCheckOrderArticlesParentId()
+    {
+        $this->d3GetConfig()->saveShopConfVar('bool', 'setupCheckOrderArticleParentId', true, null, 'd3ordermanager');
     }
 
     /**
@@ -2906,7 +2930,11 @@ ncxQlVpRVV0TWpzanRiV1g4YnZvYXI2Vm1RUittZkF3VE1id2Qwc2NaRjR6RGI1WjBsNExoOHNZTU9DL
                 "SELECT oxarticles.oxparentid FROM oxarticles WHERE oxarticles.oxid = oxorderarticles.oxartid ".
             ") WHERE oxorderarticles.oxparentid = '';";
 
-        return $this->_tableSqlExecute($sSelect, 'oxorderarticles', true);
+        $ret = $this->_tableSqlExecute($sSelect, 'oxorderarticles', true);
+
+        $this->setDontCheckOrderArticlesParentId();
+
+        return $ret;
     }
 
     /**

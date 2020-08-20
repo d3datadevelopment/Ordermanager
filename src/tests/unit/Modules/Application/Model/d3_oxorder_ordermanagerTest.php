@@ -425,9 +425,9 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
-            'canGeneratePdf',
+            'canGenerateOxidPdf',
         ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
-        $oPdfHandlerMock->method('canGeneratePdf')->willReturn(true);
+        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(true);
         
         /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
         $oModelMock = $this->getMock(Order::class, array(
@@ -487,9 +487,9 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
-            'canGeneratePdf',
+            'canGenerateOxidPdf',
         ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
-        $oPdfHandlerMock->method('canGeneratePdf')->willReturn(true);
+        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(true);
 
         /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
         $oModelMock = $this->getMock(Order::class, array(
@@ -546,9 +546,9 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
-            'canGeneratePdf',
+            'canGenerateOxidPdf',
         ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
-        $oPdfHandlerMock->method('canGeneratePdf')->willReturn(false);
+        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(false);
 
         /** @var d3_oxorder_ordermanager|PHPUnit_Framework_MockObject_MockObject $oModelMock */
         $oModelMock = $this->getMock(Order::class, array(

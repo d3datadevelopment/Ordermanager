@@ -149,14 +149,15 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         $sScriptPath = VENDOR_PATH.'bin/d3_ordermanager_cron';
 
         $aParameters = array(
-            'shp' => $this->getViewConfig()->getActiveShopId(),
+            'task'  => 'run',
+            'shp'   => $this->getViewConfig()->getActiveShopId(),
         );
 
         if ($iCronJobId !== false) {
             $aParameters['cjid'] = $iCronJobId;
         }
 
-        $sPath   = $sScriptPath." ".implode(' ', $aParameters);
+        $sPath   = 'php ' . $sScriptPath." ".implode(' ', $aParameters);
 
         return $sPath;
     }
@@ -271,8 +272,9 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         /** @var Shop $oShop */
         $oShop = $this->d3GetActiveShop();
         $aParameters = array(
-            0 => $oShop->getId(),
-            1 => $sCronId,
+            0 => 'run',
+            1 => $oShop->getId(),
+            2 => $sCronId,
         );
 
         $oD3ShGenerator = $this->getFileGeneratorCronSh();

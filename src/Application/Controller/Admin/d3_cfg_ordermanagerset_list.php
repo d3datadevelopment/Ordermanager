@@ -22,9 +22,19 @@ use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_list;
 class d3_cfg_ordermanagerset_list extends d3_cfg_mod_list
 {
     // enables language depended configuration
-    protected $_blD3ShowLangSwitch = true;
+    protected $_blD3ShowLangSwitch = false;
     protected $_sMenuItemTitle = 'd3mxordermanager';
     protected $_sMenuSubItemTitle = 'd3mxordermanager_settings';
+
+    /**
+     * d3_cfg_ordermanagerset_list constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_blD3ShowLangSwitch = false;
+    }
 
     /**
      * @return null
