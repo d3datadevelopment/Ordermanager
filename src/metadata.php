@@ -25,7 +25,7 @@ use OxidEsales\Eshop\Core as OxidCore;
 /**
  * Metadata version
  */
-$sMetadataVersion = '2.0';
+$sMetadataVersion = '2.1';
 
 /**
  * Module information
@@ -33,13 +33,13 @@ $sMetadataVersion = '2.0';
 $aModule = array(
     'id'            => 'd3ordermanager',
     'title'         =>
-        (class_exists(d3utils::class) ? d3utils::getInstance()->getD3Logo() : 'D&sup3;') .
-        ' Auftragsmanager / Order Manager',
+        '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="height:1em;width:1em"> '.
+        'Auftragsmanager / Order Manager',
     'description'  => array(
         'de'    => 'Bearbeitet frei definierbare Auftr&auml;ge auf Basis von einstellbaren Bestellungslisten.',
         'en'    => ''),
     'thumbnail'     => 'picture.png',
-    'version'       => '4.0.0.0',
+    'version'       => '4.1.0.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'http://www.oxidmodule.com/',
@@ -166,12 +166,16 @@ $aModule = array(
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_changediscount.tpl',
         'd3ordermanager_action_generatepdf.tpl'         =>
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_generatepdf.tpl',
+        'd3ordermanager_action_getpdfdocuments.tpl'         =>
+            'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_getpdfdocuments.tpl',
         'd3ordermanager_action_custaddtogroup.tpl'      =>
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_custaddtogroup.tpl',
         'd3ordermanager_action_custdelfromgroup.tpl'    =>
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_custdelfromgroup.tpl',
         'd3ordermanager_action_sendmail.tpl'            =>
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_sendmail.tpl',
+        'd3ordermanager_action_sendpushnotification.tpl'            =>
+            'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_sendpushnotification.tpl',
         'd3ordermanager_action_exportlist.tpl'          =>
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_exportlist.tpl',
     ),

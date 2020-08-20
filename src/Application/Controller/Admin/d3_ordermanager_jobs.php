@@ -52,6 +52,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
      */
     public function __construct()
     {
+        // prevent the use of the global currency setting instead of the order setting
+        unset($_GET['cur']);
+        
         d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', $this->_sModId);
 
         parent::__construct();
@@ -63,7 +66,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
      */
     public function getItemObject()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
+        /** @var Order $item */
+        $item = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
+        return $item;
     }
 
     /**
@@ -105,7 +110,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
      */
     public function d3GetSession()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Session::class);
+        /** @var Session $session */
+        $session = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Session::class);
+        return $session;
     }
 
     /**
@@ -128,7 +135,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
      */
     public function getManagerList()
     {
-        return d3GetModCfgDIC()->get(d3ordermanagerlist::class);
+        /** @var d3ordermanagerlist $managerList */
+        $managerList = d3GetModCfgDIC()->get(d3ordermanagerlist::class);
+        return $managerList;
     }
 
     /**
@@ -188,7 +197,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
      */
     public function getManager()
     {
-        return d3GetModCfgDIC()->get(d3ordermanager::class);
+        /** @var d3ordermanager $manager */
+        $manager = d3GetModCfgDIC()->get(d3ordermanager::class);
+        return $manager;
     }
 
     /**
@@ -203,7 +214,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
             $oManager
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_execute::class);
+        /** @var d3ordermanager_execute $managerExecute */
+        $managerExecute = d3GetModCfgDIC()->get(d3ordermanager_execute::class);
+        return $managerExecute;
     }
 
     /**
@@ -271,7 +284,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
             $oManager
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_toorderassignment::class);
+        /** @var d3ordermanager_toorderassignment $managerAssignment */
+        $managerAssignment = d3GetModCfgDIC()->get(d3ordermanager_toorderassignment::class);
+        return $managerAssignment;
     }
 
     /**
@@ -350,7 +365,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
      */
     public function getLang()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        /** @var Language $language */
+        $language = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        return $language;
     }
 
     /**
@@ -385,7 +402,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
      */
     public function d3GetSet()
     {
-        return d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        /** @var d3_cfg_mod $modCfg */
+        $modCfg = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        return $modCfg;
     }
 
     public function getLink()

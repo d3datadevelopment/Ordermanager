@@ -14,7 +14,7 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Ordermanager\Tests\unit\Application\Controller\Admin;
+namespace D3\Ordermanager\tests\unit\Application\Controller\Admin;
 
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_list;
 use D3\Ordermanager\Application\Model\d3ordermanager;
@@ -24,7 +24,7 @@ use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
 class d3_cfg_ordermanageritem_listTest extends d3OrdermanagerUnitTestCase
@@ -60,7 +60,7 @@ class d3_cfg_ordermanageritem_listTest extends d3OrdermanagerUnitTestCase
      */
     public function canBuildWhere()
     {
-        /** @var d3_cfg_ordermanageritem_list|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_list|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_list::class)
             ->setMethods([
                 'getListFilter',

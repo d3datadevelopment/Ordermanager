@@ -190,13 +190,17 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
 
         // setting invoice number
         if (!$this->getFieldData('oxbillnr')) {
-            $this->_setFieldData('oxbillnr', $this->getNextBillNum());
-            $this->_setFieldData('oxbilldate', date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y'))));
+            $this->assign(
+                [
+                    'oxbillnr'      => $this->getNextBillNum(),
+                    'oxbilldate'    => date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y')))
+                ]
+            );
             $this->save();
         }
 
         $oPdfHandler = $this->d3GetPdfHandler();
-        if ($oPdfHandler->canGeneratePdf()) {
+        if ($oPdfHandler->canGenerateOxidPdf()) {
 
             $oPdf = $this->d3GetInvoicePdf();
             $oPdf->setPrintHeader(false);

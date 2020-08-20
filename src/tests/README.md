@@ -9,6 +9,8 @@ See https://github.com/OXID-eSales/testing_library.
 
 Make sure the module has been activated with a valid license key.
 
+Please install the packages listed in the composer.json in "require-dev". Unfortunately Composer does not provide an automatic installation.
+
 Here is an example of Testing Library configuration file `oxideshop/test_config.yml`
 
 ```

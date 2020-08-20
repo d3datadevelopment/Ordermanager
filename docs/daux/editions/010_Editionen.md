@@ -67,8 +67,10 @@ Das Modul **{$modulename}** erhalten Sie in verschiedenen Editionen mit untersch
 | Bezahlt-am Datum setzen						|				| X					| X					|
 | Versandkosten ändern							|				| X					| X					|
 | Rabatte ändern								|				| X					| X					|
-| PDF generieren								|				| X					| X					|
-| Feld mit Wert füllen							|				| 					| X					|
+| PDF generieren (aus OXID Invoice PDF)			|				| X					| X					|
+| PDF generieren (aus (D3) PDF Dokumente)		|				| X					| X					|
 | Kundengruppe zuordnen / entfernen				|				| X					| X					|
 | Export in Liste								|				| X					| X					|
+| Feld mit Wert füllen							|				| 					| X					|
 | Individualaktionen / -bedingungen definieren	|				| 					| X					|
+| Push-Notification senden						|				| 					| X					|

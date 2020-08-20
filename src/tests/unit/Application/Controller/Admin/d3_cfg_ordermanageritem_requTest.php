@@ -14,7 +14,7 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Ordermanager\Tests\unit\Application\Controller\Admin;
+namespace D3\Ordermanager\tests\unit\Application\Controller\Admin;
 
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ;
 use D3\Ordermanager\Application\Model\d3ordermanager;

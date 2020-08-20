@@ -19,6 +19,7 @@ use D3\Ordermanager\Application\Controller\d3ordermanager_response;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use Doctrine\DBAL\DBALException;
 use Exception as ExceptionAlias;
+use OxidEsales\ComposerPlugin\Installer\Package\ShopPackageInstaller;
 use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
@@ -32,12 +33,14 @@ use splitbrain\phpcli\Options;
 
 // @codeCoverageIgnoreStart
 
+require_once(__DIR__.'/../../../../../vendor/autoload.php');
+
 $bootstrapFileName = getenv('ESHOP_BOOTSTRAP_PATH');
 if (!empty($bootstrapFileName)) {
     $bootstrapFileName = realpath(trim(getenv('ESHOP_BOOTSTRAP_PATH')));
 } else {
     $count = 0;
-    $bootstrapFileName = '../../../source/bootstrap.php';
+    $bootstrapFileName = '../../../'. ShopPackageInstaller::SHOP_SOURCE_DIRECTORY .'/bootstrap.php';
     $currentDirectory = __DIR__ . '/';
     while ($count < 5) {
         $count++;
@@ -117,10 +120,8 @@ class d3_ordermanager_cron extends CLI
     /**
      * @param Options $options
      *
+     * @throws DBALException
      * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     * @throws Exception
-     * @throws ExceptionAlias
      */
     protected function setup(Options $options)
     {
@@ -220,7 +221,15 @@ class d3_ordermanager_cron extends CLI
                     $this->info(implode(PHP_EOL, $oResponse->getLastExecDateInfo()));
                     break;
                 default:
-                    echo $this->translateFixedStrings($options->help());
+                    // old command without 'run' task
+                    if (false === in_array($aTranslation['cjid'], ['', false, null])) {
+                        $oResponse->init();
+                        if ( !$options->getOpt( 'quiet' ) ) {
+                            $this->success('script successfully finished');
+                        }
+                    } else {
+                        echo $this->translateFixedStrings( $options->help() );
+                    }
             }
         } catch ( Exception $oEx ) {
             if (!Registry::getSession()->getVariable('d3ordermanager_quiet')) {
@@ -249,6 +258,7 @@ class d3_ordermanager_cron extends CLI
     public function run()
     {
         if (false === defined('OXID_PHP_UNIT')) {
+            // run cron script from browser
             if ('cli' != php_sapi_name()) {
                 // browser call don't handle CLI options and arguments
                 /** @var $oResponse d3ordermanager_response */

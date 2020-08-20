@@ -2,6 +2,28 @@
 title: Changelog
 --- 
 
+## 4.1.0.0 - (2020-08-20)
+
+### Added
+- PDF-Dokumente können optional aus D³ PDF Dokumente Modul sowie auch aus OXID PDF Invoice Modul generiert werden
+- Push-Notifications können versendet werden
+
+### Changed
+- OXID Invoice PDF Modul ist keine Anforderung mehr
+- jeder ausgeführte Task wird auf Abbrüche kontrolliert, um Folgetasks weiter ausführen zu können
+- Inhalte der E-Mails werden in Bestellssprache geladen
+- Sprachumschalter bei den Moduleinstellungen entfernt, um Verwirrungen bei unterschiedlichen Konfigurationen zu vermeiden
+- Währung der Bestellung wird im Maileditor geladen, um passende Formatierung zu verwenden
+- umfangreicher Setupschritt wird nur noch einmalig ausgeführt
+
+### Fixed
+- Dateinamen der PDF-Dokumente werden auf ungültige Zeichen geprüft und korrigiert
+- RemarkHandler verliert Informationen beim Ausführen von Cronjobs
+- ungültige Zeichen in PDF-Dateinamen werden ersetzt
+- alte Cronaufrufe ohne Command starten Verarbeitung nicht
+
+---
+
 ## 4.0.0.0 - (2020-04-29)
 
 ** Hinweis für kleinere Versions-Upgrades: Es gibt einige rückwärts-inkompatible Änderungen an dieser Version. **

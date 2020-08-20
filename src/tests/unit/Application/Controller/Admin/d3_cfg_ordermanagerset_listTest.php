@@ -14,7 +14,7 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Ordermanager\Tests\unit\Application\Controller\Admin;
+namespace D3\Ordermanager\tests\unit\Application\Controller\Admin;
 
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list;
 use D3\Ordermanager\Application\Model\d3ordermanager;
@@ -50,6 +50,23 @@ class d3_cfg_ordermanagerset_listTest extends d3OrdermanagerUnitTestCase
         parent::tearDown();
 
         unset($this->_oController);
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list::__construct
+     * @test
+     * @throws ReflectionException
+     */
+    public function constructPass()
+    {
+        $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanagerset_list::class);
+
+        $this->assertFalse(
+            $this->getValue(
+                $this->_oController,
+                '_blD3ShowLangSwitch'
+            )
+        );
     }
 
     /**

@@ -14,7 +14,7 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Ordermanager\Tests\unit\Modules\Application\Model;
+namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
 
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanager_conf;
@@ -40,6 +40,7 @@ use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridge;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridgeInterface;
+use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use stdClass;
@@ -437,8 +438,19 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 $moduleActivationBridge->activate( $moduleId, $shopId);
             }
 
-            $this->assertInstanceOf(
-                InvoicepdfPDF::class,
+            // can't test directly due a PHP 7.4 bug in TCPDF
+            /** @var invoicepdfPDF|MockObject $oInvoicePdfMock */
+            $oInvoicePdfMock = $this->getMockBuilder(invoicepdfPDF::class)
+                ->setMethods([
+                    'setPrintHeader',
+                    'open',
+                    'output'
+                ])
+                ->disableOriginalConstructor()
+                ->getMock();
+            d3GetModCfgDIC()->set('d3ox.ordermanager.'.InvoicepdfPDF::class, $oInvoicePdfMock);
+            $this->assertSame(
+                $oInvoicePdfMock,
                 $this->callMethod(
                     $this->_oModel,
                     'd3GetInvoicePdf'
@@ -479,6 +491,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'open',
                 'output'
             ])
+            ->disableOriginalConstructor()
             ->getMock();
         $oInvoicePdfMock->method('setPrintHeader')->willReturn(true);
         $oInvoicePdfMock->method('open')->willReturn(true);
@@ -486,10 +499,10 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
-            ->setMethods(['canGeneratePdf'])
+            ->setMethods(['canGenerateOxidPdf'])
             ->setConstructorArgs([d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)])
             ->getMock();
-        $oPdfHandlerMock->method('canGeneratePdf')->willReturn(true);
+        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(true);
         
         /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(Order::class)
@@ -553,6 +566,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'open',
                 'output'
             ])
+            ->disableOriginalConstructor()
             ->getMock();
         $oInvoicePdfMock->method('setPrintHeader')->willReturn(true);
         $oInvoicePdfMock->method('open')->willReturn(true);
@@ -560,10 +574,10 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
-            ->setMethods(['canGeneratePdf'])
+            ->setMethods(['canGenerateOxidPdf'])
             ->setConstructorArgs([d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)])
             ->getMock();
-        $oPdfHandlerMock->method('canGeneratePdf')->willReturn(true);
+        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(true);
 
         /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(Order::class)
@@ -626,10 +640,10 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
-            ->setMethods(['canGeneratePdf'])
+            ->setMethods(['canGenerateOxidPdf'])
             ->setConstructorArgs([d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)])
             ->getMock();
-        $oPdfHandlerMock->method('canGeneratePdf')->willReturn(false);
+        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(false);
 
         /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(Order::class)
@@ -793,7 +807,16 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
             $this->markTestSkipped('unavailable invoicePdf class');
         }
 
-        $oPDF = oxNew('invoicepdfPDF');
+        // can't test directly due a PHP 7.4 bug in TCPDF
+        /** @var invoicepdfPDF|MockObject $oInvoicePdfMock */
+        $oInvoicePdfMock = $this->getMockBuilder(invoicepdfPDF::class)
+            ->setMethods([
+                'setPrintHeader',
+                'open',
+                'output'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(Order::class)
@@ -812,7 +835,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
             'd3generatePdfBody',
             array(
                 d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_INVOICE,
-                $oPDF
+                $oInvoicePdfMock
             )
         );
     }
@@ -828,7 +851,16 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
             $this->markTestSkipped('unavailable invoicePdf class');
         }
 
-        $oPDF = oxNew('invoicepdfPDF');
+        // can't test directly due a PHP 7.4 bug in TCPDF
+        /** @var invoicepdfPDF|MockObject $oInvoicePdfMock */
+        $oInvoicePdfMock = $this->getMockBuilder(invoicepdfPDF::class)
+            ->setMethods([
+                'setPrintHeader',
+                'open',
+                'output'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(Order::class)
@@ -847,7 +879,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
             'd3generatePdfBody',
             array(
                 d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_DELIVERYNOTE,
-                $oPDF
+                $oInvoicePdfMock
             )
         );
     }

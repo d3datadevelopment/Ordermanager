@@ -14,7 +14,7 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Ordermanager\Tests\unit\Setup;
+namespace D3\Ordermanager\tests\unit\Setup;
 
 use D3\ModCfg\Application\Model\d3bitmask;
 use D3\ModCfg\Application\Model\d3database;
@@ -1549,6 +1549,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
      * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem7InsertFields
      * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem8InsertFields
      * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem9InsertFields
+     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem10InsertFields
      * @test
      * @throws ReflectionException
      */
@@ -1638,6 +1639,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
      * @covers \D3\Ordermanager\Setup\d3ordermanager_update::_addExampleJobItem
      * @test
      * @throws ReflectionException
+     * @throws Exception
      */
     public function canAddExampleJobItemNoStepByStep()
     {
@@ -1650,7 +1652,12 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             '_updateTableItem2',
             'getStepByStepMode'])
             ->getMock();
-        $oModelMock->method('getShopListByActiveModule')->willReturn(array(1, 2));
+        $oModelMock->method('getShopListByActiveModule')->willReturn(
+            array(
+                1 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
+                2 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
+            ));
+
         $oModelMock->method('jobFieldMethodName')->willReturn(true);
         $oModelMock->method('setInitialExecMethod')->willReturn(true);
         $oModelMock->expects($this->exactly(2))->method('_updateTableItem2')->willReturn('returnValue');
@@ -1688,6 +1695,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
      * @covers \D3\Ordermanager\Setup\d3ordermanager_update::_addExampleJobItem
      * @test
      * @throws ReflectionException
+     * @throws Exception
      */
     public function canAddExampleJobItemStepByStep()
     {
@@ -1700,7 +1708,12 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             '_updateTableItem2',
             'getStepByStepMode'])
             ->getMock();
-        $oModelMock->method('getShopListByActiveModule')->willReturn(array(1, 2));
+        $oModelMock->method('getShopListByActiveModule')->willReturn(
+            array(
+                1 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
+                2 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
+            ));
+
         $oModelMock->method('jobFieldMethodName')->willReturn(true);
         $oModelMock->method('setInitialExecMethod')->willReturn(true);
         $oModelMock->expects($this->once())->method('_updateTableItem2')->willReturn('returnValue');
@@ -1719,19 +1732,24 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     *
+     * @param $blCheckStatus
+     * @param $blExpected
+     * @param $iArticleCount
      * @covers \D3\Ordermanager\Setup\d3ordermanager_update::hasNotOrderArticlesParentId
      * @test
      * @throws DBALException
      * @throws ReflectionException
+     * @dataProvider hasNotOrderArticlesParentIdDataProvider
      */
-    public function checkHasNotOrderArticlesParentId()
+    public function checkHasNotOrderArticlesParentId($blCheckStatus, $blExpected, $iArticleCount)
     {
         /** @var PDOStatement|MockObject $oStmtMock */
         $oStmtMock = $this->getMockBuilder(PDOStatement::class)
             ->setMethods(['fetchColumn'])
             ->disableOriginalConstructor()
             ->getMock();
-        $oStmtMock->expects($this->once())->method('fetchColumn')->willReturn(1);
+        $oStmtMock->expects($this->exactly((int) $blCheckStatus))->method('fetchColumn')->willReturn($iArticleCount);
 
         /** @var QueryBuilder|MockObject $oQBMock */
         $oQBMock = $this->getMockBuilder(QueryBuilder::class)
@@ -1744,11 +1762,23 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
         $od3databaseMock = $this->getMockBuilder(d3database::class)
             ->setMethods(['getQueryBuilder'])
             ->getMock();
-        $od3databaseMock->expects($this->once())->method('getQueryBuilder')->willReturn($oQBMock);
-
+        $od3databaseMock->expects($this->exactly((int) $blCheckStatus))->method('getQueryBuilder')->willReturn($oQBMock);
         d3GetModCfgDIC()->set('d3.ordermanager.database', $od3databaseMock);
 
-        $this->assertTrue(
+        /** @var d3ordermanager_update|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
+            ->setMethods([
+                'mustCheckOrderArticlesParentId',
+                'setDontCheckOrderArticlesParentId'
+            ])
+            ->getMock();
+        $oModelMock->method('mustCheckOrderArticlesParentId')->willReturn($blCheckStatus);
+        $oModelMock->expects($this->exactly(((int)!(bool) $iArticleCount)))->method('setDontCheckOrderArticlesParentId');
+
+        $this->_oModel = $oModelMock;
+
+        $this->assertSame(
+            $blExpected,
             $this->callMethod(
                 $this->_oModel,
                 'hasNotOrderArticlesParentId'
@@ -1757,7 +1787,90 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addOrderArticlesParentId
+     * @return array
+     */
+    public function hasNotOrderArticlesParentIdDataProvider()
+    {
+        return [
+            [true, true, 2], // first execution, must check
+            [true, false, 0], // first execution, must check
+            [false, false, 2] // later executions, mustn't check again
+        ];
+    }
+
+    /**
+     * @param $blConfig
+     * @param $blExpected
+     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::mustCheckOrderArticlesParentId
+     * @test
+     * @throws ReflectionException
+     * @dataProvider mustCheckOrderArticlesParentIdPassDataProvider
+     */
+    public function mustCheckOrderArticlesParentIdPass($blConfig, $blExpected)
+    {
+        /** @var Config|MockObject $oConfigMock */
+        $oConfigMock = $this->getMockBuilder(Config::class)
+            ->setMethods(['getShopConfVar'])
+            ->getMock();
+        $oConfigMock->expects($this->once())->method('getShopConfVar')->willReturn($blConfig);
+
+        /** @var d3ordermanager_update|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
+            ->setMethods(['d3GetConfig'])
+            ->getMock();
+        $oModelMock->method('d3GetConfig')->willReturn($oConfigMock);
+
+        $this->_oModel = $oModelMock;
+
+        $this->assertSame(
+            $blExpected,
+            $this->callMethod(
+                $this->_oModel,
+                'mustCheckOrderArticlesParentId'
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function mustCheckOrderArticlesParentIdPassDataProvider()
+    {
+        return [
+            [true, false],
+            [false, true]
+        ];
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::setDontCheckOrderArticlesParentId()
+     * @test
+     * @throws ReflectionException
+     */
+    public function setDontCheckOrderArticlesParentIdPass()
+    {
+        /** @var Config|MockObject $oConfigMock */
+        $oConfigMock = $this->getMockBuilder(Config::class)
+            ->setMethods(['saveShopConfVar'])
+            ->getMock();
+        $oConfigMock->expects($this->once())->method('saveShopConfVar')->willReturn(true);
+
+        /** @var d3ordermanager_update|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
+            ->setMethods(['d3GetConfig'])
+            ->getMock();
+        $oModelMock->method('d3GetConfig')->willReturn($oConfigMock);
+
+        $this->_oModel = $oModelMock;
+
+        $this->callMethod(
+            $this->_oModel,
+            'setDontCheckOrderArticlesParentId'
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addOrderArticlesParentId()
      * @test
      * @throws ReflectionException
      */
@@ -1765,9 +1878,13 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_update|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
-            ->setMethods(['_tableSqlExecute'])
+            ->setMethods([
+                '_tableSqlExecute',
+                'setDontCheckOrderArticlesParentId',
+            ])
             ->getMock();
         $oModelMock->expects($this->once())->method('_tableSqlExecute')->willReturn(true);
+        $oModelMock->expects($this->once())->method('setDontCheckOrderArticlesParentId')->willReturn(true);
 
         $this->_oModel = $oModelMock;
 

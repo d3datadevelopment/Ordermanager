@@ -14,18 +14,20 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Ordermanager\Tests\unit\Modules\Application\Model;
+namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
 
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\d3str;
 use D3\ModCfg\Application\Model\Log\d3log;
 use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
+use D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanager_conf;
 use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
 use D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
+use D3\PdfDocuments\Application\Model\Documents\invoicePdf;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use Html2Text\Html2Text;
@@ -50,6 +52,7 @@ use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateRendererBrid
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use stdClass;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
 {
@@ -2395,11 +2398,50 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
      * @throws ReflectionException
      * @throws Exception
      */
-    public function canAddOrderManagerPdfAttachmentInvoice()
+    public function canAddOrderManagerPdfAttachment()
     {
+        /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
+        $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Email::class)
+            ->setMethods([
+                'd3GetPdfHandler',
+                'addOXIDPdfAttachment',
+                'addPdfDocumentsAttachment'
+            ])
+            ->getMock();
+        $oModelMock->method('d3GetPdfHandler')->willReturn($oPdfHandlerMock);
+        $oModelMock->expects($this->once())->method('addOXIDPdfAttachment')->willReturn(true);
+        $oModelMock->expects($this->once())->method('addPdfDocumentsAttachment')->willReturn(true);
+
+        $this->_oModel = $oModelMock;
+
+        $this->callMethod(
+            $this->_oModel,
+            '_d3AddOrderManagerPdfAttachment',
+            [d3GetModCfgDIC()->get(d3ordermanager::class)]
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::addOXIDPdfAttachment
+     * @test
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function canAddOrderManagerOxidPdfAttachmentInvoice()
+    {
+        /** @var Order|MockObject $oOrderMock */
+        $oOrderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         /** @var d3ordermanager|MockObject $oManagerMock */
         $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['getValue'])
+            ->setMethods(['getValue', 'getCurrentItem'])
             ->getMock();
         $getValueMap = [
             ['blActionOrderGeneratePdf_status', true],
@@ -2408,26 +2450,27 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ['blActionOrderPdfTypeDelnote', false],
         ];
         $oManagerMock->method('getValue')->willReturnMap($getValueMap);
+        $oManagerMock->method('getCurrentItem')->willReturn($oOrderMock);
 
         /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
             ->setMethods([
-                'canGeneratePdf',
-                'createPdf',
-                'getPdfFileName',
-                'getPdfSaveDir'])
+                'canGenerateOxidPdf',
+                'createOxidPdf',
+                'getOxidPdfFileName',
+                'getOxidPdfSaveDir'])
             ->setConstructorArgs([
                 $oManagerMock, 
                 d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)
             ])
             ->getMock();
-        $oPdfHandlerMock->method('canGeneratePdf')->willReturn(true);
-        $oPdfHandlerMock->expects($this->once())->method('createPdf')->with(
+        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(true);
+        $oPdfHandlerMock->expects($this->once())->method('createOxidPdf')->with(
             $this->stringContains(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_INVOICE),
             $this->anything()
         )->willReturn(true);
-        $oPdfHandlerMock->method('getPdfFileName')->willReturn(true);
-        $oPdfHandlerMock->method('getPdfSaveDir')->willReturn(true);
+        $oPdfHandlerMock->method('getOxidPdfFileName')->willReturn(true);
+        $oPdfHandlerMock->method('getOxidPdfSaveDir')->willReturn(true);
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(Email::class)
@@ -2436,29 +2479,33 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'addAttachment'
             ])
             ->getMock();
-        $oModelMock->method('d3GetPdfHandler')->willReturn($oPdfHandlerMock);
         $oModelMock->expects($this->once())->method('addAttachment')->willReturn(true);
 
         $this->_oModel = $oModelMock;
 
         $this->callMethod(
             $this->_oModel,
-            '_d3AddOrderManagerPdfAttachment',
-            array($oManagerMock)
+            'addOXIDPdfAttachment',
+            array($oManagerMock, $oPdfHandlerMock)
         );
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::_d3AddOrderManagerPdfAttachment
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::addOXIDPdfAttachment
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
-    public function canAddOrderManagerPdfAttachmentDNote()
+    public function canAddOrderManagerOxidPdfAttachmentDNote()
     {
+        /** @var Order|MockObject $oOrderMock */
+        $oOrderMock = $this->getMockBuilder(Order::class)
+           ->disableOriginalConstructor()
+           ->getMock();
+
         /** @var d3ordermanager|MockObject $oManagerMock */
         $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['getValue'])
+            ->setMethods(['getValue', 'getCurrentItem'])
             ->getMock();
         $getValueMap = [
             ['blActionOrderGeneratePdf_status', true],
@@ -2467,27 +2514,28 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ['blActionOrderPdfTypeDelnote', true],
         ];
         $oManagerMock->method('getValue')->willReturnMap($getValueMap);
+        $oManagerMock->method('getCurrentItem')->willReturn($oOrderMock);
 
         /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
             ->setMethods([
-                'canGeneratePdf',
-                'createPdf',
-                'getPdfFileName',
-                'getPdfSaveDir'
+                'canGenerateOxidPdf',
+                'createOxidPdf',
+                'getOxidPdfFileName',
+                'getOxidPdfSaveDir'
             ])
             ->setConstructorArgs([
                 $oManagerMock, 
                 d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)
             ])
             ->getMock();
-        $oPdfHandlerMock->method('canGeneratePdf')->willReturn(true);
-        $oPdfHandlerMock->expects($this->once())->method('createPdf')->with(
+        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(true);
+        $oPdfHandlerMock->expects($this->once())->method('createOxidPdf')->with(
             $this->stringContains(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_DELIVERYNOTE),
             $this->anything()
         )->willReturn(true);
-        $oPdfHandlerMock->method('getPdfFileName')->willReturn(true);
-        $oPdfHandlerMock->method('getPdfSaveDir')->willReturn(true);
+        $oPdfHandlerMock->method('getOxidPdfFileName')->willReturn(true);
+        $oPdfHandlerMock->method('getOxidPdfSaveDir')->willReturn(true);
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(Email::class)
@@ -2496,15 +2544,99 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'addAttachment'
             ])
             ->getMock();
-        $oModelMock->method('d3GetPdfHandler')->willReturn($oPdfHandlerMock);
         $oModelMock->expects($this->once())->method('addAttachment')->willReturn(true);
 
         $this->_oModel = $oModelMock;
 
         $this->callMethod(
             $this->_oModel,
-            '_d3AddOrderManagerPdfAttachment',
-            array($oManagerMock)
+            'addOXIDPdfAttachment',
+            array($oManagerMock, $oPdfHandlerMock)
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::_d3AddOrderManagerPdfAttachment
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::addPdfDocumentsAttachment
+     * @test
+     * @throws ReflectionException
+     */
+    public function canAddOrderManagerPdfDocumentAttachment()
+    {
+        d3GetModCfgDIC()->set(
+            d3ordermanager_pdfhandler::class.'.args.ordermanager',
+            d3GetModCfgDIC()->get(d3ordermanager::class)
+        );
+        d3GetModCfgDIC()->set(
+            d3ordermanager_pdfhandler::class.'.args.order',
+            d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)
+        );
+
+        /** @var d3ordermanager_pdfhandler $oPdfHandler */
+        $oPdfHandler = d3GetModCfgDIC()->get(d3ordermanager_pdfhandler::class);
+
+        if (false === $oPdfHandler->canGeneratePdfDocuments()) {
+            $this->markTestSkipped('no PDF documents module available');
+            return;
+        }
+
+        /** @var Order|MockObject $oOrderMock */
+        $oOrderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var invoicePdf|MockObject $oDocumentMock */
+        $oDocumentMock = $this->getMockBuilder(invoicePdf::class)
+            ->setMethods(['getFilename'])
+            ->getMock();
+        $oDocumentMock->method('getFilename')->willReturn('testFileName');
+
+        /** @var d3ordermanager_action_getpdfdocuments|MockObject $oActionMock */
+        $oActionMock = $this->getMockBuilder(d3ordermanager_action_getpdfdocuments::class)
+            ->setMethods(['getDocumentList', 'getOrder'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $oActionMock->method('getDocumentList')->willReturn([$oDocumentMock]);
+        $oActionMock->method('getOrder')->willReturn(oxNew(Order::class));
+        d3GetModCfgDIC()->set(d3ordermanager_action_getpdfdocuments::class, $oActionMock);
+
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->setMethods(['getValue', 'getCurrentItem'])
+            ->getMock();
+        $getValueMap = [
+            ['blActionOrderGetPdfDocument_status', true],
+            ['blActionOrderPdfDocumentSendAttach', true],
+            ['blActionOrderPdfDocumentType_invoice', true],
+            ['blActionOrderPdfDocumentType_delnote', false],
+        ];
+        $oManagerMock->method('getValue')->willReturnMap($getValueMap);
+        $oManagerMock->method('getCurrentItem')->willReturn($oOrderMock);
+
+        /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
+        $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
+            ->setMethods(['canGeneratePdfDocuments', 'createPdfDocument', 'getOxidPdfSaveDir'])
+            ->setConstructorArgs([$oManagerMock, d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)])
+            ->getMock();
+        $oPdfHandlerMock->method('canGeneratePdfDocuments')->willReturn(true);
+        $oPdfHandlerMock->expects($this->once())->method('createPdfDocument')->with(
+            $this->isInstanceOf(invoicePdf::class),
+            $this->anything()
+        )->willReturn(true);
+        $oPdfHandlerMock->method('getOxidPdfSaveDir')->willReturn(true);
+
+        /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(Email::class)
+            ->setMethods(['d3GetPdfHandler', 'addAttachment'])
+            ->getMock();
+        $oModelMock->expects($this->once())->method('addAttachment')->willReturn(true);
+
+        $this->_oModel = $oModelMock;
+
+        $this->callMethod(
+            $this->_oModel,
+            'addPdfDocumentsAttachment',
+            array($oManagerMock, $oPdfHandlerMock)
         );
     }
 
@@ -2730,5 +2862,21 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     protected function _setModuleLicenseKey($sLicenseKey, $oManager = null)
     {
         return null;
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::d3GetDIContainer
+     * @test
+     * @throws ReflectionException
+     */
+    public function getDIContainerHasRightInstance()
+    {
+        $this->assertInstanceOf(
+            ContainerInterface::class,
+            $this->callMethod(
+                $this->_oModel,
+                'd3GetDIContainer'
+            )
+        );
     }
 }

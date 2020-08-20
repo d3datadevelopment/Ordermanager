@@ -25,7 +25,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_stornoorder.args.order:
     synthetic:  true
     shared:     false
@@ -44,7 +44,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setpaiddate.args.order:
     synthetic:  true
     shared:     false
@@ -63,7 +63,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setsendednowdate.args.order:
     synthetic:  true
     shared:     false
@@ -82,7 +82,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setfieldvalue.args.order:
     synthetic:  true
     shared:     false
@@ -101,7 +101,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendmail.args.order:
     synthetic:  true
     shared:     false
@@ -120,7 +120,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_moveordertofolder.args.order:
     synthetic:  true
     shared:     false
@@ -139,8 +139,27 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf.args.order:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.order:
     synthetic:  true
     shared:     false
     public:     false
@@ -158,7 +177,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_exportlist.args.order:
     synthetic:  true
     shared:     false
@@ -177,8 +196,27 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_executemethod.args.order:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification.args.order:
     synthetic:  true
     shared:     false
     public:     false
@@ -196,7 +234,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_deleteorder.args.order:
     synthetic:  true
     shared:     false
@@ -215,7 +253,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custdelfromgroup.args.order:
     synthetic:  true
     shared:     false
@@ -234,7 +272,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custaddtogroup.args.order:
     synthetic:  true
     shared:     false
@@ -253,7 +291,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changediscount.args.order:
     synthetic:  true
     shared:     false
@@ -272,7 +310,7 @@ services:
     synthetic:  true
     shared:     false
     public:     false
-    # arg #1 ordermanager
+    # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changedelcosts.args.order:
     synthetic:  true
     shared:     false

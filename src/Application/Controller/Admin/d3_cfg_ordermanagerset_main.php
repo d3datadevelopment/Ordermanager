@@ -62,7 +62,10 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
      */
     public function getManager()
     {
-        return d3GetModCfgDIC()->get(d3ordermanager::class);
+        /** @var d3ordermanager $manager */
+        $manager = d3GetModCfgDIC()->get(d3ordermanager::class);
+
+        return $manager;
     }
 
     /**
@@ -96,7 +99,9 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
      */
     public function getD3Str()
     {
-        return d3GetModCfgDIC()->get(d3str::class);
+        /** @var d3str $d3str */
+        $d3str = d3GetModCfgDIC()->get(d3str::class);
+        return $d3str;
     }
 
     /**
@@ -142,20 +147,21 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         $sScriptPath = VENDOR_PATH.'bin/d3_ordermanager_cron';
 
         $aParameters = array(
-            'shp' => $this->getViewConfig()->getActiveShopId(),
+            'task'  => 'run',
+            'shp'   => $this->getViewConfig()->getActiveShopId(),
         );
 
         if ($iCronJobId !== false) {
             $aParameters['cjid'] = $iCronJobId;
         }
 
-        return $sScriptPath." ".implode(' ', $aParameters);
+        return 'php ' . $sScriptPath." ".implode(' ', $aParameters);
     }
 
     /**
      * @return array
+     * @throws DBALException
      * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
      * @throws Exception
      */
     public function getAvailableCronjobIds()
@@ -209,7 +215,10 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
      */
     public function getFileGeneratorCronSh()
     {
-        return d3GetModCfgDIC()->get(d3filegeneratorcronsh::class);
+        /** @var d3filegeneratorcronsh $filegenerator */
+        $filegenerator = d3GetModCfgDIC()->get(d3filegeneratorcronsh::class);
+
+        return $filegenerator;
     }
 
     /**
@@ -227,7 +236,9 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
      */
     public function getCompatibilityAdapterHandler()
     {
-        return d3GetModCfgDIC()->get(d3ShopCompatibilityAdapterHandler::class);
+        /** @var d3ShopCompatibilityAdapterHandler $compatiblityHandler */
+        $compatiblityHandler = d3GetModCfgDIC()->get(d3ShopCompatibilityAdapterHandler::class);
+        return $compatiblityHandler;
     }
 
     /**
@@ -261,8 +272,9 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
 
         $oShop = $this->d3GetActiveShop();
         $aParameters = array(
-            0 => $oShop->getId(),
-            1 => $sCronId,
+            0 => 'run',
+            1 => $oShop->getId(),
+            2 => $sCronId,
         );
 
         $oD3ShGenerator = $this->getFileGeneratorCronSh();

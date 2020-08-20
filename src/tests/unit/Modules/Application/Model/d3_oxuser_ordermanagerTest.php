@@ -14,7 +14,7 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Ordermanager\Tests\unit\Modules\Application\Model;
+namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
 
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Modules\Application\Model\d3_oxuser_ordermanager;

@@ -17,7 +17,7 @@
     {
         "name": "D3 Data Development (Inh. Thomas Dartsch)",
         "email": "info@shopmodule.com",
-        "homepage": "http://www.d3data.de",
+        "homepage": "https://www.d3data.de",
         "role": "Owner"
     }
   ],
@@ -32,20 +32,23 @@
     }
   },
   "require": {
-    "php": "7.1 - 7.3", "ext-ionCube-Loader": "*",
+    "php": "7.1 - 7.4", "ext-ionCube-Loader": "*",
     "ext-pdo": "*",
     "oxid-esales/oxideshop-ce": "6.5 - 6.5",
     "d3/modcfg": "^5.3.1.100",
     "league/flysystem": "^1.0",
     "splitbrain/php-cli": "^1.1",
     "html2text/html2text": "^4.2",
-    "nilportugues/sql-query-formatter": "^1.2.2"
+    "nilportugues/sql-query-formatter": "^1.2.2",
+    "guzzlehttp/guzzle": "^6.5.3"
   },
   "require-dev": {
-    "mikey179/vfsstream": "^1.4"
+    "mikey179/vfsstream": "^1.4",
+    "donatj/mock-webserver": "^2.1"
   },
   "suggest": {
-    "oxid-projects/pdf-invoice-module": "enables the automatic generation, dispatch and storage of PDF documents"
+    "d3/pdfdocuments": "enables the automatic generation, dispatch and storage of highly customizable PDF documents",
+    "oxid-projects/pdf-invoice-module": "enables the automatic generation, dispatch and storage of OXID invoice PDF documents"
   },
   "autoload": {
     "psr-4": {
