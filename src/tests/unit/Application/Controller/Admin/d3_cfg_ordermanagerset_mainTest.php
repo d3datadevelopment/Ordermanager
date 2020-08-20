@@ -313,7 +313,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertRegExp(
-            '/(?!http).*\/d3_ordermanager_cron\s[0-9]\stestCjId/i',
+            '/(?!http).*php.*\/d3_ordermanager_cron\srun\s[0-9]\stestCjId/i',
             $this->callMethod($this->_oController, 'getCronPath', array('testCjId'))
         );
     }
@@ -341,7 +341,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertRegExp(
-            '/(?!http).*\/d3_ordermanager_cron\s[0-9]/i',
+            '/(?!http).*php.*\/d3_ordermanager_cron\srun\s[0-9]/i',
             $this->callMethod($this->_oController, 'getCronPath', array())
         );
     }

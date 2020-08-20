@@ -204,7 +204,15 @@ class d3_ordermanager_cron extends CLI
                     $this->info(implode(PHP_EOL, $oResponse->getLastExecDateInfo()));
                     break;
                 default:
-                    echo $this->translateFixedStrings($options->help());
+                    // old command without 'run' task
+                    if (false === in_array($aTranslation['cjid'], ['', false, null])) {
+                        $oResponse->init();
+                        if ( !$options->getOpt( 'quiet' ) ) {
+                            $this->success('script successfully finished');
+                        }
+                    } else {
+                        echo $this->translateFixedStrings( $options->help() );
+                    }
             }
         } catch ( Exception $oEx ) {
             if (!Registry::getSession()->getVariable('d3ordermanager_quiet')) {
@@ -232,6 +240,7 @@ class d3_ordermanager_cron extends CLI
     public function run()
     {
         if (false === defined('OXID_PHP_UNIT')) {
+            // run cron script from browser
             if ('cli' != php_sapi_name()) {
                 // browser call don't handle CLI options and arguments
                 /** @var $oResponse d3ordermanager_response */

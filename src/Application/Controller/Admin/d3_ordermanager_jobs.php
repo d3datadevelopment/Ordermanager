@@ -52,6 +52,9 @@ class d3_ordermanager_jobs extends AdminDetailsController
      */
     public function __construct()
     {
+        // prevent the use of the global currency setting instead of the order setting
+        unset($_GET['cur']);
+        
         d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', $this->_sModId);
 
         parent::__construct();

@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * This Software is the property of Data Development and is protected
+ * by copyright law - it is NOT Freeware.
+ *
+ * Any unauthorized use of this software without a valid license
+ * is a violation of the license agreement and will be prosecuted by
+ * civil and criminal law.
+ *
+ * http://www.shopmodule.com
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+ * @link      http://www.oxidmodule.com
+ */
+
 use D3\Ordermanager\Setup as ModuleSetup;
 use D3\Ordermanager\Modules\Application\Model as ModuleModel;
 use D3\Ordermanager\Application\Controller as OMController;
@@ -13,7 +28,7 @@ use OxidEsales\Eshop\Core as OxidCore;
 /**
  * Metadata version
  */
-$sMetadataVersion = '2.0';
+$sMetadataVersion = '2.1';
 
 /**
  * Module information
@@ -21,13 +36,13 @@ $sMetadataVersion = '2.0';
 $aModule = array(
     'id'            => 'd3ordermanager',
     'title'         =>
-        (class_exists(d3utils::class) ? d3utils::getInstance()->getD3Logo() : 'D&sup3;') .
-        ' Auftragsmanager / Order Manager',
+        '<svg style="height:1em;width:1em"><image xlink:href="https://logos.oxidmodule.com/d3logo.svg" style="height:1em;width:1em" /></svg> '.
+        'Auftragsmanager / Order Manager',
     'description'  => array(
         'de'    => 'Bearbeitet frei definierbare Auftr&auml;ge auf Basis von einstellbaren Bestellungslisten.',
         'en'    => ''),
     'thumbnail'     => 'picture.png',
-    'version'       => '3.2.0.3',
+    'version'       => '3.3.0.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'http://www.oxidmodule.com/',
@@ -154,6 +169,8 @@ $aModule = array(
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_changediscount.tpl',
         'd3ordermanager_action_generatepdf.tpl'         =>
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_generatepdf.tpl',
+        'd3ordermanager_action_getpdfdocuments.tpl'         =>
+            'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_getpdfdocuments.tpl',
         'd3ordermanager_action_custaddtogroup.tpl'      =>
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_custaddtogroup.tpl',
         'd3ordermanager_action_custdelfromgroup.tpl'    =>
@@ -231,6 +248,7 @@ $aModule = array(
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_sendmail.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_setfieldvalue.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_interface.php',
+        'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_getpdfdocuments.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_notinfolderfilter.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_folderfilter.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirementgrouplist.php',

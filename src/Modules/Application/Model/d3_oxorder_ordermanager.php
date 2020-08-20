@@ -200,7 +200,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
         }
 
         $oPdfHandler = $this->d3GetPdfHandler();
-        if ($oPdfHandler->canGeneratePdf()) {
+        if ($oPdfHandler->canGenerateOxidPdf()) {
 
             $oPdf = $this->d3GetInvoicePdf();
             $oPdf->setPrintHeader(false);

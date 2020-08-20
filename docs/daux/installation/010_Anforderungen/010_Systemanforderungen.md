@@ -10,6 +10,7 @@ title: Systemanforderungen
     * OXID eShop Community Edition (CE), Professional Edition (PE) oder Enterprise Edition (EE) in Compilation Version 
         * 6.0.x
         * 6.1.x
+        * 6.2.x
 * Themes
     * Das Modul benötigt keine Einbindung ins Frontend und ist damit von diesen Themes unabhängig.
 * (D3) Modul-Connector ([kostenfrei bei D3 erhältlich](https://www.oxidmodule.com/connector/)) ab Version 5.3.1.0 

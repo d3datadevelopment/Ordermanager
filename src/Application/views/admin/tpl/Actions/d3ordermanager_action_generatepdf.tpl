@@ -1,4 +1,4 @@
-[{if !$oView->canGeneratePdf()}]
+[{if !$oView->canGenerateOxidPdf()}]
     [{assign var="blNoPdf" value="disabled"}]
 [{else}]
     [{assign var="blNoPdf" value=""}]
@@ -9,7 +9,7 @@
         <dt>
             <input type="hidden" name="value[blActionOrderGeneratePdf_status]" value="0">
             <input id="ActionOrderGeneratePdf" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderGeneratePdf_status]" value='1' [{if $edit->getValue('blActionOrderGeneratePdf_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$blNoPdf}] [{$readonly}]>
-            <label for="ActionOrderGeneratePdf">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERGENERATEPDF"}][{if !$oView->canGeneratePdf()}] <b>[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERGENERATEPDF_NOPDF"}]</b>[{/if}]</label>
+            <label for="ActionOrderGeneratePdf">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERGENERATEPDF"}][{if !$oView->canGenerateOxidPdf()}] <b>[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERGENERATEPDF_NOPDF"}]</b>[{/if}]</label>
         </dt>
         <dd>
             [{if $oView->isEditMode()}]

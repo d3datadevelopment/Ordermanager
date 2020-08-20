@@ -240,9 +240,18 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
      * @return bool
      * @throws ExceptionAlias
      */
-    public function canGeneratePdf()
+    public function canGenerateOxidPdf()
     {
-        return $this->getPdfHandler()->canGeneratePdf();
+        return $this->getPdfHandler()->canGenerateOxidPdf();
+    }
+
+    /**
+     * @return bool
+     * @throws ExceptionAlias
+     */
+    public function canGeneratePdfDocuments()
+    {
+        return $this->getPdfHandler()->canGeneratePdfDocuments();
     }
 
     /**

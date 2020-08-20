@@ -133,7 +133,7 @@ services:
   D3\Ordermanager\Application\Model\d3ordermanager_remark:
     class:      D3\Ordermanager\Application\Model\d3ordermanager_remark
     factory:    'oxNew'
-    shared:     false
+    shared:     true
     arguments:
       - D3\Ordermanager\Application\Model\d3ordermanager_remark
       - @D3\Ordermanager\Application\Model\d3ordermanager_remark.args.ordermanager

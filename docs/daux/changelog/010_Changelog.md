@@ -2,6 +2,27 @@
 title: Changelog
 --- 
 
+## 3.3.0.0 - (2020-08-20)
+
+### Added
+- PDF-Dokumente können optional aus D³ PDF Dokumente Modul sowie auch aus OXID PDF Invoice Modul generiert werden
+
+### Changed
+- OXID Invoice PDF Modul ist keine Anforderung mehr
+- jeder ausgeführte Task wird auf Abbrüche kontrolliert, um Folgetasks weiter ausführen zu können
+- Inhalte der E-Mails werden in Bestellssprache geladen
+- Sprachumschalter bei den Moduleinstellungen entfernt, um Verwirrungen bei unterschiedlichen Konfigurationen zu vermeiden
+- Währung der Bestellung wird im Maileditor geladen, um passende Formatierung zu verwenden
+- umfangreicher Setupschritt wird nur noch einmalig ausgeführt
+
+### Fixed
+- Dateinamen der PDF-Dokumente werden auf ungültige Zeichen geprüft und korrigiert
+- RemarkHandler verliert Informationen beim Ausführen von Cronjobs
+- ungültige Zeichen in PDF-Dateinamen werden ersetzt
+- alte Cronaufrufe ohne Command starten Verarbeitung nicht
+
+---
+
 ## 3.2.0.3 - (2020-04-24)
 ### Changed
 - Demoprofile werden nicht pauschal im ersten Shopmandanten installiert, sondern im 1. Mandanten mit aktiviertem Modul

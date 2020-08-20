@@ -4,7 +4,7 @@ Lassen Sie wiederkehrende Aufgaben automatisch nach frei definierbaren Regeln au
 [![Latest Stable Release](https://img.shields.io/packagist/v/d3/ordermanager.svg?label=aktuelles%20Release)](https://packagist.org/packages/d3/ordermanager)
 ![](https://img.shields.io/badge/V6--konform-komplett-brightgreen.svg)
 ![](https://img.shields.io/badge/softwaregetestet-komplett-brightgreen.svg)
-![](https://img.shields.io/badge/Testabdeckung-100%25-brightgreen.svg)
+![](https://img.shields.io/badge/Testabdeckung-99%25-brightgreen.svg)
 
 [![Downloads](https://img.shields.io/packagist/dt/d3/ordermanager.svg?label=Downloads)](https://packagist.org/packages/d3/ordermanager)
 [![](https://img.shields.io/badge/documentation-online-brightgreen.svg)](https://docs.oxidmodule.com/Auftragsmanager/)

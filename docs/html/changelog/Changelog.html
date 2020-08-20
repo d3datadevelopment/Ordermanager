@@ -53,7 +53,7 @@
                 <hr/>
                 <a href="https://www.oxidmodule.com" target="_blank">Shop</a><br />
                 <a href="https://blog.oxidmodule.com" target="_blank">Blog</a><br />
-                <a href="https://faq.oxidmodule.com" target="_blank">FAQ</a><br />
+                <a href="https://faq.d3data.de" target="_blank">FAQ</a><br />
                 <a href="https://docs.oxidmodule.com" target="_blank">Dokumentationen</a><br />
                 <a href="https://support.oxidmodule.com" target="_blank">D³ Support Center</a><br />
                 <a href="https://www.oxidmodule.com/kontakt" target="_blank">Kontakt</a><br />
@@ -72,16 +72,38 @@
     <div class="Page__header">
         <h1><a href="../changelog/Changelog.html">Changelog</a></h1>
                 <span class="ModifiedDate">
-                        24.04.2020        </span>
+                        20.08.2020        </span>
                     </div>
 
     <div class="s-content">
-        <h2 id="page_3-2-0-3-2020-04-24">3.2.0.3 - (2020-04-24)</h2>
+        <h2 id="page_3-3-0-0-2020-08-20">3.3.0.0 - (2020-08-20)</h2>
+<h3 id="page_Added">Added</h3>
+<ul>
+<li>PDF-Dokumente können optional aus D³ PDF Dokumente Modul sowie auch aus OXID PDF Invoice Modul generiert werden</li>
+</ul>
 <h3 id="page_Changed">Changed</h3>
+<ul>
+<li>OXID Invoice PDF Modul ist keine Anforderung mehr</li>
+<li>jeder ausgeführte Task wird auf Abbrüche kontrolliert, um Folgetasks weiter ausführen zu können</li>
+<li>Inhalte der E-Mails werden in Bestellssprache geladen</li>
+<li>Sprachumschalter bei den Moduleinstellungen entfernt, um Verwirrungen bei unterschiedlichen Konfigurationen zu vermeiden</li>
+<li>Währung der Bestellung wird im Maileditor geladen, um passende Formatierung zu verwenden</li>
+<li>umfangreicher Setupschritt wird nur noch einmalig ausgeführt</li>
+</ul>
+<h3 id="page_Fixed">Fixed</h3>
+<ul>
+<li>Dateinamen der PDF-Dokumente werden auf ungültige Zeichen geprüft und korrigiert</li>
+<li>RemarkHandler verliert Informationen beim Ausführen von Cronjobs</li>
+<li>ungültige Zeichen in PDF-Dateinamen werden ersetzt</li>
+<li>alte Cronaufrufe ohne Command starten Verarbeitung nicht</li>
+</ul>
+<hr />
+<h2 id="page_3-2-0-3-2020-04-24">3.2.0.3 - (2020-04-24)</h2>
+<h3 id="page_Changed-2">Changed</h3>
 <ul>
 <li>Demoprofile werden nicht pauschal im ersten Shopmandanten installiert, sondern im 1. Mandanten mit aktiviertem Modul</li>
 </ul>
-<h3 id="page_Fixed">Fixed</h3>
+<h3 id="page_Fixed-2">Fixed</h3>
 <ul>
 <li>Verwendung des Core-Tabellennamens gegen Viewnamen getauscht</li>
 <li>fehlende Einträge im Fileregister nachgetragen</li>
@@ -109,7 +131,7 @@
 </ul>
 <hr />
 <h2 id="page_3-2-0-0-2019-12-10">3.2.0.0 - (2019-12-10)</h2>
-<h3 id="page_Added">Added</h3>
+<h3 id="page_Added-2">Added</h3>
 <ul>
 <li>bearbeitbare E-Mails haben nun einen WYSIWYG-Editor, wenn einer im Shop installiert ist</li>
 <li>Selectlisten sind nun alphabetisch sortiert (Payments, Deliveries, Countries, Groups)</li>

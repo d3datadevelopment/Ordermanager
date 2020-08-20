@@ -145,6 +145,25 @@ services:
     shared:     false
     public:     false
 
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments
+      - @D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.ordermanager
+      - @D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.order
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.order:
+    synthetic:  true
+    shared:     false
+    public:     false
+
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_exportlist:
     class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_exportlist
     factory:    'oxNew'
