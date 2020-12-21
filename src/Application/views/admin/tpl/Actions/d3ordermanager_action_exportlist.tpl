@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_action_exportlist"}]
     <dl class="[{$blActionRestriction}]">
-        <dt style="width: 20%;">
-            <input type="hidden" name="value[blActionExport_status]" value="0">
-            <input id="ActionExport" class="edittext ext_edittext" type="checkbox" name="value[blActionExport_status]" value='1' [{if $edit->getValue('blActionExport_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="ActionExport">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_EXPORT"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oAction blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd style="margin-left: 30%;">
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_action_exportlist_editor"}]
@@ -22,7 +18,8 @@
 
                     <br><br>
                     <label for="ExportTpl">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_EXPORTTEMPLATE"}]</label>
-                    <input id="ExportTpl" type="text" name="value[sExportTemplatename]" size="50" maxlength="250" value="[{$edit->getValue('sExportTemplatename')}]" [{$blActionRestriction}] [{$readonly}]> [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_EXPORTTEMPLATE_DESC"}]<br>
+                    <input id="ExportTpl" type="text" name="value[sExportTemplatename]" size="50" maxlength="250" value="[{$edit->getValue('sExportTemplatename')}]" [{$blActionRestriction}] [{$readonly}]>
+                    [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_EXPORTTEMPLATE_DESC"}]<br>
 
                     <br><br>
                     <input style="margin-left: 20px;" id="FromThemeAdmin" type="radio" name="value[sExportListFromTheme]" value="admin" [{if $edit->getValue('sExportListFromTheme') == 'admin'}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]> <label for="FromThemeAdmin">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_ADMIN"}] ([{$oView->getManagerTemplateDirs(1)}])</label><br>

@@ -8,11 +8,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 namespace D3\Ordermanager\tests\integration\Requirements;
 
@@ -156,7 +156,7 @@ class requirementTransactionFilterTest extends d3OrdermanagerRequirementIntegrat
     public function requirementsSelectsRightOrdersNotOk()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerNotOk());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 2
@@ -194,7 +194,7 @@ class requirementTransactionFilterTest extends d3OrdermanagerRequirementIntegrat
     public function requirementsSelectsRightOrdersOk()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerOk());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 1

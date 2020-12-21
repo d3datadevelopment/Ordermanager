@@ -14,6 +14,6 @@ Der **{$modulename}** ist natürlich auch ohne das "Invoice PDF"-Modul einsetzba
 
 ---
 
-Der **{$modulename}** integriert die Erweiterung "WYSIWYG Editor + Mediathek" von OXID eSales AG & digidesk - media solutions, sofern diese im Shop installiert wurde. Diese Integration wurde für die Version 2.2.0 des "WYSIWYG Editor + Mediathek"-Moduls entwickelt. 
+Der **{$modulename}** integriert die Erweiterung "WYSIWYG Editor + Mediathek" von OXID eSales AG & digidesk - media solutions, sofern diese im Shop installiert wurde. Diese Integration wurde für die Version 3.0.0 des "WYSIWYG Editor + Mediathek"-Moduls entwickelt. 
 
 Der **{$modulename}** ist natürlich auch ohne das "WYSIWYG Editor + Mediathek"-Modul einsetzbar.

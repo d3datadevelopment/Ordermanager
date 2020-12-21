@@ -6,11 +6,7 @@
 
 [{block name="ordermanager_admin_action_getpdfdocument"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blActionOrderGetPdfDocument_status]" value="0">
-            <input id="ActionOrderGetPdfDocument" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderGetPdfDocument_status]" value='1' [{if $edit->getValue('blActionOrderGetPdfDocument_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$blNoPdf}] [{$readonly}]>
-            <label for="ActionOrderGetPdfDocument">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENT"}][{if !$oView->canGeneratePdfDocuments()}] <b>[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENT_NOPDF"}]</b>[{/if}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oAction blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_action_getpdfdocument_editor"}]

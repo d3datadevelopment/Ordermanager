@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_requ_deliveryfilter"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blCheckDelivery_status]" value="0">
-            <input id="RequDelivery" class="edittext ext_edittext" type="checkbox" name="value[blCheckDelivery_status]" value='1' [{if $edit->getValue('blCheckDelivery_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="RequDelivery">[{oxmultilang ident="D3_ORDERMANAGER_REQU_DELIVERY"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oRequ blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_deliveryfilter_editor"}]

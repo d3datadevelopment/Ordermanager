@@ -8,11 +8,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 namespace D3\Ordermanager\tests\integration\Requirements;
 
@@ -176,7 +176,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function requirementsSelectsRightOrdersArticleCountryBillSingle()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerCountryBillSingle());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() === 1
@@ -215,7 +215,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function requirementsSelectsRightOrdersArticleCountryDelSingle()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerCountryDelSingle());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() === 1
@@ -254,7 +254,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function requirementsSelectsRightOrdersArticleCountryBillDelSingle()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerCountryBillDelSingle());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() === 1
@@ -293,7 +293,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function requirementsSelectsRightOrdersArticleCountryMulti()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerCountryMulti());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() === 2

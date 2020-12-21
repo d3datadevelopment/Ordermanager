@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_action_changediscount"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blActionOrderChangeDiscount_status]" value="0">
-            <input id="ActionOrderChangeDiscount" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderChangeDiscount_status]" value='1' [{if $edit->getValue('blActionOrderChangeDiscount_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="ActionOrderChangeDiscount">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERCHANGEDISCOUNT"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oAction blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_action_changediscount_editor"}]

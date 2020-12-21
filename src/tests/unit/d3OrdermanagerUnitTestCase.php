@@ -1,173 +1,240 @@
-<?php //006ef
-// This Software is the property of D³ Data Development and is protected by copyright law - it is NOT Freeware.  Any unauthorized use of this software without a valid license key is a violation of the license agreement and will be prosecuted by civil and criminal law.  Inhaber: Thomas Dartsch Alle Rechte vorbehalten  @package Auftragsmanager @version 4.1.0.0 PHP71 (20.08.2020) @author  Daniel Seifert support@shopmodule.com @copyright (C) 2020, D3 Data Development @see http://www.shopmodule.com
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+/**
+ * This Software is the property of Data Development and is protected
+ * by copyright law - it is NOT Freeware.
+ *
+ * Any unauthorized use of this software without a valid license
+ * is a violation of the license agreement and will be prosecuted by
+ * civil and criminal law.
+ *
+ * https://www.d3data.de
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+ * @link      https://www.oxidmodule.com
+ */
+
+namespace D3\Ordermanager\tests\unit;
+
+use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
+use D3\ModCfg\Application\Model\DependencyInjectionContainer\d3DicHandler;
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Log\d3NullLogger;
+use D3\ModCfg\Tests\unit\d3ModCfgUnitTestCase;
+use D3\Ordermanager\Application\Model\d3ordermanager;
+use Doctrine\DBAL\DBALException;
+use Exception as ExceptionAlias;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Container\ContainerInterface;
+
+abstract class d3OrdermanagerUnitTestCase extends d3ModCfgUnitTestCase
+{
+    CONST D3CLI_COLOR_YELLOW    = "\033[33m";
+    CONST D3CLI_COLOR_DEFAULT   = "\033[0m";
+
+    protected $_sCurrentLicenseKeyBackup;
+
+    public $sModId = 'd3_ordermanager';
+
+    /**
+     * check for dependent 3rd party modules required for coverage report
+     */
+    public function setUpBeforeTestSuite()
+    {
+        parent::setUpBeforeTestSuite();
+
+        $container = ContainerFactory::getInstance()->getContainer();
+        $shopConfiguration = $container->get(ShopConfigurationDaoBridgeInterface::class)->get();
+
+        if (false === $shopConfiguration->hasModuleConfiguration('invoicepdf')) {
+            echo self::D3CLI_COLOR_YELLOW.
+                PHP_EOL.'      - no OXID InvoicePdf module installed'.
+                PHP_EOL.'        Coverage report may be incomplete.'.
+                PHP_EOL.PHP_EOL.self::D3CLI_COLOR_DEFAULT;
+        }
+        if (false === $shopConfiguration->hasModuleConfiguration('d3PdfDocuments')) {
+            echo self::D3CLI_COLOR_YELLOW.
+                PHP_EOL."      - no D3 PDF Documents module installed".
+                PHP_EOL."        Coverage report may be incomplete.".
+                PHP_EOL.PHP_EOL.self::D3CLI_COLOR_DEFAULT;
+        }
+        if (true === $shopConfiguration->hasModuleConfiguration('d3usermanager')) {
+            echo self::D3CLI_COLOR_YELLOW.
+                PHP_EOL."      - inaccurate test results possible due to installed and activated \"UserManager\" module".
+                PHP_EOL.PHP_EOL.self::D3CLI_COLOR_DEFAULT;
+        }
+    }
+
+    /**
+     * setup basic requirements
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws ExceptionAlias
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        d3GetModCfgDIC()->set('d3.ordermanager.log', d3GetModCfgDIC()->get(d3NullLogger::class));
+
+        $this->_setLicenseKeyBackup(d3_cfg_mod::get($this->sModId)->getFieldData('oxserial'));
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        d3DicHandler::removeInstance();
+    }
+
+    /**
+     * @param $sCurrKey
+     */
+    protected function _setLicenseKeyBackup($sCurrKey)
+    {
+        if (null === $this->_sCurrentLicenseKeyBackup) {
+            $this->_sCurrentLicenseKeyBackup = $sCurrKey;
+        }
+    }
+
+    /**
+     * unvalid edition: testlicense, no feature bit set
+     * @param d3ordermanager|false $oManager
+     * @return d3ordermanager|null
+     * @throws d3_cfg_mod_exception
+     */
+    protected function _setUnvalidEditionLicense($oManager = false)
+    {
+        return $this->_setModuleLicenseKey(
+            '3Ikv2==ZDE1MnFqYXpaSWNFS09WTjdWUEdnclV0UzJnREFVZitPWG90T2RQNEJtU2x3UFFpb3BrS1Jmc
+0FaTytnWnhvZVYwYVdic1RHWU00N0hlSWpCYXExWm0zRkhHeEpOTGw5d04zdVU2c25McjdkbENBV2poZ
+TA2SEVnU0Q0QjVlQWFSN0ZIdG8rTTVDcUh6am8yMjQ1TkkrbDRDVEVpU0ZaNWtyK0xzb2J5RE1FalhSS
+TNoMnZ5RjFVS0VCY1I0YWdNQXJCNHRMck1MeUZxc21uZXhOendQdCt2TTF2T3lKakxaMEJyRi8xVG1Cd
+0hWUDQ3eW1iM2FmaWZxaDdSQUZPQlNsMjhiaEd3MnJMVGFaMFdNNEhPNS9iNGtMSWEwUGR3amVPc1RTO
+Gs5YjJVWkRjZkNNaWtld3ZPd0hMRFVRaFRvanRLRlllYUZUVitrUGVPcGlKWEdWRFpxZUw1eTM3bU5Jd
+25TYk4wZWw1K0UwSjFXZ1VxNzE2WnNLai9wNnJTR2pDSnpzVm11RERzNFZYVnNtaVd4YzgxdUQzYjRDa
+mJyWW5qN3dXK3JmZ3Z2TEt5Ui95TFdBeGJkaEp3aXYvYWVwQTZkVUhGYlNDSldVcmUyaCtUN0RyOTVMe
+XVvTDlMUExvanltckRGY0t5dFBnMm5jcThxWFdob0xaaDAwUFA3TDNZcWx6RFgxNkNEWllVdUt3ZkVSU
+nVCeG9sNTZYWk83K0czOXBNbEVXRmFnelNaaExMdU1LZ085UkVhT0U2SitMM0pRVlhVcnNXVFNZQWh3T
+k1rQ2ljbEF2RzBxckpTSkpDK25QODV6UlZVVEFjS0xKUlUxT1QxeUtYZ0lFaHVnNVJBangvTVQzUmdNT
+GVyTTV6YmVZR0tkSW8yRysxRGN4SWJMcEl5N0tZVDJnUjZma2l0N3VjSVRXd1BtVlNuL1NRYnNGMVZsS
+mVTYStkejI1UENtOFBWR3BaTGpyVDJvNEtzeElaMnRxSmlNZU5PWTUydVdVYmNHN3cweTFXUzU5aWFMa
+llzTG1JOXRlTThqakxLb3BNdzBJTkE2bFJTcnlLR2JFdzZRZjRVcGcrZEpvN29BZ1dYMHBFMitWU084Q
+VNRbVdQVk54UVN5Umx0RUVXTUFEY2QyVStDZ1hYaGpNL3JGUDdqQndvaFZkZFRPaSt0UmJPcnlFcUd2T
+mpLdW1TVExkUWRDMlJyamhZejQ1VVdKNm1RM1RCY1R5N05Fd2phMXg0azNnQ3pKS3l3cjc4S0xnc0M4Z
+DhGYWhU',
+            $oManager
+        );
+    }
+
+    /**
+     * unvalid license: domain is mydomain.de, valid from 2000-01-01 00:00:00 to 2000-01-01 00:00:01
+     * free, standard and premium edition is set
+     * @param d3ordermanager|false $oManager
+     * @return d3ordermanager|null
+     * @throws d3_cfg_mod_exception
+     */
+    protected function _setUnvalidLicense($oManager = false)
+    {
+        return $this->_setModuleLicenseKey(
+            'GsPv2==Qm1vZi8yZGg1NDc3UUhWeFdsM3FVQ3REbW91MXVzRzRUV0hOdW5XQWMwbis0RFRpRStwWDM3S
+DRVaklENUdtcEU2Q2orMDVmZlJMSTlCSkRTbWJ4ckVwVGtMbkRYS2xlbVNmQUFxdk1reW04OENubW1zL
+3BobDR5VW1PWldKcUY1bXhmQTZXT2ZmWXkzckNqclgwK2JxaGJZdzBUaGdYeHlPcU9DZ2dja251ZmNKU
+zVWTnhxS3Z0dFJ0NVhtM20zRDFWdHBkNGJvN013VFRNUzJpZ0lXaEgxMG9BYS9iMjFqSDVySUw5YXdja
+U9wbUh0SHdVWVNxem1QQUREc2drQjNaZkovZEQxYnd0Wk5PSCtWbDVDOEdObk5qWHhNTG8yR0VUMUUvQ
+WJBd0dSYzFRdXBDb3pJdEZId1pCMEthcmtTR3hQSUwybW1CcGV6cnBhWFVnT3YwWG1kV3l5VnJ3aHBRN
+zYyQjJ1TzFWTW56L2tSSVVmdkNDM1FvOVFnVjlKczViZWJWbC9zSGltS3lLeVFQbE4yRjBIY0dSckVSa
+nJ5UTFCTkxBS0x0VHpOSGkxak45YVI2M2RWbHd6U3BKeVd4SDhQUkpTNlpmN1NYaXVqOFNmOHV6SlNEM
+E5mWjRmZGRPdlh1WDVRVVBVU3RSUS9wcmxKdWxNM01SVUFlNjZ0UUpjWkhJbVJqa05MeEQ4VzBYcFpmN
+kowK2JMMDMwT2pkNmtUZTU0WHRZVkZTaU5HaUdCWmtXQlVSN29LQXdlYURQRFc2N1pQUERKdlBGWXZUY
+mxlS3lOZlBab3JJMjhVRVk1L2sxcG1ZWDlhMDhncmxvWUdKT3M4OTA2T1ZWbW1mNmF5RXV2UGk1YzAwR
+U9oYkRQRXloU1YrbE4wQWovelY1c3B6K3BXYVJUOEE5SWFyYzF5NGtaZ0s1NVRrbEQ5MndFZmZXWmx6N
+FZtOUE5SmMrR1FRT2xzd1dhUjg5SlpXcVpLVFJnd3Z1a2Q1UG85OGd2T1B3VzZCZk5iaXNwcTUyOGZ0N
+E4vbDBuM2hweFBMSHpsTXF1TEZGM2NtbURiTHVmc1BqYndzRGx5ZEJHSFQ4RExMTnJIZTlKcmtDQTl2T
+1BrdVZ4MW1CaDdDdG5ydzg3YjFEQ3JpUFAreTRnMlM3SHlXS3Axb0xhWC9aWTBOZ2dFNWhUbGIvSkpmU
+mRPR1RuYlI4clJ3b0lZaVlnLzhVcUJqTHkzR3Z3Qmpmd2pNWGo3QnhuLzAwUC9nZVpYS1YwNFF2QktGZ
+CsveXVtQmxkN2h4NWsrMXJLanBVSk5ObnFGUT09',
+            $oManager
+        );
+    }
+
+    /**
+     * license is restricted to 1 executable job, all other restrictions are disabled
+     * @param d3ordermanager|false $oManager
+     * @return d3ordermanager|null
+     * @throws d3_cfg_mod_exception
+     */
+    protected function _setJobRestrictedLicense($oManager = false)
+    {
+        return $this->_setModuleLicenseKey(
+            'oW6v2==akxtdk1SNG16MzRKV1hvdmM3SFJ2WVpZcXV3ZThZNEVmUnNPTzkzdE54bnNod3l4UzBlZXQxN
+FQvSzg0aVNDSDY2UUxDVFVHbHpiNXZwZmFiQjZOVzFZc1RRVkl2d1ZmTXZZMXEvY2FwY1JxSHAxcU5Wa
+Vg1TnhLdVE2alZMdFJ6bDB6dDY0eFhXT2sxcFBIbnVhNkEvMGIvYmRPblhuWDRXU010TFdlNHFpNGU4d
+npLaXF2TnN5TzBibkx5ZlBYOUxWOWp0M0k0dlAyWldDN2V0ZjBkcXdUNU53Yld6UnppQ3FEUkxGOUlNa
+WVPK2YyeW5zZXJZZTJxRi9XMHRqMVVsR2xCZFNtQzdrWHZkRlZ0T3d1ZG9ramVTOVBkaExta0dyV0lKO
+Ek5R0c0bWN5aHJFWWtEeDdZOWczZ1RnTElMTGVCN2IyaE85Y1hyODNWTFpEb2h3M0JCNkpCSmVLV1NZO
+UtvVHIzSU9DcmN6Y29NTnlocXFTMnVmOWVNdnk3ZVNVZG1xY3JMUGh4QTVLWTllaFpKN0lkUnZGTi9PS
+WxtaitFQkM4WDVMVGc0ZzlUS1Bvc25vK004NjJsSm4yV2JPYnllWkpBeHFQUVkwWGMvUDA3Wkl0Vzk0a
+GQxdWJUWFlrS3FiZERPcjV4c0s4alZTY3pmQTBXcUsraElwQlRjYjNYQU1aUWZCZ3JrN3RJMGpvcGx0W
+E8yZjFWTXBzbkdhQnZzOUsvVWFXSHVJeXV6emRQbVpWTXBsN0VQaGxaREhvV1owa1lxZWZielRaUWt5c
+nFvOTB3MWxveXUzMjZSYVo1dWJtNUp6VHNLa1hFeXYrUzV0cFpNY1VVVmpGS3NOdWY5UmxnTENZdVZlc
+zBjdkYxQmI2VW5ueG9RVFFRdlNUZzZ4czNnT2x0V1I2V21yRmVsV1phSjA1L21TRjdpdjVEWXJidkVjR
+29iUmdqTkxkamdyb0RCUlYwbEVSKzhBVUhvcU1BTnZPdkxkKytnZnBWWEZRM044V1o0Q1R5eWxiWTNwZ
+25EYzNaT0Z6WUZHSTZRZUhzbERLaTR1TE1oSjREUHdxak5Qam9oc3BYZjFYbjRWSStHclNZRnRQMTl2K
+yttUUVxV2xYa0tUWVZTSk9zd3dhQUhMVXJTNnZRVThxTXp3eGx0dFg3UnR0U3pMZzcxdndNTXpEUXZzc
+DhhM2NybWk2MEtBcWZyQWN0bnhwdElnMnlIM01CSlFvV0pnRjdFSWpwT1l0T0pENXo3aFpyWjdrNUZzc
+kkxd0c2',
+            $oManager
+        );
+    }
+
+    /**
+     * @param null $oManager
+     * @return d3ordermanager|null
+     * @throws d3_cfg_mod_exception
+     */
+    protected function _setCustomerLicense($oManager = null)
+    {
+        if ($this->_sCurrentLicenseKeyBackup) {
+            $oReturnManager = $this->_setModuleLicenseKey($this->_sCurrentLicenseKeyBackup, $oManager);
+
+            if ($oManager) {
+                return $oReturnManager;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $sLicenseKey
+     * @param d3ordermanager|null $oManager
+     * @return d3ordermanager|null
+     * @throws d3_cfg_mod_exception
+     */
+    abstract protected function _setModuleLicenseKey($sLicenseKey, $oManager = null);
+
+    /**
+     * @param $serviceName
+     * @param $serviceMock
+     *
+     * @return MockObject
+     */
+    protected function getContainerMock($serviceName, $serviceMock)
+    {
+        $container = $this->getMockBuilder(ContainerInterface::class)
+                          ->setMethods(['get', 'has'])
+                          ->getMock();
+        $container->expects($this->any())
+                  ->method('get')
+                  ->with($this->equalTo($serviceName))
+                  ->will($this->returnValue($serviceMock));
+
+        return $container;
+    }
+}

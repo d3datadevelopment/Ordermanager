@@ -8,11 +8,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 namespace D3\Ordermanager\tests\integration\Requirements;
 
@@ -236,7 +236,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersArtnumAndCatId()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerArtnumAndCatId());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() === 1
@@ -254,6 +254,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
      */
     public function getConfiguredManagerTitle()
     {
+        /** @var d3ordermanager $oManager */
         $oManager = d3GetModCfgDIC()->get(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
@@ -278,7 +279,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersTitle()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerTitle());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() === 1
@@ -296,6 +297,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
      */
     public function getConfiguredManagerShortDesc()
     {
+        /** @var d3ordermanager $oManager */
         $oManager = d3GetModCfgDIC()->get(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
@@ -320,7 +322,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersShortDesc()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerShortDesc());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() === 1
@@ -338,6 +340,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
      */
     public function getConfiguredManagerSelVariant()
     {
+        /** @var d3ordermanager $oManager */
         $oManager = d3GetModCfgDIC()->get(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
@@ -362,7 +365,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersSelVariant()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerSelVariant());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() === 1
@@ -380,6 +383,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
      */
     public function getConfiguredManagerPersParams()
     {
+        /** @var d3ordermanager $oManager */
         $oManager = d3GetModCfgDIC()->get(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
@@ -404,7 +408,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersPersParams()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerPersParams());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() === 1

@@ -8,19 +8,19 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 namespace D3\Ordermanager\tests\integration;
 
 use D3\ModCfg\Application\Model\d3database;
 use D3\ModCfg\Application\Model\Log\d3log;
 use D3\ModCfg\Tests\unit\d3ModCfgUnitTestCase;
-use D3\Ordermanager\Application\Model\d3ordermanager;
-use D3\Ordermanager\Application\Model\d3ordermanager_listgenerator;
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
+use D3\Ordermanager\Application\Model\d3ordermanager_listgenerator as Manager_Listgenerator;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
 use Exception;
@@ -32,7 +32,7 @@ use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use PHPUnit\Framework\MockObject\MockObject;
 
-abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
+abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
 {
     /**
      * Set up fixture.
@@ -66,16 +66,16 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
      */
     public function createObject($sClass, $sId, $aFields = array())
     {
-        /** @var BaseModel $oOrder */
-        $oOrder = d3GetModCfgDIC()->get($sClass);
+        /** @var BaseModel $oObject */
+        $oObject = d3GetModCfgDIC()->get($sClass);
 
-        if ($oOrder->exists($sId)) {
-            $oOrder->delete($sId);
+        if ($oObject->exists($sId)) {
+            $oObject->delete($sId);
         }
         
-        $oOrder->setId($sId);
-        $oOrder->assign($aFields);
-        $oOrder->save();
+        $oObject->setId($sId);
+        $oObject->assign($aFields);
+        $oObject->save();
     }
 
     /**
@@ -86,12 +86,12 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
      */
     public function createBaseModelObject($sTableName, $sId, $aFields = array())
     {
-        /** @var BaseModel $oOrder */
-        $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.BaseModel::class);
-        $oOrder->init($sTableName);
-        $oOrder->setId($sId);
-        $oOrder->assign($aFields);
-        $oOrder->save();
+        /** @var BaseModel $oObject */
+        $oObject = d3GetModCfgDIC()->get('d3ox.ordermanager.'.BaseModel::class);
+        $oObject->init($sTableName);
+        $oObject->setId($sId);
+        $oObject->assign($aFields);
+        $oObject->save();
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
     public function createManager($sId)
     {
         $this->createObject(
-            d3ordermanager::class,
+            Manager::class,
             $sId,
             array(
                 'OXSHOPID'          => 1,
@@ -157,7 +157,7 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
         $this->createObject(
             'd3ox.ordermanager.'.User::class,
             $sId,
-            array_merge(array('oxusername'   => $sId, $aFields))
+            array_merge(array('oxusername'   => $sId), $aFields)
         );
     }
 
@@ -208,7 +208,7 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
      */
     public function deleteManager($sId)
     {
-        $this->deleteObject(d3ordermanager::class, $sId);
+        $this->deleteObject(Manager::class, $sId);
         $qb = d3database::getInstance()->getQueryBuilder();
         $qb->select('oxid')
             ->from('d3order2ordermanager')
@@ -260,13 +260,13 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
 
     /**
      * @param $sManagerId
-     * @return d3ordermanager|MockObject
+     * @return Manager|MockObject
      * @throws Exception
      */
     public function getManagerMock($sManagerId)
     {
-        /** @var d3ordermanager|MockObject $oManager */
-        $oManager = $this->getMockBuilder(d3ordermanager::class)
+        /** @var Manager|MockObject $oManager */
+        $oManager = $this->getMockBuilder(Manager::class)
             ->setMethods([
                 'd3getLog',
                 'getListGenerator',
@@ -282,19 +282,19 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
     }
 
     /**
-     * @param d3ordermanager $oManager
-     * @return d3ordermanager_listgenerator|MockObject
+     * @param Manager $oManager
+     * @return Manager_Listgenerator|MockObject
      * @throws Exception
      */
-    public function getListGenerator(d3ordermanager $oManager)
+    public function getListGenerator(Manager $oManager)
     {
         d3GetModCfgDIC()->set(
-            d3ordermanager_listgenerator::class.'.args.ordermanager',
+            Manager_Listgenerator::class.'.args.ordermanager',
             $oManager
         );
 
-        /** @var d3ordermanager_listgenerator $object */
-        $object = d3GetModCfgDIC()->get(d3ordermanager_listgenerator::class);
+        /** @var Manager_Listgenerator $object */
+        $object = d3GetModCfgDIC()->get(Manager_Listgenerator::class);
 
         return $object;
     }

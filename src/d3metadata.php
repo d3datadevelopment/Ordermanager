@@ -8,11 +8,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 use D3\Ordermanager\Setup as ModuleSetup;
@@ -20,8 +20,8 @@ use D3\Ordermanager\Setup as ModuleSetup;
 /**
  * Module information
  */
-$aModule = array(
-    'd3FileRegister'    => array(
+$aModule = [
+    'd3FileRegister'    => [
         'd3/ordermanager/IntelliSenseHelper.php',
         'd3/ordermanager/metadata.php',
         'd3/ordermanager/d3metadata.php',
@@ -207,6 +207,7 @@ $aModule = array(
         'd3/ordermanager/tests/unit/Application/Model/Exceptions/d3ordermanager_requirementExceptionTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_confTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_toorderassignmentTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/d3testscript.php',
         'd3/ordermanager/tests/unit/Application/Controller/d3ordermanager_responseTest.php',
         'd3/ordermanager/tests/unit/Application/Controller/Admin/d3_cfg_ordermanagerlogTest.php',
         'd3/ordermanager/tests/unit/Application/Controller/Admin/d3_cfg_ordermanagerset_mainTest.php',
@@ -256,7 +257,7 @@ $aModule = array(
         'd3/ordermanager/tests/integration/Requirements/requirementTransactionFilterTest.php',
         'd3/ordermanager/tests/integration/Requirements/requirementFolderFilterTest.php',
         'd3/ordermanager/tests/integration/Requirements/requirementNotInFolderFilterTest.php',
-        'd3/ordermanager/tests/integration/d3OrdermanagerIntegrationTestCase.php',
+        'd3/ordermanager/tests/integration/d3IntegrationTestCase.php',
         'd3/ordermanager/tests/integration/Actions/actionSetPaidDateTest.php',
         'd3/ordermanager/tests/integration/Actions/d3OrdermanagerActionIntegrationTestCase.php',
         'd3/ordermanager/tests/integration/Actions/actionDeleteOrderTest.php',
@@ -274,11 +275,13 @@ $aModule = array(
         'd3/ordermanager/tests/integration/Requirements/requirementOrderSumTest.php',
         'd3/ordermanager/tests/integration/executeCronTest.php',
         'd3/ordermanager/tests/integration/Admin/jobListTest.php',
-    ),
-    'd3SetupClasses'    => array(
-        ModuleSetup\d3ordermanager_update::class,
-    ),
+
+        'd3/ordermanager/Application/Model/d3ordermanager_vars.php'
+    ],
+    'd3SetupClasses'    => [
+        ModuleSetup\d3ordermanager_update::class
+    ],
     'd3DICDefinitionFiles'  => [
         'd3/ordermanager/Config/services.yaml',
     ]
-);
+];

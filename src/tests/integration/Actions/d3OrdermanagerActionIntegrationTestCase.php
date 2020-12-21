@@ -8,11 +8,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 namespace D3\Ordermanager\tests\integration\Actions;
 
@@ -20,13 +20,13 @@ use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanager_execute;
 use D3\Ordermanager\Application\Model\d3ordermanager_listgenerator;
 use D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment;
-use D3\Ordermanager\tests\integration\d3OrdermanagerIntegrationTestCase;
+use D3\Ordermanager\tests\integration\d3IntegrationTestCase;
 use Exception;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Core\Model\ListModel;
 use PHPUnit\Framework\MockObject\MockObject;
 
-abstract class d3OrdermanagerActionIntegrationTestCase extends d3OrdermanagerIntegrationTestCase
+abstract class d3OrdermanagerActionIntegrationTestCase extends d3IntegrationTestCase
 {
     /**
      * @param array $aOrderIdList
@@ -57,10 +57,10 @@ abstract class d3OrdermanagerActionIntegrationTestCase extends d3OrdermanagerInt
     {
         /** @var d3ordermanager_listgenerator|MockObject $oListGeneratorMock */
         $oListGeneratorMock = $this->getMockBuilder(d3ordermanager_listgenerator::class)
-            ->setMethods(['getConcernedOrders'])
+            ->setMethods(['getConcernedItems'])
             ->setConstructorArgs([$oManager])
             ->getMock();
-        $oListGeneratorMock->method('getConcernedOrders')->willReturn($this->getFilledResultList());
+        $oListGeneratorMock->method('getConcernedItems')->willReturn($this->getFilledResultList());
 
         return $oListGeneratorMock;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This Software is the property of Data Development and is protected
  * by copyright law - it is NOT Freeware.
@@ -7,19 +8,20 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
+use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
 use D3\ModCfg\Application\Model\d3database;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
-use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use Doctrine\DBAL\DBALException;
@@ -34,6 +36,8 @@ use OxidEsales\Eshop\Core\Model\MultiLanguageModel;
 
 class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
 {
+    use VariablesTrait;
+
     protected $_sModId = 'd3_ordermanager';
     protected $_sMenuItemTitle = 'd3mxordermanager';
     protected $_blUseOwnOxid = true;
@@ -43,14 +47,14 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
             'sTranslationId' => 'D3_TOOLTIPS_NEWORDERMANAGER',
         ),
     );
-    protected $_sD3ObjectClass = d3ordermanager::class;
+    protected $_sD3ObjectClass = Manager::class;
 
     /**
-     * d3_cfg_ordermanageritem_settings constructor.
+     * constructor.
      */
     public function __construct()
     {
-        d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', $this->_sModId);
+        d3GetModCfgDIC()->setParameter($this->_DIC_Instance_Id.'modcfgid', $this->_sModId);
 
         parent::__construct();
     }
@@ -62,7 +66,7 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
     public function getItemFolders()
     {
         /** @var Config $config */
-        $config = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
+        $config = d3GetModCfgDIC()->get($this->_DIC_OxInstance_Id.Config::class);
 
         return $config->getConfigParam('aOrderfolder');
     }
@@ -74,7 +78,7 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
     public function getGroupsList()
     {
         /** @var $oGroupsList ListModel */
-        $oGroupsList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.ListModel::class);
+        $oGroupsList = d3GetModCfgDIC()->get($this->_DIC_OxInstance_Id.ListModel::class);
         $oGroupsList->init('oxgroups');
         return $this->_getObjectList($oGroupsList, null, 'oxtitle ASC');
     }
@@ -93,7 +97,7 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
         startProfile(__METHOD__);
 
         /** @var Language $oLang */
-        $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        $oLang = d3GetModCfgDIC()->get($this->_DIC_OxInstance_Id.Language::class);
 
         /** @var MultiLanguageModel $oObject */
         $oObject = $oObjectList->getBaseObject();
@@ -143,10 +147,10 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
     public function getRestrictionMessage()
     {
         /** @var Language $oLang */
-        $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        $oLang = d3GetModCfgDIC()->get($this->_DIC_OxInstance_Id.Language::class);
 
         /** @var d3_cfg_mod $oModCfg */
-        $oModCfg =  d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        $oModCfg =  d3GetModCfgDIC()->get($this->_DIC_Instance_Id.'modcfg');
 
         return sprintf(
             $oLang->translateString('D3_ORDERMANAGER_ERROR_RESTRICTIONS'),

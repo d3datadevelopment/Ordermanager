@@ -8,19 +8,20 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
+use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
-use D3\Ordermanager\Application\Model\d3ordermanager;
-use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
+use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Core\Config;
@@ -31,6 +32,8 @@ use OxidEsales\Eshop\Core\Request;
 
 class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
 {
+    use VariablesTrait;
+
     protected $_sSavedId = null;
     protected $_sSetModId = 'd3_ordermanager';
     protected $_sModId = 'd3_ordermanager';
@@ -44,7 +47,7 @@ class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
             'sTranslationId' => 'D3_TOOLTIPS_NEWORDERMANAGER',
         ),
     );
-    protected $_sD3ObjectClass = d3ordermanager::class;
+    protected $_sD3ObjectClass = Manager::class;
 
     /**
      * Loads article parameters and passes them to template engine, returns
@@ -84,9 +87,9 @@ class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
     {
         $aParams = parent::addDefaultValues($aParams);
 
-        /** @var d3ordermanager $oOrderManager */
-        $oOrderManager = d3GetModCfgDIC()->get(d3ordermanager::class);
-        $sFieldLongName = $oOrderManager->d3GetFieldLongName('d3_cronjobid');
+        /** @var Manager $oManager */
+        $oManager = d3GetModCfgDIC()->get(Manager::class);
+        $sFieldLongName = $oManager->d3GetFieldLongName('d3_cronjobid');
 
         /** @var Request $request */
         $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);

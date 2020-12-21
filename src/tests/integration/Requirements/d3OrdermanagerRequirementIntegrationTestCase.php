@@ -8,22 +8,22 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 namespace D3\Ordermanager\tests\integration\Requirements;
 
 use D3\Ordermanager\Application\Model\d3ordermanager;
-use D3\Ordermanager\tests\integration\d3OrdermanagerIntegrationTestCase;
+use D3\Ordermanager\tests\integration\d3IntegrationTestCase;
 use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use PHPUnit\Framework\MockObject\MockObject;
 
-abstract class d3OrdermanagerRequirementIntegrationTestCase extends d3OrdermanagerIntegrationTestCase
+abstract class d3OrdermanagerRequirementIntegrationTestCase extends d3IntegrationTestCase
 {
     /**
      * @param $sManagerId

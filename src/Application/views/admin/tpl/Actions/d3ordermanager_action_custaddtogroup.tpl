@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_action_custaddtogroup"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blActionCust2Group_status]" value="0">
-            <input id="ActionCustAdd2Group" class="edittext ext_edittext" type="checkbox" name="value[blActionCust2Group_status]" value='1' [{if $edit->getValue('blActionCust2Group_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="ActionCustAdd2Group">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_CUSTOMERADD2GROUP"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oAction blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_action_custaddtogroup_editor"}]

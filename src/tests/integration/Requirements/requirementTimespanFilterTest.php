@@ -8,11 +8,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 namespace D3\Ordermanager\tests\integration\Requirements;
 
@@ -210,7 +210,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersOrderDateMinute()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerOrderDateMinute());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 3
@@ -234,7 +234,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersOrderDateHour()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerOrderDateHour());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 2
@@ -258,7 +258,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersOrderDateDay()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerOrderDateDay());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 1
@@ -282,7 +282,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersOrderDateDontPass()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerOrderDateDontPass());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 0
@@ -370,7 +370,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersDelDateMinute()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerDelDateMinute());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 3
@@ -394,7 +394,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersDelDateHour()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerDelDateHour());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 2
@@ -418,7 +418,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersDelDateDay()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerDelDateDay());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 1
@@ -442,7 +442,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersDelDateDontPass()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerDelDateDontPass());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 0
@@ -530,7 +530,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersPaidDateMinute()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerPaidDateMinute());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 3
@@ -554,7 +554,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersPaidDateHour()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerPaidDateHour());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 2
@@ -578,7 +578,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersPaidDateDay()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerPaidDateDay());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 1
@@ -602,7 +602,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersPaidDateDontPass()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerPaidDateDontPass());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 0

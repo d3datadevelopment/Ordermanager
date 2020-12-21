@@ -8,42 +8,44 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Application\Controller;
 
+use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\ModCfg\Application\Model\Log\d3LogInterface;
-use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException;
-use D3\Ordermanager\Application\Model\d3ordermanager;
-use D3\Ordermanager\Application\Model\d3ordermanagerlist;
-use D3\Ordermanager\Application\Model\d3ordermanager_execute;
-use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Log\d3log;
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
+use D3\Ordermanager\Application\Model\d3ordermanager_execute as ManagerExecuteModel;
+use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
+use D3\Ordermanager\Application\Model\d3ordermanagerlist as ManagerList;
+use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException as cronUnavailableException;
 use Doctrine\DBAL\DBALException;
 use Exception;
+use OxidEsales\Eshop\Core\Base;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\DatabaseException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
-use OxidEsales\Eshop\Core\Base;
-use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Session;
 
 class d3ordermanager_response extends Base
 {
+    use VariablesTrait;
     private $_sModId = 'd3_ordermanager';
 
     /**
-     * d3ordermanager_response constructor.
+     * constructor.
      */
     public function __construct()
     {
@@ -110,8 +112,8 @@ class d3ordermanager_response extends Base
                 'execution time: '.$iExecTime." sec"
             );
 
-        } catch (d3ordermanager_cronUnavailableException $oEx) {
-            /** @var d3ordermanager_cronunavailableexception $oEx */
+        } catch (cronUnavailableException $oEx) {
+            /** @var cronUnavailableException $oEx */
             $oEx->d3showMessage();
             $blExc = true;
         } catch (StandardException $oEx) {
@@ -127,27 +129,33 @@ class d3ordermanager_response extends Base
     }
 
     /**
-     * @return d3ordermanagerlist
+     * @return ManagerList
      * @throws Exception
      */
     public function getManagerList()
     {
-        return d3GetModCfgDIC()->get(d3ordermanagerlist::class);
+        /** @var ManagerList $managerList */
+        $managerList = d3GetModCfgDIC()->get(ManagerList::class);
+
+        return $managerList;
     }
 
     /**
-     * @param d3ordermanager $oManager
-     * @return d3ordermanager_execute
+     * @param Manager $oManager
+     * @return ManagerExecuteModel
      * @throws Exception
      */
-    public function getManagerExecute(d3ordermanager $oManager)
+    public function getManagerExecute(Manager $oManager)
     {
         d3GetModCfgDIC()->set(
-            d3ordermanager_execute::class.'.args.ordermanager',
+            ManagerExecuteModel::class.'.args.ordermanager',
             $oManager
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_execute::class);
+        /** @var ManagerExecuteModel $manager_execute */
+        $manager_execute = d3GetModCfgDIC()->get(ManagerExecuteModel::class);
+
+        return $manager_execute;
     }
 
     /**
@@ -155,9 +163,9 @@ class d3ordermanager_response extends Base
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @throws DatabaseException
-     * @throws Exception
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
+     * @throws Exception
      */
     protected function _startJobs()
     {
@@ -185,7 +193,7 @@ class d3ordermanager_response extends Base
             $oManagerList->count()
         );
 
-        /** @var $oManager d3ordermanager */
+        /** @var $oManager Manager */
         foreach ($oManagerList->getList() as $oManager) {
             $oHandleManager = $this->getManager();
             $oHandleManager->load($oManager->getId());
@@ -203,12 +211,15 @@ class d3ordermanager_response extends Base
     }
 
     /**
-     * @return d3ordermanager
+     * @return Manager
      * @throws Exception
      */
     public function getManager()
     {
-        return d3GetModCfgDIC()->get(d3ordermanager::class);
+        /** @var Manager $manager */
+        $manager = d3GetModCfgDIC()->get(Manager::class);
+
+        return $manager;
     }
 
     /**
@@ -233,7 +244,10 @@ class d3ordermanager_response extends Base
      */
     protected function _getSet()
     {
-        return d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        /** @var d3_cfg_mod $modcfg */
+        $modcfg = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+
+        return $modcfg;
     }
 
     /**
@@ -280,7 +294,7 @@ class d3ordermanager_response extends Base
      * @throws StandardException
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
-     * @throws d3ordermanager_cronUnavailableException
+     * @throws cronUnavailableException
      * @throws Exception
      */
     protected function _checkUnavailableCronjob()
@@ -307,7 +321,7 @@ class d3ordermanager_response extends Base
      * @throws StandardException
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
-     * @throws d3ordermanager_cronUnavailableException
+     * @throws cronUnavailableException
      * @throws Exception
      */
     public function _checkDisabledCronjob()
@@ -327,17 +341,20 @@ class d3ordermanager_response extends Base
 
     /**
      * @param $sMessage
-     * @return d3ordermanager_cronUnavailableException
+     * @return cronUnavailableException
      * @throws Exception
      */
     public function getCronUnavailableException($sMessage)
     {
         d3GetModCfgDIC()->setParameter(
-            d3ordermanager_cronUnavailableException::class.'.args.message',
+            cronUnavailableException::class.'.args.message',
             $sMessage
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_cronUnavailableException::class);
+        /** @var cronUnavailableException $cronUnavailableExc */
+        $cronUnavailableExc = d3GetModCfgDIC()->get(cronUnavailableException::class);
+
+        return $cronUnavailableExc;
     }
 
     /**
@@ -414,6 +431,9 @@ class d3ordermanager_response extends Base
      */
     public function getLang()
     {
-        return Registry::getLang();
+        /** @var Language $lang */
+        $lang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+
+        return $lang;
     }
 }

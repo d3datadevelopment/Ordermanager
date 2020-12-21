@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_action_setfieldvalue"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blActionOrderAddFieldValue_status]" value="0">
-            <input id="ActionOrderSetField" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderAddFieldValue_status]" value='1' [{if $edit->getValue('blActionOrderAddFieldValue_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="ActionOrderSetField">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERADDFIELDVALUE"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oAction blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_action_setfieldvalue_editor"}]

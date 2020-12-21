@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_requ_datenotset"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blCheckNotSetDate_status]" value="0">
-            <input id="RequNotSetDate" class="edittext ext_edittext" type="checkbox" name="value[blCheckNotSetDate_status]" value='1' [{if $edit->getValue('blCheckNotSetDate_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="RequNotSetDate">[{oxmultilang ident="D3_ORDERMANAGER_REQU_NOTSETDATE"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oRequ blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_datenotset_editor"}]

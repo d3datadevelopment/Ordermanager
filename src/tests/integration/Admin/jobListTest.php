@@ -6,22 +6,22 @@
  * Any unauthorized use of this software without a valid license
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author        D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link          http://www.oxidmodule.com
+ * @link          https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\tests\integration\Admin;
 
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_list;
-use D3\Ordermanager\tests\integration\d3OrdermanagerIntegrationTestCase;
+use D3\Ordermanager\tests\integration\d3IntegrationTestCase;
 use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 
-class jobListTest extends d3OrdermanagerIntegrationTestCase
+class jobListTest extends d3IntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
 

@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_requ_notingroup"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blCheckNotInGroup_status]" value="0">
-            <input id="RequNotInGroup" class="edittext ext_edittext" type="checkbox" name="value[blCheckNotInGroup_status]" value='1' [{if $edit->getValue('blCheckNotInGroup_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="RequNotInGroup">[{oxmultilang ident="D3_ORDERMANAGER_REQU_NOTINGROUP"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oRequ blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_notingroup_editor"}]

@@ -1,9 +1,6 @@
 [{block name="ordermanager_admin_requ_otherjob"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blCheckOtherJob_status]" value="0">
-            <input id="RequOtherJob" class="edittext ext_edittext" type="checkbox" name="value[blCheckOtherJob_status]" value='1' [{if $edit->getValue('blCheckOtherJob_status') == 1}]checked[{/if}] [{$readonly}] [{$blActionRestriction}]>
-            <label for="RequOtherJob">[{oxmultilang ident="D3_ORDERMANAGER_REQU_OTHERJOB"}]</label>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oRequ blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_otherjob_editor"}]

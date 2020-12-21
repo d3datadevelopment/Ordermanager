@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_requ_countryfilter"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blCheckCountry_status]" value="0">
-            <input id="RequCountry" class="edittext ext_edittext" type="checkbox" name="value[blCheckCountry_status]" value='1' [{if $edit->getValue('blCheckCountry_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="RequCountry">[{oxmultilang ident="D3_ORDERMANAGER_REQU_COUNTRY"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oRequ blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_countryfilter_editor"}]

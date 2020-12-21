@@ -8,17 +8,19 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Setup;
 
+use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\d3bitmask;
 use D3\ModCfg\Application\Model\d3database;
+use D3\ModCfg\Application\Model\d3str;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
@@ -43,19 +45,19 @@ class d3ordermanager_update extends d3install_updatebase
 {
     public $sModKey = 'd3_ordermanager';
     public $sModName = 'Auftragsmanager';
-    public $sModVersion = '4.1.0.0';
-    public $sModRevision = '4100';
+    public $sModVersion = '4.1.1.0';
+    public $sModRevision = '4110';
     public $sBaseConf =
-    'mMSv2==Yzg0aU80d2NHY0gvYlQ0Z1grZERKYS9XNFFGcUJEam4vd1dVSVBTWWlobTYwejdOZUQwa0VqK
-1BOT2N6R0VWbjFSOVVPcEJYZWRzQk9CTmpMc2xYSG9ZRDhtZzFXYkE3Z1owWGpzb0Mvc3I0Q1lmU1MyS
-VRldTlOMnZhTEFZSCtRdzlyQW0vOHVGYzd3eFo4WUVjc0VjbG1sLzREeXRiU0dMcXRNTGpMSFBTYWVOL
-0luY2ZwcndaWW1jVnlhUWVUQjhVTHVpaVo1UEx3NDZrYjVWbmxFS0ZkK01iak5ONW5jQlFKMWg1VWIra
-W9WamNnVEdDeE5YeHlCeEpjTmVvc2lUVEVGL25ZUFJQOS9ZcEdBbUpMUUxndVo2N3g3ZUQvd1BUN3BXZ
-U8zcnl6RFpwQ252VmNJQisrZzBSQkFZMXlNMzFGaC9temlmMzBRMTBVT1FPQmZ3PT0=';
+    'JFiv2==NnV0bDJpVjNtUHYwRGpJc2p0OXQrNXN0VmtLWGdpQWpENEFtQU1rR2dOL3JUY09OZ2EvZ2VaV
+jVtZXErYis4dG5ON1dPTHhEWnJsaFdCMzYxNmhLSk9zSHlMcXpXS2c4V0NybTlCblBkMUEzZ3JmaElPM
+EdCelZnakdCSkx6WEVnVXlDTjFUc1R2b0ZWQnBJdXJRcXN3eS9rMkdGQTlhbFN3RlNydGM5NmZYUnFyc
+WZXRTNVMGt6b281eHlJek5sN1NIZjdHWjV0YlZ1aWhuaG1VOVlIZVpUdzBwMk5rdnVpSHY5ZllLbmxEU
+C9rbnFvMTFyTjV6SGdRdlNyaFRTM3dybEVuQXZNRVBDZk1UN1VRenFWZUVCRjFpclVlbDJnZm5GOGV1N
+jMyRlBYaHZ0ZUd0dDYrdzVBTkpvZ0x6ZnRtNklMdFVseEpqK210bzJQclY4ZElnPT0=';
     public $sRequirements = '';
-    public $sBaseValue = 'TyUzQTglM0ElMjJzdGRDbGFzcyUyMiUzQTQlM0ElN0JzJTNBMjMlM0ElMjJkM19jZmdfbW9kX19hRm9sZGVyTGlzdCUyMiUzQmElM0E1JTNBJTdCaSUzQTAlM0JzJTNBMjUlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfTkVXJTIyJTNCaSUzQTElM0JzJTNBMzIlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfUEFZQURWQU5DRSUyMiUzQmklM0EyJTNCcyUzQTM2JTNBJTIyRDNfT1JERVJNQU5BR0VSX09SREVSX1BBWVNUQVRVU0NIRUNLJTIyJTNCaSUzQTMlM0JzJTNBMzYlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfREVMSVZFUllTVEFUVVMlMjIlM0JpJTNBNCUzQnMlM0EzNyUzQSUyMkQzX09SREVSTUFOQUdFUl9PUkRFUl9PUkRFUlBST0NFU1NJTkclMjIlM0IlN0RzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19ibENyb25BY3RpdmUlMjIlM0JzJTNBMSUzQSUyMjAlMjIlM0JzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19pTWF4T3JkZXJDbnQlMjIlM0JzJTNBMiUzQSUyMjUwJTIyJTNCcyUzQTI1JTNBJTIyZDNfY2ZnX21vZF9fc0Nyb25QYXNzd29yZCUyMiUzQnMlM0E4JTNBJTIyNW5kYnJCM1IlMjIlM0IlN0Q=';
+    public $sBaseValue = 'TyUzQTglM0ElMjJzdGRDbGFzcyUyMiUzQTUlM0ElN0JzJTNBMjMlM0ElMjJkM19jZmdfbW9kX19hRm9sZGVyTGlzdCUyMiUzQmElM0E1JTNBJTdCaSUzQTAlM0JzJTNBMjUlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfTkVXJTIyJTNCaSUzQTElM0JzJTNBMzIlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfUEFZQURWQU5DRSUyMiUzQmklM0EyJTNCcyUzQTM2JTNBJTIyRDNfT1JERVJNQU5BR0VSX09SREVSX1BBWVNUQVRVU0NIRUNLJTIyJTNCaSUzQTMlM0JzJTNBMzYlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfREVMSVZFUllTVEFUVVMlMjIlM0JpJTNBNCUzQnMlM0EzNyUzQSUyMkQzX09SREVSTUFOQUdFUl9PUkRFUl9PUkRFUlBST0NFU1NJTkclMjIlM0IlN0RzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19ibENyb25BY3RpdmUlMjIlM0JzJTNBMSUzQSUyMjAlMjIlM0JzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19pTWF4T3JkZXJDbnQlMjIlM0JzJTNBMiUzQSUyMjUwJTIyJTNCcyUzQTI1JTNBJTIyZDNfY2ZnX21vZF9fc0Nyb25QYXNzd29yZCUyMiUzQnMlM0EwJTNBJTIyJTIyJTNCcyUzQTMwJTNBJTIyZDNfY2ZnX21vZF9fYmxDYWxjU3RhdE9uRGVtYW5kJTIyJTNCcyUzQTElM0ElMjIwJTIyJTNCJTdE';
 
-    public $sMinModCfgVersion = '5.3.1.1';
+    public $sMinModCfgVersion = '5.3.1.2';
     
     protected $_aUpdateMethods = array(
         array('check' => 'doesOrder2OrderManagerTableNotExist',
@@ -68,6 +70,8 @@ U8zcnl6RFpwQ252VmNJQisrZzBSQkFZMXlNMzFGaC9temlmMzBRMTBVT1FPQmZ3PT0=';
               'do'    => 'fixIndizes'),
         array('check' => 'checkOrderManagerTableExist',
               'do'    => 'convertOrderManagerItems'),
+        array('check' => 'checkCronPasswordSet',
+              'do'    => 'createCronPassword'),
         array('check' => 'needExampleJobList',
               'do'    => 'addExampleJobList'),
         array('check' => 'isExampleContentMissingInDatabase',
@@ -552,7 +556,9 @@ U8zcnl6RFpwQ252VmNJQisrZzBSQkFZMXlNMzFGaC9temlmMzBRMTBVT1FPQmZ3PT0=';
             $this
         );
 
-        return d3GetModCfgDIC()->get(d3installdbrecord::class);
+        /** @var d3installdbrecord $dbRecord */
+        $dbRecord = d3GetModCfgDIC()->get(d3installdbrecord::class);
+        return $dbRecord;
     }
 
     /**
@@ -562,7 +568,9 @@ U8zcnl6RFpwQ252VmNJQisrZzBSQkFZMXlNMzFGaC9temlmMzBRMTBVT1FPQmZ3PT0=';
      */
     public function d3GetConfig()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
+        /** @var Config $config */
+        $config = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
+        return $config;
     }
 
     /**
@@ -719,6 +727,48 @@ U8zcnl6RFpwQ252VmNJQisrZzBSQkFZMXlNMzFGaC9temlmMzBRMTBVT1FPQmZ3PT0=';
             }
         }
         return $blRet;
+    }
+
+    /**
+     * @return bool true, if new password must set
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function checkCronPasswordSet()
+    {
+        /** @var d3_cfg_mod $set */
+        $set = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        $password = $set->getValue('sCronPassword');
+        return false === $password || is_null($password) || (is_string($password) && strlen($password) <= 0);
+    }
+
+    /**
+     * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     */
+    public function createCronPassword()
+    {
+        $message = Registry::getLang()->translateString('D3_ORDERMANAGER_SETUP_CRONPASSWORD') . PHP_EOL.PHP_EOL;
+        $this->setActionLog('msg', $message, __METHOD__);
+
+        if ($this->hasExecute()) {
+            /** @var d3str $oD3str */
+            $oD3str = d3GetModCfgDIC()->get(d3str::class);
+            $password = $oD3str->random_str(12);
+
+            /** @var d3_cfg_mod $set */
+            $set = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+            $set->setValue('sCronPassword', $password);
+            $set->saveNoLicenseRefresh();
+        }
+
+        return true;
     }
 
     /**
@@ -965,7 +1015,9 @@ U8zcnl6RFpwQ252VmNJQisrZzBSQkFZMXlNMzFGaC9temlmMzBRMTBVT1FPQmZ3PT0=';
      */
     public function getD3BitMask()
     {
-        return d3GetModCfgDIC()->get(d3bitmask::class);
+        /** @var d3bitmask $bitMask */
+        $bitMask = d3GetModCfgDIC()->get(d3bitmask::class);
+        return $bitMask;
     }
 
     /**
@@ -1436,14 +1488,14 @@ U8zcnl6RFpwQ252VmNJQisrZzBSQkFZMXlNMzFGaC9temlmMzBRMTBVT1FPQmZ3PT0=';
             ),
             array (
                 'fieldname'     => 'OXSHORTDESC',
-                'content'       => 'Alle Bestellungen, die einen Trackingcode erhalten, werden als "versendet" markiert. Der Kunde kann diesen Status abfragen (optional) oder wird per Mail informiert. Auf dem "versendet"-Status können andere Aufgaben aufbauen und weitere Aktionen auslösen.',
+                'content'       => 'Alle Bestellungen, die einen Trackingcode erhalten, werden als "versendet" markiert. Der Kunde kann diesen Status abfragen oder wird per Mail informiert. Auf dem "versendet"-Status können andere Aufgaben aufbauen und weitere Aktionen auslösen.',
                 'force_update'  => false,
                 'use_quote'     => true,
                 'use_multilang' => false,
             ),
             array (
                 'fieldname'     => $this->_getLangAbbrFieldName('d3modprofile', 'OXSHORTDESC', 'de'),
-                'content'       => 'Alle Bestellungen, die einen Trackingcode erhalten, werden als "versendet" markiert. Der Kunde kann diesen Status abfragen (optional) oder wird per Mail informiert. Auf dem "versendet"-Status können andere Aufgaben aufbauen und weitere Aktionen auslösen.',
+                'content'       => 'Alle Bestellungen, die einen Trackingcode erhalten, werden als "versendet" markiert. Der Kunde kann diesen Status abfragen oder wird per Mail informiert. Auf dem "versendet"-Status können andere Aufgaben aufbauen und weitere Aktionen auslösen.',
                 'force_update'  => false,
                 'use_quote'     => true,
                 'use_multilang' => false,

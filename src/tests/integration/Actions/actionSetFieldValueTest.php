@@ -8,11 +8,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 namespace D3\Ordermanager\tests\integration\Actions;
 
@@ -100,7 +100,7 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
     {
         $oManager = $this->getManagerMock($this->sManagerId);
 
-        $oManager->setValue('blActionOrder2Folder_status', true);
+        $oManager->setValue('blActionOrderAddFieldValue_status', true);
         $oManager->setValue('sActionAddField_field', 'd3TestField');
         $oManager->setValue('sActionAddField_value', $this->sExpectedValue);
         $oManager->setValue('blItemExecute', true);
@@ -116,7 +116,7 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
     {
         $oManager = $this->getManagerMock($this->sManagerId);
 
-        $oManager->setValue('blActionOrder2Folder_status', true);
+        $oManager->setValue('blActionOrderAddFieldValue_status', true);
         $oManager->setValue('sActionAddField_field', 'd3TestField_1');
         $oManager->setValue('sActionAddField_value', $this->sExpectedValue);
         $oManager->setValue('blItemExecute', true);

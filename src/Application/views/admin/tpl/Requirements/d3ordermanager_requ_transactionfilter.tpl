@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_requ_transactionfilter"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blCheckTransaction_status]" value="0">
-            <input id="RequTransStatus" class="edittext ext_edittext" type="checkbox" name="value[blCheckTransaction_status]" value='1' [{if $edit->getValue('blCheckTransaction_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="RequTransStatus">[{oxmultilang ident="D3_ORDERMANAGER_REQU_TRANSACTION"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oRequ blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_transactionfilter_editor"}]

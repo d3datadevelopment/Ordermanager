@@ -8,11 +8,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 namespace D3\Ordermanager\tests\integration\Requirements;
 
@@ -235,7 +235,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function requirementsSelectsRightOrdersSingleOrderDate()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerSingleOrderDate());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 1
@@ -259,7 +259,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function requirementsSelectsRightOrdersMultiOrderDate()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerMultiOrderDate());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 2
@@ -283,7 +283,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function requirementsSelectsRightOrdersSingleDelDate()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerSingleDelDate());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 1
@@ -307,7 +307,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function requirementsSelectsRightOrdersMultiDelDate()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerMultiDelDate());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 2
@@ -331,7 +331,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function requirementsSelectsRightOrdersSinglePaidDate()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerSinglePaidDate());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 1
@@ -355,7 +355,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function requirementsSelectsRightOrdersMultiPaidDate()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerMultiPaidDate());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 2

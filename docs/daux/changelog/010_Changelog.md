@@ -2,6 +2,33 @@
 title: Changelog
 --- 
 
+## unreleased
+
+---
+
+## 4.1.1.0 - (2020-12-21)
+
+** Hinweis für kleinere Versions-Upgrades: Es gibt einige rückwärts-inkompatible Änderungen an dieser Version. **
+
+### Added
+- Angepasst für Shopversion 6.2.3
+- Zufallspasswort wird im Installationsprozess erstellt
+
+### Changed
+- Einstellungen zu Wiedervorlage von Auslöser-Tab verschoben
+- Funktionsnamen eindeutig gemacht
+- D3-Logo zu statischem Assett geändert
+- Cron-Task optimiert
+- an Code des Kundenmanager Moduls angepasst
+
+### Fixed
+- Tests angepasst
+- Kurzbeschreibungen der Aufgaben gekürzt, um Fehler in der Installation zu vermeiden
+- Aufgabenbeschreibung wird nicht doppelt UTF-codiert
+- Queryfehler korrigiert
+
+---
+
 ## 4.1.0.0 - (2020-08-20)
 
 ### Added

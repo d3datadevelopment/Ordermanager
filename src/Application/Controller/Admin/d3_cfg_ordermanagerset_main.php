@@ -8,24 +8,26 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
-use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
-use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
-use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
 use D3\ModCfg\Application\Model\d3str;
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\ModCfg\Application\Model\Filegenerator\d3filegeneratorcronsh;
 use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
+use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
 use Doctrine\DBAL\DBALException;
 use Exception;
+use OxidEsales\Eshop\Application\Model\Shop;
 use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
@@ -33,11 +35,12 @@ use OxidEsales\Eshop\Core\Exception\FileException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Request;
-use OxidEsales\Eshop\Application\Model\Shop;
 use OxidEsales\Eshop\Core\ViewConfig;
 
 class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
 {
+    use VariablesTrait;
+
     protected $_sModId = 'd3_ordermanager';
 
     protected $_sThisTemplate = "d3_cfg_ordermanagerset_main.tpl";
@@ -47,23 +50,23 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
     protected $_sMenuSubItemTitle = 'd3mxordermanager_settings';
 
     /**
-     * d3_cfg_ordermanagerset_main constructor.
+     * constructor.
      */
     public function __construct()
     {
-        d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', $this->_sModId);
+        d3GetModCfgDIC()->setParameter($this->_DIC_Instance_Id.'modcfgid', $this->_sModId);
 
         parent::__construct();
     }
 
     /**
-     * @return d3ordermanager
+     * @return Manager
      * @throws Exception
      */
     public function getManager()
     {
-        /** @var d3ordermanager $manager */
-        $manager = d3GetModCfgDIC()->get(d3ordermanager::class);
+        /** @var Manager $manager */
+        $manager = d3GetModCfgDIC()->get(Manager::class);
 
         return $manager;
     }
@@ -177,7 +180,7 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
     public function getCJIDDesc($aCJID)
     {
         /** @var Language $oLang */
-        $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        $oLang = d3GetModCfgDIC()->get($this->_DIC_OxInstance_Id.Language::class);
         if ($aCJID['count'] == 1) {
             return sprintf(
                 $oLang->translateString('D3_ORDERMANAGER_SET_CRON_JOBID', null, true),
@@ -248,7 +251,7 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
     public function d3GetActiveShop()
     {
         /** @var Config $config */
-        $config = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
+        $config = d3GetModCfgDIC()->get($this->_DIC_OxInstance_Id.Config::class);
 
         return $config->getActiveShop();
     }
@@ -267,7 +270,7 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         $sScriptPath = VENDOR_PATH.'bin/d3_ordermanager_cron';
 
         /** @var Request $request */
-        $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
+        $request = d3GetModCfgDIC()->get($this->_DIC_OxInstance_Id.Request::class);
         $sCronId = $request->getRequestEscapedParameter('cronid');
 
         $oShop = $this->d3GetActiveShop();

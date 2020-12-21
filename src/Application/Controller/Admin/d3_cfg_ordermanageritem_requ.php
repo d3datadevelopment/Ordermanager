@@ -8,29 +8,32 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
-use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_abstract;
-use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist;
-use D3\Ordermanager\Application\Model\d3ordermanager;
-use D3\Ordermanager\Application\Model\d3ordermanagerlist;
-use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist;
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
+use D3\Ordermanager\Application\Model\d3ordermanagerlist as ManagerList;
+use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
+use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_abstract as RequirementAbstractModel;
+use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist as RequirementGroupListModel;
+use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist as RequirementListModel;
 use Exception;
-use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\DeliveryList;
+use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\CountryList;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Model\ListModel;
 
 class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
 {
+    use VariablesTrait;
+
     protected $_sThisTemplate = "d3_cfg_ordermanageritem_requ.tpl";
     protected $_aTransStatus = array('OK', 'ERROR', 'NOT_OK');
     protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
@@ -44,9 +47,9 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
         // @codeCoverageIgnoreEnd
 
         $aMissingRequiredValues = array();
-        /** @var d3ordermanager_requirement_abstract $oRequirement */
+        /** @var RequirementAbstractModel $oRequirement */
         foreach ($this->getRequirementList() as $sId => $oRequirement) {
-            if ($this->getProfile()->getValue($oRequirement->sRequActiveSwitch) && false == $oRequirement->hasRequiredValues()) {
+            if ($this->getProfile()->getValue($oRequirement->getActiveSwitchParameter()) && false == $oRequirement->hasRequiredValues()) {
                 $aMissingRequiredValues[] = $sId;
             }
         }
@@ -90,14 +93,14 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     }
 
     /**
-     * @return d3ordermanagerlist
+     * @return ManagerList
      * @throws Exception
      */
     public function getJobList()
     {
         $sCurrentId = $this->getViewDataElement('edit')->getId();
-        /** @var $oManagerList d3Ordermanagerlist */
-        $oManagerList = d3GetModCfgDIC()->get(d3ordermanagerlist::class);
+        /** @var $oManagerList ManagerList */
+        $oManagerList = d3GetModCfgDIC()->get(ManagerList::class);
         $oManagerList->setCustomSorting('oxsort ASC');
         $oManagerList->getList();
         $oManagerList->offsetUnset($sCurrentId);
@@ -136,33 +139,37 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     }
 
     /**
-     * @param d3ordermanager $oManager
-     * @return d3ordermanager_requirementgrouplist
+     * @param Manager $oManager
+     * @return RequirementGroupListModel
      * @throws Exception
      */
-    public function getRequirementGroupList(d3ordermanager $oManager)
+    public function getRequirementGroupList(Manager $oManager)
     {
         d3GetModCfgDIC()->set(
-            d3ordermanager_requirementgrouplist::class.'.args.ordermanager',
+            RequirementGroupListModel::class.'.args.ordermanager',
             $oManager
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_requirementgrouplist::class);
+        /** @var RequirementGroupListModel $requGroupModel */
+        $requGroupModel = d3GetModCfgDIC()->get(RequirementGroupListModel::class);
+        return $requGroupModel;
     }
 
     /**
-     * @param d3ordermanager $oManager
-     * @return d3ordermanager_requirementlist
+     * @param Manager $oManager
+     * @return RequirementListModel
      * @throws Exception
      */
-    public function getRequirementListObject(d3ordermanager $oManager)
+    public function getRequirementListObject(Manager $oManager)
     {
         d3GetModCfgDIC()->set(
-            d3ordermanager_requirementlist::class.'.args.ordermanager',
+            RequirementListModel::class.'.args.ordermanager',
             $oManager
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_requirementlist::class);
+        /** @var RequirementListModel $requListModel */
+        $requListModel = d3GetModCfgDIC()->get(RequirementListModel::class);
+        return $requListModel;
     }
 
     /**
@@ -171,7 +178,7 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
      */
     public function getGroupedRequirementList()
     {
-        /** @var d3ordermanager $oManager */
+        /** @var Manager $oManager */
         $oManager = $this->getProfile();
         $oRequList = $this->getRequirementGroupList($oManager);
         $oRequList->setGroups($oManager->getConfiguration()->getGroupedRequirementIdList());
@@ -185,7 +192,7 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
      */
     public function getRequirementList()
     {
-        /** @var d3ordermanager $oManager */
+        /** @var Manager $oManager */
         $oManager = $this->getProfile();
         $oRequList = $this->getRequirementListObject($oManager);
         $oRequList->setRequirements($oManager->getConfiguration()->getRequirementIdList());

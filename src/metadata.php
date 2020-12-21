@@ -8,17 +8,16 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 use D3\Ordermanager\Modules\Application\Model as ModuleModel;
 use D3\Ordermanager\Application\Controller as OMController;
 use D3\Ordermanager\Application\Controller\Admin as OMControllerAdmin;
-use D3\ModCfg\Application\Model\d3utils;
 use OxidEsales\Eshop\Application\Model as OxidModel;
 use OxidEsales\Eshop\Core as OxidCore;
 
@@ -26,33 +25,36 @@ use OxidEsales\Eshop\Core as OxidCore;
  * Metadata version
  */
 $sMetadataVersion = '2.1';
+$sLogo = '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="height:1em;width:1em"> ';
 
 /**
  * Module information
  */
-$aModule = array(
+$aModule = [
     'id'            => 'd3ordermanager',
-    'title'         =>
-        '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="height:1em;width:1em"> '.
-        'Auftragsmanager / Order Manager',
-    'description'  => array(
+    'title'         => [
+        'de'    => $sLogo . 'Auftragsmanager',
+        'en'    => $sLogo . 'Order Manager'
+    ],
+    'description'  => [
         'de'    => 'Bearbeitet frei definierbare Auftr&auml;ge auf Basis von einstellbaren Bestellungslisten.',
-        'en'    => ''),
+        'en'    => 'Processes freely definable tasks on the basis of adjustable order lists.'
+    ],
     'thumbnail'     => 'picture.png',
-    'version'       => '4.1.0.0',
+    'version'       => '4.1.1.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
-    'url'           => 'http://www.oxidmodule.com/',
-    'extend'        => array(
+    'url'           => 'https://www.oxidmodule.com/',
+    'extend'        => [
         OxidCore\Email::class                   => ModuleModel\d3_oxemail_ordermanager::class,
         OxidModel\Order::class                  => ModuleModel\d3_oxorder_ordermanager::class,
         OxidModel\User::class                   => ModuleModel\d3_oxuser_ordermanager::class,
         OxidModel\Basket::class                 => ModuleModel\d3_oxbasket_ordermanager::class,
         OxidModel\BasketItem::class             => ModuleModel\d3_oxbasketitem_ordermanager::class
-    ),
-    'controllers'   => array(
+    ],
+    'controllers'   => [
         'd3ordermanager_response'           => OMController\d3ordermanager_response::class,
-        
+
         'd3_cfg_ordermanagerset'            => OMControllerAdmin\d3_cfg_ordermanagerset::class,
         'd3_cfg_ordermanagerset_list'       => OMControllerAdmin\d3_cfg_ordermanagerset_list::class,
         'd3_cfg_ordermanagerset_main'       => OMControllerAdmin\d3_cfg_ordermanagerset_main::class,
@@ -64,30 +66,26 @@ $aModule = array(
         'd3_cfg_ordermanageritem_main'      => OMControllerAdmin\d3_cfg_ordermanageritem_main::class,
         'd3_cfg_ordermanageritem_mall'      => OMControllerAdmin\d3_cfg_ordermanageritem_mall::class,
         'd3_cfg_ordermanageritem_trigger'   => OMControllerAdmin\d3_cfg_ordermanageritem_trigger::class,
-        'd3_cfg_ordermanageritem_overview'  =>
-            OMControllerAdmin\d3_cfg_ordermanageritem_overview::class,
-        'd3_cfg_ordermanageritem_settings'  =>
-            OMControllerAdmin\d3_cfg_ordermanageritem_settings::class,
+        'd3_cfg_ordermanageritem_overview'  => OMControllerAdmin\d3_cfg_ordermanageritem_overview::class,
+        'd3_cfg_ordermanageritem_settings'  => OMControllerAdmin\d3_cfg_ordermanageritem_settings::class,
         'd3_cfg_ordermanageritem_requ'      => OMControllerAdmin\d3_cfg_ordermanageritem_requ::class,
         'd3_cfg_ordermanageritem_action'    => OMControllerAdmin\d3_cfg_ordermanageritem_action::class,
         'd3_ordermanager_jobs'              => OMControllerAdmin\d3_ordermanager_jobs::class,
-    ),
-    'templates'   => array(
+    ],
+    'templates'   => [
         'd3_cfg_ordermanagerset_main.tpl'       => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanagerset_main.tpl',
         'd3_cfg_ordermanageritem_list.tpl'      => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_list.tpl',
         'd3_cfg_ordermanageritem_main.tpl'      => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_main.tpl',
         'd3_cfg_ordermanageritem_mall.tpl'      => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_mall.tpl',
         'd3_cfg_ordermanageritem_trigger.tpl'   => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_trigger.tpl',
-        'd3_cfg_ordermanageritem_overview.tpl'  =>
-            'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_overview.tpl',
+        'd3_cfg_ordermanageritem_overview.tpl'  => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_overview.tpl',
         'd3_cfg_ordermanageritem_requ.tpl'      => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_requ.tpl',
-        'd3_cfg_ordermanageritem_action.tpl'    =>
-            'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_action.tpl',
+        'd3_cfg_ordermanageritem_action.tpl'    => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_action.tpl',
         'd3_ordermanager_jobs.tpl'              => 'd3/ordermanager/Application/views/admin/tpl/d3_ordermanager_jobs.tpl',
-        'd3ordermanager_info_html.tpl'          =>
-            'd3/ordermanager/Application/views/admin/tpl/email/html/d3ordermanager_info_html.tpl',
-        'd3ordermanager_info_plain.tpl'         =>
-            'd3/ordermanager/Application/views/admin/tpl/email/plain/d3ordermanager_info_plain.tpl',
+        'd3ordermanager_info_html.tpl'          => 'd3/ordermanager/Application/views/admin/tpl/email/html/d3ordermanager_info_html.tpl',
+        'd3ordermanager_info_plain.tpl'         => 'd3/ordermanager/Application/views/admin/tpl/email/plain/d3ordermanager_info_plain.tpl',
+
+        'd3ordermanager_activeswitch.tpl'       => 'd3/ordermanager/Application/views/admin/tpl/inc/d3ordermanager_activeswitch.tpl',
 
         'd3ordermanager_requ_fromordernr.tpl'           =>
             'd3/ordermanager/Application/views/admin/tpl/Requirements/d3ordermanager_requ_fromordernr.tpl',
@@ -178,15 +176,15 @@ $aModule = array(
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_sendpushnotification.tpl',
         'd3ordermanager_action_exportlist.tpl'          =>
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_exportlist.tpl',
-    ),
+    ],
     'events'      => [
         'onActivate'    => '\D3\Ordermanager\Setup\Events::onActivate',
     ],
-    'blocks'      => array(
-        array(
+    'blocks'      => [
+        [
             'template'  => 'order_remark.tpl',
             'block'     => 'admin_order_remark_type',
             'file'      => 'Application/views/admin/blocks/d3ordermanager_order_remark_type.tpl',
-        )
-    )
-);
+        ]
+    ]
+];

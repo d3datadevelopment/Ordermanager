@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This Software is the property of Data Development and is protected
  * by copyright law - it is NOT Freeware.
@@ -7,28 +8,28 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 // @codeCoverageIgnoreStart
 
-$sLangName = "Deutsch";
-$iLangNr   = 0;
+$sLangName = 'Deutsch';
+
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
 $aLang = array(
-
-    //Navigation
     'charset'                                            => 'UTF-8',
+
     'd3mxordermanager'                                   => '<i class="fa fa-clipboard"></i> Auftragsmanager',
     'd3mxordermanager_settings'                          => 'Einstellungen',
     'd3tbclordermanager_settings_main'                   => 'Grundeinstellungen',
     'd3mxordermanager_items'                             => 'Aufgaben',
+
     'd3tbclordermanager_items_main'                      => 'Stamm',
     'd3tbclordermanager_items_main_desc'                 => 'Hier finden Sie die Grundeinstellungen zu jeder Aufgabe. Vergeben Sie einen aussagekräftigen Titel, um die Aufgabe jederzeit wiederzuerkennen.',
     'd3tbclordermanager_items_mall'                      => 'Mall',
@@ -41,8 +42,10 @@ $aLang = array(
     'd3tbclordermanager_items_requ_desc'                 => 'Mit den Bedingungen stellen Sie ein, welche Bestellungen aus Ihrem Bestelleingang von dieser Aufgabe bearbeitet werden soll. Wenn Sie mehrere Bedingungen wählen, müssen diese alle gemeinsam auf eine Bestellung passen.',
     'd3tbclordermanager_items_action'                    => 'Aktionen',
     'd3tbclordermanager_items_action_desc'               => 'Aktionen sind Veränderungen, welche auf die selektierten Bestellungen angewendet werden. Die Ausführungsreihenfolge entspricht genau der Darstellung auf dieser Seite von oben nach unten.',
-    'tbclorder_ordermanager_jobs'                        => '<img title="D³ Data Development" alt="D³" src="../modules/d3/modcfg/public/d3logo.php"> Auftragsmanager',
+    'tbclorder_ordermanager_jobs'                        => '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="height:1em;width:1em"> Auftragsmanager',
+
     'D3_ORDERMANAGER_TRANSL'                             => 'Auftragsmanager',
+
     'D3_ORDERMANAGER_METADATA_TITLE'                     => 'D³ Auftragsmanager',
     'D3_ORDERMANAGER_METADATA_DESC'                      => 'Führt ausgeführte Aufträge nach definierten Regeln weiter.<br>Aktivieren Sie die Moduleinträge bitte immer und steuern Sie die Modulaktivität ausschließlich im Adminbereich des Moduls.',
     'D3_ORDERMANAGER_SET_DEBUG_DESC'                     => 'Mit aktiviertem Debug-Modus werden die einzelnen Aufgaben nur am Bildschirm angezeigt und (unabhängig der Aufgabeneinstellung) nicht tatsächlich ausgeführt. Rufen Sie zur Kontrolle den Cronjob einfach über den weiter unten gezeigten Link im Browser auf und kontrollieren Sie die Ausgaben.',
@@ -199,7 +202,7 @@ $aLang = array(
     'D3_ORDERMANAGER_REQU_OTHERJOB_UNKNOWNJOBID'         => 'Unbekannte Aufgabe',
     'D3_ORDERMANAGER_REQU_OTHERJOB_EXECUTED'             => 'ausgeführt',
     'D3_ORDERMANAGER_REQU_OTHERJOB_NOTEXECUTED'          => 'nicht ausgeführt',
-    'D3_ORDERMANAGER_REQU_OTHERJOB_DESC'                 => 'Stellen Sie hier die Aufgabe des Autragsmanagers ein, deren Ausführungsstatus an den vorliegenden Bestellungen geprüft werden sollen.',
+    'D3_ORDERMANAGER_REQU_OTHERJOB_DESC'                 => 'Stellen Sie hier die Aufgabe des Auftragsmanagers ein, deren Ausführungsstatus an den vorliegenden Bestellungen geprüft werden sollen.',
     'D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC'          => 'Wählen Sie das zu prüfende Feld und tragen Sie das Suchmuster zur Prüfung ein. Dabei sind folgende Wildcards erlaubt:<ul><li>[ <b>_</b> ] ein einzelnes Zeichen, auch leer</li><li>[ <b>%</b> ] beliebig viele Zeichen</li></ul>Um die genannten Zeichen als Suchbegriff zu verwenden, maskieren Sie diese mit einem Schrägstrich [ <b>/</b> ]. <br><br>Beispiele: <br>"__shirt_" findet "Shirts", aber auch "T-Shirt"<br>"%tasse%" findet alle Arten von Tassen<br><br>Die Groß-/Kleinschreibung ist hierbei egal. Legen Sie die Prüfung so an, dass alle Sprachmöglichkeiten Ihres Shops abgedeckt werden.',
     'D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_ARTNUM'         => 'Artikelnummer',
     'D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_TITLE'          => 'Artikeltitel',
@@ -460,6 +463,9 @@ $aLang = array(
 
     'D3_ORDERMANAGER_GENERAL_ORDER'                      => 'Auftrag:',
 
+    'D3_ORDERMANAGER_CLI_COMMON_RUNFROMCLI'              => 'Dieses Script muss von der Befehlszeile aus ausgeführt werden.',
+    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDSHOPID'           => 'ungültige Shop-ID',
+    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDCJID'             => 'ungültige Cronjob-ID',
     'D3_ORDERMANAGER_CLI_HELP'                           => 'Ermöglicht die Ausführung von Auftragsmanageraufgaben.',
     'D3_ORDERMANAGER_CLI_OPTION_VERSION'                 => 'zeigt Version',
     'D3_ORDERMANAGER_CLI_OPTION_QUIET'                   => 'verhindert die Anzeige der Ausgabe',
@@ -474,6 +480,9 @@ $aLang = array(
     'D3_ORDERMANAGER_CLI_ARGUMENT_SHOPID'                => 'ID des ausgewählten Shops, mögliche Werte sind: "%1$s"',
     'D3_ORDERMANAGER_CLI_ARGUMENT_KEY'                   => 'optional - nur für externe Anrufe erforderlich,'.PHP_EOL.'Zugriffsschlüssel zur Verhinderung externer unbefugter Anrufe (kann im Shop-Backend eingestellt werden)',
     'D3_ORDERMANAGER_CLI_ARGUMENT_ENCLOSER'              => '", "',
+    'D3_ORDERMANAGER_CLI_FINISHED_SUCCFESSFULLY'         => 'Das Script wurde erfolgreich beendet.',
+
+    'D3_ORDERMANAGER_SETUP_CRONPASSWORD'                 => 'Für die Absicherung externer Cronjobaufrufe wird ein sicheres Passwort gesetzt. Dieses können Sie später in den Moduleinstellungen einsehen und bei Bedarf verändern.',
 );
 
 // @codeCoverageIgnoreEnd

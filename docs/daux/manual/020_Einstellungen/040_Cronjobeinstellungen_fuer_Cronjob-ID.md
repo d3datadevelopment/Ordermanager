@@ -6,7 +6,7 @@ Der Auftragsmanager stellt verschiedene Cronjobs zur Verfügung. Je nach Einrich
 
 Für jeden verfügbaren Cronjob sehen Sie in den Einstellungen die für Einrichtung benötigten Informationen:
 
-Den Link mit allen erforderlichen Parametern für den manuellen Aufruf des Bearbeitungsskripts finden Sie in der Zeile „externer Link“. Über den blauen Button können Sie die Ausführung in einem neuen Browser-Tab sofort starten.
+Den Link mit allen erforderlichen Parametern für den manuellen Aufruf des Bearbeitungsskripts finden Sie in der Zeile "externer Link". Über den blauen Button können Sie die Ausführung in einem neuen Browser-Tab sofort starten.
 
 Direkt darunter finden Sie den Link, den Sie für die Einrichtung des Cronjobs benötigen. Dort ist das Passwort nicht nötigt, da Ihr Server die Identifizierung selbst durchführen kann.
 

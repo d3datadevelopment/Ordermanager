@@ -7,19 +7,20 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
 use D3\ModCfg\Application\Model\d3filesystem;
 use D3\ModCfg\Application\Model\d3str;
-use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
+use D3\Usermanager\Application\Model\d3usermanager_vars as VariablesTrait;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminMall;  // required for non fallback case
@@ -56,6 +57,8 @@ if (false == class_exists("\OxidEsales\Eshop\Application\Controller\Admin\AdminM
  */
 class d3_cfg_ordermanageritem_mall extends d3AdminMall
 {
+    use VariablesTrait;
+
     private $_sModId = 'd3_ordermanager';
     /**
      * DB table having oxshopincl and oxshopexcl fields we are going to deal with
@@ -75,10 +78,10 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
     /**
      * Class name of object to load
      */
-    protected $_sObjectClassName = d3ordermanager::class;
+    protected $_sObjectClassName = Manager::class;
 
     /**
-     * d3_cfg_ordermanageritem_mall constructor.
+     * constructor.
      */
     public function __construct()
     {
@@ -88,12 +91,14 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
     }
 
     /**
-     * @return d3ordermanager
+     * @return Manager
      * @throws Exception
      */
     public function getProfile()
     {
-        return d3GetModCfgDIC()->get($this->_sObjectClassName);
+        /** @var Manager $oManager */
+        $oManager = d3GetModCfgDIC()->get($this->_sObjectClassName);
+        return $oManager;
     }
 
     /**
@@ -132,7 +137,10 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
      */
     public function getLang()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        /** @var Language $lang */
+        $lang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+
+        return $lang;
     }
 
     /**
@@ -166,7 +174,10 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
      */
     public function d3GetSet()
     {
-        return d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        /** @var d3_cfg_mod $modcfg */
+        $modcfg = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+
+        return $modcfg;
     }
 
     /**
@@ -208,12 +219,12 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
     }
 
     /**
-     * @param d3ordermanager $oProfile
+     * @param Manager $oProfile
      * @param               $soxId
      *
-     * @return d3ordermanager
+     * @return Manager
      */
-    protected function _d3LoadInOtherLang(d3ordermanager $oProfile, $soxId)
+    protected function _d3LoadInOtherLang(Manager $oProfile, $soxId)
     {
         // load object in other languages
         $oOtherLang = $oProfile->getAvailableInLangs();

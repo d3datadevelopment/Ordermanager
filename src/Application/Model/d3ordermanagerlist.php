@@ -8,18 +8,19 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Application\Model;
 
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
+use D3\Ordermanager\Application\Model\d3ordermanagerlist as ManagerList;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Configuration\d3modprofilelist;
-use D3\ModCfg\Application\Model\d3utils;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use Doctrine\DBAL\DBALException;
@@ -40,11 +41,11 @@ class d3ordermanagerlist extends d3modprofilelist
      *
      * @var string
      */
-    protected $_sObjectsInListName = d3ordermanager::class;
+    protected $_sObjectsInListName = Manager::class;
 
     /**
      * @param $sFolderId
-     * @return d3ordermanagerlist
+     * @return ManagerList
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -55,7 +56,7 @@ class d3ordermanagerlist extends d3modprofilelist
      */
     public function d3GetManuallyManagerJobsByFolder($sFolderId)
     {
-        /** @var d3ordermanager $oListObject */
+        /** @var Manager $oListObject */
         $oListObject = $this->getBaseObject();
         $fieldList = array_map('trim', explode(',', $oListObject->getSelectFields()));
 
@@ -71,7 +72,7 @@ class d3ordermanagerlist extends d3modprofilelist
 
         $this->selectString($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
-        /** @var $oManager d3ordermanager */
+        /** @var $oManager Manager */
         foreach ($this->getArray() as $sKey => $oManager) {
             if (false == $this->canExecutedManually($oManager)) {
                 $this->offsetUnset($sKey);
@@ -82,7 +83,7 @@ class d3ordermanagerlist extends d3modprofilelist
     }
 
     /**
-     * @return d3ordermanagerlist
+     * @return ManagerList
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -99,7 +100,7 @@ class d3ordermanagerlist extends d3modprofilelist
                 array_map(array($this->d3GetSet(),'getLicenseConfigData'),array(d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION))
             )
         ) {
-            /** @var d3ordermanager $oListObject */
+            /** @var Manager $oListObject */
             $oListObject = $this->getBaseObject();
             $fieldList = array_map('trim', explode(',', $oListObject->getSelectFields()));
 
@@ -120,7 +121,7 @@ class d3ordermanagerlist extends d3modprofilelist
 
             $this->selectString($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
-            /** @var $oManager d3ordermanager */
+            /** @var $oManager Manager */
             foreach ($this->getArray() as $sKey => $oManager) {
                 if (false == $oManager->getLicenseActive()) {
                     $this->offsetUnset($sKey);
@@ -132,7 +133,7 @@ class d3ordermanagerlist extends d3modprofilelist
     }
 
     /**
-     * @return $this
+     * @return ManagerList
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -149,7 +150,7 @@ class d3ordermanagerlist extends d3modprofilelist
                 array_map(array($this->d3GetSet(),'getLicenseConfigData'),array(d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION))
             )
         ) {
-            /** @var d3ordermanager $oListObject */
+            /** @var Manager $oListObject */
             $oListObject = $this->getBaseObject();
             $fieldList = array_map('trim', explode(',', $oListObject->getSelectFields()));
 
@@ -170,7 +171,7 @@ class d3ordermanagerlist extends d3modprofilelist
 
             $this->selectString($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
-            /** @var $oManager d3ordermanager */
+            /** @var $oManager Manager */
             foreach ($this->getArray() as $sKey => $oManager) {
                 if (false == $oManager->getLicenseActive()) {
                     $this->offsetUnset($sKey);
@@ -182,7 +183,7 @@ class d3ordermanagerlist extends d3modprofilelist
     }
 
     /**
-     * @param d3ordermanager $oManager
+     * @param Manager $oManager
      *
      * @return bool
      * @throws DatabaseConnectionException
@@ -192,45 +193,34 @@ class d3ordermanagerlist extends d3modprofilelist
      * @throws DatabaseErrorException
      * @throws StandardException
      */
-    public function canExecutedManually(d3ordermanager $oManager)
+    public function canExecutedManually(Manager $oManager)
     {
         return $oManager->getFieldData('D3_OM_EXECMANUALLY') &&
                $oManager->getLicenseActive();
     }
 
     /**
-     * @param d3ordermanager $oListObject
+     * @param Manager $oListObject
      * @param QueryBuilder   $queryBuilder
      * @param bool           $blManually
-     * @param bool           $blUseCommonActiveCheck
+     * @param bool           $blUseCommonActiveCheck (oxactive field)
      *
      * @return QueryBuilder
      * @throws DatabaseConnectionException
      * @throws Exception
      */
-    public function d3AddActiveSnippet(d3ordermanager $oListObject, QueryBuilder $queryBuilder, $blManually = false, $blUseCommonActiveCheck = true)
+    public function d3AddActiveSnippet(Manager $oListObject, QueryBuilder $queryBuilder, $blManually = false, $blUseCommonActiveCheck = true)
     {
         $sActiveSnippet = $oListObject->getSqlActiveSnippet();
-
-        /** @var d3utils $d3Utils */
-        $d3Utils = d3GetModCfgDIC()->get(d3utils::class);
 
         if ($blUseCommonActiveCheck && $sActiveSnippet) {
             $queryBuilder->andWhere($sActiveSnippet);
         }
 
         if ($blManually) {
-            $sFieldName = $d3Utils->getMultiLangFieldName(
-                'D3_OM_EXECMANUALLY',
-                '',
-                $oListObject
-            );
+            $sFieldName = "D3_OM_EXECMANUALLY";
         } else {
-            $sFieldName = $d3Utils->getMultiLangFieldName(
-                'oxactive',
-                '',
-                $oListObject
-            );
+            $sFieldName = "oxactive";
         }
 
         $queryBuilder->andWhere(
@@ -245,12 +235,12 @@ class d3ordermanagerlist extends d3modprofilelist
 
     /**
      * @param                $sFolderId
-     * @param d3ordermanager $oListObject
+     * @param Manager $oListObject
      * @param QueryBuilder   $queryBuilder
      *
      * @return QueryBuilder
      */
-    public function d3AddFolderSelection($sFolderId, d3ordermanager $oListObject, QueryBuilder $queryBuilder)
+    public function d3AddFolderSelection($sFolderId, Manager $oListObject, QueryBuilder $queryBuilder)
     {
         if ($sFolderId && $sFolderId != '-1') {
             $queryBuilder->andWhere(
@@ -269,7 +259,7 @@ class d3ordermanagerlist extends d3modprofilelist
      */
     public function setCronJobId($iCronJobId)
     {
-        /** @var d3ordermanager $oBaseObject */
+        /** @var Manager $oBaseObject */
         $oBaseObject = $this->getBaseObject();
         $oBaseObject->setCronJobIdFilter($iCronJobId);
     }
@@ -280,7 +270,9 @@ class d3ordermanagerlist extends d3modprofilelist
      */
     public function d3GetSet()
     {
-        return d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        /** @var d3_cfg_mod $set */
+        $set = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        return $set;
     }
 
     /**

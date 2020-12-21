@@ -7,11 +7,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\tests\unit\Application\Controller;
@@ -869,6 +869,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
      * @covers \D3\Ordermanager\Application\Controller\d3ordermanager_response::_checkUnavailableCronjob
      * @test
      * @throws ReflectionException
+     * @doesNotPerformAssertions
      */
     public function unavailableEnabledCronjobPass()
     {
@@ -898,8 +899,6 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oControllerMock->expects($this->any())->method('_checkDisabledCronjob')->willReturn(true);
 
         $this->_oController = $oControllerMock;
-
-        $this->doesNotPerformAssertions();
 
         $this->callMethod($this->_oController, '_checkUnavailableCronjob');
     }
@@ -979,6 +978,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
      * @covers \D3\Ordermanager\Application\Controller\d3ordermanager_response::_checkDisabledCronjob
      * @test
      * @throws ReflectionException
+     * @doesNotPerformAssertions
      */
     public function disabledCronjobCheckDontPassWithEnabledCronjob()
     {
@@ -1011,8 +1011,6 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oControllerMock->method('_getSet')->willReturn($oModCfgMock);
 
         $this->_oController = $oControllerMock;
-
-        $this->doesNotPerformAssertions();
 
         $this->callMethod($this->_oController, '_checkDisabledCronjob');
     }

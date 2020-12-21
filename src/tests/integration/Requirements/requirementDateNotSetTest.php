@@ -8,11 +8,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 namespace D3\Ordermanager\tests\integration\Requirements;
 
@@ -190,7 +190,7 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
     public function requirementsSelectsRightOrdersNotSetDelDate()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerNotSetDelDate());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 2
@@ -215,7 +215,7 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
     public function requirementsSelectsRightOrdersNotSetPaidDate()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerNotSetPaidDate());
-        $oOrderList = $oListGenerator->getConcernedOrders();
+        $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
             $oOrderList->count() >= 2

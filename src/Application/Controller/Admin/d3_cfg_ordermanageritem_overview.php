@@ -8,23 +8,26 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
-use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
-use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist;
-use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist;
-use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
+use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
+use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist as ActionListModel;
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
+use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
+use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist as RequirementListModel;
+use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action as ItemActionController;
+use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ as ItemRequirementController;
 use Doctrine\DBAL\DBALException;
 use Exception;
-use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Application\Model\Order as ItemModel;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Language;
@@ -32,11 +35,13 @@ use OxidEsales\Eshop\Core\Request;
 
 class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 {
-    protected $_sSetModId = 'd3_ordermanager';
-    protected $_sModId = 'd3_ordermanager';
-    protected $_sThisTemplate = "d3_cfg_ordermanageritem_overview.tpl";
-    protected $_sMenuItemTitle = 'd3mxordermanager';
-    protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
+    use VariablesTrait;
+
+    protected $_sSetModId = 'd3usermanager';
+    protected $_sModId = 'd3usermanager';
+    protected $_sThisTemplate = "d3_cfg_usermanageritem_overview.tpl";
+    protected $_sMenuItemTitle = 'd3mxusermanager';
+    protected $_sMenuSubItemTitle = 'd3mxusermanager_items';
     protected $_blUseOwnOxid = true;
     protected $_aNaviItems = array(
         'new' => array(
@@ -44,28 +49,28 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
             'sTranslationId' => 'D3_TOOLTIPS_NEWORDERMANAGER',
         ),
     );
-    protected $_sD3ObjectClass = d3ordermanager::class;
+    protected $_sD3ObjectClass = Manager::class;
     protected $_sRequestData;
 
     /**
-     * @return d3_cfg_ordermanageritem_action
+     * @return ItemActionController
      * @throws Exception
      */
     public function getActionAdminController()
     {
-        /** @var d3_cfg_ordermanageritem_action $action */
-        $action = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_action::class);
+        /** @var ItemActionController $action */
+        $action = d3GetModCfgDIC()->get(ItemActionController::class);
         return $action;
     }
 
     /**
-     * @return d3_cfg_ordermanageritem_requ
+     * @return ItemRequirementController
      * @throws Exception
      */
     public function getRequirementAdminController()
     {
-        /** @var d3_cfg_ordermanageritem_requ $requ */
-        $requ = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_requ::class);
+        /** @var ItemRequirementController $requ */
+        $requ = d3GetModCfgDIC()->get(ItemRequirementController::class);
         return $requ;
     }
 
@@ -92,19 +97,19 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     }
 
     /**
-     * @param d3ordermanager $oManager
-     * @return d3ordermanager_requirementlist
+     * @param Manager $oManager
+     * @return RequirementListModel
      * @throws Exception
      */
-    public function getRequirementListObject(d3ordermanager $oManager)
+    public function getRequirementListObject(Manager $oManager)
     {
         d3GetModCfgDIC()->set(
-            d3ordermanager_requirementlist::class.'.args.ordermanager',
+            RequirementListModel::class.'.args.ordermanager',
             $oManager
         );
 
-        /** @var d3ordermanager_requirementlist $requList */
-        $requList = d3GetModCfgDIC()->get(d3ordermanager_requirementlist::class);
+        /** @var RequirementListModel $requList */
+        $requList = d3GetModCfgDIC()->get(RequirementListModel::class);
         return $requList;
     }
 
@@ -114,7 +119,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      */
     public function getRequirementList()
     {
-        /** @var d3ordermanager $oManager */
+        /** @var Manager $oManager */
         $oManager = $this->getProfile();
         $oRequList = $this->getRequirementListObject($oManager);
         $oRequList->setRequirements($oManager->getConfiguration()->getRequirementIdList());
@@ -123,23 +128,23 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     }
 
     /**
-     * @param d3ordermanager $oManager
-     * @return d3ordermanager_actionlist
+     * @param Manager $oManager
+     * @return ActionListModel
      * @throws Exception
      */
-    public function getActionListObject(d3ordermanager $oManager)
+    public function getActionListObject(Manager $oManager)
     {
         d3GetModCfgDIC()->set(
-            d3ordermanager_actionlist::class.'.args.ordermanager',
+            ActionListModel::class.'.args.ordermanager',
             $oManager
         );
         d3GetModCfgDIC()->set(
-            d3ordermanager_actionlist::class.'.args.order',
-            d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)
+            ActionListModel::class.'.args.order',
+            d3GetModCfgDIC()->get('d3ox.ordermanager.'.ItemModel::class)
         );
 
-        /** @var d3ordermanager_actionlist $actionlist */
-        $actionlist = d3GetModCfgDIC()->get(d3ordermanager_actionlist::class);
+        /** @var ActionListModel $actionlist */
+        $actionlist = d3GetModCfgDIC()->get(ActionListModel::class);
         return $actionlist;
     }
 
@@ -149,7 +154,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      */
     public function getActionList()
     {
-        /** @var d3ordermanager $oManager */
+        /** @var Manager $oManager */
         $oManager = $this->getProfile();
         $oActionList = $this->getActionListObject($oManager);
         $oActionList->setActions($oManager->getConfiguration()->getActionIdList());
@@ -198,7 +203,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         $iRequestCount = $request->getRequestEscapedParameter('toFinishedCount');
 
         if ($this->canRequestData(__FUNCTION__)) {
-            /** @var d3ordermanager $oProfile */
+            /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
             return $oProfile->getListGenerator()->getConcernedItemCount();
         } elseif ($this->canUseRequestData($iRequestCount)) {
@@ -223,7 +228,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         $iRequestCount = $request->getRequestEscapedParameter('finishedCount');
 
         if ($this->canRequestData(__FUNCTION__)) {
-            /** @var d3ordermanager $oProfile */
+            /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
             return $oProfile->getListGenerator()->getFinishedItemCount();
         } elseif ($this->canUseRequestData($iRequestCount)) {
@@ -248,7 +253,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         $iRequestCount = $request->getRequestEscapedParameter('finishedMonthCount');
 
         if ($this->canRequestData(__FUNCTION__)) {
-            /** @var d3ordermanager $oProfile */
+            /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
             return $oProfile->getListGenerator()->getFinishedMonthItemCount();
         } elseif ($this->canUseRequestData($iRequestCount)) {
@@ -273,7 +278,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         $iRequestCount = $request->getRequestEscapedParameter('notFinishedCount');
 
         if ($this->canRequestData(__FUNCTION__)) {
-            /** @var d3ordermanager $oProfile */
+            /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
             return $oProfile->getListGenerator()->getNotFinishedItemCount();
         } elseif ($this->canUseRequestData($iRequestCount)) {
@@ -343,13 +348,13 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     }
 
     /**
-     * @return d3ordermanager
+     * @return Manager
      * @throws Exception
      */
     public function getManager()
     {
-        /** @var d3ordermanager $manager */
-        $manager = d3GetModCfgDIC()->get(d3ordermanager::class);
+        /** @var Manager $manager */
+        $manager = d3GetModCfgDIC()->get(Manager::class);
         return $manager;
     }
 
@@ -361,6 +366,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     {
         /** @var Language $lang */
         $lang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+
         return $lang;
     }
 

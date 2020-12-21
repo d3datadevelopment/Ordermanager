@@ -11,18 +11,18 @@
   [{strip}]
     [{foreach from=$aNotes item="aManagerJobs" key="sOrderId"}]
         [{block name="d3ordermanager_infomail_order"}]
-            [{assign var="oOrder" value=$oEmailView->d3getOrder($sOrderId)}]
-            [{if $oOrder->getId()}]
-                [{oxmultilang ident="D3_ORDERMANAGER_MAIL_ORDER"}] [{$oOrder->getFieldData('oxordernr')}] [{oxmultilang ident="D3_ORDERMANAGER_MAIL_ORDERFROM"}] [{$oOrder->getFieldData('oxorderdate')}] ([{$oOrder->getFieldData('oxbilllname')}], [{$oOrder->getFieldData('oxbillfname')}]):<br>
+            [{assign var="oItem" value=$oEmailView->d3getOrder($sOrderId)}]
+            [{if $oItem->getId()}]
+                [{oxmultilang ident="D3_ORDERMANAGER_MAIL_ORDER"}] [{$oItem->getFieldData('oxordernr')}] [{oxmultilang ident="D3_ORDERMANAGER_MAIL_ORDERFROM"}] [{$oItem->getFieldData('oxorderdate')}] ([{$oItem->getFieldData('oxbilllname')}], [{$oItem->getFieldData('oxbillfname')}]):<br>
             [{else}]
                 [{oxmultilang ident="D3_ORDERMANAGER_MAIL_GENERAL"}]:<br>
             [{/if}]
             <ul>
                 [{block name="d3ordermanager_infomail_manager"}]
                     [{foreach from=$aManagerJobs item="aJobActions" key="sManagerId"}]
-                        [{assign var="oOrderManager" value=$oEmailView->d3getOrderManager($sManagerId)}]
+                        [{assign var="oManager" value=$oEmailView->d3getOrderManager($sManagerId)}]
                         <li>
-                            [{$oOrderManager->getFieldData('oxtitle')}]
+                            [{$oManager->getFieldData('oxtitle')}]
                             <ul>
                                 [{block name="d3ordermanager_infomail_job"}]
                                     [{foreach from=$aJobActions item="sJobText"}]

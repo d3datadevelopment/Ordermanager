@@ -7,28 +7,28 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 // @codeCoverageIgnoreStart
 
 $sLangName = "English";
-$iLangNr   = 0;
+
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
 $aLang = array(
-
-    //Navigation
     'charset'                                            => 'UTF-8',
+
     'd3mxordermanager'                                   => '<i class="fa fa-clipboard"></i> Order Manager',
     'd3mxordermanager_settings'                          => 'Settings',
     'd3tbclordermanager_settings_main'                   => 'Main Settings',
     'd3mxordermanager_items'                             => 'Jobs',
+
     'd3tbclordermanager_items_main'                      => 'Main',
     'd3tbclordermanager_items_main_desc'                 => 'Here you will find the basic settings for each task. Assign a meaningful title to recognize the task at any time.',
     'd3tbclordermanager_items_mall'                      => 'Mall',
@@ -41,8 +41,10 @@ $aLang = array(
     'd3tbclordermanager_items_requ_desc'                 => 'You use the requirements to specify which orders from your orders list are to be processed by this task. If you select several conditions, they must all fit together on one order.',
     'd3tbclordermanager_items_action'                    => 'Actions',
     'd3tbclordermanager_items_action_desc'               => 'Actions are changes that are applied to the selected orders. The execution sequence corresponds exactly to the top-down display on this page.',
-    'tbclorder_ordermanager_jobs'                        => '<img title="D³ Data Development" alt="D³" src="../modules/d3/modcfg/public/d3logo.php"> Order Manager',
+    'tbclorder_ordermanager_jobs'                        => '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="height:1em;width:1em"> Order Manager',
+
     'D3_ORDERMANAGER_TRANSL'                             => 'Order Manager',
+
     'D3_ORDERMANAGER_METADATA_TITLE'                     => 'D³ Order Manager',
     'D3_ORDERMANAGER_METADATA_DESC'                      => 'Please always activate the module entries and only control the module activity in the admin area of ​​the module.',
     'D3_ORDERMANAGER_SET_DEBUG_DESC'                     => 'Activated debug mode don\'t process the job. Execution shows job details on screen. Call the cronjob in your browser for check via the shown link. Verify the informations.',
@@ -460,6 +462,9 @@ $aLang = array(
 
     'D3_ORDERMANAGER_GENERAL_ORDER'                      => 'order:',
 
+    'D3_ORDERMANAGER_CLI_COMMON_RUNFROMCLI'              => 'This script has to be run from the command line',
+    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDSHOPID'           => 'unvalid shop id',
+    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDCJID'             => 'unvalid cronjob id',
     'D3_ORDERMANAGER_CLI_HELP'                           => 'Enables remote execution of tasks of the order manager',
     'D3_ORDERMANAGER_CLI_OPTION_VERSION'                 => 'print version',
     'D3_ORDERMANAGER_CLI_OPTION_QUIET'                   => 'prevents output from being displayed',
@@ -474,6 +479,9 @@ $aLang = array(
     'D3_ORDERMANAGER_CLI_ARGUMENT_SHOPID'                => 'ID of the selected shop, possible values are: "%1$s"',
     'D3_ORDERMANAGER_CLI_ARGUMENT_KEY'                   => 'optional - required for external calls only,'.PHP_EOL.'access key to prevent external unauthorized calls (can be set in the shop backend)',
     'D3_ORDERMANAGER_CLI_ARGUMENT_ENCLOSER'              => '", "',
+    'D3_ORDERMANAGER_CLI_FINISHED_SUCCFESSFULLY'         => 'script successfully finished',
+
+    'D3_ORDERMANAGER_SETUP_CRONPASSWORD'                 => 'A secure password is set to protect external cron job calls. You can later view this password in the module settings and change it if necessary.',
 );
 
 // @codeCoverageIgnoreEnd

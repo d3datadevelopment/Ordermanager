@@ -8,11 +8,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Application\Controller\Admin;
@@ -27,7 +27,7 @@ class d3_cfg_ordermanagerset_list extends d3_cfg_mod_list
     protected $_sMenuSubItemTitle = 'd3mxordermanager_settings';
 
     /**
-     * d3_cfg_ordermanagerset_list constructor.
+     * constructor.
      */
     public function __construct()
     {

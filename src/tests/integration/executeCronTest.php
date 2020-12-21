@@ -1,27 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: daniel
- * Date: 06.08.18
- * Time: 22:24
- */
 
 namespace D3\Ordermanager\tests\integration;
-
 
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
-use D3\Ordermanager\Application\Controller\d3ordermanager_response;
-use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Application\Controller\d3ordermanager_response as ResponseController;
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use Doctrine\DBAL\DBALException;
 use Exception;
-use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Application\Model\Order as Item;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 
-class executeCronTest extends d3OrdermanagerIntegrationTestCase
+class executeCronTest extends d3IntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
     public $aArticleIdList = array(
@@ -144,7 +137,7 @@ class executeCronTest extends d3OrdermanagerIntegrationTestCase
     }
 
     /**
-     * @return d3ordermanager
+     * @return Manager
      * @throws Exception
      */
     public function getConfiguredManager()
@@ -181,8 +174,8 @@ class executeCronTest extends d3OrdermanagerIntegrationTestCase
         $set->assign(array('oxactive' => 1));
         $set->saveNoLicenseRefresh();
 
-        /** @var $oResponse d3ordermanager_response */
-        $oResponse = d3GetModCfgDIC()->get(d3ordermanager_response::class);
+        /** @var $oResponse ResponseController */
+        $oResponse = d3GetModCfgDIC()->get(ResponseController::class);
 
         $_GET['shp'] = 1;
         $_GET['cjid'] = 'testId';
@@ -193,20 +186,20 @@ class executeCronTest extends d3OrdermanagerIntegrationTestCase
         $set->assign(array('oxactive' => 1));
         $set->saveNoLicenseRefresh();
 
-        /** @var Order $oOrder */
-        $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
-        $oOrder->load($this->aOrderIdList[0]);
+        /** @var Item $oItem */
+        $oItem = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dExpectedValue * 100),
-            round((float) $oOrder->getFieldData('oxdelcost') * 100)
+            round((float) $oItem->getFieldData('oxdelcost') * 100)
         );
 
-        /** @var Order $oOrder */
-        $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
-        $oOrder->load($this->aOrderIdList[1]);
+        /** @var Item $oItem */
+        $oItem = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem->load($this->aOrderIdList[1]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
-            round((float) $oOrder->getFieldData('oxdelcost') * 100)
+            round((float) $oItem->getFieldData('oxdelcost') * 100)
         );
     }
 
@@ -230,8 +223,8 @@ class executeCronTest extends d3OrdermanagerIntegrationTestCase
         $set->assign(array('oxactive' => 0));
         $set->saveNoLicenseRefresh();
 
-        /** @var $oResponse d3ordermanager_response */
-        $oResponse = d3GetModCfgDIC()->get(d3ordermanager_response::class);
+        /** @var $oResponse ResponseController */
+        $oResponse = d3GetModCfgDIC()->get(ResponseController::class);
 
         $_GET['shp'] = 1;
         $_GET['cjid'] = 'testId';
@@ -244,20 +237,20 @@ class executeCronTest extends d3OrdermanagerIntegrationTestCase
         $set->assign(array('oxactive' => 1));
         $set->saveNoLicenseRefresh();
 
-        /** @var Order $oOrder */
-        $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
-        $oOrder->load($this->aOrderIdList[0]);
+        /** @var Item $oItem */
+        $oItem = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
-            round((float) $oOrder->getFieldData('oxdelcost') * 100)
+            round((float) $oItem->getFieldData('oxdelcost') * 100)
         );
 
-        /** @var Order $oOrder */
-        $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
-        $oOrder->load($this->aOrderIdList[1]);
+        /** @var Item $oItem */
+        $oItem = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem->load($this->aOrderIdList[1]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
-            round((float) $oOrder->getFieldData('oxdelcost') * 100)
+            round((float) $oItem->getFieldData('oxdelcost') * 100)
         );
     }
 
@@ -280,8 +273,8 @@ class executeCronTest extends d3OrdermanagerIntegrationTestCase
         $set->assign(array('oxactive' => 1));
         $set->saveNoLicenseRefresh();
 
-        /** @var $oResponse d3ordermanager_response */
-        $oResponse = d3GetModCfgDIC()->get(d3ordermanager_response::class);
+        /** @var $oResponse ResponseController */
+        $oResponse = d3GetModCfgDIC()->get(ResponseController::class);
 
         $_GET['shp'] = 1;
         $_GET['cjid'] = 'testId';
@@ -292,20 +285,20 @@ class executeCronTest extends d3OrdermanagerIntegrationTestCase
         $set->assign(array('oxactive' => 1));
         $set->saveNoLicenseRefresh();
 
-        /** @var Order $oOrder */
-        $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
-        $oOrder->load($this->aOrderIdList[0]);
+        /** @var Item $oItem */
+        $oItem = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
-            round((float) $oOrder->getFieldData('oxdelcost') * 100)
+            round((float) $oItem->getFieldData('oxdelcost') * 100)
         );
 
-        /** @var Order $oOrder */
-        $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
-        $oOrder->load($this->aOrderIdList[1]);
+        /** @var Item $oItem */
+        $oItem = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem->load($this->aOrderIdList[1]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
-            round((float) $oOrder->getFieldData('oxdelcost') * 100)
+            round((float) $oItem->getFieldData('oxdelcost') * 100)
         );
     }
 }

@@ -8,15 +8,17 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
+use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list as setListController;
+use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main as setMainController;
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_;
 
 class d3_cfg_ordermanagerset extends d3_cfg_mod_
@@ -26,8 +28,8 @@ class d3_cfg_ordermanagerset extends d3_cfg_mod_
      */
     public function render()
     {
-        $this->addTplParam('sListClass', d3_cfg_ordermanagerset_list::class);
-        $this->addTplParam('sMainClass', d3_cfg_ordermanagerset_main::class);
+        $this->addTplParam('sListClass', setListController::class);
+        $this->addTplParam('sMainClass', setMainController::class);
 
         $this->_hasListItems = false;
 

@@ -7,17 +7,18 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 use D3\Ordermanager\Application\Controller\d3ordermanager_response;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
 use Doctrine\DBAL\DBALException;
+use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Session;
@@ -206,7 +207,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->getMock();
         $oOptionsMock->method('getOpt')->will($this->returnCallback(
             function($param) {
-                return $param == 'version';
+                return $param == d3_ordermanager_cron::OPTION_VERSION;
             }
         ));
         $oOptionsMock->expects($this->never())->method('getCmd')->willReturn(false);
@@ -250,7 +251,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->getMock();
         $oOptionsMock->method('getOpt')->will($this->returnCallback(
             function($param) {
-                return $param == 'quiet';
+                return $param == d3_ordermanager_cron::OPTION_QUIET;
             }
         ));
         $oOptionsMock->method('getCmd')->willReturn(false);
@@ -290,7 +291,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
      * @test
      * @throws ReflectionException
      */
-    public function mainUseQuietCmdDefaultCJID()
+    public function mainUseQuietCmdDefaultUnvalidCJID()
     {
         /** @var Options|MockObject $oOptionsMock */
         $oOptionsMock = $this->getMockBuilder(Options::class)
@@ -305,12 +306,155 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->getMock();
         $oOptionsMock->method('getOpt')->willReturn(false);
         $oOptionsMock->method('getCmd')->willReturn(false);
-        $oOptionsMock->method('getArgs')->willReturn(['1', '10', 'key']);
+        $oOptionsMock->method('getArgs')->willReturn(['1', '1234561', 'key']);
 
         $this->setValue(
             $oOptionsMock,
             'args',
-            ['1', '10', 'key']
+            ['1', '1234561', 'key']
+        );
+        $oOptionsMock->parseOptions();
+
+        /** @var Session|MockObject $oSessionMock */
+        $oSessionMock = $this->getMockBuilder(Session::class)
+            ->setMethods(['setVariable'])
+            ->getMock();
+        $oSessionMock->expects($this->never())->method('setVariable')
+            ->with($this->equalTo('d3ordermanager_quiet'))->willReturn(false);
+        d3GetModCfgDIC()->set('d3ox.ordermanager.'.Session::class, $oSessionMock);
+
+        /** @var d3ordermanager_response|MockObject $oResponseMock */
+        $oResponseMock = $this->getMockBuilder(d3ordermanager_response::class)
+            ->setMethods(['init'])
+            ->getMock();
+        $oResponseMock->expects($this->never())->method('init')->willReturn(true);
+        d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
+
+        /** @var d3_ordermanager_cron|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
+            ->setMethods([
+                'translateFixedStrings',
+                'success',
+                'error'
+            ])
+            ->getMock();
+        $oControllerMock->expects($this->never())->method('translateFixedStrings')->willReturn(false);
+        $oControllerMock->expects($this->never())->method('success')->willReturn(true);
+        $oControllerMock->expects($this->once())->method('error')->willReturn(true);
+
+        $this->_oController = $oControllerMock;
+
+        $this->callMethod(
+            $this->_oController,
+            'main',
+            array($oOptionsMock)
+        );
+    }
+
+    /**
+     * @covers d3_ordermanager_cron::main
+     * @test
+     * @throws ReflectionException
+     */
+    public function mainUseQuietCmdDefaultUnvalidShopId()
+    {
+        /** @var Options|MockObject $oOptionsMock */
+        $oOptionsMock = $this->getMockBuilder(Options::class)
+            ->setMethods([
+                'getOpt',
+                'getCmd',
+                'getArgs'
+            ])
+            ->setConstructorArgs(
+                [$this->getValue($this->_oController, 'colors')]
+            )
+            ->getMock();
+        $oOptionsMock->method('getOpt')->willReturn(false);
+        $oOptionsMock->method('getCmd')->willReturn(false);
+        $oOptionsMock->method('getArgs')->willReturn(['5', '1234561', 'key']);
+
+        $this->setValue(
+            $oOptionsMock,
+            'args',
+            ['5', '1234561', 'key']
+        );
+        $oOptionsMock->parseOptions();
+
+        /** @var Session|MockObject $oSessionMock */
+        $oSessionMock = $this->getMockBuilder(Session::class)
+            ->setMethods(['setVariable'])
+            ->getMock();
+        $oSessionMock->expects($this->never())->method('setVariable')
+            ->with($this->equalTo('d3ordermanager_quiet'))->willReturn(false);
+        d3GetModCfgDIC()->set('d3ox.ordermanager.'.Session::class, $oSessionMock);
+
+        /** @var d3ordermanager_response|MockObject $oResponseMock */
+        $oResponseMock = $this->getMockBuilder(d3ordermanager_response::class)
+            ->setMethods(['init'])
+            ->getMock();
+        $oResponseMock->expects($this->never())->method('init')->willReturn(true);
+        d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
+
+        /** @var Config|MockObject $oConfigMock */
+        $oConfigMock = $this->getMockBuilder(Config::class)
+            ->setMethods(['getShopIds'])
+            ->getMock();
+        $oConfigMock->method('getShopIds')->willReturn([0, 1, 2]);
+        d3GetModCfgDIC()->set( 'd3ox.ordermanager.' . Config::class , $oConfigMock);
+
+        /** @var d3_ordermanager_cron|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
+            ->setMethods([
+                'translateFixedStrings',
+                'success',
+                'error'
+            ])
+            ->getMock();
+        $oControllerMock->expects($this->never())->method('translateFixedStrings')->willReturn(false);
+        $oControllerMock->expects($this->never())->method('success')->willReturn(true);
+        $oControllerMock->expects($this->once())->method('error')->willReturn(true);
+
+        $this->_oController = $oControllerMock;
+
+        $this->callMethod(
+            $this->_oController,
+            'main',
+            array($oOptionsMock)
+        );
+    }
+
+    /**
+     * @covers d3_ordermanager_cron::main
+     * @test
+     * @throws ReflectionException
+     */
+    public function mainUseQuietCmdDefaultValidCJID()
+    {
+        $aAvailableIds = d3GetModCfgDIC()->get(d3ordermanager::class)->getAvailableCronjobIds();
+
+        if (0 === count($aAvailableIds)) {
+            $this->fail('no available cronjob ids for running test');
+        }
+
+        /** @var Options|MockObject $oOptionsMock */
+        $oOptionsMock = $this->getMockBuilder(Options::class)
+            ->setMethods([
+                'getOpt',
+                'getCmd',
+                'getArgs'
+            ])
+            ->setConstructorArgs(
+                [$this->getValue($this->_oController, 'colors')]
+            )
+            ->getMock();
+        $oOptionsMock->method('getOpt')->willReturn(false);
+        $oOptionsMock->method('getCmd')->willReturn(false);
+        $oOptionsMock->method('getArgs')->willReturn(['1', end($aAvailableIds)['id'], 'key']);
+
+        $this->setValue(
+            $oOptionsMock,
+            'args',
+            ['1', end($aAvailableIds)['id'], 'key']
         );
         $oOptionsMock->parseOptions();
 
@@ -333,11 +477,13 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
             ->setMethods([
                 'translateFixedStrings',
-                'success'
+                'success',
+                'error'
             ])
             ->getMock();
         $oControllerMock->expects($this->never())->method('translateFixedStrings')->willReturn(false);
         $oControllerMock->expects($this->once())->method('success')->willReturn(true);
+        $oControllerMock->expects($this->never())->method('error')->willReturn(true);
 
         $this->_oController = $oControllerMock;
 
@@ -349,6 +495,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers d3_ordermanager_cron::main
      * @test
      * @throws ReflectionException
      */
@@ -362,7 +509,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ])
             ->setConstructorArgs([$this->getValue($this->_oController, 'colors')])
             ->getMock();
-        $oOptionsMock->method('getCmd')->willReturn('run');
+        $oOptionsMock->method('getCmd')->willReturn(d3_ordermanager_cron::COMMAND_RUN);
         $oOptionsMock->method('getOpt')->willReturn(false);
 
         $this->setValue(
@@ -409,7 +556,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ])
             ->setConstructorArgs([$this->getValue($this->_oController, 'colors')])
             ->getMock();
-        $oOptionsMock->method('getCmd')->willReturn('status');
+        $oOptionsMock->method('getCmd')->willReturn(d3_ordermanager_cron::COMMAND_STATUS);
         $oOptionsMock->method('getOpt')->willReturn(false);
 
         $this->setValue(
@@ -449,7 +596,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ])
             ->setConstructorArgs([$this->getValue($this->_oController, 'colors')])
             ->getMock();
-        $oOptionsMock->method('getCmd')->willReturn('run');
+        $oOptionsMock->method('getCmd')->willReturn(d3_ordermanager_cron::COMMAND_RUN);
         $oOptionsMock->method('getOpt')->willReturn(false);
 
         $this->setValue(

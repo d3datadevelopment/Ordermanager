@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_requ_languagefilter"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blCheckLanguage_status]" value="0">
-            <input id="RequLanguage" class="edittext ext_edittext" type="checkbox" name="value[blCheckLanguage_status]" value='1' [{if $edit->getValue('blCheckLanguage_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="RequLanguage">[{oxmultilang ident="D3_ORDERMANAGER_REQU_LANGUAGE"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oRequ blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_languagefilter_editor"}]

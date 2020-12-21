@@ -8,24 +8,24 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
-use D3\Ordermanager\Application\Model\d3ordermanager;
-use D3\Ordermanager\Application\Model\d3ordermanagerlist;
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_list;
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
+use D3\Ordermanager\Application\Model\d3ordermanagerlist as ManagerList;
 use OxidEsales\Eshop\Core\TableViewNameGenerator;
 
 class d3_cfg_ordermanageritem_list extends d3_cfg_mod_list
 {
-    protected $_sListClass = d3ordermanager::class;
-    protected $_sListType = d3ordermanagerlist::class;
+    protected $_sListClass = Manager::class;
+    protected $_sListType = ManagerList::class;
     protected $_blShowListItems = true;
     protected $_sThisTemplate = 'd3_cfg_ordermanageritem_list.tpl';
     protected $_sMenuItemTitle = 'd3mxordermanager';

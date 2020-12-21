@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_requ_fromordernr"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blCheckFromOrderNr_status]" value="0">
-            <input id="RequFromOrderNr" class="edittext ext_edittext" type="checkbox" name="value[blCheckFromOrderNr_status]" value='1' [{if $edit->getValue('blCheckFromOrderNr_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="RequFromOrderNr">[{oxmultilang ident="D3_ORDERMANAGER_REQU_FROMORDERNR"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oRequ blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_requ_fromordernr_editor"}]

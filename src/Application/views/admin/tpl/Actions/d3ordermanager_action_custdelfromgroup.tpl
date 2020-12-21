@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_action_custdelfromgroup"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blActionCustFromGroup_status]" value="0">
-            <input id="ActionCustRemoveFromGroup" class="edittext ext_edittext" type="checkbox" name="value[blActionCustFromGroup_status]" value='1' [{if $edit->getValue('blActionCustFromGroup_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="ActionCustRemoveFromGroup">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_CUSTOMERREMOVEFROMGROUP"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oAction blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_action_custdelfromgroup_editor"}]
@@ -17,7 +13,7 @@
                     </SELECT><br>
                     [{oxmultilang ident="D3_ORDERMANAGER_REQU_MULTIPLE"}]<br>
                     [{if !$blActionRestriction}]
-                        <input type="button" onclick="selectAllListElems(document.getElementById('sCustRemoveGroup')); return false;" value="[{oxmultilang ident="D3_GENERAL_ORDERMANAGER_SELECT_ALL"}]" [{$readonly}]> <input type="button" href="#" onclick="selectNoListElems(document.getElementById('sCustRemoveGroup')); return false;" value="[{oxmultilang ident="D3_GENERAL_ORDERMANAGER_SELECT_NONE"}]" [{$readonly}]>
+                        <input type="button" href="#" onclick="selectAllListElems(document.getElementById('sCustRemoveGroup')); return false;" value="[{oxmultilang ident="D3_GENERAL_ORDERMANAGER_SELECT_ALL"}]" [{$readonly}]> <input type="button" href="#" onclick="selectNoListElems(document.getElementById('sCustRemoveGroup')); return false;" value="[{oxmultilang ident="D3_GENERAL_ORDERMANAGER_SELECT_NONE"}]" [{$readonly}]>
                     [{/if}]
                 [{/block}]
             [{else}]

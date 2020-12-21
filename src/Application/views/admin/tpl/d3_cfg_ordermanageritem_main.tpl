@@ -142,7 +142,7 @@
                         </td>
                         <td class="edittext">
                             <select id="MainFolder" class="editinput" size="1" name="editval[[{$edit->d3GetFieldLongName('oxfolder')}]]" [{$readonly}]>
-                                <option value="" [{if '' == $edit->getFieldData('oxfolder')}] selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_NOFOLDER"}]</option>
+                                <option value="" [{if '' == $edit->getFieldData('oxfolder')}] selected[{/if}]>[{oxmultilang ident="D3_MODPROFILE_MAIN_NOFOLDER"}]</option>
                                 [{foreach from=$oView->getFolderList() key="sMLItem" item="sTranslation"}]
                                     <option value="[{$sMLItem}]" [{if $sMLItem == $edit->getFieldData('oxfolder')}] selected[{/if}]>[{$sTranslation}]</option>
                                 [{/foreach}]
@@ -206,38 +206,6 @@
                                 <input type="hidden" name="value[blItemMailSend]" value="0">
                                 <input id="MainMailsend" type="checkbox" class="edittext ext_edittext" name="value[blItemMailSend]" value="1" [{if $edit->getValue('blItemMailSend')}]checked[{/if}] [{$readonly}]>
                                 [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_MAILSEND_DESC"}]
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
-
-                <fieldset>
-                    <legend>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_FOLLOWUP"}]</legend>
-                    <table style="border: none; padding: 0;">
-                        <tr>
-                            <td class="edittext">
-                                <label for="MainMarkOrder">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_MARKORDER"}]</label>&nbsp;
-                            </td>
-                            <td class="edittext">
-                                <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_OM_MARKORDER')}]]" value="0">
-                                <input id="MainMarkOrder" type="checkbox" onclick="if(this.checked){document.getElementById('delayTime').style.display = 'table-row';}else{document.getElementById('delayTime').style.display = 'none';}" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_MARKORDER')}]]" value="1" [{if $edit->getFieldData('D3_OM_MARKORDER')}]checked[{/if}] [{$readonly}]>
-                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_MARKORDER_DESC"}]
-                            </td>
-                        </tr>
-
-                        <tr id="delayTime" style="display:[{if $edit->getFieldData('D3_OM_MARKORDER')}]table-row[{else}]none[{/if}];">
-                            <td class="edittext">
-                                <label for="MainMarkOrderDelay">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY"}]</label>&nbsp;
-                            </td>
-                            <td class="edittext">
-                                <input id="MainMarkOrderDelay" type="text" name="value[iUnmarkExecDelayTimeValue]" class="edittext ext_edittext" size="3" maxlength="5" value="[{if $edit->getValue('iUnmarkExecDelayTimeValue')}][{$edit->getValue('iUnmarkExecDelayTimeValue')}][{else}]1[{/if}]" [{$readonly}]>
-                                <label for="MainMarkOrderUnit" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDORDERUNIT"}]</label>
-                                <select id="MainMarkOrderUnit" name="value[sUnmarkExecDelayTimeUnit]" class="edittext ext_edittext" size="1" [{$readonly}]>
-                                    <option value="days" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'days'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_DAY"}]</option>
-                                    <option value="hours" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'hours'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_HOUR"}]</option>
-                                    <option value="minutes" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'minutes'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_MINUTE"}]</option>
-                                </select>
-                                [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_DESC"}]
                             </td>
                         </tr>
                     </table>

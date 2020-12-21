@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_action_sendpushnotification"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blActionOrderSendPushNotification_status]" value="0">
-            <input id="ActionOrderSendPushNotification" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderSendPushNotification_status]" value='1' [{if $edit->getValue('blActionOrderSendPushNotification_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="ActionOrderSendPushNotification">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oAction blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_action_sendpushnotification_editor"}]

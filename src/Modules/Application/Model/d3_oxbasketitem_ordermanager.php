@@ -8,11 +8,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Modules\Application\Model;
@@ -26,7 +26,7 @@ class d3_oxbasketitem_ordermanager extends d3_oxbasketitem_ordermanager_parent
     /**
      * @throws Exception
      */
-    public function d3ChangeOrderArticle2RealArticle()
+    public function d3OrderManagerChangeOrderArticle2RealArticle()
     {
         if ($this->_oArticle instanceof OrderArticle) {
             $sArticleId = $this->_oArticle->getProductId();

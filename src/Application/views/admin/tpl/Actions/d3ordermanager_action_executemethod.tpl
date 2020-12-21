@@ -1,10 +1,6 @@
 [{block name="ordermanager_admin_action_executemethod"}]
     <dl class="[{$blActionRestriction}]">
-        <dt>
-            <input type="hidden" name="value[blActionOrderExecuteMethod_status]" value="0">
-            <input id="ActionOrderExecuteMethod" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderExecuteMethod_status]" value='1' [{if $edit->getValue('blActionOrderExecuteMethod_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="ActionOrderExecuteMethod">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDEREXECUTEMETHOD"}]</label>
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oAction blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd>
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_action_executemethod_editor"}]

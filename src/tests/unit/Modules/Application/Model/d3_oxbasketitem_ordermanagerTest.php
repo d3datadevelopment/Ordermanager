@@ -7,11 +7,11 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
@@ -59,7 +59,7 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasketitem_ordermanager::d3ChangeOrderArticle2RealArticle
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasketitem_ordermanager::d3OrderManagerChangeOrderArticle2RealArticle
      * @test
      * @throws ArticleException
      * @throws ArticleInputException
@@ -88,7 +88,7 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
             );
 
             $this->setValue($this->_oModel, '_oArticle', $oOrderArticle);
-            $this->callMethod($this->_oModel, 'd3ChangeOrderArticle2RealArticle');
+            $this->callMethod($this->_oModel, 'd3OrderManagerChangeOrderArticle2RealArticle');
             $this->assertInstanceOf(Article::class, $this->_oModel->getArticle());
         } else {
             $this->markTestSkipped('no article available');
@@ -96,7 +96,7 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasketitem_ordermanager::d3ChangeOrderArticle2RealArticle
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasketitem_ordermanager::d3OrderManagerChangeOrderArticle2RealArticle
      * @test
      * @throws ArticleException
      * @throws ArticleInputException
@@ -115,7 +115,7 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
         );
 
         $this->setValue($this->_oModel, '_oArticle', $oOrderArticle);
-        $this->callMethod($this->_oModel, 'd3ChangeOrderArticle2RealArticle');
+        $this->callMethod($this->_oModel, 'd3OrderManagerChangeOrderArticle2RealArticle');
         $this->assertInstanceOf(OrderArticle::class, $this->_oModel->getArticle());
     }
 

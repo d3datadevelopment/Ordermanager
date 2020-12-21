@@ -1,11 +1,6 @@
 [{block name="ordermanager_admin_action_sendmail"}]
     <dl class="[{$blActionRestriction}]">
-        <dt style="width: 20%;">
-            <input type="hidden" name="value[blActionMailsend_status]" value="0">
-            <input id="ActionMailsend" class="edittext ext_edittext" type="checkbox" name="value[blActionMailsend_status]" value='1' [{if $edit->getValue('blActionMailsend_status') == 1}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
-            <label for="ActionMailsend">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND"}]</label>
-             [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_MAILSEND_DESC"}]
-        </dt>
+        [{include file="d3ordermanager_activeswitch.tpl" oActionRequ=$oAction blActionRestriction=$blActionRestriction readonly=$readonly}]
         <dd style="margin-left: 30%;">
             [{if $oView->isEditMode()}]
                 [{block name="ordermanager_admin_action_sendmail_editor"}]
@@ -21,11 +16,11 @@
                     <input style="margin-left: 20px;" id="FromModule" type="radio" name="value[sSendMailFromTheme]" value="module" [{if $edit->getValue('sSendMailFromTheme') == 'module'}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]>
                     <label for="FromModule">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_MODULE"}]</label>
                     <label for="FromModuleId" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND"}]</label>
-                        <select id="FromModuleId" class="editinput" name="value[sSendMailFromModulePath]" size="1" [{$blActionRestriction}] [{$readonly}]>
-                            [{foreach from=$oView->getModulePathList() key="sId" item="sModulePath"}]
-                                <option value="[{$sId}]" [{if $edit->getValue('sSendMailFromModulePath') == $sId}]selected[{/if}]>[{$sModulePath}]</option>
-                            [{/foreach}]
-                        </select> [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_DESC"}]<br>
+                    <select id="FromModuleId" class="editinput" name="value[sSendMailFromModulePath]" size="1" [{$blActionRestriction}] [{$readonly}]>
+                        [{foreach from=$oView->getModulePathList() key="sId" item="sModulePath"}]
+                            <option value="[{$sId}]" [{if $edit->getValue('sSendMailFromModulePath') == $sId}]selected[{/if}]>[{$sModulePath}]</option>
+                        [{/foreach}]
+                    </select> [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_DESC"}]<br>
                     <hr>
                     <input type="radio" id="FromSourceCms" name="value[sSendMailFromSource]" value="cms" [{if $edit->getValue('sSendMailFromSource') == 'cms'}]checked[{/if}] [{$blActionRestriction}] [{$readonly}]> <label for="FromSourceCms">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROMCMS"}]</label>
                     <br>
@@ -73,6 +68,7 @@
                 [{/block}]
             [{else}]
                 [{block name="ordermanager_admin_action_sendmail_viewer"}]
+                    [{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROM1"}]<br>
                     [{if $edit->getValue('sSendMailFromSource') == 'template'}]
                         [{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE"}]
                         <br>
@@ -109,10 +105,12 @@
                     [{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_FROM2"}]<br>
 
                     [{if $edit->getValue('blSendMailToCustomer') == 1}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER"}] [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER_DESC"}],
+                        [{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER"}]
+                        [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER_DESC"}],
                     [{/if}]
                     [{if $edit->getValue('blSendMailToOwner') == 1}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER"}] [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER_DESC"}],
+                        [{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER"}]
+                        [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER_DESC"}],
                     [{/if}]
                     [{if $edit->getValue('blSendMailToCustom') == 1}]
                         [{oxmultilang ident="D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL"}]
@@ -132,6 +130,7 @@
                     [{/if}]
                 [{/block}]
             [{/if}]
+            [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_SENDMAIL_DESC"}]
         </dd>
         <div class="spacer"></div>
     </dl>

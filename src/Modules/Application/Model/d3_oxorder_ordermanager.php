@@ -8,15 +8,16 @@
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
  *
- * http://www.shopmodule.com
+ * https://www.d3data.de
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
- * @link      http://www.oxidmodule.com
+ * @link      https://www.oxidmodule.com
  */
 
 namespace D3\Ordermanager\Modules\Application\Model;
 
+use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
@@ -48,7 +49,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
     protected $_iSelectedLang;
 
     /**
-     * @param string $sName
+     * @param $sName
      *
      * @return mixed
      */
@@ -99,9 +100,11 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
      * @return Voucher
      * @throws Exception
      */
-    public function d3GetVoucher()
+    public function d3GetOrderManagerVoucher()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Voucher::class);
+        /** @var Voucher $voucher */
+        $voucher = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Voucher::class);
+        return $voucher;
     }
 
     /**
@@ -140,7 +143,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
 
         $this->_aVoucherList = $oBasket->getVouchers();
         foreach (array_keys($this->_aVoucherList) as $sKey) {
-            $oVoucher = $this->d3GetVoucher();
+            $oVoucher = $this->d3GetOrderManagerVoucher();
             $oVoucher->load($sKey);
             $this->_aVoucherList[$sKey] = $oVoucher;
         }
@@ -152,7 +155,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
      * @return d3ordermanager_pdfhandler
      * @throws Exception
      */
-    public function d3GetPdfHandler()
+    public function d3GetOrderManagerPdfHandler()
     {
         d3GetModCfgDIC()->set(
             d3ordermanager_pdfhandler::class.'.args.ordermanager',
@@ -163,16 +166,20 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
             d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_pdfhandler::class);
+        /** @var d3ordermanager_pdfhandler $pdfHandler */
+        $pdfHandler = d3GetModCfgDIC()->get(d3ordermanager_pdfhandler::class);
+        return $pdfHandler;
     }
 
     /**
      * @return InvoicepdfPDF
      * @throws Exception
      */
-    public function d3GetInvoicePdf()
+    public function d3GetOrderManagerInvoicePdf()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.InvoicepdfPDF::class);
+        /** @var InvoicepdfPDF $invoicePdf */
+        $invoicePdf = d3GetModCfgDIC()->get('d3ox.ordermanager.'.InvoicepdfPDF::class);
+        return $invoicePdf;
     }
 
     /**
@@ -183,7 +190,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
      * @return null|string
      * @throws Exception
      */
-    public function d3generatePdf($sFilename, $iSelLang = 0, $sDocType = d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_INVOICE, $sDestination = 'S')
+    public function d3OrderManagerGeneratePdf($sFilename, $iSelLang = 0, $sDocType = d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_INVOICE, $sDestination = 'S')
     {
         // setting pdf language
         $this->_iSelectedLang = $iSelLang;
@@ -199,16 +206,16 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
             $this->save();
         }
 
-        $oPdfHandler = $this->d3GetPdfHandler();
+        $oPdfHandler = $this->d3GetOrderManagerPdfHandler();
         if ($oPdfHandler->canGenerateOxidPdf()) {
 
-            $oPdf = $this->d3GetInvoicePdf();
+            $oPdf = $this->d3GetOrderManagerInvoicePdf();
             $oPdf->setPrintHeader(false);
             $oPdf->Open();
 
             // adding header
             $this->pdfHeader($oPdf);
-            $this->d3generatePdfBody( $sDocType, $oPdf );
+            $this->d3OrderManagerGeneratePdfBody( $sDocType, $oPdf );
             // adding footer
             $this->pdfFooter($oPdf);
 
@@ -237,12 +244,16 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
     {
         $iRet = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
 
-        $oOrderManagerList = d3GetModCfgDIC()->get(d3ordermanagerlist::class);
-        /** @var d3ordermanager $oManager */
-        foreach ($oOrderManagerList->d3GetOrderFinishTriggeredManagerTasks() as $oManager) {
-            $oManagerExecute = $this->getManagerExecute($oManager);
-            if ($oManagerExecute->orderMeetsConditions($this->getId())) {
-                $oManagerExecute->exec4order($this->getId(), d3ordermanager_conf::EXECTYPE_ORDERFINISHTRIGGERED);
+        /** @var d3_cfg_mod $oSet */
+        $oSet = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        if ($oSet->isActive()) {
+            $oOrderManagerList = d3GetModCfgDIC()->get(d3ordermanagerlist::class);
+            /** @var d3ordermanager $oManager */
+            foreach ($oOrderManagerList->d3GetOrderFinishTriggeredManagerTasks() as $oManager) {
+                $oManagerExecute = $this->d3OrdermanagerGetManagerExecute($oManager);
+                if ($oManagerExecute->orderMeetsConditions($this->getId())) {
+                    $oManagerExecute->exec4order($this->getId(), d3ordermanager_conf::EXECTYPE_ORDERFINISHTRIGGERED);
+                }
             }
         }
 
@@ -264,12 +275,16 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
     {
         $blSave = parent::save();
 
-        $oOrderManagerList = d3GetModCfgDIC()->get(d3ordermanagerlist::class);
-        /** @var d3ordermanager $oManager */
-        foreach ($oOrderManagerList->d3GetOrderSaveTriggeredManagerTasks() as $oManager) {
-            $oManagerExecute = $this->getManagerExecute($oManager);
-            if ($oManagerExecute->orderMeetsConditions($this->getId())) {
-                $oManagerExecute->exec4order($this->getId(), d3ordermanager_conf::EXECTYPE_ORDERSAVETRIGGERED);
+        /** @var d3_cfg_mod $oSet */
+        $oSet = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        if ($oSet->isActive()) {
+            $oOrderManagerList = d3GetModCfgDIC()->get(d3ordermanagerlist::class);
+            /** @var d3ordermanager $oManager */
+            foreach ($oOrderManagerList->d3GetOrderSaveTriggeredManagerTasks() as $oManager) {
+                $oManagerExecute = $this->d3OrdermanagerGetManagerExecute($oManager);
+                if ($oManagerExecute->orderMeetsConditions($this->getId())) {
+                    $oManagerExecute->exec4order($this->getId(), d3ordermanager_conf::EXECTYPE_ORDERSAVETRIGGERED);
+                }
             }
         }
 
@@ -281,21 +296,23 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
      * @return d3ordermanager_execute
      * @throws Exception
      */
-    public function getManagerExecute(d3ordermanager $oManager)
+    public function d3OrdermanagerGetManagerExecute(d3ordermanager $oManager)
     {
         d3GetModCfgDIC()->set(
             d3ordermanager_execute::class.'.args.ordermanager',
             $oManager
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_execute::class);
+        /** @var d3ordermanager_execute $execute */
+        $execute = d3GetModCfgDIC()->get(d3ordermanager_execute::class);
+        return $execute;
     }
 
     /**
      * @param               $sDocType
      * @param InvoicepdfPDF $oPdf
      */
-    public function d3generatePdfBody( $sDocType, InvoicepdfPDF $oPdf )
+    public function d3OrderManagerGeneratePdfBody( $sDocType, InvoicepdfPDF $oPdf )
     {
         switch ( $sDocType ) {
             case d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_DELIVERYNOTE:
