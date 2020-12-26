@@ -37,11 +37,11 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 {
     use VariablesTrait;
 
-    protected $_sSetModId = 'd3usermanager';
-    protected $_sModId = 'd3usermanager';
-    protected $_sThisTemplate = "d3_cfg_usermanageritem_overview.tpl";
-    protected $_sMenuItemTitle = 'd3mxusermanager';
-    protected $_sMenuSubItemTitle = 'd3mxusermanager_items';
+    protected $_sSetModId = 'd3ordermanager';
+    protected $_sModId = 'd3ordermanager';
+    protected $_sThisTemplate = "d3_cfg_ordermanageritem_overview.tpl";
+    protected $_sMenuItemTitle = 'd3mxordermanager';
+    protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
     protected $_blUseOwnOxid = true;
     protected $_aNaviItems = array(
         'new' => array(

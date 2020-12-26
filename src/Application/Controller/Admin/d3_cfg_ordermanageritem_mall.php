@@ -20,7 +20,7 @@ use D3\ModCfg\Application\Model\d3filesystem;
 use D3\ModCfg\Application\Model\d3str;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
-use D3\Usermanager\Application\Model\d3usermanager_vars as VariablesTrait;
+use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminMall;  // required for non fallback case

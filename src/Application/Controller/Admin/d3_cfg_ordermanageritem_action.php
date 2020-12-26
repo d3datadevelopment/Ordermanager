@@ -46,8 +46,8 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
 {
     use VariablesTrait;
 
-    protected $_sThisTemplate = "d3_cfg_usermanageritem_action.tpl";
-    protected $_sMenuSubItemTitle = 'd3mxusermanager_items';
+    protected $_sThisTemplate = "d3_cfg_ordermanageritem_action.tpl";
+    protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
     protected $_sSavedId;
     protected $_sExportFieldDescMLIdent = 'D3_ORDERMANAGER_FIELDDESC';
     protected $_sExportFieldTitleBaseMLIdent = 'D3_ORDERMANAGER_FIELDTITLE_';
