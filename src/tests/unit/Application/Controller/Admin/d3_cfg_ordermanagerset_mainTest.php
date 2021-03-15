@@ -484,11 +484,13 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
      */
     public function canGetCronProviderList()
     {
+        $expected = ['contentList'];
+
         /** @var d3filegeneratorcronsh|MockObject $oFileGeneratorCronShMock */
         $oFileGeneratorCronShMock = $this->getMockBuilder(d3filegeneratorcronsh::class)
             ->setMethods(['getContentList'])
             ->getMock();
-        $oFileGeneratorCronShMock->method('getContentList')->willReturn('contentList');
+        $oFileGeneratorCronShMock->method('getContentList')->willReturn($expected);
 
         /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
@@ -499,7 +501,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertSame(
-            'contentList',
+            $expected,
             $this->callMethod($this->_oController, 'getCronProviderList')
         );
     }

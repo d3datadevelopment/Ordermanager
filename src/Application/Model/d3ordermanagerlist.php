@@ -15,6 +15,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types = 1);
+
 namespace D3\Ordermanager\Application\Model;
 
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
@@ -54,7 +56,7 @@ class d3ordermanagerlist extends d3modprofilelist
      * @throws d3_cfg_mod_exception
      * @throws Exception
      */
-    public function d3GetManuallyManagerJobsByFolder($sFolderId)
+    public function d3GetManuallyManagerJobsByFolder($sFolderId): d3ordermanagerlist
     {
         /** @var Manager $oListObject */
         $oListObject = $this->getBaseObject();
@@ -92,7 +94,7 @@ class d3ordermanagerlist extends d3modprofilelist
      * @throws d3_cfg_mod_exception
      * @throws Exception
      */
-    public function d3GetOrderSaveTriggeredManagerTasks()
+    public function d3GetOrderSaveTriggeredManagerTasks(): d3ordermanagerlist
     {
         if ($this->d3GetSet()->isDemo() ||
             in_array(
@@ -117,7 +119,7 @@ class d3ordermanagerlist extends d3modprofilelist
                 ->orderBy($oListObject->getViewName() . ".oxsort", 'ASC')
                 ->addOrderBy($oListObject->getViewName() . ".oxfolder", "ASC");
 
-            $queryBuilder = $this->d3AddActiveSnippet($oListObject, $queryBuilder, true, false);
+            $queryBuilder = $this->d3AddActiveSnippet($oListObject, $queryBuilder, false, false);
 
             $this->selectString($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
@@ -142,7 +144,7 @@ class d3ordermanagerlist extends d3modprofilelist
      * @throws d3_cfg_mod_exception
      * @throws Exception
      */
-    public function d3GetOrderFinishTriggeredManagerTasks()
+    public function d3GetOrderFinishTriggeredManagerTasks(): d3ordermanagerlist
     {
         if ($this->d3GetSet()->isDemo() ||
             in_array(
@@ -167,7 +169,7 @@ class d3ordermanagerlist extends d3modprofilelist
                 ->orderBy($oListObject->getViewName() . ".oxsort", 'ASC')
                 ->addOrderBy($oListObject->getViewName() . ".oxfolder", 'ASC');
 
-            $queryBuilder = $this->d3AddActiveSnippet($oListObject, $queryBuilder, true, false);
+            $queryBuilder = $this->d3AddActiveSnippet($oListObject, $queryBuilder, false, false);
 
             $this->selectString($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
@@ -193,7 +195,7 @@ class d3ordermanagerlist extends d3modprofilelist
      * @throws DatabaseErrorException
      * @throws StandardException
      */
-    public function canExecutedManually(Manager $oManager)
+    public function canExecutedManually(Manager $oManager): bool
     {
         return $oManager->getFieldData('D3_OM_EXECMANUALLY') &&
                $oManager->getLicenseActive();
@@ -209,7 +211,7 @@ class d3ordermanagerlist extends d3modprofilelist
      * @throws DatabaseConnectionException
      * @throws Exception
      */
-    public function d3AddActiveSnippet(Manager $oListObject, QueryBuilder $queryBuilder, $blManually = false, $blUseCommonActiveCheck = true)
+    public function d3AddActiveSnippet(Manager $oListObject, QueryBuilder $queryBuilder, $blManually = false, $blUseCommonActiveCheck = true): QueryBuilder
     {
         $sActiveSnippet = $oListObject->getSqlActiveSnippet();
 
@@ -240,7 +242,7 @@ class d3ordermanagerlist extends d3modprofilelist
      *
      * @return QueryBuilder
      */
-    public function d3AddFolderSelection($sFolderId, Manager $oListObject, QueryBuilder $queryBuilder)
+    public function d3AddFolderSelection($sFolderId, Manager $oListObject, QueryBuilder $queryBuilder): QueryBuilder
     {
         if ($sFolderId && $sFolderId != '-1') {
             $queryBuilder->andWhere(
@@ -265,8 +267,8 @@ class d3ordermanagerlist extends d3modprofilelist
     }
 
     /**
+     * return type can't defined, because of unmockable d3_cfg_mod class, use stdClass in test
      * @return d3_cfg_mod
-     * @throws Exception
      */
     public function d3GetSet()
     {
@@ -278,7 +280,7 @@ class d3ordermanagerlist extends d3modprofilelist
     /**
      * @return ContainerInterface
      */
-    public function getDIContainer()
+    public function getDIContainer(): ContainerInterface
     {
         return ContainerFactory::getInstance()->getContainer();
     }

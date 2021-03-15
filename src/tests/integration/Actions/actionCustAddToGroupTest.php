@@ -70,9 +70,7 @@ class actionCustAddToGroupTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @throws DBALException
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     public function cleanTestData()
     {
@@ -167,7 +165,6 @@ class actionCustAddToGroupTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
-     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -249,7 +246,6 @@ class actionCustAddToGroupTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
-     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -334,7 +330,6 @@ class actionCustAddToGroupTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
-     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -426,7 +421,6 @@ class actionCustAddToGroupTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
-     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -508,7 +502,6 @@ class actionCustAddToGroupTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
-     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

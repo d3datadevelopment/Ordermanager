@@ -19,11 +19,13 @@ namespace D3\Ordermanager\tests\integration\Requirements;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class requirementToOrderNrTest extends d3OrdermanagerRequirementIntegrationTestCase
 {
@@ -52,6 +54,8 @@ class requirementToOrderNrTest extends d3OrdermanagerRequirementIntegrationTestC
 
     /**
      * Tear down fixture.
+     *
+     * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
@@ -115,9 +119,7 @@ class requirementToOrderNrTest extends d3OrdermanagerRequirementIntegrationTestC
     }
 
     /**
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     * @throws Exception
+     * @throws DBALException
      */
     public function cleanTestData()
     {
@@ -132,7 +134,7 @@ class requirementToOrderNrTest extends d3OrdermanagerRequirementIntegrationTestC
      * @return d3ordermanager
      * @throws Exception
      */
-    public function getConfiguredManager()
+    public function getConfiguredManager(): d3ordermanager
     {
         $oManager = $this->getManagerMock($this->sManagerId);
 
@@ -144,7 +146,6 @@ class requirementToOrderNrTest extends d3OrdermanagerRequirementIntegrationTestC
 
     /**
      * @test
-     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -167,22 +168,26 @@ class requirementToOrderNrTest extends d3OrdermanagerRequirementIntegrationTestC
     }
 
     /**
-     * @return d3ordermanager
-     * @throws Exception
+     * @param $orderNrValue
+     *
+     * @return d3ordermanager|MockObject
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
-    public function getConfiguredManagerNoValidConfig()
+    public function getConfiguredManagerNoValidConfig($orderNrValue)
     {
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckToOrderNr_status', true);
-        $oManager->setValue('sToOrderNrValue', ' ');
+        $oManager->setValue('sToOrderNrValue', $orderNrValue);
 
         return $oManager;
     }
 
     /**
      * @test
-     * @coversNothing
+     * @param $orderNrValue
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -190,17 +195,25 @@ class requirementToOrderNrTest extends d3OrdermanagerRequirementIntegrationTestC
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
      * @throws Exception
+     * @dataProvider requirementsSelectsRightOrdersNoValidConfigDataProvider
      */
-    public function requirementsSelectsRightOrdersNoValidConfig()
+    public function requirementsSelectsRightOrdersNoValidConfig($orderNrValue)
     {
-        $oListGenerator = $this->getListGenerator($this->getConfiguredManagerNoValidConfig());
-        $oOrderList = $oListGenerator->getConcernedItems();
+        $this->expectException(d3ordermanager_requirementException::class);
 
-        $this->assertTrue(
-            $oOrderList->count() >= 3
-            && $oOrderList->offsetExists($this->aOrderIdList[0])
-            && $oOrderList->offsetExists($this->aOrderIdList[2])
-            && $oOrderList->offsetExists($this->aOrderIdList[1])
-        );
+        $oListGenerator = $this->getListGenerator($this->getConfiguredManagerNoValidConfig($orderNrValue));
+        $oListGenerator->getConcernedItems();
+    }
+
+    /**
+     * @return array
+     */
+    public function requirementsSelectsRightOrdersNoValidConfigDataProvider(): array
+    {
+        return [
+            'spaceOrderNr'  => ['   '],
+            'emptyOrderNr'  => [''],
+            'falseOrderNr'  => [false]
+        ];
     }
 }

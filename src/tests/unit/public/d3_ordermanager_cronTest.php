@@ -14,8 +14,12 @@
  * @link      https://www.oxidmodule.com
  */
 
+namespace D3\Ordermanager\tests\unit\publicDir;
+
+use D3\ModCfg\Application\Model\Exception\d3PreventExitException;
 use D3\Ordermanager\Application\Controller\d3ordermanager_response;
 use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\publicDir\d3_ordermanager_cron;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
 use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Core\Config;
@@ -23,6 +27,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Session;
 use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionException;
 use splitbrain\phpcli\Exception as Exception;
 use splitbrain\phpcli\Options;
 
@@ -41,21 +46,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     {
         parent::setUp();
 
-        $count = 0;
-        $filePath = '../../../source/modules/d3/ordermanager/public/d3_ordermanager_cron.php';
-        $currentDirectory = __DIR__ . '/';
-        while ($count < 5) {
-            $count++;
-            if (file_exists($currentDirectory . $filePath)) {
-                $filePath = $currentDirectory . $filePath;
-                break;
-            }
-            $filePath = '../' . $filePath;
-        }
-
-        require_once($filePath);
-
-        $this->_oController = oxNew(d3_ordermanager_cron::class);
+        $this->_oController = oxNew( d3_ordermanager_cron::class);
     }
 
     public function tearDown()
@@ -66,7 +57,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::__construct
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::__construct
      * @test
      * @throws ReflectionException
      */
@@ -93,7 +84,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::__construct
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::__construct
      * @test
      * @throws ReflectionException
      */
@@ -119,7 +110,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::isCLI
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::isCLI
      * @test
      * @throws ReflectionException
      */
@@ -134,7 +125,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::setup
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::setup
      * @test
      * @throws ReflectionException
      */
@@ -162,7 +153,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::parseOptions
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::parseOptions
      * @test
      * @throws ReflectionException
      */
@@ -191,7 +182,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::main
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::main
      * @test
      * @throws ReflectionException
      */
@@ -235,7 +226,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::main
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::main
      * @test
      * @throws ReflectionException
      */
@@ -263,14 +254,6 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         );
         $oOptionsMock->parseOptions();
 
-        /** @var Session|MockObject $oSessionMock */
-        $oSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['setVariable'])
-            ->getMock();
-        $oSessionMock->expects($this->once())->method('setVariable')
-            ->with($this->equalTo('d3ordermanager_quiet'))->willReturn(true);
-        d3GetModCfgDIC()->set('d3ox.ordermanager.'.Session::class, $oSessionMock);
-
         /** @var d3_ordermanager_cron|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
             ->setMethods(['translateFixedStrings'])
@@ -287,7 +270,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::main
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::main
      * @test
      * @throws ReflectionException
      */
@@ -315,19 +298,11 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         );
         $oOptionsMock->parseOptions();
 
-        /** @var Session|MockObject $oSessionMock */
-        $oSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['setVariable'])
-            ->getMock();
-        $oSessionMock->expects($this->never())->method('setVariable')
-            ->with($this->equalTo('d3ordermanager_quiet'))->willReturn(false);
-        d3GetModCfgDIC()->set('d3ox.ordermanager.'.Session::class, $oSessionMock);
-
         /** @var d3ordermanager_response|MockObject $oResponseMock */
         $oResponseMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods(['init'])
+            ->setMethods(['initCli'])
             ->getMock();
-        $oResponseMock->expects($this->never())->method('init')->willReturn(true);
+        $oResponseMock->expects($this->never())->method('initCli')->willReturn(true);
         d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
 
         /** @var d3_ordermanager_cron|MockObject $oControllerMock */
@@ -352,7 +327,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::main
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::main
      * @test
      * @throws ReflectionException
      */
@@ -390,9 +365,9 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_response|MockObject $oResponseMock */
         $oResponseMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods(['init'])
+            ->setMethods(['initCli'])
             ->getMock();
-        $oResponseMock->expects($this->never())->method('init')->willReturn(true);
+        $oResponseMock->expects($this->never())->method('initCli')->willReturn(true);
         d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
 
         /** @var Config|MockObject $oConfigMock */
@@ -424,7 +399,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::main
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::main
      * @test
      * @throws ReflectionException
      */
@@ -458,19 +433,11 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         );
         $oOptionsMock->parseOptions();
 
-        /** @var Session|MockObject $oSessionMock */
-        $oSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['setVariable'])
-            ->getMock();
-        $oSessionMock->expects($this->never())->method('setVariable')
-            ->with($this->equalTo('d3ordermanager_quiet'))->willReturn(false);
-        d3GetModCfgDIC()->set('d3ox.ordermanager.'.Session::class, $oSessionMock);
-
         /** @var d3ordermanager_response|MockObject $oResponseMock */
         $oResponseMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods(['init'])
+            ->setMethods(['initCli'])
             ->getMock();
-        $oResponseMock->expects($this->once())->method('init')->willReturn(true);
+        $oResponseMock->expects($this->once())->method('initCli')->willReturn(true);
         d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
 
         /** @var d3_ordermanager_cron|MockObject $oControllerMock */
@@ -495,7 +462,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::main
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::main
      * @test
      * @throws ReflectionException
      */
@@ -521,9 +488,9 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_response|MockObject $oResponseMock */
         $oResponseMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods(['init'])
+            ->setMethods(['initCli'])
             ->getMock();
-        $oResponseMock->expects($this->once())->method('init')->willReturn(true);
+        $oResponseMock->expects($this->once())->method('initCli')->willReturn(true);
         d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
 
         /** @var d3_ordermanager_cron|MockObject $oControllerMock */
@@ -542,12 +509,20 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::main
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::main
      * @test
      * @throws ReflectionException
      */
     public function mainCmdStatus()
     {
+        /** @var d3ordermanager_response|MockObject $oResponseMock */
+        $oResponseMock = $this->getMockBuilder(d3ordermanager_response::class)
+            ->setMethods(['getLastExecDateInfo'])
+            ->getMock();
+        $oResponseMock->expects($this->atLeastOnce())->method('getLastExecDateInfo')->willReturn(['content1', 'content2']);
+
+        d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock );
+
         /** @var Options|MockObject $oOptionsMock */
         $oOptionsMock = $this->getMockBuilder(Options::class)
             ->setMethods([
@@ -577,12 +552,12 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oController,
             'main',
-            array($oOptionsMock)
+            [$oOptionsMock]
         );
     }
 
     /**
-     * @covers d3_ordermanager_cron::main
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::main
      * @test
      * @throws ReflectionException
      */
@@ -608,9 +583,9 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_response|MockObject $oResponseMock */
         $oResponseMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods(['init'])
+            ->setMethods(['initCli'])
             ->getMock();
-        $oResponseMock->expects($this->once())->method('init')->willThrowException(new Exception('excMsg'));
+        $oResponseMock->expects($this->once())->method('initCli')->willThrowException(new Exception('excMsg'));
         d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
 
         /** @var d3_ordermanager_cron|MockObject $oControllerMock */
@@ -629,7 +604,30 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::translateFixedStrings
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::execute
+     * @test
+     * @throws ReflectionException
+     */
+    public function executeThrowRightException()
+    {
+        /** @var d3_ordermanager_cron|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
+            ->setMethods(['main'])
+            ->getMock();
+        $oControllerMock->method('main')->willReturn(true);
+
+        $this->_oController = $oControllerMock;
+
+        $this->expectException(d3PreventExitException::class);
+
+        $this->callMethod(
+            $this->_oController,
+            'execute'
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::translateFixedStrings
      * @test
      * @throws ReflectionException
      */
@@ -648,7 +646,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers d3_ordermanager_cron::translateFixedStrings
+     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::translateFixedStrings
      * @test
      * @throws ReflectionException
      */

@@ -127,7 +127,6 @@ class requirementTrackCodeTest extends d3OrdermanagerRequirementIntegrationTestC
 
     /**
      * @test
-     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException

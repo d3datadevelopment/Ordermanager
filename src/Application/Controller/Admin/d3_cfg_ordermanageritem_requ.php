@@ -15,15 +15,17 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types = 1);
+
 namespace D3\Ordermanager\Application\Controller\Admin;
 
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist as ManagerList;
 use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
-use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_abstract as RequirementAbstractModel;
+use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException;
+use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_interface as RequirementModelInterface;
 use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist as RequirementGroupListModel;
 use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist as RequirementListModel;
-use Exception;
 use OxidEsales\Eshop\Application\Model\DeliveryList;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\CountryList;
@@ -47,10 +49,15 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
         // @codeCoverageIgnoreEnd
 
         $aMissingRequiredValues = array();
-        /** @var RequirementAbstractModel $oRequirement */
+        /** @var RequirementModelInterface $oRequirement */
         foreach ($this->getRequirementList() as $sId => $oRequirement) {
-            if ($this->getProfile()->getValue($oRequirement->getActiveSwitchParameter()) && false == $oRequirement->hasRequiredValues()) {
-                $aMissingRequiredValues[] = $sId;
+            if ($this->getProfile()->getValue($oRequirement->getActiveSwitchParameter())) {
+                try {
+                    $oRequirement->throwUnvalidConfigurationException();
+                } catch (d3ordermanager_requirementException $e) {
+                    unset($e);
+                    $aMissingRequiredValues[] = $sId;
+                }
             }
         }
 
@@ -61,9 +68,8 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
 
     /**
      * @return ListModel
-     * @throws Exception
      */
-    public function getPaymentList()
+    public function getPaymentList(): ListModel
     {
         /** @var PaymentList $oPaymentList */
         $oPaymentList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.PaymentList::class);
@@ -72,9 +78,8 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
 
     /**
      * @return ListModel
-     * @throws Exception
      */
-    public function getDeliveryList()
+    public function getDeliveryList(): ListModel
     {
         /** @var DeliveryList $oDeliveryList */
         $oDeliveryList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.DeliveryList::class);
@@ -83,9 +88,8 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
 
     /**
      * @return ListModel
-     * @throws Exception
      */
-    public function getCountryList()
+    public function getCountryList(): ListModel
     {
         /** @var CountryList $oCountryList */
         $oCountryList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.CountryList::class);
@@ -94,9 +98,8 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
 
     /**
      * @return ManagerList
-     * @throws Exception
      */
-    public function getJobList()
+    public function getJobList(): ManagerList
     {
         $sCurrentId = $this->getViewDataElement('edit')->getId();
         /** @var $oManagerList ManagerList */
@@ -109,9 +112,8 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
 
     /**
      * @return array
-     * @throws Exception
      */
-    public function getLanguageList()
+    public function getLanguageList(): array
     {
         $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
         return $oLang->getLanguageArray();
@@ -120,7 +122,7 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     /**
      * @return array
      */
-    public function getTransStatusList()
+    public function getTransStatusList(): array
     {
         return $this->_aTransStatus;
     }
@@ -133,7 +135,7 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
      *
      * @return array
      */
-    public function addDefaultValues($aParams)
+    public function addDefaultValues($aParams): array
     {
         return $aParams;
     }
@@ -141,9 +143,8 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     /**
      * @param Manager $oManager
      * @return RequirementGroupListModel
-     * @throws Exception
      */
-    public function getRequirementGroupList(Manager $oManager)
+    public function getRequirementGroupList(Manager $oManager): RequirementGroupListModel
     {
         d3GetModCfgDIC()->set(
             RequirementGroupListModel::class.'.args.ordermanager',
@@ -158,9 +159,8 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     /**
      * @param Manager $oManager
      * @return RequirementListModel
-     * @throws Exception
      */
-    public function getRequirementListObject(Manager $oManager)
+    public function getRequirementListObject(Manager $oManager): RequirementListModel
     {
         d3GetModCfgDIC()->set(
             RequirementListModel::class.'.args.ordermanager',
@@ -174,9 +174,8 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
 
     /**
      * @return array
-     * @throws Exception
      */
-    public function getGroupedRequirementList()
+    public function getGroupedRequirementList(): array
     {
         /** @var Manager $oManager */
         $oManager = $this->getProfile();
@@ -188,9 +187,8 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
 
     /**
      * @return array
-     * @throws Exception
      */
-    public function getRequirementList()
+    public function getRequirementList(): array
     {
         /** @var Manager $oManager */
         $oManager = $this->getProfile();

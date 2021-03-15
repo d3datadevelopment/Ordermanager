@@ -19,11 +19,13 @@ namespace D3\Ordermanager\tests\integration\Requirements;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class requirementFromOrderNrTest extends d3OrdermanagerRequirementIntegrationTestCase
 {
@@ -144,7 +146,6 @@ class requirementFromOrderNrTest extends d3OrdermanagerRequirementIntegrationTes
 
     /**
      * @test
-     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -164,5 +165,56 @@ class requirementFromOrderNrTest extends d3OrdermanagerRequirementIntegrationTes
             && $oOrderList->offsetExists($this->aOrderIdList[1])
             && false == $oOrderList->offsetExists($this->aOrderIdList[2])
         );
+    }
+
+    /**
+     * @param $invalidValue
+     *
+     * @return d3ordermanager|MockObject
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function getConfiguredManagerNoValidConfig($invalidValue)
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blCheckFromOrderNr_status', true);
+        $oManager->setValue('sFromOrderNrValue', $invalidValue);
+
+        return $oManager;
+    }
+
+    /**
+     * @test
+     * @param $testValue
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     * @dataProvider requirementsSelectsRightOrdersNoValidConfigDataProvider
+     */
+    public function requirementsSelectsRightOrdersNoValidConfig($testValue)
+    {
+        $this->expectException(d3ordermanager_requirementException::class);
+
+        $oListGenerator = $this->getListGenerator($this->getConfiguredManagerNoValidConfig($testValue));
+        $oListGenerator->getConcernedItems();
+    }
+
+    /**
+     * @return array
+     */
+    public function requirementsSelectsRightOrdersNoValidConfigDataProvider(): array
+    {
+        return [
+            'unknown'=> [null],
+            'space'  => [' '],
+            'empty'  => [''],
+            'false'  => [false]
+        ];
     }
 }

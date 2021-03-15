@@ -13,10 +13,11 @@
 
 parameters:
   D3\Ordermanager\Application\Model\d3ordermanagerlist.args.objectname:
+  D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck.args.checktypes:
   D3\Ordermanager\Application\Model\d3ordermanager_export.args.filename:
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.message:
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.code:
-  D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.message:
+  D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_smartyException.args.message:
 
 services:
   # ordermanager
@@ -34,6 +35,28 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\d3ordermanager_conf
+
+  # ordermanager_configurationcheck
+  D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck:
+    class:      D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck
+      - '@D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck.args.ordermanager'
+      - '%D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck.args.checktypes%'
+  D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck.args.ordermanager:
+    synthetic: true
+    shared: false
+    public: false
+
+  # d3ordermanager_debugoutput
+  D3\Ordermanager\Application\Model\Output\d3ordermanager_debugoutput:
+    class:      D3\Ordermanager\Application\Model\Output\d3ordermanager_debugoutput
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Output\d3ordermanager_debugoutput
 
   # ordermanagerlist
   D3\Ordermanager\Application\Model\d3ordermanagerlist:
@@ -243,6 +266,29 @@ services:
  #   shared:     false
  #   public:     false
 
+  # d3ordermanager_actionException
+  D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_actionException:
+    class:      D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_actionException
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_actionException
+      - '@D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_actionException.args.actionobject'
+    # arg #2 action object
+  D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_actionException.args.actionobject:
+    synthetic:  true
+    shared:     false
+    public:     false
+
+  # d3ordermanager_smartyException
+  D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_smartyException:
+    class:      D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_smartyException
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_smartyException
+      - '%D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_smartyException.args.message%'
+
   # d3ordermanager_requirementException
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException:
     class:      D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException
@@ -250,7 +296,6 @@ services:
     shared:     false
     arguments:
       - D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException
-      - '%D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.message%'
       - '@D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.requirementobject'
     # arg #2 requirement object
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.requirementobject:
@@ -271,6 +316,14 @@ services:
     synthetic:  true
     shared:     false
     public:     false
+
+  # d3ordermanager_renderererrorhandler
+  D3\Ordermanager\Application\Model\d3ordermanager_renderererrorhandler:
+    class:      D3\Ordermanager\Application\Model\d3ordermanager_renderererrorhandler
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\d3ordermanager_renderererrorhandler
 
   D3\Ordermanager\tests\additional:
     class:    D3\Ordermanager\tests\additional
@@ -362,3 +415,10 @@ services:
     shared:   false
     arguments:
       - D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem
+
+  D3\Ordermanager\publicDir\d3_ordermanager_cron:
+    class:    D3\Ordermanager\publicDir\d3_ordermanager_cron
+    factory:  'oxNew'
+    shared:   true
+    arguments:
+      - D3\Ordermanager\publicDir\d3_ordermanager_cron

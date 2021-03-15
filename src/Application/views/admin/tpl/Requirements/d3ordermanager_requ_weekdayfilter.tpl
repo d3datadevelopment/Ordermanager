@@ -6,20 +6,16 @@
                 [{block name="ordermanager_admin_requ_weekdayfilter_editor"}]
                     <label for="RequWeekdayType">[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_IF1"}]</label>
                     <SELECT id="RequWeekdayType" class="editinput" name="value[sWeekdaysType]" size="1" [{$blActionRestriction}] [{$readonly}]>
-                        <option value="orderdate" [{if $edit->getValue('sWeekdaysType') == 'orderdate'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_ORDERDATE"}]</option>
-                        <option value="deldate" [{if $edit->getValue('sWeekdaysType') == 'deldate'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_DELDATE"}]</option>
-                        <option value="paiddate" [{if $edit->getValue('sWeekdaysType') == 'paiddate'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_PAIDDATE"}]</option>
+                        [{foreach from=$oRequ->getTypeList() key="type" item="translation"}]
+                            <option value="[{$type}]" [{if $edit->getValue('sWeekdaysType') == $type}]selected[{/if}]>[{oxmultilang ident=$translation}]</option>
+                        [{/foreach}]
                     </SELECT>
                     <label for="RequWeekdays">[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_IF2"}]</label>
                     <input type="hidden" name="value[sWeekdayDays]" value="">
                     <SELECT id="RequWeekdays" class="editinput" name="value[sWeekdayDays][]" id="sWeekDays" size="7" multiple [{$blActionRestriction}] [{$readonly}]>
-                        <option value="Mon" [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Mon', $edit->getValue('sWeekdayDays'))}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_MONDAY"}]</option>
-                        <option value="Tue" [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Tue', $edit->getValue('sWeekdayDays'))}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_TUESDAY"}]</option>
-                        <option value="Wed" [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Wed', $edit->getValue('sWeekdayDays'))}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_WEDNESDAY"}]</option>
-                        <option value="Thu" [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Thu', $edit->getValue('sWeekdayDays'))}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_THURSDAY"}]</option>
-                        <option value="Fri" [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Fri', $edit->getValue('sWeekdayDays'))}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_FRIDAY"}]</option>
-                        <option value="Sat" [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Sat', $edit->getValue('sWeekdayDays'))}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_SATURDAY"}]</option>
-                        <option value="Sun" [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Sun', $edit->getValue('sWeekdayDays'))}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_SUNDAY"}]</option>
+                        [{foreach from=$oRequ->getWeekdayList() item="translIdent" key="weekdayAbbr"}]
+                            <option value="[{$weekdayAbbr}]" [{if is_array($edit->getValue('sWeekdayDays')) && in_array($weekdayAbbr, $edit->getValue('sWeekdayDays'))}]selected[{/if}]>[{oxmultilang ident=$translIdent}]</option>
+                        [{/foreach}]
                     </SELECT>
                     [{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_IF3"}]<br>
                     [{oxmultilang ident="D3_ORDERMANAGER_REQU_MULTIPLE"}]<br>
@@ -28,36 +24,18 @@
             [{else}]
                 [{block name="ordermanager_admin_requ_weekdayfilter_viewer"}]
                     <label for="RequWeekdayType">[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_IF1"}]</label>
-                    [{if $edit->getValue('sWeekdaysType') == 'orderdate'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_ORDERDATE"}]
-                    [{elseif $edit->getValue('sWeekdaysType') == 'deldate'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_DELDATE"}]
-                    [{elseif $edit->getValue('sWeekdaysType') == 'paiddate'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_PAIDDATE"}]
-                    [{/if}]
+                    [{foreach from=$oRequ->getTypeList() key="type" item="translation"}]
+                        [{if $edit->getValue('sWeekdaysType') == $type}]
+                            [{oxmultilang ident=$translation}]
+                        [{/if}]
+                    [{/foreach}]
                     <label for="RequWeekdays">[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_IF2"}]</label>
                     <ul>
-                        [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Mon', $edit->getValue('sWeekdayDays'))}]
-                            <li>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_MONDAY"}]</li>
-                        [{/if}]
-                        [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Tue', $edit->getValue('sWeekdayDays'))}]
-                            <li>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_TUESDAY"}]</li>
-                        [{/if}]
-                        [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Wed', $edit->getValue('sWeekdayDays'))}]
-                            <li>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_WEDNESDAY"}]</li>
-                        [{/if}]
-                        [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Thu', $edit->getValue('sWeekdayDays'))}]
-                            <li>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_THURSDAY"}]</li>
-                        [{/if}]
-                        [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Fri', $edit->getValue('sWeekdayDays'))}]
-                            <li>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_FRIDAY"}]</li>
-                        [{/if}]
-                        [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Sat', $edit->getValue('sWeekdayDays'))}]
-                            <li>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_SATURDAY"}]</li>
-                        [{/if}]
-                        [{if is_array($edit->getValue('sWeekdayDays')) && in_array('Sun', $edit->getValue('sWeekdayDays'))}]
-                            <li>[{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_SUNDAY"}]</li>
-                        [{/if}]
+                        [{foreach from=$oRequ->getWeekdayList() item="translIdent" key="weekdayAbbr"}]
+                            [{if is_array($edit->getValue('sWeekdayDays')) && in_array($weekdayAbbr, $edit->getValue('sWeekdayDays'))}]
+                                <li>[{oxmultilang ident=$translIdent}]</li>
+                            [{/if}]
+                        [{/foreach}]
                     </ul>
                     [{oxmultilang ident="D3_ORDERMANAGER_REQU_WEEKDAYS_IF3"}]
                 [{/block}]

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This Software is the property of Data Development and is protected
  * by copyright law - it is NOT Freeware.
@@ -13,6 +14,8 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
+declare(strict_types = 1);
 
 namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
 

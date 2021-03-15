@@ -6,14 +6,16 @@
                 [{block name="ordermanager_admin_requ_ordersum_editor"}]
                     <label for="sOrderSumType" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUM"}]</label>
                     <SELECT id="sOrderSumType" class="editinput" name="value[sOrderSumType]" size="1" [{$blActionRestriction}] [{$readonly}]>
-                        <option value="total" [{if $edit->getValue('sOrderSumType') == 'total'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMTYPE_TOTAL"}]</option>
-                        <option value="article" [{if $edit->getValue('sOrderSumType') == 'article'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMTYPE_ARTICLE"}]</option>
+                        [{foreach from=$oRequ->getSumTypeList() key="type" item="translation"}]
+                            <option value="[{$type}]" [{if $edit->getValue('sOrderSumType') == $type}]selected[{/if}]>[{oxmultilang ident=$translation}]</option>
+                        [{/foreach}]
                     </SELECT>
 
                     <label for="sOrderSumRelation" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUM"}]</label>
                     <SELECT id="sOrderSumRelation" class="editinput" name="value[sOrderSumRelation]" size="1" [{$blActionRestriction}] [{$readonly}]>
-                        <option value="higher" [{if $edit->getValue('sOrderSumRelation') == 'higher'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMREL_HIGHER"}]</option>
-                        <option value="lower" [{if $edit->getValue('sOrderSumRelation') == 'lower'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMREL_LOWER"}]</option>
+                        [{foreach from=$oRequ->getRelationList() key="type" item="translation"}]
+                            <option value="[{$type}]" [{if $edit->getValue('sOrderSumRelation') == $type}]selected[{/if}]>[{oxmultilang ident=$translation}]</option>
+                        [{/foreach}]
                     </SELECT>
 
                     <input id="RequOrderSumValue" style="text-align: right;" class="editinput" type="text" size="8" maxlength="20" name="value[sOrderSumValue]" value="[{if $edit->getValue('sOrderSumValue')}][{$edit->getValue('sOrderSumValue')}][{else}]0.00[{/if}]" [{$blActionRestriction}] [{$readonly}]>
@@ -21,19 +23,17 @@
                 [{/block}]
             [{else}]
                 [{block name="ordermanager_admin_requ_ordersum_viewer"}]
-                    [{if $edit->getValue('sOrderSumType') == 'total'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMTYPE_TOTAL"}]
-                    [{/if}]
-                    [{if $edit->getValue('sOrderSumType') == 'article'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMTYPE_ARTICLE"}]
-                    [{/if}]
+                    [{foreach from=$oRequ->getSumTypeList() key="type" item="translation"}]
+                        [{if $edit->getValue('sOrderSumType') == $type}]
+                            [{oxmultilang ident=$translation}]
+                        [{/if}]
+                    [{/foreach}]
 
-                    [{if $edit->getValue('sOrderSumRelation') == 'higher'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMREL_HIGHER"}]
-                    [{/if}]
-                    [{if $edit->getValue('sOrderSumRelation') == 'lower'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUMREL_LOWER"}]
-                    [{/if}]
+                    [{foreach from=$oRequ->getRelationList() key="type" item="translation"}]
+                        [{if $edit->getValue('sOrderSumRelation') == $type}]
+                            [{oxmultilang ident=$translation}]
+                        [{/if}]
+                    [{/foreach}]
 
                     [{if $edit->getValue('sOrderSumValue')}][{$edit->getValue('sOrderSumValue')}][{else}]0.00[{/if}]
                     [{oxmultilang ident="D3_ORDERMANAGER_REQU_ORDERSUM_DEFCUR"}]

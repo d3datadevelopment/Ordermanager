@@ -342,7 +342,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
         $oManagerConfMock = $this->getMockBuilder(d3ordermanager_conf::class)
             ->setMethods(['getGroupedRequirementIdList'])
             ->getMock();
-        $oManagerConfMock->method('getGroupedRequirementIdList')->willReturn(true);
+        $oManagerConfMock->method('getGroupedRequirementIdList')->willReturn([]);
 
         /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMockBuilder(d3ordermanager::class)

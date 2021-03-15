@@ -26,8 +26,12 @@ use Doctrine\DBAL\DBALException;
 use Exception as ExceptionAlias;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\DataObject\ShopConfiguration;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\State\ModuleStateService;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\State\ModuleStateServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
 
@@ -48,24 +52,37 @@ abstract class d3OrdermanagerUnitTestCase extends d3ModCfgUnitTestCase
         parent::setUpBeforeTestSuite();
 
         $container = ContainerFactory::getInstance()->getContainer();
+        /** @var ShopConfiguration $shopConfiguration */
         $shopConfiguration = $container->get(ShopConfigurationDaoBridgeInterface::class)->get();
 
-        if (false === $shopConfiguration->hasModuleConfiguration('invoicepdf')) {
+        /** @var ModuleStateService $moduleState */
+        $moduleState = $container->get(ModuleStateServiceInterface::class);
+
+        if (false === $shopConfiguration->hasModuleConfiguration('invoicepdf') ||
+            false === $moduleState->isActive('invoicepdf', Registry::getConfig()->getShopId())
+        ) {
             echo self::D3CLI_COLOR_YELLOW.
                 PHP_EOL.'      - no OXID InvoicePdf module installed'.
                 PHP_EOL.'        Coverage report may be incomplete.'.
                 PHP_EOL.PHP_EOL.self::D3CLI_COLOR_DEFAULT;
         }
-        if (false === $shopConfiguration->hasModuleConfiguration('d3PdfDocuments')) {
+        if (false === $shopConfiguration->hasModuleConfiguration('d3PdfDocuments') ||
+            false === $moduleState->isActive('d3PdfDocuments', Registry::getConfig()->getShopId())
+        ) {
             echo self::D3CLI_COLOR_YELLOW.
                 PHP_EOL."      - no D3 PDF Documents module installed".
                 PHP_EOL."        Coverage report may be incomplete.".
                 PHP_EOL.PHP_EOL.self::D3CLI_COLOR_DEFAULT;
         }
-        if (true === $shopConfiguration->hasModuleConfiguration('d3usermanager')) {
-            echo self::D3CLI_COLOR_YELLOW.
-                PHP_EOL."      - inaccurate test results possible due to installed and activated \"UserManager\" module".
-                PHP_EOL.PHP_EOL.self::D3CLI_COLOR_DEFAULT;
+        foreach (['d3usermanager', 'd3bonimascore'] as $incompatibleModuleId) {
+            if ( true === $shopConfiguration->hasModuleConfiguration( $incompatibleModuleId ) &&
+                 true === $moduleState->isActive( $incompatibleModuleId, Registry::getConfig()->getShopId() )
+            ) {
+                echo self::D3CLI_COLOR_YELLOW .
+                     PHP_EOL . "      - inaccurate test results possible due to installed ".
+                    'and activated "'.$incompatibleModuleId.'" module' .
+                     PHP_EOL . PHP_EOL . self::D3CLI_COLOR_DEFAULT;
+            }
         }
     }
 

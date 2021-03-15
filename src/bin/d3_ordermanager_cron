@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+declare(strict_types = 1);
+
 $count = 0;
 $filePath = '../../../source/modules/d3/ordermanager/public/d3_ordermanager_cron.php';
 $currentDirectory = __DIR__ . '/';

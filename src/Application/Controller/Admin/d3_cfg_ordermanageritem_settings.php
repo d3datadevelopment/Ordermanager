@@ -15,17 +15,18 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types = 1);
+
 namespace D3\Ordermanager\Application\Controller\Admin;
 
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
-use D3\ModCfg\Application\Model\d3database;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use Doctrine\DBAL\DBALException;
-use Exception;
+use Doctrine\DBAL\Query\QueryBuilder;
 use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
@@ -33,6 +34,9 @@ use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Model\ListModel;
 use OxidEsales\Eshop\Core\Model\MultiLanguageModel;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
+use Psr\Container\ContainerInterface;
 
 class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
 {
@@ -61,9 +65,8 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
 
     /**
      * @return array
-     * @throws Exception
      */
-    public function getItemFolders()
+    public function getItemFolders(): array
     {
         /** @var Config $config */
         $config = d3GetModCfgDIC()->get($this->_DIC_OxInstance_Id.Config::class);
@@ -73,9 +76,8 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
 
     /**
      * @return ListModel
-     * @throws Exception
      */
-    public function getGroupsList()
+    public function getGroupsList(): ListModel
     {
         /** @var $oGroupsList ListModel */
         $oGroupsList = d3GetModCfgDIC()->get($this->_DIC_OxInstance_Id.ListModel::class);
@@ -84,15 +86,21 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
     }
 
     /**
+     * @return ContainerInterface
+     */
+    public function getDIContainer(): ContainerInterface
+    {
+        return ContainerFactory::getInstance()->getContainer();
+    }
+
+    /**
      * @param ListModel   $oObjectList
      * @param null|string $sWhere
      * @param null|string $sOrderBy
      *
      * @return ListModel
-     * @throws DBALException
-     * @throws Exception
      */
-    protected function _getObjectList($oObjectList, $sWhere = null, $sOrderBy = null)
+    protected function _getObjectList(ListModel $oObjectList, $sWhere = null, $sOrderBy = null): ListModel
     {
         startProfile(__METHOD__);
 
@@ -106,19 +114,18 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
         }
         $sFieldList = $oObject->getSelectFields();
 
-        /** @var d3database $db */
-        $db = d3GetModCfgDIC()->get('d3.ordermanager.database');
-        $qb = $db->getQueryBuilder();
+        /** @var queryBuilder $qb */
+        $qb = $this->getDIContainer()->get(QueryBuilderFactoryInterface::class)->create();
         $qb->select($sFieldList)
             ->from($oObject->getViewName());
-            
+
         if ($sWhere) {
             $qb->add('where', $sWhere);
         }
         if ($sOrderBy) {
             $qb->add('orderBy', $sOrderBy);
         }
-            
+
         $oObjectList->selectString($qb->getSQL(), $qb->getParameters());
 
         stopProfile(__METHOD__);
@@ -129,7 +136,7 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
     /**
      * @return bool
      */
-    public function isEditMode()
+    public function isEditMode(): bool
     {
         return true;
     }
@@ -142,9 +149,8 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
      * @throws StandardException
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
-     * @throws Exception
      */
-    public function getRestrictionMessage()
+    public function getRestrictionMessage(): string
     {
         /** @var Language $oLang */
         $oLang = d3GetModCfgDIC()->get($this->_DIC_OxInstance_Id.Language::class);

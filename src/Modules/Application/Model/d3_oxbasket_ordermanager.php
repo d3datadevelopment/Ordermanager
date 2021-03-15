@@ -15,6 +15,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types = 1);
+
 namespace D3\Ordermanager\Modules\Application\Model;
 
 use Exception;
@@ -26,8 +28,6 @@ use OxidEsales\Eshop\Application\Model\BasketItem;
 use OxidEsales\Eshop\Application\Model\DiscountList;
 use OxidEsales\Eshop\Application\Model\Discount;
 use OxidEsales\Eshop\Core\Config;
-use OxidEsales\Eshop\Core\Exception\ArticleException;
-use OxidEsales\Eshop\Core\Exception\ArticleInputException;
 use OxidEsales\Eshop\Core\Price;
 use OxidEsales\Eshop\Core\PriceList;
 use OxidEsales\Eshop\Core\Session;
@@ -42,9 +42,8 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
 {
     /**
      * @return d3_oxbasketitem_ordermanager
-     * @throws Exception
      */
-    public function d3getOrderManagerBasketItemInstance()
+    public function d3getOrderManagerBasketItemInstance(): d3_oxbasketitem_ordermanager
     {
         /** @var d3_oxbasketitem_ordermanager $basketItem */
         $basketItem = d3GetModCfgDIC()->get('d3ox.ordermanager.'.BasketItem::class);
@@ -55,9 +54,8 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
      * Adds order article to basket (method normally used while recalculating order)
      *
      * @param OrderArticle $oOrderArticle order article to store in basket
-     * @throws Exception
      */
-    public function addOrderArticleToBasket4OrderManager($oOrderArticle)
+    public function addOrderArticleToBasket4OrderManager(OrderArticle $oOrderArticle)
     {
         // adding only if amount > 0
         if ($oOrderArticle->getFieldData('oxamount') > 0) {
@@ -80,9 +78,8 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
 
     /**
      * @return Config
-     * @throws Exception
      */
-    public function d3GetOrderManagerConfig()
+    public function d3GetOrderManagerConfig(): Config
     {
         /** @var Config $config */
         $config = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
@@ -91,9 +88,8 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
 
     /**
      * @return Session
-     * @throws Exception
      */
-    public function d3GetOrderManagerSession()
+    public function d3GetOrderManagerSession(): Session
     {
         /** @var Session $session */
         $session = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Session::class);
@@ -103,11 +99,10 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
     /**
      * @param bool $blForceUpdate
      * @param      $oOrder
-     * @throws ArticleException
-     * @throws ArticleInputException
+     *
      * @throws Exception
      */
-    public function calculateBasket4OrderManager($blForceUpdate, $oOrder)
+    public function calculateBasket4OrderManager( bool $blForceUpdate, $oOrder )
     {
         if (!$this->isEnabled()) {
             return;
@@ -177,7 +172,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
      * @return PriceList
      * @throws Exception
      */
-    public function d3GetOrderManagerPriceList()
+    public function d3GetOrderManagerPriceList(): PriceList
     {
         /** @var PriceList $priceList */
         $priceList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.PriceList::class);
@@ -188,7 +183,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
      * @return DiscountList
      * @throws Exception
      */
-    public function d3GetOrderManagerDiscountList()
+    public function d3GetOrderManagerDiscountList(): DiscountList
     {
         /** @var DiscountList $discountList */
         $discountList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.DiscountList::class);
@@ -241,6 +236,9 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
                 //P collect discount values for basket items which are discountable
                 if (!$oArticle->skipDiscounts()) {
                     $this->_oDiscountProductsPriceList->addToPriceList($oBasketPrice);
+                    if (false === isset($this->_aDiscountedVats[$oBasketPrice->getVat()])) {
+                        $this->_aDiscountedVats[$oBasketPrice->getVat()] = 0;
+                    }
                     $this->_aDiscountedVats[$oBasketPrice->getVat()] += $oBasketPrice->getVatValue();
                 } else {
                     $this->_oNotDiscountedProductsPriceList->addToPriceList($oBasketPrice);
@@ -259,7 +257,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
      * @return Price
      * @throws Exception
      */
-    public function d3GetOrderManagerPriceObject()
+    public function d3GetOrderManagerPriceObject(): Price
     {
         /** @var Price $price */
         $price = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Price::class);
@@ -271,7 +269,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
      * @return Price
      * @throws Exception
      */
-    protected function _calcPaymentCost4OrderManager($oOrder)
+    protected function _calcPaymentCost4OrderManager(Order $oOrder): Price
     {
         $oPaymentPrice = $this->d3GetOrderManagerPriceObject();
         $oPaymentPrice->setBruttoPriceMode();
@@ -283,7 +281,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
     /**
      * @param Order $oOrder
      */
-    protected function _calcBasketDiscount4OrderManager($oOrder)
+    protected function _calcBasketDiscount4OrderManager(Order $oOrder)
     {
         $oDiscount = new stdClass();
         $oDiscount->sOXID     = 'stdDiscount';
@@ -304,7 +302,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
     /**
      * @return array
      */
-    public function d3GetOrderManagerDiscounts()
+    public function d3GetOrderManagerDiscounts(): array
     {
         return $this->_aDiscounts;
     }
@@ -312,7 +310,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
     /**
      * @return array
      */
-    public function d3GetOrderManagerDiscountedVats()
+    public function d3GetOrderManagerDiscountedVats(): array
     {
         return $this->_aDiscountedVats;
     }

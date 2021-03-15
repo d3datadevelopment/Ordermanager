@@ -35,12 +35,12 @@
     "php": "7.1 - 7.4", "ext-ionCube-Loader": "*",
     "ext-pdo": "*",
     "oxid-esales/oxideshop-ce": "6.5 - 6.6",
-    "d3/modcfg": "^5.3.1.200",
+    "d3/modcfg": "^5.3.6.000",
     "league/flysystem": "^1.0",
     "splitbrain/php-cli": "^1.1",
     "html2text/html2text": "^4.2",
-    "nilportugues/sql-query-formatter": "^1.2.2",
-    "guzzlehttp/guzzle": "^6.5.3"
+    "d3/oxid-sql-logger": "^1.2.2",
+    "ext-mbstring": "*"
   },
   "require-dev": {
     "mikey179/vfsstream": "^1.4",
@@ -52,7 +52,9 @@
   },
   "autoload": {
     "psr-4": {
-      "D3\\Ordermanager\\": "../../../source/modules/d3/ordermanager"
+      "D3\\Ordermanager\\": "../../../source/modules/d3/ordermanager",
+      "D3\\Ordermanager\\publicDir\\": "../../../source/modules/d3/ordermanager/public",
+      "D3\\Ordermanager\\tests\\unit\\publicDir\\": "../../../source/modules/d3/ordermanager/tests/unit/public"
     }
   },
   "bin": ["src/bin/d3_ordermanager_cron"]

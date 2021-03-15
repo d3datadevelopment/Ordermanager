@@ -19,6 +19,7 @@ namespace D3\Ordermanager\tests\integration\Actions;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Application\Model\Order;
@@ -26,6 +27,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
+use OxidEsales\Eshop\Core\Registry;
 
 class actionSetSendedNowDateTest extends d3OrdermanagerActionIntegrationTestCase
 {
@@ -64,9 +66,7 @@ class actionSetSendedNowDateTest extends d3OrdermanagerActionIntegrationTestCase
     }
 
     /**
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     * @throws Exception
+     * @throws DBALException
      */
     public function cleanTestData()
     {
@@ -100,7 +100,6 @@ class actionSetSendedNowDateTest extends d3OrdermanagerActionIntegrationTestCase
 
     /**
      * @test
-     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -111,8 +110,13 @@ class actionSetSendedNowDateTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function actionChangeConcernedOrder()
     {
+        // prevent save trigger action in test
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+
         $oExecute = $this->getExecuteMock($this->getConfiguredManager());
         $oExecute->startJobItemExecution();
+
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
 
         /** @var Order $oOrder */
         $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);

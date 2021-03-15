@@ -15,6 +15,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types = 1);
+
 use D3\Ordermanager\Modules\Application\Model as ModuleModel;
 use D3\Ordermanager\Application\Controller as OMController;
 use D3\Ordermanager\Application\Controller\Admin as OMControllerAdmin;
@@ -41,7 +43,7 @@ $aModule = [
         'en'    => 'Processes freely definable tasks on the basis of adjustable order lists.'
     ],
     'thumbnail'     => 'picture.png',
-    'version'       => '4.1.1.0',
+    'version'       => '4.1.2.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'https://www.oxidmodule.com/',

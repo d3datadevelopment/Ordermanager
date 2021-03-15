@@ -16,36 +16,32 @@
                     <input id="RequTimespan[{$oRequ->getSlotId()}]Min" style="text-align: right;" class="edittext ext_edittext" type="text" size="4" maxlength="3" name="value[sTimespan[{$oRequ->getSlotId()}]Value]" value='[{$edit->getValue($sValueVarName)}]' [{$blActionRestriction}] [{$readonly}]>
                     <label for="RequTimespan[{$oRequ->getSlotId()}]Unit" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN"}]</label>
                     <SELECT id="RequTimespan[{$oRequ->getSlotId()}]Unit" class="editinput" name="value[sTimespan[{$oRequ->getSlotId()}]Unit]" size="1" [{$blActionRestriction}] [{$readonly}]>
-                        <option value="minute" [{if $edit->getValue($sUnitVarName) == 'minute'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_MINUTE"}]</option>
-                        <option value="hour" [{if $edit->getValue($sUnitVarName) == 'hour'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_HOUR"}]</option>
-                        <option value="day" [{if $edit->getValue($sUnitVarName) == 'day'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_DAY"}]</option>
+                        [{foreach from=$oRequ->getUnitList() key="type" item="translation"}]
+                            <option value="[{$type}]" [{if $edit->getValue($sUnitVarName) == $type}]selected[{/if}]>[{oxmultilang ident=$translation}]</option>
+                        [{/foreach}]
                     </SELECT>
                     <label for="RequTimespan[{$oRequ->getSlotId()}]Type">[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_AFTER"}]</label>
                     <SELECT id="RequTimespan[{$oRequ->getSlotId()}]Type" class="editinput" name="value[sTimespan[{$oRequ->getSlotId()}]Type]" size="1" [{$blActionRestriction}] [{$readonly}]>
-                        <option value="orderdate" [{if $edit->getValue($sTypeVarName) == 'orderdate'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_ORDERDATE"}]</option>
-                        <option value="deldate" [{if $edit->getValue($sTypeVarName) == 'deldate'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_DELDATE"}]</option>
-                        <option value="paiddate" [{if $edit->getValue($sTypeVarName) == 'paiddate'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_PAIDDATE"}]</option>
+                        [{foreach from=$oRequ->getTypeList() key="type" item="translation"}]
+                            <option value="[{$type}]" [{if $edit->getValue($sUnitVarName) == $type}]selected[{/if}]>[{oxmultilang ident=$translation}]</option>
+                        [{/foreach}]
                     </SELECT>
                 [{/block}]
             [{else}]
                 [{block name="ordermanager_admin_requ_timespanfilter_viewer"}]
                     <label for="RequTimespan[{$oRequ->getSlotId()}]Min">[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_MINIMUM"}]</label>
                     [{$edit->getValue($sValueVarName)}]
-                    [{if $edit->getValue($sUnitVarName) == 'minute'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_MINUTE"}]
-                    [{elseif $edit->getValue($sUnitVarName) == 'hour'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_HOUR"}]
-                    [{elseif $edit->getValue($sUnitVarName) == 'day'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_DAY"}]
-                    [{/if}]
+                    [{foreach from=$oRequ->getUnitList() key="type" item="translation"}]
+                        [{if $edit->getValue($sUnitVarName) == $type}]
+                            [{oxmultilang ident=$translation}]
+                        [{/if}]
+                    [{/foreach}]
                     <label for="RequTimespan[{$oRequ->getSlotId()}]Type">[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_AFTER"}]</label>
-                    [{if $edit->getValue($sTypeVarName) == 'orderdate'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_ORDERDATE"}]
-                    [{elseif $edit->getValue($sTypeVarName) == 'deldate'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_DELDATE"}]
-                    [{elseif $edit->getValue($sTypeVarName) == 'paiddate'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_PAIDDATE"}]
-                    [{/if}]
+                    [{foreach from=$oRequ->getTypeList() key="type" item="translation"}]
+                        [{if $edit->getValue($sTypeVarName) == $type}]
+                            [{oxmultilang ident=$translation}]
+                        [{/if}]
+                    [{/foreach}]
                 [{/block}]
             [{/if}]
             [{oxinputhelp ident="D3_ORDERMANAGER_REQU_TIMESPAN_DESC"}]

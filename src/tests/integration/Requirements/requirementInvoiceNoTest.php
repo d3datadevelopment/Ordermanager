@@ -31,10 +31,12 @@ class requirementInvoiceNoTest extends d3OrdermanagerRequirementIntegrationTestC
     public $aOrderIdList = array(
         'orderTestIdNo1',
         'orderTestIdNo2',
+        'orderTestIdNo3',
     );
     public $aOrderArticleIdList = array(
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
+        'orderTestIdNo3Article1',
     );
 
     /**
@@ -96,6 +98,20 @@ class requirementInvoiceNoTest extends d3OrdermanagerRequirementIntegrationTestC
                 )
             )
         );
+
+        $this->createOrder(
+            $this->aOrderIdList[2],
+            array(
+                'oxorderdate'   => '2018-01-01 00:00:00',
+                'oxbillcompany' => __CLASS__,
+                'oxbillnr'      => '',
+            ),
+            array(
+                $this->aOrderArticleIdList[2] => array(
+                    'oxtitle'       => __CLASS__,
+                )
+            )
+        );
     }
 
     /**
@@ -127,7 +143,6 @@ class requirementInvoiceNoTest extends d3OrdermanagerRequirementIntegrationTestC
 
     /**
      * @test
-     * @coversNothing
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
@@ -142,9 +157,10 @@ class requirementInvoiceNoTest extends d3OrdermanagerRequirementIntegrationTestC
         $oOrderList = $oListGenerator->getConcernedItems();
 
         $this->assertTrue(
-            $oOrderList->count() >= 1
+            $oOrderList->count() >= 2
             && $oOrderList->offsetExists($this->aOrderIdList[0])
-            && false == $oOrderList->offsetExists($this->aOrderIdList[1])
+            && $oOrderList->offsetExists($this->aOrderIdList[1])
+            && false === $oOrderList->offsetExists($this->aOrderIdList[2])
         );
     }
 }

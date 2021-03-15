@@ -15,17 +15,15 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types = 1);
+
 namespace D3\Ordermanager\Modules\Application\Model;
 
-use Exception;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
 use OxidEsales\Eshop\Application\Model\Article;
 
 class d3_oxbasketitem_ordermanager extends d3_oxbasketitem_ordermanager_parent
 {
-    /**
-     * @throws Exception
-     */
     public function d3OrderManagerChangeOrderArticle2RealArticle()
     {
         if ($this->_oArticle instanceof OrderArticle) {

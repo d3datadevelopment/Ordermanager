@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This Software is the property of Data Development and is protected
  * by copyright law - it is NOT Freeware.
@@ -13,6 +14,8 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
+declare(strict_types = 1);
 
 namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
 
@@ -286,7 +289,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock->method('setCost')->willReturn(true);
         $oModelMock->method('_calcDeliveryCost')->willReturn(true);
         $oModelMock->method('_calcBasketWrapping')->willReturn(true);
-        $oModelMock->method('_calcPaymentCost4OrderManager')->willReturn(true);
+        $oModelMock->method('_calcPaymentCost4OrderManager')->willReturn(oxNew(Price::class));
         $oModelMock->expects($this->once())->method('_calcTotalPrice')->willReturn(true);
         $oModelMock->method('formatDiscount')->willReturn(true);
         $oModelMock->method('afterUpdate')->willReturn(true);
@@ -565,7 +568,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock->method('setCost')->willReturn(true);
         $oModelMock->method('_calcDeliveryCost')->willReturn(true);
         $oModelMock->method('_calcBasketWrapping')->willReturn(true);
-        $oModelMock->method('_calcPaymentCost4OrderManager')->willReturn(true);
+        $oModelMock->method('_calcPaymentCost4OrderManager')->willReturn(oxNew(Price::class));
         $oModelMock->expects($this->once())->method('_calcTotalPrice')->willReturn(true);
         $oModelMock->method('formatDiscount')->willReturn(true);
         $oModelMock->method('afterUpdate')->willReturn(true);

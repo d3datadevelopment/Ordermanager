@@ -128,7 +128,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
         $oModelMock->method('checkOrderManagerTableExist')->willReturn(true);
         $oModelMock->expects($this->once())->method('_changeItemContent')->willReturn(true);
         $oModelMock->method('_prepareConvertAssignments')->willReturn(true);
-        $oModelMock->method('_getConvertAssignments')->willReturn(true);
+        $oModelMock->method('_getConvertAssignments')->willReturn([]);
         $oModelMock->method('_getDatabaseHandler')->willReturn($oDatabaseMock);
         $oModelMock->method('hasExecute')->willReturn(true);
         $oModelMock->method('getDb')->willReturn($oDBInterfaceMock);
@@ -187,7 +187,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
         $oModelMock->method('checkOrderManagerTableExist')->willReturn(true);
         $oModelMock->expects($this->once())->method('_changeItemContent')->willReturn(true);
         $oModelMock->method('_prepareConvertAssignments')->willReturn(true);
-        $oModelMock->method('_getConvertAssignments')->willReturn(true);
+        $oModelMock->method('_getConvertAssignments')->willReturn([]);
         $oModelMock->method('_getDatabaseHandler')->willReturn($oDatabaseMock);
         $oModelMock->method('hasExecute')->willReturn(false);
         $oModelMock->method('getDb')->willReturn($oDBInterfaceMock);
@@ -292,19 +292,20 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
                 '_changeItemContent',
                 '_prepareConvertAssignments',
                 '_getConvertAssignments',
-            '_getDatabaseHandler',
-            'hasExecute',
-            'getDb',
-            'setUpdateBreak',
-            'setActionLog',
-            '_dropTable',
-            'fixUnRegisterMultiLangTables',
-            'setErrorMessage'])
+                '_getDatabaseHandler',
+                'hasExecute',
+                'getDb',
+                'setUpdateBreak',
+                'setActionLog',
+                '_dropTable',
+                'fixUnRegisterMultiLangTables',
+                'setErrorMessage'
+             ])
             ->getMock();
         $oModelMock->method('checkOrderManagerTableExist')->willReturn(true);
         $oModelMock->expects($this->once())->method('_changeItemContent')->willReturn(true);
         $oModelMock->method('_prepareConvertAssignments')->willReturn(true);
-        $oModelMock->method('_getConvertAssignments')->willReturn(true);
+        $oModelMock->method('_getConvertAssignments')->willReturn([]);
         $oModelMock->method('_getDatabaseHandler')->willReturn($oDatabaseMock);
         $oModelMock->method('hasExecute')->willReturn(true);
         $oModelMock->method('getDb')->willReturn($oDBInterfaceMock);
@@ -1471,46 +1472,10 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
      * @covers \D3\Ordermanager\Setup\d3ordermanager_update::requireExample2ShopRelation
      * @test
      * @throws ReflectionException
-     */
-    public function checkRequireExample2ShopRelationTrue()
-    {
-        /** @var d3ordermanager_update|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
-            ->setMethods([
-                'setInitialExecMethod',
-                'getExampleJobInsertList',
-                'getExampleJobItem1InsertFields',
-                '_require2ShopRelation'])
-            ->getMock();
-        $oModelMock->method('setInitialExecMethod')->willReturn(true);
-        $oModelMock->method('getExampleJobInsertList')->willReturn(
-            array(
-                array(
-                    'content'   => 'getExampleJobItem1InsertFields',
-                    'table'     => 'd3modprofile'
-                )
-            )
-        );
-        $oModelMock->expects($this->once())->method('getExampleJobItem1InsertFields')->willReturn(true);
-        $oModelMock->expects($this->once())->method('_require2ShopRelation')->willReturn(true);
-
-        $this->_oModel = $oModelMock;
-
-        $this->assertTrue(
-            $this->callMethod(
-                $this->_oModel,
-                'requireExample2ShopRelation'
-            )
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::requireExample2ShopRelation
-     * @test
-     * @throws ReflectionException
      * @throws Exception
+     * @dataProvider trueFalseExpected
      */
-    public function checkRequireExample2ShopRelationFalse()
+    public function checkRequireExample2ShopRelationPass($expected)
     {
         /** @var d3ordermanager_update|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
@@ -1531,18 +1496,19 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
                 )
             )
         );
-        $oModelMock->expects($this->exactly(3))->method('getExampleJobItem1InsertFields')->willReturn(true);
-        $oModelMock->expects($this->exactly(3))->method('_require2ShopRelation')->willReturn(false);
+        $oModelMock->expects($this->exactly($expected ? 1 : 3))->method('getExampleJobItem1InsertFields')->willReturn([]);
+        $oModelMock->expects($this->exactly($expected ? 1 : 3))->method('_require2ShopRelation')->willReturn($expected);
         $oModelMock->expects($this->atLeastOnce())->method('getShopListByActiveModule')->willReturn(
-            array(
+            [
                 1 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
                 2 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
                 3 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
-            ));
+            ] );
 
         $this->_oModel = $oModelMock;
 
-        $this->assertFalse(
+        $this->assertSame(
+            $expected,
             $this->callMethod(
                 $this->_oModel,
                 'requireExample2ShopRelation'
@@ -1796,12 +1762,15 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::_addExampleJobItem
+     * @covers       \D3\Ordermanager\Setup\d3ordermanager_update::_addExampleJobItem
      * @test
+     *
+     * @param $expected
+     *
      * @throws ReflectionException
-     * @throws Exception
+     * @dataProvider trueFalseExpected
      */
-    public function canAddExampleJobItemNoStepByStep()
+    public function canAddExampleJobItemNoStepByStep($expected)
     {
         /** @var d3ordermanager_update|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
@@ -1821,13 +1790,13 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
 
         $oModelMock->method('jobFieldMethodName')->willReturn(true);
         $oModelMock->method('setInitialExecMethod')->willReturn(true);
-        $oModelMock->expects($this->exactly(2))->method('_updateTableItem2')->willReturn('returnValue');
+        $oModelMock->expects($this->exactly(2))->method('_updateTableItem2')->willReturn($expected);
         $oModelMock->method('getStepByStepMode')->willReturn(false);
 
         $this->_oModel = $oModelMock;
 
         $this->assertSame(
-            'returnValue',
+            $expected,
             $this->callMethod(
                 $this->_oModel,
                 '_addExampleJobItem',
@@ -1853,12 +1822,15 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::_addExampleJobItem
+     * @covers       \D3\Ordermanager\Setup\d3ordermanager_update::_addExampleJobItem
      * @test
+     *
+     * @param $expected
+     *
      * @throws ReflectionException
-     * @throws Exception
+     * @dataProvider trueFalseExpected
      */
-    public function canAddExampleJobItemStepByStep()
+    public function canAddExampleJobItemStepByStep($expected)
     {
         /** @var d3ordermanager_update|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
@@ -1879,19 +1851,30 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
 
         $oModelMock->method('jobFieldMethodName')->willReturn(true);
         $oModelMock->method('setInitialExecMethod')->willReturn(true);
-        $oModelMock->expects($this->once())->method('_updateTableItem2')->willReturn('returnValue');
+        $oModelMock->expects($this->once())->method('_updateTableItem2')->willReturn($expected);
         $oModelMock->method('getStepByStepMode')->willReturn(true);
 
         $this->_oModel = $oModelMock;
 
         $this->assertSame(
-            'returnValue',
+            $expected,
             $this->callMethod(
                 $this->_oModel,
                 '_addExampleJobItem',
-                array('tableName', 'jobFieldMethodName')
+                [ 'tableName', 'jobFieldMethodName' ]
             )
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function trueFalseExpected(): array
+    {
+        return [
+            'true expected' => [true],
+            'false expected' => [false]
+        ];
     }
 
     /**

@@ -44,7 +44,6 @@ class jobListTest extends d3IntegrationTestCase
     }
 
     /**
-     * @coversNothing
      * @test
      */
     public function getUnfilteredJobList()
@@ -64,7 +63,6 @@ class jobListTest extends d3IntegrationTestCase
     }
 
     /**
-     * @coversNothing
      * @test
      */
     public function getFilteredJobList()

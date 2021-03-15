@@ -15,6 +15,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types = 1);
+
 use D3\Ordermanager\Setup as ModuleSetup;
 
 /**
@@ -59,9 +61,20 @@ $aModule = [
         'd3/ordermanager/Application/Model/d3ordermanager.php',
         'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_cronUnavailableException.php',
         'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_requirementException.php',
+        'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_templaterendererExceptionInterface.php',
+        'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_smartyException.php',
         'd3/ordermanager/Application/Model/d3ordermanager_toorderassignment.php',
         'd3/ordermanager/Application/Model/d3ordermanager_execute.php',
         'd3/ordermanager/Application/Model/d3ordermanager_conf.php',
+        'd3/ordermanager/Application/Model/d3ordermanager_renderererrorhandler.php',
+        'd3/ordermanager/Application/Model/d3ordermanager_actionrequirement_interface.php',
+        'd3/ordermanager/Application/Model/d3ordermanager_configurationcheck.php',
+        'd3/ordermanager/Application/Model/Exceptions/d3ActionRequirementInterface.php',
+        'd3/ordermanager/Application/Model/Exceptions/d3ActionRequirementAbstract.php',
+        'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_actionException.php',
+        'd3/ordermanager/Application/Model/Output/d3ordermanager_debugoutput.php',
+        'd3/ordermanager/Application/Model/Output/d3ordermanager_abstractoutput.php',
+        'd3/ordermanager/Application/Model/Output/d3ordermanager_nulloutput.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_custaddtogroup.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_setsendednowdate.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_exportlist.php',
@@ -82,6 +95,7 @@ $aModule = [
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_sendpushnotification.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_setfieldvalue.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_interface.php',
+        'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_testaction.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_notinfolderfilter.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_folderfilter.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirementgrouplist.php',
@@ -120,8 +134,10 @@ $aModule = [
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_currencyfilter.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_timespanfilter_abstract.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_countryfilter.php',
+        'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_testfilter.php',
         'd3/ordermanager/Application/Model/d3ordermanager_partgrouplist_abstract.php',
         'd3/ordermanager/Application/Model/d3ordermanager_partgrouplist_interface.php',
+        'd3/ordermanager/Application/Model/d3ordermanager_partlist_interface.php',
         'd3/ordermanager/Application/Model/d3ordermanager_remark.php',
         'd3/ordermanager/Config/services.php',
         'd3/ordermanager/Setup/d3ordermanager_update.php',
@@ -194,6 +210,8 @@ $aModule = [
         'd3/ordermanager/tests/unit/Application/Model/Requirements/d3ordermanagerrequnotingroupfilterTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Requirements/d3ordermanagerrequotherjobTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Requirements/d3OrdermanagerRequirementUnitTestCase.php',
+        'd3/ordermanager/tests/unit/Application/Model/Output/d3ordermanager_debugoutputTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_renderererrorhandlerTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanagerTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_executeTest.php',
         'd3/ordermanager/tests/unit/Modules/Application/Model/d3_oxbasket_ordermanagerTest.php',
@@ -205,6 +223,7 @@ $aModule = [
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanagerlistTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Exceptions/d3ordermanager_cronUnavailableExceptionTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Exceptions/d3ordermanager_requirementExceptionTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/Exceptions/d3ordermanager_actionExceptionTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_confTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_toorderassignmentTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3testscript.php',
@@ -229,6 +248,7 @@ $aModule = [
         'd3/ordermanager/tests/unit/Modules/Application/Model/d3_oxemail_ordermanagerTest.php',
         'd3/ordermanager/tests/unit/public/d3_ordermanager_cronTest.php',
         'd3/ordermanager/tests/unit/Setup/d3ordermanager_updateTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_configurationcheckTest.php',
         'd3/ordermanager/tests/integration/Requirements/d3OrdermanagerRequirementIntegrationTestCase.php'.
         'd3/ordermanager/tests/integration/Requirements/requirementOrderSumTest.php',
         'd3/ordermanager/tests/integration/Requirements/requirementInvoiceNoTest.php',
@@ -271,10 +291,17 @@ $aModule = [
         'd3/ordermanager/tests/integration/Actions/actionMoveOrderToFolderTest.php',
         'd3/ordermanager/tests/integration/Actions/actionChangeDiscountTest.php',
         'd3/ordermanager/tests/integration/Actions/actionCustAddToGroupTest.php',
+        'd3/ordermanager/tests/integration/Actions/actionExportListTest.php',
         'd3/ordermanager/tests/integration/Requirements/d3OrdermanagerRequirementIntegrationTestCase.php',
         'd3/ordermanager/tests/integration/Requirements/requirementOrderSumTest.php',
-        'd3/ordermanager/tests/integration/executeCronTest.php',
+        'd3/ordermanager/tests/integration/executeCronTest.php',    // outdated
+        'd3/ordermanager/tests/integration/Trigger/executeCLICronTest.php',
+        'd3/ordermanager/tests/integration/Trigger/executeGUICronTest.php',
+        'd3/ordermanager/tests/integration/Trigger/finalizeOrderTest.php',
+        'd3/ordermanager/tests/integration/Trigger/orderSaveTest.php',
         'd3/ordermanager/tests/integration/Admin/jobListTest.php',
+        'd3/ordermanager/tests/integration/Admin/jobExecuteTest.php',
+        'd3/ordermanager/tests/tools/Intercept.php',
 
         'd3/ordermanager/Application/Model/d3ordermanager_vars.php'
     ],

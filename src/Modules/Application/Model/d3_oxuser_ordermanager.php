@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This Software is the property of Data Development and is protected
  * by copyright law - it is NOT Freeware.
@@ -14,23 +15,25 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types = 1);
+
 namespace D3\Ordermanager\Modules\Application\Model;
 
 class d3_oxuser_ordermanager extends d3_oxuser_ordermanager_parent
 {
     /**
-     * @param string $sName
+     * @param string $sParamName
      *
      * @return mixed
      */
-    public function __get($sName)
+    public function __get( $sParamName )
     {
-        $mContent = parent::__get($sName);
+        $mContent = parent::__get( $sParamName);
 
-        if (false == $mContent && $this->{$sName}) {
+        if (false == $mContent && $this->{$sParamName}) {
             // same extension  in the usermanager module can prevent execution
             // @codeCoverageIgnoreStart
-            return $this->{$sName};
+            return $this->{$sParamName};
             // @codeCoverageIgnoreEnd
         }
 

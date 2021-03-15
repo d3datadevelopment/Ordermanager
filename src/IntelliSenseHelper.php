@@ -15,6 +15,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types = 1);
+
 namespace D3\Ordermanager\Modules\Application\Model
 {
     use OxidEsales\Eshop\Application\Model\Basket;

@@ -11,7 +11,7 @@
   [{strip}]
     [{foreach from=$aNotes item="aManagerJobs" key="sOrderId"}]
         [{block name="d3ordermanager_infomail_order"}]
-            [{assign var="oItem" value=$oEmailView->d3getOrder($sOrderId)}]
+            [{assign var="oItem" value=$oEmailView->d3getOrderManagerOrder($sOrderId)}]
             [{if $oItem->getId()}]
                 [{oxmultilang ident="D3_ORDERMANAGER_MAIL_ORDER"}] [{$oItem->getFieldData('oxordernr')}] [{oxmultilang ident="D3_ORDERMANAGER_MAIL_ORDERFROM"}] [{$oItem->getFieldData('oxorderdate')}] ([{$oItem->getFieldData('oxbilllname')}], [{$oItem->getFieldData('oxbillfname')}]):<br>
             [{else}]
