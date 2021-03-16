@@ -59,7 +59,7 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
      * @return array
      * @throws Exception
      */
-    public function getItemFolders()
+    public function getOrderFolders()
     {
         /** @var Config $config */
         $config = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);

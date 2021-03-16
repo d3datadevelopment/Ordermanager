@@ -16,8 +16,12 @@
 
 namespace D3\Ordermanager\Tests\unit\Setup;
 
+use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\d3bitmask;
 use D3\ModCfg\Application\Model\d3database;
+use D3\ModCfg\Application\Model\d3str;
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\ModCfg\Application\Model\Installwizzard\d3installdbrecord;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Setup\d3ordermanager_update;
@@ -29,6 +33,7 @@ use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
 use PHPUnit_Framework_MockObject_MockObject;
 use ReflectionException;
 use stdClass;
@@ -307,13 +312,18 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
 
     public function dbInterfaceExecuteThrowException()
     {
-        $oPDOException = oxNew(\PDOException::class);
-        $oPDOException->errorInfo = array(
+        $pdoExceptionMock = $this->getMockBuilder(PDOException::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pdoExceptionMock->errorInfo = array(
             1   => 'errorInfoNo1',
             2   => 'errorInfoNo1',
         );
 
-        throw oxNew(PDOException::class, $oPDOException);
+        /** @var PDOException $pdoExc */
+        $pdoExc = oxNew(PDOException::class, $pdoExceptionMock);
+
+        throw $pdoExc;
     }
 
     /**
@@ -860,6 +870,163 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             $this->_oModel,
             'addModCfgItem'
         );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::checkCronPasswordSet
+     * @test
+     * @param $testPW
+     * @param $expected
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws ReflectionException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws StandardException
+     * @dataProvider passwordTestDataProvider
+     */
+    public function canCheckCronPasswordSet($testPW, $expected)
+    {
+        /** @var d3_cfg_mod $set */
+        $set = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        $currPassword = $set->getValue('sCronPassword');
+        $set->setValue('sCronPassword', $testPW);
+        $set->saveNoLicenseRefresh();
+
+        $this->assertSame(
+            $expected,
+            $this->callMethod(
+                $this->_oModel,
+                'checkCronPasswordSet'
+            )
+        );
+
+        $set->setValue('sCronPassword', $currPassword);
+        $set->saveNoLicenseRefresh();
+    }
+
+    /**
+     * @return array[]
+     */
+    public function passwordTestDataProvider()
+    {
+        return [
+            [false, true],
+            [null, true],
+            ['', true],
+            ['abc', false],
+            ['123', false],
+            ['%_(', false],
+        ];
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::createCronPassword
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws ReflectionException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     */
+    public function canCreateCronPasswordExecute()
+    {
+        $expectedPW = 'testRandom';
+
+        /** @var d3_cfg_mod $set */
+        $set = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        $currPassword = $set->getValue('sCronPassword');
+        $set->setValue('sCronPassword', 'otherContent');
+        $set->saveNoLicenseRefresh();
+
+        $oStrMock = $this->getMockBuilder(d3str::class)
+            ->setMethods(['random_str'])
+            ->getMock();
+        $oStrMock->expects($this->atLeastOnce())->method('random_str')->willReturn($expectedPW);
+        d3GetModCfgDIC()->set(d3str::class, $oStrMock);
+
+        /** @var d3ordermanager_update|PHPUnit_Framework_MockObject_MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
+            ->setMethods([
+                'hasExecute',
+                'setActionLog'
+            ])
+            ->getMock();
+        $oModelMock->method('hasExecute')->willReturn(true);
+        $oModelMock->expects($this->exactly(1))->method('setActionLog')->willReturn(true);
+
+        $this->_oModel = $oModelMock;
+
+        $this->callMethod(
+            $this->_oModel,
+            'createCronPassword'
+        );
+
+        /** @var d3_cfg_mod $set */
+        $fixtureSet = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        $fixturePw = $fixtureSet->getValue('sCronPassword');
+
+        $this->assertSame($expectedPW, $fixturePw);
+
+        $set->setValue('sCronPassword', $currPassword);
+        $set->saveNoLicenseRefresh();
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::createCronPassword
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws ReflectionException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     */
+    public function canCreateCronPasswordNoExecute()
+    {
+        $expectedPW = 'testRandom';
+
+        /** @var d3_cfg_mod $set */
+        $set = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        $currPassword = $set->getValue('sCronPassword');
+        $set->setValue('sCronPassword', 'otherContent');
+        $set->saveNoLicenseRefresh();
+
+        $oStrMock = $this->getMockBuilder(d3str::class)
+            ->setMethods(['random_str'])
+            ->getMock();
+        $oStrMock->expects($this->never())->method('random_str')->willReturn($expectedPW);
+        d3GetModCfgDIC()->set(d3str::class, $oStrMock);
+
+        /** @var d3ordermanager_update|PHPUnit_Framework_MockObject_MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
+            ->setMethods([
+                'hasExecute',
+                'setActionLog'
+            ])
+            ->getMock();
+        $oModelMock->method('hasExecute')->willReturn(false);
+        $oModelMock->expects($this->exactly(1))->method('setActionLog')->willReturn(true);
+
+        $this->_oModel = $oModelMock;
+
+        $this->callMethod(
+            $this->_oModel,
+            'createCronPassword'
+        );
+
+        /** @var d3_cfg_mod $set */
+        $fixtureSet = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        $fixturePw = $fixtureSet->getValue('sCronPassword');
+
+        $this->assertSame('otherContent', $fixturePw);
+
+        $set->setValue('sCronPassword', $currPassword);
+        $set->saveNoLicenseRefresh();
     }
 
     /**
@@ -1472,7 +1639,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             array(
                 1 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
                 2 => d3GetModCfgDIC()->get('d3ox.ordermanager.'.Shop::class),
-            ));;
+            ));
         $oModelMock->method('jobFieldMethodName')->willReturn(true);
         $oModelMock->method('_convertExampleJobItems')->willReturn(true);
         $oModelMock->method('setInitialExecMethod')->willReturn(true);
@@ -1542,29 +1709,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
                 array('tableName', 'jobFieldMethodName')
             )
         );
-    }
-
-    /**
-     * @test
-     * @throws ReflectionException
-     */
-    public function canConvertExampleJobItems()
-    {
-        $aFieldList = $this->callMethod(
-            $this->_oModel,
-            '_convertExampleJobItems',
-            array(
-                array(
-                    'fieldKey1' => array(
-                        'field1'    => 'content1',
-                        'field2'    => 'content1äüöß',
-                    )
-                )
-            )
-        );
-
-        $this->assertInternalType('array', $aFieldList);
-        $this->assertCount(1, $aFieldList);
     }
 
     /**

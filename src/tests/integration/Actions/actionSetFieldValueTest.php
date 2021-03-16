@@ -19,6 +19,7 @@ namespace D3\Ordermanager\tests\integration\Actions;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Application\Model\Order;
@@ -26,6 +27,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
+use OxidEsales\Eshop\Core\Registry;
 
 class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
 {
@@ -65,9 +67,7 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
     }
 
     /**
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     * @throws Exception
+     * @throws DBALException
      */
     public function cleanTestData()
     {
@@ -100,7 +100,7 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
     {
         $oManager = $this->getManagerMock($this->sManagerId);
 
-        $oManager->setValue('blActionOrder2Folder_status', true);
+        $oManager->setValue('blActionOrderAddFieldValue_status', true);
         $oManager->setValue('sActionAddField_field', 'd3TestField');
         $oManager->setValue('sActionAddField_value', $this->sExpectedValue);
         $oManager->setValue('blItemExecute', true);
@@ -116,7 +116,7 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
     {
         $oManager = $this->getManagerMock($this->sManagerId);
 
-        $oManager->setValue('blActionOrder2Folder_status', true);
+        $oManager->setValue('blActionOrderAddFieldValue_status', true);
         $oManager->setValue('sActionAddField_field', 'd3TestField_1');
         $oManager->setValue('sActionAddField_value', $this->sExpectedValue);
         $oManager->setValue('blItemExecute', true);
@@ -145,8 +145,13 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function actionChangeConcernedOrderExistingSingleLangField()
     {
+        // prevent save trigger action in test
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerExistingSingleLangField());
         $oExecute->startJobItemExecution();
+
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
 
         /** @var Order $oOrder */
         $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
@@ -177,8 +182,13 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function actionChangeConcernedOrderNotExistingSingleLangField()
     {
+        // prevent save trigger action in test
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerNotExistingSingleLangField());
         $oExecute->startJobItemExecution();
+
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
 
         /** @var Order $oOrder */
         $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
@@ -207,8 +217,13 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function actionChangeConcernedOrderNotExistingMultiLangField()
     {
+        // prevent save trigger action in test
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerNotExistingMultiLangField());
         $oExecute->startJobItemExecution();
+
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
 
         /** @var Order $oOrder */
         $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);

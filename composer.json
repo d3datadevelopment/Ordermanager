@@ -17,7 +17,7 @@
     {
         "name": "D3 Data Development (Inh. Thomas Dartsch)",
         "email": "info@shopmodule.com",
-        "homepage": "http://www.d3data.de",
+        "homepage": "https://www.d3data.de",
         "role": "Owner"
     }
   ],
@@ -34,10 +34,12 @@
   "require": {
     "php": "7.1 - 7.4", "ext-ionCube-Loader": "*",
     "oxid-esales/oxideshop-ce": "6.0 - 6.3",
-    "d3/modcfg": "^5.3.1.000",
+    "d3/modcfg": "^5.3.6.000",
     "league/flysystem": "^1.0",
     "splitbrain/php-cli": "^1.1",
-    "html2text/html2text": "^4.2"
+    "html2text/html2text": "^4.2",
+    "d3/oxid-sql-logger": "^1.2.2",
+    "ext-mbstring": "*"
   },
   "require-dev": {
     "mikey179/vfsstream": "^1.4"
@@ -48,7 +50,9 @@
   },
   "autoload": {
     "psr-4": {
-      "D3\\Ordermanager\\": "../../../source/modules/d3/ordermanager"
+      "D3\\Ordermanager\\": "../../../source/modules/d3/ordermanager",
+      "D3\\Ordermanager\\publicDir\\": "../../../source/modules/d3/ordermanager/public",
+      "D3\\Ordermanager\\tests\\unit\\publicDir\\": "../../../source/modules/d3/ordermanager/tests/unit/public"
     }
   },
   "bin": ["src/bin/d3_ordermanager_cron"]

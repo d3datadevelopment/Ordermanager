@@ -19,17 +19,19 @@ namespace D3\Ordermanager\Application\Controller\Admin;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
-use D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_abstract;
-use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist;
-use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist;
-use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler;
-use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
+use D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_interface as ActionModelInterface;
+use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist as ActionGroupList;
+use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist as ActionList;
+use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler as PdfHandler;
+use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
+use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_actionException;
 use Doctrine\DBAL\DBALException;
 use Exception as ExceptionAlias;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\ContentList;
 use OxidEsales\Eshop\Core\Config;
+use OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
@@ -37,7 +39,9 @@ use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Module\Module;
 use OxidEsales\Eshop\Core\Module\ModuleList;
 use OxidEsales\Eshop\Core\Model\ListModel;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
+use OxidEsales\Eshop\Core\UtilsView;
 
 class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
 {
@@ -57,12 +61,17 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
         // @codeCoverageIgnoreEnd
 
         $aMissingRequiredValues = array();
-        /** @var d3ordermanager_action_abstract $oAction */
+        /** @var ActionModelInterface $oAction */
         foreach ($this->getActionList() as $sId => $oAction) {
-            if ($this->getProfile()->getValue($oAction->sActionActiveSwitch) && false == $oAction->hasRequiredValues()) {
-                $aMissingRequiredValues[] = $sId;
+            if ($this->getProfile()->getValue($oAction->getActiveSwitchParameter())) {
+                try {
+                    $oAction->throwUnvalidConfigurationException();
+                } catch (d3ordermanager_actionException $e) {
+                    unset($e);
+                    $aMissingRequiredValues[] = $sId;
+                }
             }
-        };
+        }
 
         if (count($aMissingRequiredValues)) {
             $this->addTplParam('missingRequValuesActions', $aMissingRequiredValues);
@@ -86,7 +95,10 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
      */
     public function d3GetConfig()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
+        /** @var Config $config */
+        $config = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
+
+        return $config;
     }
 
     /**
@@ -112,12 +124,13 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
     }
 
     /**
-     * @return d3ordermanager
+     * @return Manager
      * @throws ExceptionAlias
      */
     public function getProfile()
     {
-        $oProfile = d3GetModCfgDIC()->get(d3ordermanager::class);
+        /** @var Manager $oProfile */
+        $oProfile = d3GetModCfgDIC()->get(Manager::class);
 
         $soxId = $this->getEditObjectId();
 
@@ -185,7 +198,10 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
      */
     public function getLang()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        /** @var Language $language */
+        $language = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+
+        return $language;
     }
 
     /**
@@ -219,21 +235,24 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
     }
 
     /**
-     * @return d3ordermanager_pdfhandler
+     * @return PdfHandler
      * @throws ExceptionAlias
      */
     public function getPdfHandler()
     {
         d3GetModCfgDIC()->set(
-            d3ordermanager_pdfhandler::class.'.args.ordermanager',
+            PdfHandler::class.'.args.ordermanager',
             $this->getProfile()
         );
         d3GetModCfgDIC()->set(
-            d3ordermanager_pdfhandler::class.'.args.order',
+            PdfHandler::class.'.args.order',
             d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_pdfhandler::class);
+        /** @var PdfHandler $pdfhandler */
+        $pdfhandler = d3GetModCfgDIC()->get(PdfHandler::class);
+
+        return $pdfhandler;
     }
 
     /**
@@ -255,39 +274,44 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
     }
 
     /**
-     * @return d3ordermanager_actiongrouplist
+     * @return ActionGroupList
      * @throws ExceptionAlias
      */
     public function getActionGroupList()
     {
         d3GetModCfgDIC()->set(
-            d3ordermanager_actiongrouplist::class.'.args.ordermanager',
+            ActionGroupList::class.'.args.ordermanager',
             $this->getProfile()
         );
         d3GetModCfgDIC()->set(
-            d3ordermanager_actiongrouplist::class.'.args.order',
+            ActionGroupList::class.'.args.order',
             d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_actiongrouplist::class);
+        /** @var ActionGroupList $actiongroup */
+        $actiongroup = d3GetModCfgDIC()->get(ActionGroupList::class);
+
+        return $actiongroup;
     }
 
     /**
-     * @return d3ordermanager_actionlist
+     * @return ActionList
      * @throws ExceptionAlias
      */
     public function getActionListObject()
     {
         d3GetModCfgDIC()->set(
-            d3ordermanager_actionlist::class.'.args.ordermanager',
+            ActionList::class.'.args.ordermanager',
             $this->getProfile()
         );
         d3GetModCfgDIC()->set(
-            d3ordermanager_actionlist::class.'.args.order',
+            ActionList::class.'.args.order',
             d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)
         );
 
-        return d3GetModCfgDIC()->get(d3ordermanager_actionlist::class);
+        /** @var ActionList $actionlist */
+        $actionlist = d3GetModCfgDIC()->get(ActionList::class);
+        return $actionlist;
     }
 
     /**
@@ -296,7 +320,6 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
      */
     public function getGroupedActionList()
     {
-        /** @var d3ordermanager $oManager */
         $oManager = $this->getProfile();
         $oActionList = $this->getActionGroupList();
         $oActionList->setGroups($oManager->getConfiguration()->getGroupedActionIdList());
@@ -310,7 +333,6 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
      */
     public function getActionList()
     {
-        /** @var d3ordermanager $oManager */
         $oManager = $this->getProfile();
         $oActionList = $this->getActionListObject();
         $oActionList->setActions($oManager->getConfiguration()->getActionIdList());
@@ -319,12 +341,12 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
     }
 
     /**
-     * @param d3ordermanager $oProfile
+     * @param Manager $oProfile
      * @param               $soxId
      *
-     * @return d3ordermanager
+     * @return Manager
      */
-    protected function _d3LoadInOtherLang(d3ordermanager $oProfile, $soxId)
+    protected function _d3LoadInOtherLang(Manager $oProfile, $soxId)
     {
         // load object in other languages
         $oOtherLang = $oProfile->getAvailableInLangs();
@@ -341,7 +363,9 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
      */
     public function getModuleList()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.ModuleList::class);
+        /** @var ModuleList $moduleList */
+        $moduleList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.ModuleList::class);
+        return $moduleList;
     }
 
     /**
@@ -350,7 +374,9 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
      */
     public function getShopCompatibilityAdapterHandler()
     {
-        return d3GetModCfgDIC()->get(d3ShopCompatibilityAdapterHandler::class);
+        /** @var d3ShopCompatibilityAdapterHandler $adapter */
+        $adapter = d3GetModCfgDIC()->get(d3ShopCompatibilityAdapterHandler::class);
+        return $adapter;
     }
 
     /**
@@ -369,11 +395,9 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
 
         /** @var Module $oModule */
         $oModule = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Module::class);
-        /** @var ModuleList $oModuleList */
         $oModuleList = $this->getModuleList();
 
         foreach (array_keys($oModuleList->getModulesFromDir($sModulesDir)) as $sId) {
-            /** @var d3ShopCompatibilityAdapterHandler $oD3CompatibilityAdapterHandler */
             $oD3CompatibilityAdapterHandler = $this->getShopCompatibilityAdapterHandler();
             $sModulePath = $oD3CompatibilityAdapterHandler->call(
                 'oxmodule__getModuleFullPath',
@@ -381,7 +405,7 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
             );
 
             $aModulePathList[$sId] = $sModulePath;
-        };
+        }
 
         return $aModulePathList;
     }
@@ -397,14 +421,21 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
      */
     public function markAsFinished()
     {
-        /** @var d3ordermanager $oProfile */
         $oProfile = $this->getProfile();
         /** @var Language $oLang */
         $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
-        $iCount = $oProfile->markConcernedItemsAsFinished();
-        $this->_aMessages[] = sprintf(
-            $oLang->translateString('D3_ORDERMANAGER_ACTION_MARKASFINISHED_MESSAGE'),
-            $iCount
+        $iAllCount = d3GetModCfgDIC()->get('d3ox.ordermanager.'.DatabaseInterface::class.'.assoc')
+            ->getOne('SELECT COUNT(*) FROM '.d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)->getViewName());
+        $iCount = $oProfile->markConcernedItemsAsFinished(true);
+
+        $oEx = oxNew(
+            StandardException::class,
+            sprintf(
+                $oLang->translateString('D3_ORDERMANAGER_ACTION_MARKASFINISHED_MESSAGE'),
+                $iCount,
+                $iAllCount
+            )
         );
+        Registry::get(UtilsView::class)->addErrorToDisplay($oEx);
     }
 }

@@ -13,12 +13,9 @@
                 [{block name="ordermanager_admin_requ_noarticlecontent_editor"}]
                     <label for="RequNoArticleContent[{$oRequ->getSlotId()}]Type">[{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTICLECONTENT2"}]</label>
                     <SELECT id="RequNoArticleContent[{$oRequ->getSlotId()}]Type" class="editinput" name="value[sNoArticleContent[{$oRequ->getSlotId()}]Type]" size="1" [{$blActionRestriction}] [{$readonly}]>
-                        <option value="oxartnum" [{if $edit->getValue($sTypeVarName) == 'oxartnum'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_ARTNUM"}]</option>
-                        <option value="oxtitle" [{if $edit->getValue($sTypeVarName) == 'oxtitle'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_TITLE"}]</option>
-                        <option value="oxshortdesc" [{if $edit->getValue($sTypeVarName) == 'oxshortdesc'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_SHORTDESC"}]</option>
-                        <option value="oxselvariant" [{if $edit->getValue($sTypeVarName) == 'oxselvariant'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_SELVARIANT"}]</option>
-                        <option value="oxpersparam" [{if $edit->getValue($sTypeVarName) == 'oxpersparam'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_PERSPARAM"}]</option>
-                        <option value="oxcatid" [{if $edit->getValue($sTypeVarName) == 'oxcatid'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_CATID"}]</option>
+                        [{foreach from=$oRequ->getTypeList() key="type" item="translation"}]
+                            <option value="[{$type}]" [{if $edit->getValue($sTypeVarName) == $type}]selected[{/if}]>[{oxmultilang ident=$translation}]</option>
+                        [{/foreach}]
                     </SELECT>:
 
                     <label for="sNoArticleContentRegExp" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_NOARTICLECONTENT"}]</label>
@@ -27,24 +24,11 @@
             [{else}]
                 [{block name="ordermanager_admin_requ_noarticlecontent_viewer"}]
                     <label for="RequNoArticleContent[{$oRequ->getSlotId()}]Type">[{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTICLECONTENT2"}]</label>
-                    [{if $edit->getValue($sTypeVarName) == 'oxartnum'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_ARTNUM"}]
-                    [{/if}]
-                    [{if $edit->getValue($sTypeVarName) == 'oxtitle'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_TITLE"}]
-                    [{/if}]
-                    [{if $edit->getValue($sTypeVarName) == 'oxshortdesc'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_SHORTDESC"}]
-                    [{/if}]
-                    [{if $edit->getValue($sTypeVarName) == 'oxselvariant'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_SELVARIANT"}]
-                    [{/if}]
-                    [{if $edit->getValue($sTypeVarName) == 'oxpersparam'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_PERSPARAM"}]
-                    [{/if}]
-                    [{if $edit->getValue($sTypeVarName) == 'oxcatid'}]
-                        [{oxmultilang ident="D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_CATID"}]
-                    [{/if}]
+                    [{foreach from=$oRequ->getTypeList() key="type" item="translation"}]
+                        [{if $edit->getValue($sTypeVarName) == $type}]
+                            [{oxmultilang ident=$translation}]
+                        [{/if}]
+                    [{/foreach}]
                     : [{$edit->getValue($sRegExpVarName)}]
                 [{/block}]
             [{/if}]

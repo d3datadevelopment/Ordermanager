@@ -17,7 +17,8 @@
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
-use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_abstract;
+use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException;
+use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_interface as RequirementModelInterface;
 use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
@@ -44,12 +45,17 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
         // @codeCoverageIgnoreEnd
 
         $aMissingRequiredValues = array();
-        /** @var d3ordermanager_requirement_abstract $oRequirement */
+        /** @var RequirementModelInterface $oRequirement */
         foreach ($this->getRequirementList() as $sId => $oRequirement) {
-            if ($this->getProfile()->getValue($oRequirement->sRequActiveSwitch) && false == $oRequirement->hasRequiredValues()) {
-                $aMissingRequiredValues[] = $sId;
+            if ($this->getProfile()->getValue($oRequirement->getActiveSwitchParameter())) {
+                try {
+                    $oRequirement->throwUnvalidConfigurationException();
+                } catch (d3ordermanager_requirementException $e) {
+                    unset($e);
+                    $aMissingRequiredValues[] = $sId;
+                }
             }
-        };
+        }
 
         if (count($aMissingRequiredValues)) {
             $this->addTplParam('missingRequValuesActions', $aMissingRequiredValues);
@@ -111,8 +117,7 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     public function getLanguageList()
     {
         $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
-        $aLanguageList = $oLang->getLanguageArray();
-        return $aLanguageList;
+        return $oLang->getLanguageArray();
     }
 
     /**
@@ -174,7 +179,6 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     {
         /** @var d3ordermanager $oManager */
         $oManager = $this->getProfile();
-        /** @var d3ordermanager_requirementgrouplist $oRequList */
         $oRequList = $this->getRequirementGroupList($oManager);
         $oRequList->setGroups($oManager->getConfiguration()->getGroupedRequirementIdList());
 
@@ -189,7 +193,6 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     {
         /** @var d3ordermanager $oManager */
         $oManager = $this->getProfile();
-        /** @var d3ordermanager_requirementlist $oRequList */
         $oRequList = $this->getRequirementListObject($oManager);
         $oRequList->setRequirements($oManager->getConfiguration()->getRequirementIdList());
 

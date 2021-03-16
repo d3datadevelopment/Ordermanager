@@ -17,9 +17,11 @@
 namespace D3\Ordermanager\tests\integration;
 
 use D3\ModCfg\Application\Model\Log\d3log;
+use D3\ModCfg\Application\Model\Log\d3NullLogger;
 use D3\ModCfg\Tests\unit\d3ModCfgUnitTestCase;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanager_listgenerator;
+use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
 use Exception;
 use OxidEsales\Eshop\Application\Model\Article;
 use OxidEsales\Eshop\Application\Model\Groups;
@@ -30,10 +32,13 @@ use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
+use OxidEsales\Eshop\Core\Registry;
 use PHPUnit_Framework_MockObject_MockObject;
 
 abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
 {
+    protected $DICdefinitions;
+
     /**
      * Set up fixture.
      * @throws Exception
@@ -41,6 +46,10 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
     public function setUp()
     {
         parent::setUp();
+
+        $this->DICdefinitions = d3GetModCfgDIC()->getDefinitions();
+
+        d3GetModCfgDIC()->set('d3.ordermanager.log', d3GetModCfgDIC()->get(d3NullLogger::class));
 
         $this->createTestData();
     }
@@ -53,6 +62,9 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
         $this->cleanTestData();
 
         parent::tearDown();
+
+        d3GetModCfgDIC()->reset();
+        d3GetModCfgDIC()->setDefinitions($this->DICdefinitions);
     }
 
     abstract public function createTestData();
@@ -133,7 +145,12 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
      */
     public function createOrder($sId, $aFields = array(), $aOrderArticles = array())
     {
+        // prevent trigger action in test preparation
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+
         $this->createObject('d3ox.ordermanager.'.Order::class, $sId, $aFields);
+
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
 
         if (is_array($aOrderArticles) && count($aOrderArticles)) {
             foreach ($aOrderArticles as $sOArtId => $aOArtFields) {
@@ -152,7 +169,7 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
         $this->createObject(
             'd3ox.ordermanager.'.User::class,
             $sId,
-            array_merge(array('oxusername'   => $sId, $aFields))
+            array_merge(array('oxusername'   => $sId), $aFields)
         );
     }
 
@@ -175,6 +192,9 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
     {
         /** @var BaseModel $oObject */
         $oObject = d3GetModCfgDIC()->get($sClass);
+        if (method_exists($oObject, 'setRights')) {
+            $oObject->setRights(null);
+        }
         if ($oObject->exists($sId)) {
             $oObject->delete($sId);
         }
@@ -190,6 +210,9 @@ abstract class d3OrdermanagerIntegrationTestCase extends d3ModCfgUnitTestCase
         /** @var BaseModel $oObject */
         $oObject = d3GetModCfgDIC()->get('d3ox.ordermanager.'.BaseModel::class);
         $oObject->init($sTableName);
+        if (method_exists($oObject, 'setRights')) {
+            $oObject->setRights(null);
+        }
         if ($oObject->exists($sId)) {
             $oObject->delete($sId);
         }

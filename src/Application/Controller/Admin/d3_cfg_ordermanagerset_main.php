@@ -110,7 +110,7 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
      * @throws FileException
      * @throws Exception
      */
-    public function getCronLink($blUsePw, $iCronJobId = false)
+    public function getCronLink($blUsePw = true, $iCronJobId = false)
     {
         $sBaseUrl = $this->getViewConfig()->getModuleUrl('d3ordermanager').'public/d3_ordermanager_cron.php';
 
@@ -128,9 +128,7 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
                 $this->getBaseCronPW();
         }
 
-        $sURL   = $this->getD3Str()->generateParameterUrl($sBaseUrl, $aParameters);
-
-        return $sURL;
+        return $this->getD3Str()->generateParameterUrl($sBaseUrl, $aParameters);
     }
 
     /**
@@ -157,9 +155,7 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
             $aParameters['cjid'] = $iCronJobId;
         }
 
-        $sPath   = 'php ' . $sScriptPath." ".implode(' ', $aParameters);
-
-        return $sPath;
+        return 'php ' . $sScriptPath." ".implode(' ', $aParameters);
     }
 
     /**
@@ -269,7 +265,6 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
         $sCronId = $request->getRequestEscapedParameter('cronid');
 
-        /** @var Shop $oShop */
         $oShop = $this->d3GetActiveShop();
         $aParameters = array(
             0 => 'run',

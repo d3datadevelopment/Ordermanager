@@ -93,7 +93,9 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
      */
     public function getProfile()
     {
-        return d3GetModCfgDIC()->get($this->_sObjectClassName);
+        /** @var d3ordermanager $oManager */
+        $oManager = d3GetModCfgDIC()->get($this->_sObjectClassName);
+        return $oManager;
     }
 
     /**
@@ -132,7 +134,10 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
      */
     public function getLang()
     {
-        return d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        /** @var Language $lang */
+        $lang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+
+        return $lang;
     }
 
     /**
@@ -166,7 +171,10 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
      */
     public function d3GetSet()
     {
-        return d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+        /** @var d3_cfg_mod $modcfg */
+        $modcfg = d3GetModCfgDIC()->get('d3.ordermanager.modcfg');
+
+        return $modcfg;
     }
 
     /**
