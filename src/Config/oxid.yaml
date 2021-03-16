@@ -45,6 +45,14 @@ services:
       - 'getSession'
     shared:     true
 
+  # lang
+  d3ox.ordermanager.OxidEsales\Eshop\Core\Language:
+    class:      'OxidEsales\Eshop\Core\Session'
+    factory:
+      - 'OxidEsales\Eshop\Core\Registry'
+      - 'getLang'
+    shared:     true
+
   # ViewConfig
   d3ox.ordermanager.OxidEsales\Eshop\Core\ViewConfig:
     class:      'OxidEsales\Eshop\Core\ViewConfig'
@@ -323,14 +331,6 @@ services:
     factory:    'oxNew'
     arguments:
       - 'OxidEsales\Eshop\Application\Model\Remark'
-    shared:     false
-
-  # Language
-  d3ox.ordermanager.OxidEsales\Eshop\Core\Language:
-    class:      'OxidEsales\Eshop\Core\Language'
-    factory:    'oxNew'
-    arguments:
-      - 'OxidEsales\Eshop\Core\Language'
     shared:     false
 
   # Field

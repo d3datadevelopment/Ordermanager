@@ -19,30 +19,37 @@ namespace D3\Ordermanager\tests\integration\Requirements;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class requirementInGroupFilterTest extends d3OrdermanagerRequirementIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
         'orderTestIdNo3',
-    );
-    public $aOrderArticleIdList = array(
+    ];
+    public $aGroupsIdList = [
+        'sGroupId1Pass',
+        'sGroupId2Pass',
+        'sGroupId3Pass',
+    ];
+    public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
         'orderTestIdNo3Article1',
-    );
-    public $aGroupAssignIdList = array(
+    ];
+    public $aGroupAssignIdList = [
         'groupAssignIdNo1',
         'groupAssignIdNo2',
         'groupAssignIdNo3',
-    );
+    ];
 
     /**
      * Set up fixture.
@@ -76,6 +83,14 @@ class requirementInGroupFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->sManagerId
         );
 
+        foreach ($this->aGroupsIdList as $sId) {
+            $this->createBaseModelObject(
+                'oxgroups',
+                $sId,
+                ['oxtitle' => __METHOD__]
+            );
+        }
+
         $this->createOrder(
             $this->aOrderIdList[0],
             array(
@@ -95,7 +110,7 @@ class requirementInGroupFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aGroupAssignIdList[0],
             array(
                 'oxobjectid'    => 'sUserIdNo1',
-                'oxgroupsid'    => 'sGroupId1Pass',
+                'oxgroupsid'    => $this->aGroupsIdList[0],
             )
         );
 
@@ -118,7 +133,7 @@ class requirementInGroupFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aGroupAssignIdList[1],
             array(
                 'oxobjectid'    => 'sUserIdNo2',
-                'oxgroupsid'    => 'sGroupId2Pass',
+                'oxgroupsid'    => $this->aGroupsIdList[1],
             )
         );
 
@@ -141,7 +156,7 @@ class requirementInGroupFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aGroupAssignIdList[2],
             array(
                 'oxobjectid'    => 'sUserIdNo3',
-                'oxgroupsid'    => 'sGroupId3Pass',
+                'oxgroupsid'    => $this->aGroupsIdList[2],
             )
         );
     }
@@ -154,6 +169,13 @@ class requirementInGroupFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function cleanTestData()
     {
         $this->deleteManager($this->sManagerId);
+
+        foreach ($this->aGroupsIdList as $sId) {
+            $this->deleteBaseModelObject(
+                'oxgroups',
+                $sId
+            );
+        }
 
         foreach ($this->aOrderIdList as $sOrderId) {
             $this->deleteOrder($sOrderId);
@@ -173,7 +195,7 @@ class requirementInGroupFilterTest extends d3OrdermanagerRequirementIntegrationT
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckInGroup_status', true);
-        $oManager->setValue('sCustInGroupId', array('sGroupId1Pass'));
+        $oManager->setValue('sCustInGroupId', [$this->aGroupsIdList[0]]);
 
         return $oManager;
     }
@@ -187,7 +209,7 @@ class requirementInGroupFilterTest extends d3OrdermanagerRequirementIntegrationT
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckInGroup_status', true);
-        $oManager->setValue('sCustInGroupId', array('sGroupId1Pass', 'sGroupId2Pass'));
+        $oManager->setValue('sCustInGroupId', [$this->aGroupsIdList[0], $this->aGroupsIdList[1]]);
 
         return $oManager;
     }
@@ -236,5 +258,56 @@ class requirementInGroupFilterTest extends d3OrdermanagerRequirementIntegrationT
             && $oOrderList->offsetExists($this->aOrderIdList[1])
             && false == $oOrderList->offsetExists($this->aOrderIdList[2])
         );
+    }
+
+    /**
+     * @param $invalidValue
+     *
+     * @return d3ordermanager|MockObject
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function getConfiguredManagerNoValidConfig($invalidValue)
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blCheckInGroup_status', true);
+        $oManager->setValue('sCustInGroupId', $invalidValue);
+
+        return $oManager;
+    }
+
+    /**
+     * @test
+     * @param $testValue
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     * @dataProvider requirementsSelectsRightOrdersNoValidConfigDataProvider
+     */
+    public function requirementsSelectsRightOrdersNoValidConfig($testValue)
+    {
+        $this->setExpectedException(d3ordermanager_requirementException::class);
+
+        $oListGenerator = $this->getListGenerator($this->getConfiguredManagerNoValidConfig($testValue));
+        $oListGenerator->getConcernedOrders();
+    }
+
+    /**
+     * @return array
+     */
+    public function requirementsSelectsRightOrdersNoValidConfigDataProvider()
+    {
+        return [
+            'unknown'=> ['unknownValue'],
+            'space'  => [' '],
+            'empty'  => [''],
+            'false'  => [false]
+        ];
     }
 }

@@ -105,7 +105,7 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oOrderArticle = d3GetModCfgDIC()->get('d3ox.ordermanager.'.OrderArticle::class);
         $oOrderArticle->assign(
             array(
-                'oxartid' => 'foobar',
+                'oxartid' => __METHOD__,
             )
         );
 

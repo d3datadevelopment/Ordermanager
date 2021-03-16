@@ -58,9 +58,9 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
      * @test
      * @throws ReflectionException
      */
-    public function getItemFoldersReturnArray()
+    public function getOrderFoldersReturnArray()
     {
-        $this->assertInternalType('array', $this->callMethod($this->_oController, 'getItemFolders'));
+        $this->assertInternalType('array', $this->callMethod($this->_oController, 'getOrderFolders'));
     }
 
     /**

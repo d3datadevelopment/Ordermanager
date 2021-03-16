@@ -19,25 +19,35 @@ namespace D3\Ordermanager\tests\integration\Requirements;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\Eshop\Core\Language;
+use OxidEsales\Eshop\Core\Registry;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use stdClass;
 
 class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
         'orderTestIdNo3',
-    );
-    public $aOrderArticleIdList = array(
+    ];
+    public $aLanguageId = [
+        '52',
+        '53',
+        '54',
+    ];
+    public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
         'orderTestIdNo3Article1',
-    );
+    ];
 
     /**
      * Set up fixture.
@@ -76,7 +86,7 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
             array(
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
-                'oxlang'        => '12',
+                'oxlang'        => $this->aLanguageId[0],
             ),
             array(
                 $this->aOrderArticleIdList[0] => array(
@@ -90,7 +100,7 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
             array(
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
-                'oxlang'        => '23',
+                'oxlang'        => $this->aLanguageId[1],
             ),
             array(
                 $this->aOrderArticleIdList[1] => array(
@@ -104,7 +114,7 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
             array(
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
-                'oxlang'        => '34',
+                'oxlang'        => $this->aLanguageId[2],
             ),
             array(
                 $this->aOrderArticleIdList[2] => array(
@@ -137,7 +147,7 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckLanguage_status', true);
-        $oManager->setValue('sInLanguageId', array('12'));
+        $oManager->setValue('sInLanguageId', [$this->aLanguageId[0]]);
 
         return $oManager;
     }
@@ -151,7 +161,7 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckLanguage_status', true);
-        $oManager->setValue('sInLanguageId', array('12', '23'));
+        $oManager->setValue('sInLanguageId', [$this->aLanguageId[0], $this->aLanguageId[1]]);
 
         return $oManager;
     }
@@ -168,8 +178,39 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
      */
     public function requirementsSelectsRightOrdersSingle()
     {
+        /** @var Language $oLang */
+        $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        $langBackup = $oLang;
+        $aLangs = $oLang->getLanguageArray();
+
+        foreach ($this->aLanguageId as $sId) {
+            $oLang = oxNew(stdClass::class);
+            $oLang->id = $sId;
+            $oLang->oxid = $sId.'_oxid';
+            $oLang->abbr = $sId.'_abbr';
+            $oLang->name = $sId.'_name';
+            $oLang->active = '1';
+            $oLang->sort = $sId;
+            $oLang->selected = 0;
+            $aLangs[$sId] = $oLang;
+        }
+
+        /** @var Language|MockObject $oLangMock */
+        $oLangMock = $this->getMockBuilder(Language::class)
+            ->setMethods(['getLanguageArray'])
+            ->getMock();
+        $oLangMock->method('getLanguageArray')->willReturn($aLangs);
+
+        $definitions = d3GetModCfgDIC()->getDefinitions();
+
+        d3GetModCfgDIC()->set('d3ox.ordermanager.'.Language::class, $oLangMock);
+
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerSingle());
         $oOrderList = $oListGenerator->getConcernedOrders();
+
+        d3GetModCfgDIC()->reset();
+        d3GetModCfgDIC()->setDefinitions($definitions);
+        Registry::set(Language::class, $langBackup);
 
         $this->assertTrue(
             $oOrderList->count() === 1
@@ -191,8 +232,39 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
      */
     public function requirementsSelectsRightOrdersMulti()
     {
+        /** @var Language $oLang */
+        $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
+        $langBackup = $oLang;
+        $aLangs = $oLang->getLanguageArray();
+
+        foreach ($this->aLanguageId as $sId) {
+            $oLang = oxNew(stdClass::class);
+            $oLang->id = $sId;
+            $oLang->oxid = $sId.'_oxid';
+            $oLang->abbr = $sId.'_abbr';
+            $oLang->name = $sId.'_name';
+            $oLang->active = '1';
+            $oLang->sort = $sId;
+            $oLang->selected = 0;
+            $aLangs[$sId] = $oLang;
+        }
+
+        /** @var Language|MockObject $oLangMock */
+        $oLangMock = $this->getMockBuilder(Language::class)
+            ->setMethods(['getLanguageArray'])
+            ->getMock();
+        $oLangMock->method('getLanguageArray')->willReturn($aLangs);
+
+        $definitions = d3GetModCfgDIC()->getDefinitions();
+
+        d3GetModCfgDIC()->set('d3ox.ordermanager.'.Language::class, $oLangMock);
+
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerMulti());
         $oOrderList = $oListGenerator->getConcernedOrders();
+
+        d3GetModCfgDIC()->reset();
+        d3GetModCfgDIC()->setDefinitions($definitions);
+        Registry::set(Language::class, $langBackup);
 
         $this->assertTrue(
             $oOrderList->count() === 2
@@ -200,5 +272,56 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
             && $oOrderList->offsetExists($this->aOrderIdList[1])
             && false == $oOrderList->offsetExists($this->aOrderIdList[2])
         );
+    }
+
+    /**
+     * @param $invalidValue
+     *
+     * @return d3ordermanager|MockObject
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function getConfiguredManagerNoValidConfig($invalidValue)
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blCheckLanguage_status', true);
+        $oManager->setValue('sInLanguageId', $invalidValue);
+
+        return $oManager;
+    }
+
+    /**
+     * @test
+     * @param $testValue
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     * @dataProvider requirementsSelectsRightOrdersNoValidConfigDataProvider
+     */
+    public function requirementsSelectsRightOrdersNoValidConfig($testValue)
+    {
+        $this->setExpectedException(d3ordermanager_requirementException::class);
+
+        $oListGenerator = $this->getListGenerator($this->getConfiguredManagerNoValidConfig($testValue));
+        $oListGenerator->getConcernedOrders();
+    }
+
+    /**
+     * @return array
+     */
+    public function requirementsSelectsRightOrdersNoValidConfigDataProvider()
+    {
+        return [
+            'unknown'=> ['unknownValue'],
+            'space'  => [' '],
+            'empty'  => [''],
+            'false'  => [false]
+        ];
     }
 }

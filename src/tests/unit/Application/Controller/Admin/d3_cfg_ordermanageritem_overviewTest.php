@@ -22,7 +22,9 @@ use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ;
 use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanager_conf;
+use D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck;
 use D3\Ordermanager\Application\Model\d3ordermanager_listgenerator;
+use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException;
 use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
 use Doctrine\DBAL\DBALException;
@@ -32,7 +34,8 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\SystemComponentException;
 use OxidEsales\Eshop\Core\Language;
-use PHPUnit_Framework_MockObject_MockObject;
+use OxidEsales\Eshop\Core\UtilsView;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use ReflectionException;
 use stdClass;
 
@@ -60,6 +63,71 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         parent::tearDown();
 
         unset($this->_oController);
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_overview::render
+     * @test
+     * @throws ReflectionException
+     */
+    public function renderThrowsException()
+    {
+        /** @var d3ordermanager_requirementException|MockObject $excMock */
+        $excMock = $this->getMockBuilder(d3ordermanager_requirementException::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var d3ordermanager_configurationcheck|MockObject $confCheckMock */
+        $confCheckMock = $this->getMockBuilder(d3ordermanager_configurationcheck::class)
+            ->setMethods(['checkThrowingExceptions'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $confCheckMock->method('checkThrowingExceptions')->willThrowException($excMock);
+
+        d3GetModCfgDIC()->set(d3ordermanager_configurationcheck::class, $confCheckMock);
+
+        /** @var UtilsView|MockObject $utilsViewMock */
+        $utilsViewMock = $this->getMockBuilder(UtilsView::class)
+            ->setMethods(['addErrorToDisplay'])
+            ->getMock();
+        $utilsViewMock->expects($this->atLeastOnce())->method('addErrorToDisplay')->willReturn(true);
+
+        d3GetModCfgDIC()->set('d3ox.ordermanager.'.UtilsView::class, $utilsViewMock);
+
+        $this->callMethod(
+            $this->_oController,
+            'render'
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_overview::render
+     * @test
+     * @throws ReflectionException
+     */
+    public function renderDontThrowsException()
+    {
+        /** @var d3ordermanager_configurationcheck|MockObject $confCheckMock */
+        $confCheckMock = $this->getMockBuilder(d3ordermanager_configurationcheck::class)
+            ->setMethods(['checkThrowingExceptions'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $confCheckMock->method('checkThrowingExceptions')->willReturn(true);
+
+        d3GetModCfgDIC()->set(d3ordermanager_configurationcheck::class, $confCheckMock);
+
+        /** @var UtilsView|MockObject $utilsViewMock */
+        $utilsViewMock = $this->getMockBuilder(UtilsView::class)
+            ->setMethods(['addErrorToDisplay'])
+            ->getMock();
+        $utilsViewMock->expects($this->never())->method('addErrorToDisplay')->willReturn(true);
+
+        d3GetModCfgDIC()->set('d3ox.ordermanager.'.UtilsView::class, $utilsViewMock);
+
+        $this->callMethod(
+            $this->_oController,
+            'render'
+        );
     }
 
     /**
@@ -104,7 +172,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $mExpectedRequ = 'returnValueRequ';
         $mExpectedController = 'returnValueController';
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oActionAdminControllerMock */
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oActionAdminControllerMock */
         $oActionAdminControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
             $sMethodName
         ));
@@ -116,7 +184,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
             )
             ->willReturn($mExpectedAction);
 
-        /** @var d3_cfg_ordermanageritem_requ|PHPUnit_Framework_MockObject_MockObject $oRequirementAdminControllerMock */
+        /** @var d3_cfg_ordermanageritem_requ|MockObject $oRequirementAdminControllerMock */
         $oRequirementAdminControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
             $sOtherMethodName
         ));
@@ -128,7 +196,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
             )
             ->willReturn($mExpectedRequ);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getActionAdminController',
             'getRequirementAdminController',
@@ -168,7 +236,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $mExpectedRequ = 'returnValueRequ';
         $mExpectedController = 'returnValueController';
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oActionAdminControllerMock */
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oActionAdminControllerMock */
         $oActionAdminControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
             $sOtherMethodName
         ));
@@ -180,7 +248,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
             )
             ->willReturn($mExpectedAction);
 
-        /** @var d3_cfg_ordermanageritem_requ|PHPUnit_Framework_MockObject_MockObject $oRequirementAdminControllerMock */
+        /** @var d3_cfg_ordermanageritem_requ|MockObject $oRequirementAdminControllerMock */
         $oRequirementAdminControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
             $sMethodName
         ));
@@ -192,7 +260,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
             )
             ->willReturn($mExpectedRequ);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getActionAdminController',
             'getRequirementAdminController',
@@ -232,7 +300,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $mExpectedRequ = 'returnValueRequ';
         $mExpectedController = 'returnValueController';
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oActionAdminControllerMock */
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oActionAdminControllerMock */
         $oActionAdminControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
             $sOtherMethodName
         ));
@@ -244,7 +312,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
             )
             ->willReturn($mExpectedAction);
 
-        /** @var d3_cfg_ordermanageritem_requ|PHPUnit_Framework_MockObject_MockObject $oRequirementAdminControllerMock */
+        /** @var d3_cfg_ordermanageritem_requ|MockObject $oRequirementAdminControllerMock */
         $oRequirementAdminControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
             $sOtherMethodName
         ));
@@ -256,7 +324,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
             )
             ->willReturn($mExpectedRequ);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getActionAdminController',
             'getRequirementAdminController',
@@ -296,7 +364,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $mExpectedRequ = 'returnValueRequ';
         $mExpectedController = 'returnValueController';
 
-        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oActionAdminControllerMock */
+        /** @var d3_cfg_ordermanageritem_action|MockObject $oActionAdminControllerMock */
         $oActionAdminControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
             $sOtherMethodName
         ));
@@ -308,7 +376,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
             )
             ->willReturn($mExpectedAction);
 
-        /** @var d3_cfg_ordermanageritem_requ|PHPUnit_Framework_MockObject_MockObject $oRequirementAdminControllerMock */
+        /** @var d3_cfg_ordermanageritem_requ|MockObject $oRequirementAdminControllerMock */
         $oRequirementAdminControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
             $sOtherMethodName
         ));
@@ -320,7 +388,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
             )
             ->willReturn($mExpectedRequ);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getActionAdminController',
             'getRequirementAdminController',
@@ -373,27 +441,31 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
      */
     public function canGetRequirementList()
     {
-        /** @var d3ordermanager_conf|PHPUnit_Framework_MockObject_MockObject $oManagerConfMock */
+        $expected = [
+            'test'  => 'item'
+        ];
+
+        /** @var d3ordermanager_conf|MockObject $oManagerConfMock */
         $oManagerConfMock = $this->getMock(d3ordermanager_conf::class, array(
             'getRequirementIdList'
         ));
-        $oManagerConfMock->method('getRequirementIdList')->willReturn(true);
+        $oManagerConfMock->method('getRequirementIdList')->willReturn([]);
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
+        /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMock(d3ordermanager::class, array(
             'getConfiguration'
         ));
         $oProfileMock->method('getConfiguration')->willReturn($oManagerConfMock);
 
-        /** @var d3ordermanager_requirementlist|PHPUnit_Framework_MockObject_MockObject $oRequListMock */
+        /** @var d3ordermanager_requirementlist|MockObject $oRequListMock */
         $oRequListMock = $this->getMock(d3ordermanager_requirementlist::class, array(
             'setRequirements',
             'getRequirementList'
         ), array($oProfileMock));
         $oRequListMock->method('setRequirements')->willReturn(true);
-        $oRequListMock->expects($this->once())->method('getRequirementList')->willReturn('testReturn');
+        $oRequListMock->expects($this->once())->method('getRequirementList')->willReturn($expected);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getProfile',
             'getRequirementListObject',
@@ -404,7 +476,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertSame(
-            'testReturn',
+            $expected,
             $this->callMethod(
                 $this->_oController,
                 "getRequirementList"
@@ -436,27 +508,31 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
      */
     public function canGetActionList()
     {
-        /** @var d3ordermanager_conf|PHPUnit_Framework_MockObject_MockObject $oManagerConfMock */
+        $expected = [
+            'test'  => 'item'
+        ];
+
+        /** @var d3ordermanager_conf|MockObject $oManagerConfMock */
         $oManagerConfMock = $this->getMock(d3ordermanager_conf::class, array(
             'getActionIdList'
         ));
-        $oManagerConfMock->method('getActionIdList')->willReturn(true);
+        $oManagerConfMock->method('getActionIdList')->willReturn([]);
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
+        /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMock(d3ordermanager::class, array(
             'getConfiguration'
         ));
         $oProfileMock->method('getConfiguration')->willReturn($oManagerConfMock);
 
-        /** @var d3ordermanager_actionlist|PHPUnit_Framework_MockObject_MockObject $oActionListMock */
+        /** @var d3ordermanager_actionlist|MockObject $oActionListMock */
         $oActionListMock = $this->getMock(d3ordermanager_actionlist::class, array(
             'setActions',
             'getActionList'
         ), array($oProfileMock, d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
         $oActionListMock->method('setActions')->willReturn(true);
-        $oActionListMock->expects($this->once())->method('getActionList')->willReturn('testReturn');
+        $oActionListMock->expects($this->once())->method('getActionList')->willReturn($expected);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getProfile',
             'getActionListObject',
@@ -467,7 +543,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertSame(
-            'testReturn',
+            $expected,
             $this->callMethod(
                 $this->_oController,
                 "getActionList"
@@ -512,19 +588,19 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $mExpected = 255;
 
-        /** @var d3ordermanager_listgenerator|PHPUnit_Framework_MockObject_MockObject $oListGeneratorMock */
+        /** @var d3ordermanager_listgenerator|MockObject $oListGeneratorMock */
         $oListGeneratorMock = $this->getMock(d3ordermanager_listgenerator::class, array(
             'getConcernedItemCount'
         ), array(d3GetModCfgDIC()->get(d3ordermanager::class)));
         $oListGeneratorMock->method('getConcernedItemCount')->willReturn($mExpected);
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
+        /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMock(d3ordermanager::class, array(
             'getListGenerator'
         ));
         $oProfileMock->method('getListGenerator')->willReturn($oListGeneratorMock);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'getProfile',
@@ -552,7 +628,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $mExpected = 256;
         $_POST['toFinishedCount'] = $mExpected;
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'canUseRequestData',
@@ -577,7 +653,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
      */
     public function canNotGetToFinishedCount()
     {
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'canUseRequestData',
@@ -604,19 +680,19 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $mExpected = 257;
 
-        /** @var d3ordermanager_listgenerator|PHPUnit_Framework_MockObject_MockObject $oListGeneratorMock */
+        /** @var d3ordermanager_listgenerator|MockObject $oListGeneratorMock */
         $oListGeneratorMock = $this->getMock(d3ordermanager_listgenerator::class, array(
             'getFinishedItemCount'
         ), array(d3GetModCfgDIC()->get(d3ordermanager::class)));
         $oListGeneratorMock->method('getFinishedItemCount')->willReturn($mExpected);
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
+        /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMock(d3ordermanager::class, array(
             'getListGenerator'
         ));
         $oProfileMock->method('getListGenerator')->willReturn($oListGeneratorMock);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'getProfile',
@@ -644,7 +720,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $mExpected = 258;
         $_POST['finishedCount'] = $mExpected;
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'canUseRequestData',
@@ -669,7 +745,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
      */
     public function canNotGetFinishedCount()
     {
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'canUseRequestData',
@@ -696,19 +772,19 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $mExpected = 259;
 
-        /** @var d3ordermanager_listgenerator|PHPUnit_Framework_MockObject_MockObject $oListGeneratorMock */
+        /** @var d3ordermanager_listgenerator|MockObject $oListGeneratorMock */
         $oListGeneratorMock = $this->getMock(d3ordermanager_listgenerator::class, array(
             'getFinishedMonthItemCount'
         ), array(d3GetModCfgDIC()->get(d3ordermanager::class)));
         $oListGeneratorMock->method('getFinishedMonthItemCount')->willReturn($mExpected);
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
+        /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMock(d3ordermanager::class, array(
             'getListGenerator'
         ));
         $oProfileMock->method('getListGenerator')->willReturn($oListGeneratorMock);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'getProfile',
@@ -736,7 +812,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $mExpected = 260;
         $_POST['finishedMonthCount'] = $mExpected;
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'canUseRequestData',
@@ -761,7 +837,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
      */
     public function canNotGetFinishedMonthCount()
     {
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'canUseRequestData',
@@ -788,19 +864,19 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $mExpected = 261;
 
-        /** @var d3ordermanager_listgenerator|PHPUnit_Framework_MockObject_MockObject $oListGeneratorMock */
+        /** @var d3ordermanager_listgenerator|MockObject $oListGeneratorMock */
         $oListGeneratorMock = $this->getMock(d3ordermanager_listgenerator::class, array(
             'getNotFinishedItemCount'
         ), array(d3GetModCfgDIC()->get(d3ordermanager::class)));
         $oListGeneratorMock->method('getNotFinishedItemCount')->willReturn($mExpected);
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oProfileMock */
+        /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMock(d3ordermanager::class, array(
             'getListGenerator'
         ));
         $oProfileMock->method('getListGenerator')->willReturn($oListGeneratorMock);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'getProfile',
@@ -828,7 +904,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $mExpected = 262;
         $_POST['notFinishedCount'] = $mExpected;
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'canUseRequestData',
@@ -853,7 +929,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
      */
     public function canNotGetNotFinishedMonthCount()
     {
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'canRequestData',
             'canUseRequestData',
@@ -879,7 +955,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $sFncName = 'fncName';
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getDataOnDemand',
         ));
@@ -904,7 +980,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $sFncName = 'fncName';
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getDataOnDemand',
             '_getRequestData'
@@ -931,7 +1007,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $sFncName = 'fncName';
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getDataOnDemand',
             '_getRequestData'
@@ -958,7 +1034,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $iRequestCount = '300';
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getDataOnDemand'
         ));
@@ -983,7 +1059,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $iRequestCount = '301';
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getDataOnDemand',
         ));
@@ -1008,7 +1084,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $iRequestCount = null;
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getDataOnDemand',
         ));
@@ -1033,13 +1109,13 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $mExpected = 'testValue';
 
-        /** @var stdClass|PHPUnit_Framework_MockObject_MockObject $oModCfgMock */
+        /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMock(stdClass::class, array(
             'getValue',
         ));
         $oModCfgMock->method('getValue')->willReturn($mExpected);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'd3GetSet',
         ));
@@ -1065,7 +1141,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $_POST['sRequestName'] = 400;
         $sFncName = 'fncName';
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             '_getRequestData'
         ));
@@ -1091,7 +1167,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $_POST['sRequestName'] = null;
         $sFncName = 'fncName';
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             '_getRequestData'
         ));
@@ -1117,7 +1193,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $_POST['sRequestName'] = 401;
         $sFncName = 'fncName';
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             '_getRequestData'
         ));
@@ -1143,7 +1219,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $_POST['sRequestName'] = null;
         $sFncName = 'fncName';
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             '_getRequestData'
         ));
@@ -1198,7 +1274,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $mExpected = 'managerTitleFromObject';
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
+        /** @var d3ordermanager|MockObject $oManagerMock */
         $oManagerMock = $this->getMock(d3ordermanager::class, array(
             'load',
             'getFieldData'
@@ -1206,7 +1282,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $oManagerMock->method('load')->willReturn(true);
         $oManagerMock->method('getFieldData')->willReturn($mExpected);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getManager'
         ));
@@ -1232,13 +1308,13 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
     {
         $mExpected = 'managerTitleFromTranslation';
 
-        /** @var Language|PHPUnit_Framework_MockObject_MockObject $oLangMock */
+        /** @var Language|MockObject $oLangMock */
         $oLangMock = $this->getMock(d3ordermanager::class, array(
             'translateString',
         ));
         $oLangMock->method('translateString')->willReturn($mExpected);
 
-        /** @var d3ordermanager|PHPUnit_Framework_MockObject_MockObject $oManagerMock */
+        /** @var d3ordermanager|MockObject $oManagerMock */
         $oManagerMock = $this->getMock(d3ordermanager::class, array(
             'load',
             'getFieldData'
@@ -1246,7 +1322,7 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $oManagerMock->method('load')->willReturn(false);
         $oManagerMock->method('getFieldData')->willReturn($mExpected);
 
-        /** @var d3_cfg_ordermanageritem_overview|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_overview::class, array(
             'getManager',
             'getLang'

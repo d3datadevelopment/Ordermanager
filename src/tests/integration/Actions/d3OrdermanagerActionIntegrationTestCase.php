@@ -36,7 +36,7 @@ abstract class d3OrdermanagerActionIntegrationTestCase extends d3OrdermanagerInt
     public function getResultList($aOrderIdList = array())
     {
         /** @var ListModel $oList */
-        $oList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.ListModel::class);;
+        $oList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.ListModel::class);
         $oList->init(Order::class);
 
         foreach ($aOrderIdList as $sId) {

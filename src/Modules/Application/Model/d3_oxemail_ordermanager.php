@@ -29,6 +29,9 @@ use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
 use D3\ModCfg\Application\Model\d3str;
+use D3\Ordermanager\Application\Model\d3ordermanager_renderererrorhandler;
+use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_smartyException;
+use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_templaterendererExceptionInterface;
 use D3\PdfDocuments\Application\Model\Interfaces\pdfdocumentsOrderInterface;
 use Doctrine\DBAL\DBALException;
 use Exception;
@@ -52,6 +55,8 @@ use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Module\Module;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\UtilsView;
+use OxidEsales\EshopCommunity\Internal\Application\ContainerFactory;
+use Psr\Container\ContainerInterface;
 use Smarty;
 
 class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
@@ -101,8 +106,14 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
 
         $this->_processViewArray();
 
-        $this->setBody($oSmarty->fetch($this->_sOrderManagerInfoTemplate));
-        $this->setAltBody($oSmarty->fetch($this->_sOrderManagerInfoPlainTemplate));
+        set_error_handler(
+            [d3GetModCfgDIC()->get(d3ordermanager_renderererrorhandler::class), 'd3HandleTemplateEngineErrors']
+        );
+
+        $this->d3OMsetBody($oSmarty->fetch($this->_sOrderManagerInfoTemplate));
+        $this->d3OMsetAltBody($oSmarty->fetch($this->_sOrderManagerInfoPlainTemplate));
+
+        restore_error_handler();
 
         /** @var d3LogInterface $oLog */
         $oLog = d3GetModCfgDIC()->get('d3.ordermanager.log');
@@ -117,7 +128,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         /** @var Language $oLang */
         $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
         $sSubject = $oLang->translateString('D3_ORDERMANAGER_MAIL_ORDERSUBJECT', 0);
-        $this->setSubject($sSubject);
+        $this->d3OMsetSubject($sSubject);
 
         $sFullName = $oShop->__get('oxshops__oxname')->getRawValue();
         $this->setRecipient($oShop->getFieldData('oxinfoemail'), $sFullName);
@@ -180,9 +191,9 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         $aContent = $this->getOrderManagerMailContent($oOrderManager);
 
         $oShop = $this->_getShop();
-        $this->setBody($aContent['html']);
-        $this->setAltBody($aContent['plain']);
-        $this->setSubject($aContent['subject']);
+        $this->d3OMsetBody($aContent['html']);
+        $this->d3OMsetAltBody($aContent['plain']);
+        $this->d3OMsetSubject($aContent['subject']);
 
         $this->_d3SetOrderManagerReplyAddress($oOrderManager, $oShop);
 
@@ -197,6 +208,48 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         }
 
         return $blSuccess;
+    }
+
+    /**
+     * @param $content
+     *
+     * @throws d3ordermanager_smartyException
+     */
+    protected function d3OMsetBody($content)
+    {
+        $this->setBody($content);
+
+        if ((bool) strlen($content) && false === (bool) strlen($this->getBody())) {
+            $this->throwUnequalContentException();
+        }
+    }
+
+    /**
+     * @param $content
+     *
+     * @throws d3ordermanager_smartyException
+     */
+    protected function d3OMsetAltBody($content)
+    {
+        $this->setAltBody($content);
+
+        if ((bool) strlen($content) && false === (bool) strlen($this->getAltBody())) {
+            $this->throwUnequalContentException();
+        }
+    }
+
+    /**
+     * @param $content
+     *
+     * @throws d3ordermanager_smartyException
+     */
+    protected function d3OMsetSubject($content)
+    {
+        $this->setSubject($content);
+
+        if ((bool) strlen($content) && false === (bool) strlen($this->getSubject())) {
+            $this->throwUnequalContentException();
+        }
     }
 
     /**
@@ -228,7 +281,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
     protected function _d3getOrderManagerMailOption($sVarName)
     {
         $aEditedValues = $this->oOrderManager->getEditedValues();
-        return $aEditedValues[$sVarName] === false || $aEditedValues[$sVarName] === null ?
+        return false === isset($aEditedValues[$sVarName]) || $aEditedValues[$sVarName] === false || $aEditedValues[$sVarName] === null ?
             $this->oOrderManager->getValue($sVarName) :
             $aEditedValues[$sVarName];
     }
@@ -321,13 +374,14 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
      * @throws Exception
+     * @throws d3ordermanager_templaterendererExceptionInterface
      */
     public function getOrderManagerMailContent(d3ordermanager $oOrderManager)
     {
         $this->oOrderManager = $oOrderManager;
         $aContent = array();
 
-        $blTplFromAdmin = $oOrderManager->getValue('sSendMailFromTheme') == 'admin' ? true : false;
+        $blTplFromAdmin = $oOrderManager->getValue('sSendMailFromTheme') == 'admin';
 
         $oConfig = $this->d3GetConfig();
         $oConfig->setAdminMode($blTplFromAdmin);
@@ -421,7 +475,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
 
             $sPath = $this->getD3Str()->untrailingslashit($sModulePath);
         } else {
-            $blAdmin = $oOrderManager->getValue('sSendMailFromTheme') == 'admin' ? true : false;
+            $blAdmin = $oOrderManager->getValue('sSendMailFromTheme') == 'admin';
             $sPath   = $this->d3GetConfig()->getTemplateDir($blAdmin);
         }
         return $sPath;
@@ -469,6 +523,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
      * @return mixed
      * @throws d3ParameterNotFoundException
      * @throws Exception
+     * @throws d3ordermanager_templaterendererExceptionInterface
      */
     protected function _d3GenerateOrderManagerMailContent($aContent, Smarty $oSmarty)
     {
@@ -485,6 +540,10 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         $iOrderCurr = $this->oOrderManager->getCurrentItem()->getOrderCurrency()->id;
         Registry::getConfig()->setActShopCurrency($iOrderCurr);
 
+        set_error_handler(
+            [d3GetModCfgDIC()->get(d3ordermanager_renderererrorhandler::class), 'd3HandleTemplateEngineErrors']
+        );
+
         if ($this->d3HasOrderManagerEditorMailContent($aEditedValues)) {
             $aContent = $aEditedValues['mail'];
 
@@ -493,7 +552,6 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
             }
         } elseif ($this->oOrderManager->getValue('sSendMailFromSource') == 'cms') {
             $oUtilsView = $this->d3GetUtilsView();
-            /** @var $oContent Content */
             $oContent = $this->d3GetContent();
             $oContent->loadInLang($iOrderLangId, $this->oOrderManager->getValue('sSendMailFromContentname'));
 
@@ -513,6 +571,8 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
             $aContent['plain']   = $oSmarty->fetch($this->oOrderManager->getValue('sSendMailFromTemplatenamePlain'));
             $aContent['subject'] = $oSmarty->fetch($this->oOrderManager->getValue('sSendMailFromSubject'));
         }
+
+        restore_error_handler();
 
         $oLang->setTplLanguage($iCurrentTplLang);
         $oLang->setBaseLanguage($iCurrentBaseLang);
@@ -544,7 +604,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
      */
     public function isArrayEditorMailContent($aEditedValues)
     {
-        return is_array($aEditedValues) && is_array($aEditedValues['mail']);
+        return is_array($aEditedValues) && isset($aEditedValues['mail']) && is_array($aEditedValues['mail']);
     }
 
     /**
@@ -611,7 +671,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
      *
      * @return Remark
      * @throws d3ParameterNotFoundException
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _d3sendOrderManagerMailToOwner(Shop $oShop)
     {
@@ -725,7 +785,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         /** @var d3ordermanager_action_generatepdf $action */
         $action = d3GetModCfgDIC()->get(d3ordermanager_action_generatepdf::class);
 
-        if ($oOrderManager->getValue($action->sActionActiveSwitch)
+        if ($oOrderManager->getValue($action->getActiveSwitchParameter())
             && $oOrderManager->getValue('blActionOrderPdfSendAttach')
             && $oPDFHandler->canGenerateOxidPdf()
         ) {
@@ -766,7 +826,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         /** @var d3ordermanager_action_getpdfdocuments $action */
         $action = d3GetModCfgDIC()->get(d3ordermanager_action_getpdfdocuments::class);
 
-        if ($oOrderManager->getValue($action->sActionActiveSwitch)
+        if ($oOrderManager->getValue($action->getActiveSwitchParameter())
             && $oOrderManager->getValue('blActionOrderPdfDocumentSendAttach')
             && $oPDFHandler->canGeneratePdfDocuments()
         ) {
@@ -803,13 +863,14 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
      * add user history
      * @return Remark
      * @throws d3ParameterNotFoundException
-     * @throws \Exception
+     * @throws Exception
      */
     public function d3generateRemark() {
         $oRemark        = $this->d3GetRemark();
         $aRemarkContent = array(
             'oxtext'     => $this->d3getRemarkText(),
-            'oxparentid' => $this->oOrderManager->getCurrentItem()->getOrderUser()->getId(),
+            'oxparentid' => $this->oOrderManager->getCurrentItem()->getOrderUser()->getId() ? :
+                $this->oOrderManager->getCurrentItem()->getId(),
             'oxtype'     => 'd3om',
         );
         $oRemark->assign( $aRemarkContent );
@@ -833,5 +894,27 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
                $this->getAltBody()
            ]
         );
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function d3getOrderManagerDIContainer()
+    {
+        return ContainerFactory::getInstance()->getContainer();
+    }
+
+    /**
+     * @throws d3ordermanager_smartyException
+     */
+    protected function throwUnequalContentException()
+    {
+        d3GetModCfgDIC()->setParameter(
+            d3ordermanager_smartyException::class . '.args.message',
+            'empty mail content, possible file encoding error'
+        );
+        /** @var d3ordermanager_smartyException $e */
+        $e = d3GetModCfgDIC()->get( d3ordermanager_smartyException::class );
+        throw $e;
     }
 }
