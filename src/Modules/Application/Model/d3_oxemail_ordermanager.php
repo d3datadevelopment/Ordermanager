@@ -86,7 +86,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
     /**
      * @return TemplateEngineInterface
      */
-    protected function _getTemplateEngine(): TemplateEngineInterface
+    protected function _d3GetOrderManagerTemplateEngine(): TemplateEngineInterface
     {
         /** @var TemplateRendererInterface $renderer */
         $renderer = $this->d3getOrderManagerDIContainer()
@@ -121,7 +121,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
             [d3GetModCfgDIC()->get(d3ordermanager_renderererrorhandler::class), 'd3HandleTemplateEngineErrors']
         );
         /** @var LegacySmartyEngine $templateEngine */
-        $templateEngine = $this->_getTemplateEngine();
+        $templateEngine = $this->_d3GetOrderManagerTemplateEngine();
         foreach ($this->getViewData() as $key => $value) {
             $templateEngine->addGlobal($key, $value);
         }
@@ -235,7 +235,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         $this->setBody($content);
 
         if ((bool) strlen($content) && false === (bool) strlen($this->getBody())) {
-            $this->throwUnequalContentException();
+            $this->d3OrderManagerThrowUnequalContentException();
         }
     }
 
@@ -249,7 +249,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         $this->setAltBody($content);
 
         if ((bool) strlen($content) && false === (bool) strlen($this->getAltBody())) {
-            $this->throwUnequalContentException();
+            $this->d3OrderManagerThrowUnequalContentException();
         }
     }
 
@@ -263,7 +263,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         $this->setSubject($content);
 
         if ((bool) strlen($content) && false === (bool) strlen($this->getSubject())) {
-            $this->throwUnequalContentException();
+            $this->d3OrderManagerThrowUnequalContentException();
         }
     }
 
@@ -930,7 +930,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
     /**
      * @throws d3ordermanager_smartyException
      */
-    protected function throwUnequalContentException() : void
+    protected function d3OrderManagerThrowUnequalContentException() : void
     {
         d3GetModCfgDIC()->setParameter(
             d3ordermanager_smartyException::class . '.args.message',

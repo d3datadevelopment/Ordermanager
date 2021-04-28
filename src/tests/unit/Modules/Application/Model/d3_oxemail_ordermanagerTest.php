@@ -102,7 +102,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::_getTemplateEngine
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::_d3GetOrderManagerTemplateEngine
      * @test
      * @throws ReflectionException
      */
@@ -112,7 +112,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             TemplateEngineInterface::class,
             $this->callMethod(
                 $this->_oModel,
-                '_getTemplateEngine'
+                '_d3GetOrderManagerTemplateEngine'
             )
         );
     }
@@ -175,7 +175,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock = $this->getMockBuilder(Email::class)
             ->setMethods([
                 '_getShop',
-                '_getTemplateEngine',
+                '_d3GetOrderManagerTemplateEngine',
                 '_setMailParams',
                 'setViewData',
                 '_processViewArray',
@@ -191,7 +191,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ])
             ->getMock();
         $oModelMock->method('_getShop')->willReturn($oShopMock);
-        $oModelMock->method('_getTemplateEngine')->willReturn($templateEngineMock);
+        $oModelMock->method('_d3GetOrderManagerTemplateEngine')->willReturn($templateEngineMock);
         $oModelMock->method('_setMailParams')->willReturn(true);
         $oModelMock->method('setViewData')->willReturn(true);
         $oModelMock->method('_processViewArray')->willReturn(true);
@@ -409,11 +409,11 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     {
         /** @var Email|MockObject $mailMock */
         $mailMock = $this->getMockBuilder(Email::class)
-            ->setMethods([$setMethod, $getMethod, 'throwUnequalContentException'])
+            ->setMethods([$setMethod, $getMethod, 'd3OrderManagerThrowUnequalContentException'])
             ->getMock();
         $mailMock->expects($this->atLeastOnce())->method($setMethod)->willReturn(true);
         $mailMock->method($getMethod)->willReturn($returnValue);
-        $mailMock->expects($this->exactly((int) $expectException))->method('throwUnequalContentException')->willReturn($returnValue);
+        $mailMock->expects($this->exactly((int) $expectException))->method('d3OrderManagerThrowUnequalContentException')->willReturn($returnValue);
 
         $this->_oModel = $mailMock;
 
@@ -3007,7 +3007,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::throwUnequalContentException
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::d3OrderManagerThrowUnequalContentException
      * @test
      * @throws ReflectionException
      */
@@ -3017,7 +3017,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         $this->callMethod(
             $this->_oModel,
-            'throwUnequalContentException'
+            'd3OrderManagerThrowUnequalContentException'
         );
     }
 }
