@@ -45,7 +45,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -58,7 +58,7 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->cleanTestData();
 

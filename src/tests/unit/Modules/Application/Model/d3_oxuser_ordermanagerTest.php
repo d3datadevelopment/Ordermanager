@@ -41,14 +41,14 @@ class d3_oxuser_ordermanagerTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->_oModel = d3GetModCfgDIC()->get('d3ox.ordermanager.'.User::class);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         parent::tearDown();
 

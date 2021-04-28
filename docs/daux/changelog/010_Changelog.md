@@ -2,7 +2,34 @@
 title: Changelog
 --- 
 
-## 4.4.2.0 - (2021-03-10)
+## 5.0.0.0 - (2021-04-27)
+
+### Added
+- installierbar in OXID 6.3.x
+
+### Changed
+- Tests angepasst
+
+### Fixed
+- Eingabekonvertierung bei Rabatt ändern Aktion optimiert
+
+---
+
+## 4.1.2.1 - (2021-04-27)
+
+### Added
+- installierbar in OXID 6.2.4
+
+### Changed
+- D3 Methoden in öffentlichen Klassen mit individuellen Namen versehen
+
+### Fixed
+- Syntaxfehler in Wochentagsbedingungsprüfung korrigiert
+- erweiterte Methoden für Kompatibilität mit Elternmethoden angepasst
+
+---
+
+## 4.1.2.0 - (2021-03-10)
 
 ** Hinweis für kleinere Versions-Upgrades: Es gibt einige rückwärts-inkompatible Änderungen an dieser Version. **
 

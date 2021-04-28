@@ -51,14 +51,14 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3ordermanager_response::class);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         parent::tearDown();
 
@@ -86,7 +86,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_startExecution',
                 'isBrowserCall'
             ])
@@ -109,7 +109,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_startExecution',
                 'isBrowserCall'
             ])
@@ -141,13 +141,13 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         /** @var d3ordermanager_requirementException|MockObject $exception */
         $exception = $this->getMockBuilder(d3ordermanager_requirementException::class)
             ->setConstructorArgs([$requirement])
-            ->setMethods(['debugOut', 'getMessage'])
+            ->onlyMethods(['debugOut', 'getMessage'])
             ->getMock();
         $exception->expects($this->once())->method('debugOut')->willReturn(true);
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_startExecution',
                 'isBrowserCall'
             ])
@@ -171,7 +171,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_startExecution',
                 'isBrowserCall'
             ])
@@ -197,7 +197,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_startExecution',
                 'isBrowserCall'
             ])
@@ -220,7 +220,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods(['_startExecution'])
+            ->onlyMethods(['_startExecution'])
             ->getMock();
         $oControllerMock->expects($this->once())->method('_startExecution')->willReturn(true);
 
@@ -241,17 +241,15 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3log|MockObject $oLogMock */
         $oLogMock = $this->getMockBuilder(d3log::class)
-            ->setMethods(['log'])
+            ->onlyMethods(['log'])
             ->getMock();
         $oLogMock->method('log')->willReturn(true);
 
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods([
-                'd3getLog',
-                'setValue',
-                'saveNoLicenseRefresh'
-            ])
+            ->addMethods(['d3getLog'])
+            ->addMethods(['setValue'])
+            ->addMethods(['saveNoLicenseRefresh'])
             ->getMock();
         $oModCfgMock->method('d3getLog')->willReturn($oLogMock);
         $oModCfgMock->method('setValue')->willReturn(true);
@@ -259,7 +257,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_getSet',
                 '_checkUnavailableCronjob',
                 '_getCronTimestampVarName',
@@ -267,7 +265,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->getMock();
         $oControllerMock->method('_getSet')->willReturn($oModCfgMock);
         $oControllerMock->method('_checkUnavailableCronjob')->willReturn(null);
-        $oControllerMock->method('_getCronTimestampVarName')->willReturn(true);
+        $oControllerMock->method('_getCronTimestampVarName')->willReturn('varName');
         $oControllerMock->expects($this->once())->method('_startJobs')->willReturn(true);
 
         $this->_oController = $oControllerMock;
@@ -287,17 +285,15 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3log|MockObject $oLogMock */
         $oLogMock = $this->getMockBuilder(d3log::class)
-            ->setMethods(['log'])
+            ->onlyMethods(['log'])
             ->getMock();
         $oLogMock->method('log')->willReturn(true);
 
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods([
-                'd3getLog',
-                'setValue',
-                'saveNoLicenseRefresh'
-            ])
+            ->addMethods(['d3getLog'])
+            ->addMethods(['setValue'])
+            ->addMethods(['saveNoLicenseRefresh'])
             ->getMock();
         $oModCfgMock->method('d3getLog')->willReturn($oLogMock);
         $oModCfgMock->method('setValue')->willReturn(true);
@@ -305,7 +301,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_getSet',
                 '_checkUnavailableCronjob',
                 '_getCronTimestampVarName',
@@ -313,7 +309,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->getMock();
         $oControllerMock->method('_getSet')->willReturn($oModCfgMock);
         $oControllerMock->method('_checkUnavailableCronjob')->will($this->returnCallback(array($this, 'unavailableCronjobCallback')));
-        $oControllerMock->method('_getCronTimestampVarName')->willReturn(true);
+        $oControllerMock->method('_getCronTimestampVarName')->willReturn('varName');
         $oControllerMock->expects($this->never())->method('_startJobs')->willReturn(true);
 
         $this->_oController = $oControllerMock;
@@ -405,15 +401,15 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3log|MockObject $oLogMock */
         $oLogMock = $this->getMockBuilder(d3log::class)
-            ->setMethods(['log'])
+            ->onlyMethods(['log'])
             ->getMock();
         $oLogMock->method('log')->willReturn(true);
 
         /** @var d3ordermanager|MockObject $oManagerMock */
         $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods([
-                'getId',
+            ->onlyMethods([
                 'd3GetLog',
+                'getId',
                 'load'
             ])
             ->getMock();
@@ -423,7 +419,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
         $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager_execute::class)
-            ->setMethods([
+            ->onlyMethods([
                 'setManager',
                 'startJobExecution',
                 'finishJobExecution'
@@ -436,7 +432,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanagerlist|MockObject $oListMock */
         $oListMock = $this->getMockBuilder(d3ordermanagerlist::class)
-            ->setMethods([
+            ->onlyMethods([
                 'setCronJobId',
                 'setCustomSorting',
                 'selectString'
@@ -451,7 +447,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getManagerList',
                 'getManager',
                 'getManagerExecute'
@@ -488,7 +484,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['getValue'])
+            ->addMethods(['getValue'])
             ->getMock();
         $map = [
             ['sCronPassword', ''],
@@ -497,13 +493,13 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager|MockObject $oManagerMock */
         $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['getBaseCronPW'])
+            ->onlyMethods(['getBaseCronPW'])
             ->getMock();
         $oManagerMock->method('getBaseCronPW')->willReturn('sBaseCronPw');
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_getSet',
                 'hasValidAccessKey',
                 'getManager'
@@ -534,7 +530,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['getValue'])
+            ->addMethods(['getValue'])
             ->getMock();
         $map = [
             ['sCronPassword', 'sRegCronPw'],
@@ -543,13 +539,13 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager|MockObject $oManagerMock */
         $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['getBaseCronPW'])
+            ->onlyMethods(['getBaseCronPW'])
             ->getMock();
         $oManagerMock->method('getBaseCronPW')->willReturn('sBaseCronPw');
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_getSet',
                 'hasValidAccessKey',
                 'getManager'
@@ -645,7 +641,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods(['isBrowserCall'])
+            ->onlyMethods(['isBrowserCall'])
             ->getMock();
         $oControllerMock->method('isBrowserCall')->willReturn(true);
 
@@ -669,7 +665,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods(['isBrowserCall'])
+            ->onlyMethods(['isBrowserCall'])
             ->getMock();
         $oControllerMock->method('isBrowserCall')->willReturn(true);
 
@@ -693,7 +689,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods(['isBrowserCall'])
+            ->onlyMethods(['isBrowserCall'])
             ->getMock();
         $oControllerMock->method('isBrowserCall')->willReturn(false);
 
@@ -717,19 +713,19 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_cronUnavailableException|MockObject $oExceptionMock */
         $oExceptionMock = $this->getMockBuilder(d3ordermanager_cronUnavailableException::class)
-            ->setMethods(['debugOut'])
+            ->onlyMethods(['debugOut'])
             ->getMock();
         $oExceptionMock->method('debugOut')->willReturn(true);
 
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['isActive'])
+            ->addMethods(['isActive'])
             ->getMock();
         $oModCfgMock->method('isActive')->willReturn(false);
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_checkAccessKey',
                 'getCronUnavailableException',
                 '_getSet'
@@ -755,19 +751,19 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_cronUnavailableException|MockObject $oExceptionMock */
         $oExceptionMock = $this->getMockBuilder(d3ordermanager_cronUnavailableException::class)
-            ->setMethods(['debugOut'])
+            ->onlyMethods(['debugOut'])
             ->getMock();
         $oExceptionMock->method('debugOut')->willReturn(true);
 
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['isActive'])
+            ->addMethods(['isActive'])
             ->getMock();
         $oModCfgMock->method('isActive')->willReturn(true);
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_checkAccessKey',
                 'getCronUnavailableException',
                 '_getSet'
@@ -793,20 +789,20 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_cronUnavailableException|MockObject $oExceptionMock */
         $oExceptionMock = $this->getMockBuilder(d3ordermanager_cronUnavailableException::class)
-            ->setMethods(['debugOut'])
+            ->onlyMethods(['debugOut'])
             ->getMock();
         $oExceptionMock->method('debugOut')->willReturn(true);
 
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['isActive', 'getValue'])
+            ->addMethods(['isActive', 'getValue'])
             ->getMock();
         $oModCfgMock->method('isActive')->willReturn(true);
         $oModCfgMock->method('getValue')->willReturn(false);
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_checkAccessKey',
                 'getCronUnavailableException',
                 '_getSet'
@@ -833,24 +829,25 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_cronUnavailableException|MockObject $oExceptionMock */
         $oExceptionMock = $this->getMockBuilder(d3ordermanager_cronUnavailableException::class)
-            ->setMethods(['debugOut'])
+            ->onlyMethods(['debugOut'])
             ->getMock();
         $oExceptionMock->method('debugOut')->willReturn(true);
 
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['isActive', 'getValue'])
+            ->addMethods(['isActive', 'getValue'])
             ->getMock();
         $oModCfgMock->expects($this->any())->method('isActive')->willReturn(true);
         $oModCfgMock->expects($this->any())->method('getValue')->willReturn(true);
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->addMethods(['_checkDisabledCronjob'])
+            ->onlyMethods([
                 '_checkAccessKey',
                 'getCronUnavailableException',
-                '_getSet',
-                '_checkDisabledCronjob'])
+                '_getSet'
+            ])
             ->getMock();
         $oControllerMock->expects($this->any())->method('_checkAccessKey')->willReturn(true);
         $oControllerMock->method('getCronUnavailableException')->willReturn($oExceptionMock);
@@ -915,13 +912,13 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods(['_getCronJobIdParameter'])
+            ->onlyMethods(['_getCronJobIdParameter'])
             ->getMock();
         $oControllerMock->expects($this->any())->method('_getCronJobIdParameter')->willReturn(false);
 
         $this->_oController = $oControllerMock;
 
-        $this->assertContains('Timestamp', $this->callMethod($this->_oController, '_getCronTimestampVarName'));
+        $this->assertStringContainsStringIgnoringCase('Timestamp', $this->callMethod($this->_oController, '_getCronTimestampVarName'));
     }
 
     /**
@@ -933,15 +930,15 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods(['_getCronJobIdParameter'])
+            ->onlyMethods(['_getCronJobIdParameter'])
             ->getMock();
         $oControllerMock->expects($this->any())->method('_getCronJobIdParameter')->willReturn('testJobId');
 
         $this->_oController = $oControllerMock;
 
         $sReturn = $this->callMethod($this->_oController, '_getCronTimestampVarName');
-        $this->assertContains('Timestamp', $sReturn);
-        $this->assertContains('testJobId', $sReturn);
+        $this->assertStringContainsStringIgnoringCase('Timestamp', $sReturn);
+        $this->assertStringContainsStringIgnoringCase('testJobId', $sReturn);
     }
 
     /**
@@ -955,7 +952,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
 
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['getValue'])
+            ->addMethods(['getValue'])
             ->getMock();
         $map = [
             ['tsVarName', $testValue]
@@ -964,7 +961,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_getCronTimestampVarName',
                 '_getSet'
             ])
@@ -991,13 +988,13 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     {
         /** @var Language|MockObject $oLangMock */
         $oLangMock = $this->getMockBuilder(Language::class)
-            ->setMethods(['translateString'])
+            ->onlyMethods(['translateString'])
             ->getMock();
         $oLangMock->method('translateString')->willReturn('%1$s -- %2$s');
 
         /** @var d3ordermanager|MockObject $oManagerMock */
         $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['getAvailableCronjobIds'])
+            ->onlyMethods(['getAvailableCronjobIds'])
             ->getMock();
         $oManagerMock->method('getAvailableCronjobIds')->willReturn(
             [
@@ -1018,7 +1015,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_response|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
-            ->setMethods([
+            ->onlyMethods([
                 '_getCronJobIdParameter',
                 'getManager',
                 'getLastExecDate',

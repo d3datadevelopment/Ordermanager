@@ -43,14 +43,14 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_mall::class);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         parent::tearDown();
 
@@ -93,13 +93,13 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['loadInLang'])
+            ->onlyMethods(['loadInLang'])
             ->getMock();
         $oProfileMock->expects($this->once())->method('loadInLang')->willReturn(true);
 
         /** @var d3_cfg_ordermanageritem_mall|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_mall::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getProfile',
                 '_d3LoadInOtherLang',
                 '_isSetOxid'
@@ -128,13 +128,13 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['loadInLang'])
+            ->onlyMethods(['loadInLang'])
             ->getMock();
         $oProfileMock->expects($this->never())->method('loadInLang')->willReturn(true);
 
         /** @var d3_cfg_ordermanageritem_mall|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_mall::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getProfile',
                 '_d3LoadInOtherLang',
                 '_isSetOxid'
@@ -159,8 +159,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
      */
     public function canGetUserMessages()
     {
-        $this->assertInternalType(
-            'array',
+        $this->assertIsArray(
             $this->callMethod($this->_oController, 'getUserMessages')
         );
     }
@@ -187,7 +186,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3filesystem|MockObject $oFileSystemMock */
         $oFileSystemMock = $this->getMockBuilder(d3filesystem::class)
-            ->setMethods([
+            ->onlyMethods([
                 'unprefixedslashit',
                 'splitFilename'
             ])
@@ -200,19 +199,19 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
 
         /** @var Language|MockObject $oLangMock */
         $oLangMock = $this->getMockBuilder(Language::class)
-            ->setMethods(['TranslateString'])
+            ->onlyMethods(['TranslateString'])
             ->getMock();
         $oLangMock->method('TranslateString')->willReturn('modulepath');
 
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['getHelpURL'])
+            ->addMethods(['getHelpURL'])
             ->getMock();
         $oModCfgMock->method('getHelpURL')->willReturn('https://faq.d3data.de/module/');
 
         /** @var d3_cfg_ordermanageritem_mall|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_mall::class)
-            ->setMethods([
+            ->onlyMethods([
                 'd3GetSet',
                 'getLang'
             ])
@@ -239,7 +238,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3filesystem|MockObject $oFileSystemMock */
         $oFileSystemMock = $this->getMockBuilder(d3filesystem::class)
-            ->setMethods(['splitFilename'])
+            ->onlyMethods(['splitFilename'])
             ->getMock();
         $oFileSystemMock->method('splitFilename')->willReturn(
             array('name' => 'filename', 'ext' => '')
@@ -249,7 +248,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3str|MockObject $oD3StrMock */
         $oD3StrMock = $this->getMockBuilder(d3str::class)
-            ->setMethods([
+            ->onlyMethods([
                 'unprefixedslashit',
                 'trailingslashit'
             ])
@@ -261,19 +260,19 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
 
         /** @var Language|MockObject $oLangMock */
         $oLangMock = $this->getMockBuilder(Language::class)
-            ->setMethods(['TranslateString'])
+            ->onlyMethods(['TranslateString'])
             ->getMock();
         $oLangMock->method('TranslateString')->willReturn('modulepath');
 
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['getHelpURL'])
+            ->addMethods(['getHelpURL'])
             ->getMock();
         $oModCfgMock->method('getHelpURL')->willReturn('https://faq.d3data.de/module/');
 
         /** @var d3_cfg_ordermanageritem_mall|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_mall::class)
-            ->setMethods([
+            ->onlyMethods([
                 'd3GetSet',
                 'getLang'
             ])
@@ -320,8 +319,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
      */
     public function naviItemshasRightType()
     {
-        $this->assertInternalType(
-            'array',
+        $this->assertIsArray(
             $this->callMethod($this->_oController, 'getNaviItems')
         );
     }
@@ -333,8 +331,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
      */
     public function menuItemTitleHasRightType()
     {
-        $this->assertInternalType(
-            'string',
+        $this->assertIsString(
             $this->callMethod($this->_oController, 'd3GetMenuItemTitle')
         );
     }
@@ -346,8 +343,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
      */
     public function menuSubItemTitleHasRightType()
     {
-        $this->assertInternalType(
-            'string',
+        $this->assertIsString(
             $this->callMethod($this->_oController, 'd3GetMenuSubItemTitle')
         );
     }
@@ -388,7 +384,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getAvailableInLangs',
                 'loadInLang'
             ])

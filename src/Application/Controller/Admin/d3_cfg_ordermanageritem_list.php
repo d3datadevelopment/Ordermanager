@@ -20,6 +20,7 @@ declare(strict_types = 1);
 namespace D3\Ordermanager\Application\Controller\Admin;
 
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_list;
+use D3\ModCfg\Application\Model\Configuration\d3modprofile;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist as ManagerList;
 use OxidEsales\Eshop\Core\TableViewNameGenerator;
@@ -40,12 +41,12 @@ class d3_cfg_ordermanageritem_list extends d3_cfg_mod_list
     {
         $aWhere = parent::buildWhere();
 
-        $baseObject = $this->getItemListBaseObject();
+        $baseObject = oxNew(d3modprofile::class);
         foreach ($aWhere as $key => $value) {
             unset($aWhere[$key]);
             $aWhere[str_replace(
                 oxNew(TableViewNameGenerator::class)->getViewName($baseObject->getCoreTableName()),
-                $baseObject->getViewName(),
+                oxNew(TableViewNameGenerator::class)->getViewName($baseObject->getCoreTableName(), -1),
                 $key
             )] = $value;
         }

@@ -43,7 +43,7 @@ class requirementInvoiceNoTest extends d3OrdermanagerRequirementIntegrationTestC
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -55,7 +55,7 @@ class requirementInvoiceNoTest extends d3OrdermanagerRequirementIntegrationTestC
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->cleanTestData();
 

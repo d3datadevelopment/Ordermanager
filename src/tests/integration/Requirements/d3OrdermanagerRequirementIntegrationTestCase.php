@@ -36,7 +36,7 @@ abstract class d3OrdermanagerRequirementIntegrationTestCase extends d3Integratio
     {
         /** @var d3ordermanager|MockObject $oManager */
         $oManager = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['d3getLog'])
+            ->onlyMethods(['d3getLog'])
             ->getMock();
         $oManager->method('d3getLog')->willReturn($this->getD3LogMock());
         $oManager->load($sManagerId);

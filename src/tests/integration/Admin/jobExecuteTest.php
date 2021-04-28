@@ -47,7 +47,7 @@ class jobExecuteTest extends d3IntegrationTestCase
     public $dCurrentValue = 1.23;
     public $dExpectedValue = 2.34;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -287,8 +287,7 @@ class jobExecuteTest extends d3IntegrationTestCase
             'execChangedContents'
         );
 
-        $this->assertInternalType(
-            'array',
+        $this->assertIsArray(
             $this->callMethod(
                 $this->_oController,
                 'getViewDataElement',
@@ -318,8 +317,7 @@ class jobExecuteTest extends d3IntegrationTestCase
 
         $this->getConfiguredManager()->save();
 
-        $this->assertInternalType(
-            'array',
+        $this->assertIsArray(
             $this->callMethod(
                 $this->_oController,
                 'getViewDataElement',

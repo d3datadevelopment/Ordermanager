@@ -44,7 +44,7 @@ class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegr
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -56,7 +56,7 @@ class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegr
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->cleanTestData();
 
@@ -148,7 +148,7 @@ class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegr
 
         /** @var ListModel|MockObject $oListMock */
         $oListMock = $this->getMockBuilder(ListModel::class)
-            ->setMethods(['testChangeOrderList'])
+            ->addMethods(['testChangeOrderList'])
             ->getMock();
         $oListMock->expects($this->once())->method('testChangeOrderList')->willReturn(null);
         d3GetModCfgDIC()->set('d3ox.ordermanager.'.ListModel::class, $oListMock);

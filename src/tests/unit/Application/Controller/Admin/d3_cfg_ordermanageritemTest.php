@@ -38,7 +38,7 @@ class d3_cfg_ordermanageritemTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -47,7 +47,7 @@ class d3_cfg_ordermanageritemTest extends d3OrdermanagerUnitTestCase
         $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem::class);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         parent::tearDown();
 
@@ -61,7 +61,7 @@ class d3_cfg_ordermanageritemTest extends d3OrdermanagerUnitTestCase
      */
     public function renderPass()
     {
-        $this->assertContains(
+        $this->assertStringContainsStringIgnoringCase(
             '.tpl',
             $this->callMethod($this->_oController, 'render')
         );

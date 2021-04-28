@@ -38,14 +38,14 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_main::class);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         parent::tearDown();
 
@@ -59,7 +59,7 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
      */
     public function renderPass()
     {
-        $this->assertContains(
+        $this->assertStringContainsStringIgnoringCase(
             '.tpl',
             $this->callMethod($this->_oController, 'render')
         );
@@ -78,7 +78,7 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_cfg_ordermanageritem_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_main::class)
-            ->setMethods(['fixCronjobId'])
+            ->onlyMethods(['fixCronjobId'])
             ->getMock();
         $oControllerMock->method('fixCronjobId')->willReturn('newCjId');
 
@@ -105,7 +105,7 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_cfg_ordermanageritem_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_main::class)
-            ->setMethods(['fixCronjobId'])
+            ->onlyMethods(['fixCronjobId'])
             ->getMock();
         $oControllerMock->method('fixCronjobId')->willReturn('newCjId');
 

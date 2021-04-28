@@ -53,7 +53,7 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -65,7 +65,7 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->cleanTestData();
 
@@ -197,7 +197,7 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
 
         /** @var Language|MockObject $oLangMock */
         $oLangMock = $this->getMockBuilder(Language::class)
-            ->setMethods(['getLanguageArray'])
+            ->onlyMethods(['getLanguageArray'])
             ->getMock();
         $oLangMock->method('getLanguageArray')->willReturn($aLangs);
 
@@ -251,7 +251,7 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
 
         /** @var Language|MockObject $oLangMock */
         $oLangMock = $this->getMockBuilder(Language::class)
-            ->setMethods(['getLanguageArray'])
+            ->onlyMethods(['getLanguageArray'])
             ->getMock();
         $oLangMock->method('getLanguageArray')->willReturn($aLangs);
 

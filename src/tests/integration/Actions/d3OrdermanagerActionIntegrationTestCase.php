@@ -57,7 +57,7 @@ abstract class d3OrdermanagerActionIntegrationTestCase extends d3IntegrationTest
     {
         /** @var d3ordermanager_listgenerator|MockObject $oListGeneratorMock */
         $oListGeneratorMock = $this->getMockBuilder(d3ordermanager_listgenerator::class)
-            ->setMethods(['getConcernedItems'])
+            ->onlyMethods(['getConcernedItems'])
             ->setConstructorArgs([$oManager])
             ->getMock();
         $oListGeneratorMock->method('getConcernedItems')->willReturn($this->getFilledResultList());
@@ -75,7 +75,7 @@ abstract class d3OrdermanagerActionIntegrationTestCase extends d3IntegrationTest
     {
         /** @var d3ordermanager_toorderassignment|MockObject $oExecute */
         $oAssignmentMock = $this->getMockBuilder(d3ordermanager_toorderassignment::class)
-            ->setMethods(['setAssignment'])
+            ->onlyMethods(['setAssignment'])
             ->setConstructorArgs([$oManager])
             ->getMock();
         $oAssignmentMock->method('setAssignment')->willReturn(true);
@@ -91,7 +91,7 @@ abstract class d3OrdermanagerActionIntegrationTestCase extends d3IntegrationTest
     {
         /** @var d3ordermanager_execute|MockObject $oExecute */
         $oExecute = $this->getMockBuilder(d3ordermanager_execute::class)
-            ->setMethods(['getManagerAssignmentInstance'])
+            ->onlyMethods(['getManagerAssignmentInstance'])
             ->setConstructorArgs([$oConfiguredManager])
             ->getMock();
         $oExecute->method('getManagerAssignmentInstance')->willReturn($this->getManagerAssignmentMock($oExecute->getManager()));

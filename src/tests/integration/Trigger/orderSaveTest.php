@@ -157,7 +157,7 @@ class orderSaveTest extends d3IntegrationTestCase
         $manager = $this->getConfiguredManager();
         /** @var d3ordermanagerlist|MockObject $managerListMock */
         $managerListMock = $this->getMockBuilder(d3ordermanagerlist::class)
-            ->setMethods(['d3GetOrderSaveTriggeredManagerTasks'])
+            ->onlyMethods(['d3GetOrderSaveTriggeredManagerTasks'])
             ->getMock();
         $managerListMock->offsetSet($manager->getId(), $manager);
         $managerListMock->method('d3GetOrderSaveTriggeredManagerTasks')->willReturnSelf();
@@ -205,7 +205,7 @@ class orderSaveTest extends d3IntegrationTestCase
 
         /** @var d3ordermanagerlist|MockObject $managerListMock */
         $managerListMock = $this->getMockBuilder(d3ordermanagerlist::class)
-            ->setMethods(['d3GetOrderSaveTriggeredManagerTasks'])
+            ->onlyMethods(['d3GetOrderSaveTriggeredManagerTasks'])
             ->getMock();
         $managerListMock->offsetSet($manager->getId(), $manager);
         $managerListMock->method('d3GetOrderSaveTriggeredManagerTasks')->willReturnSelf();
@@ -253,7 +253,7 @@ class orderSaveTest extends d3IntegrationTestCase
 
         /** @var d3ordermanagerlist|MockObject $managerListMock */
         $managerListMock = $this->getMockBuilder(d3ordermanagerlist::class)
-            ->setMethods(['d3GetOrderSaveTriggeredManagerTasks'])
+            ->onlyMethods(['d3GetOrderSaveTriggeredManagerTasks'])
             ->getMock();
         $managerListMock->method('d3GetOrderSaveTriggeredManagerTasks')->willReturnSelf();
 
@@ -290,7 +290,7 @@ class orderSaveTest extends d3IntegrationTestCase
 
         /** @var d3ordermanagerlist|MockObject $managerListMock */
         $managerListMock = $this->getMockBuilder(d3ordermanagerlist::class)
-            ->setMethods(['d3GetOrderSaveTriggeredManagerTasks'])
+            ->onlyMethods(['d3GetOrderSaveTriggeredManagerTasks'])
             ->getMock();
         $managerListMock->method('d3GetOrderSaveTriggeredManagerTasks')->willReturnSelf();
 

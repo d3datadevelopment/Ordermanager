@@ -45,7 +45,7 @@ class requirementTransactionFilterTest extends d3OrdermanagerRequirementIntegrat
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -57,7 +57,7 @@ class requirementTransactionFilterTest extends d3OrdermanagerRequirementIntegrat
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->cleanTestData();
 

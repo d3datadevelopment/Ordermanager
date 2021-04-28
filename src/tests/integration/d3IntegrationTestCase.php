@@ -40,7 +40,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
     /**
      * Set up fixture.
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -52,7 +52,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
     /**
      * Tear down fixture.
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->cleanTestData();
 
@@ -267,7 +267,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
     {
         /** @var d3log|MockObject $oD3LogMock */
         $oD3LogMock = $this->getMockBuilder(d3log::class)
-            ->setMethods(['log'])
+            ->onlyMethods(['log'])
             ->getMock();
         $oD3LogMock->method('log')->willReturn(true);
 
@@ -283,7 +283,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
     {
         /** @var Manager|MockObject $oManager */
         $oManager = $this->getMockBuilder(Manager::class)
-            ->setMethods([
+            ->onlyMethods([
                 'd3getLog',
                 'getListGenerator',
                 'getRecalculateFlag'

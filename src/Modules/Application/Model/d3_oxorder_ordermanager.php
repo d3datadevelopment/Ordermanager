@@ -255,7 +255,7 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
      * @throws d3_cfg_mod_exception
      * @throws Exception
      */
-    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false): int
+    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)//: int // function declaration must be compatible with parent function
     {
         $iRet = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
 

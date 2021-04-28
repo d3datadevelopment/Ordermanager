@@ -45,14 +45,14 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanagerset_main::class);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         parent::tearDown();
 
@@ -93,13 +93,13 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager|MockObject $oManagerMock */
         $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['getBaseCronPW'])
+            ->onlyMethods(['getBaseCronPW'])
             ->getMock();
         $oManagerMock->method('getBaseCronPW')->willReturn('testBaseCronPw');
 
         /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
-            ->setMethods(['getManager'])
+            ->onlyMethods(['getManager'])
             ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
 
@@ -146,7 +146,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3_cfg_mod|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['getValue'])
+            ->addMethods(['getValue'])
             ->getMock();
         $map = [
             ['sCronPassword', 'testCronPassword']
@@ -155,7 +155,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3str|MockObject $oD3StrMock */
         $oD3StrMock = $this->getMockBuilder(d3str::class)
-            ->setMethods(['generateParameterUrl'])
+            ->onlyMethods(['generateParameterUrl'])
             ->getMock();
         $oD3StrMock->method('generateParameterUrl')->with(
             $this->stringContains('http://www.example.net/modules/public/d3_ordermanager_cron.php'),
@@ -167,7 +167,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var ViewConfig|MockObject $oViewConfMock */
         $oViewConfMock = $this->getMockBuilder(ViewConfig::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getModuleUrl',
                 'getActiveShopId'
             ])
@@ -177,7 +177,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getViewConfig',
                 'd3GetSet',
                 'getBaseCronPW',
@@ -205,7 +205,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3_cfg_mod|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['getValue'])
+            ->addMethods(['getValue'])
             ->getMock();
         $map = [
             ['sCronPassword', '']
@@ -214,7 +214,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3str|MockObject $oD3StrMock */
         $oD3StrMock = $this->getMockBuilder(d3str::class)
-            ->setMethods(['generateParameterUrl'])
+            ->onlyMethods(['generateParameterUrl'])
             ->getMock();
         $oD3StrMock->method('generateParameterUrl')->with(
             $this->stringContains('http://www.example.net/modules/public/d3_ordermanager_cron.php'),
@@ -228,7 +228,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var ViewConfig|MockObject $oViewConfMock */
         $oViewConfMock = $this->getMockBuilder(ViewConfig::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getModuleUrl',
                 'getActiveShopId'
             ])
@@ -238,7 +238,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getViewConfig',
                 'd3GetSet',
                 'getBaseCronPW',
@@ -266,7 +266,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3_cfg_mod|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['getValue'])
+            ->addMethods(['getValue'])
             ->getMock();
         $map = [
             ['sCronPassword', '']
@@ -275,7 +275,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3str|MockObject $oD3StrMock */
         $oD3StrMock = $this->getMockBuilder(d3str::class)
-            ->setMethods(['generateParameterUrl'])
+            ->onlyMethods(['generateParameterUrl'])
             ->getMock();
         $oD3StrMock->method('generateParameterUrl')->with(
             $this->stringContains('http://www.example.net/modules/public/d3_ordermanager_cron.php'),
@@ -291,7 +291,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var ViewConfig|MockObject $oViewConfMock */
         $oViewConfMock = $this->getMockBuilder(ViewConfig::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getModuleUrl',
                 'getActiveShopId'
             ])
@@ -301,7 +301,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getViewConfig',
                 'd3GetSet',
                 'getBaseCronPW',
@@ -329,13 +329,13 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     {
         /** @var ViewConfig|MockObject $oViewConfMock */
         $oViewConfMock = $this->getMockBuilder(ViewConfig::class)
-            ->setMethods(['getActiveShopId'])
+            ->onlyMethods(['getActiveShopId'])
             ->getMock();
         $oViewConfMock->method('getActiveShopId')->willReturn(1);
 
         /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
-            ->setMethods(['getViewConfig'])
+            ->onlyMethods(['getViewConfig'])
             ->getMock();
         $oControllerMock->method('getViewConfig')->willReturn($oViewConfMock);
 
@@ -358,13 +358,13 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var ViewConfig|MockObject $oViewConfMock */
         $oViewConfMock = $this->getMockBuilder(ViewConfig::class)
-            ->setMethods(['getActiveShopId'])
+            ->onlyMethods(['getActiveShopId'])
             ->getMock();
         $oViewConfMock->method('getActiveShopId')->willReturn(1);
 
         /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
-            ->setMethods(['getViewConfig'])
+            ->onlyMethods(['getViewConfig'])
             ->getMock();
         $oControllerMock->method('getViewConfig')->willReturn($oViewConfMock);
 
@@ -385,13 +385,13 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager|MockObject $oManagerMock */
         $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['getAvailableCronjobIds'])
+            ->onlyMethods(['getAvailableCronjobIds'])
             ->getMock();
         $oManagerMock->method('getAvailableCronjobIds')->willReturn(array(1,5,8,'foobar'));
 
         /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
-            ->setMethods(['getManager'])
+            ->onlyMethods(['getManager'])
             ->getMock();
         $oControllerMock->method('getManager')->willReturn($oManagerMock);
 
@@ -416,8 +416,8 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
         );
 
         $sDesc = $this->callMethod($this->_oController, 'getCJIDDesc', array($aCjId));
-        $this->assertContains('testid', $sDesc);
-        $this->assertContains('1', $sDesc);
+        $this->assertStringContainsStringIgnoringCase('testid', $sDesc);
+        $this->assertStringContainsStringIgnoringCase('1', $sDesc);
         $this->assertTrue(strlen($sDesc) > 11);
     }
 
@@ -434,8 +434,8 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
         );
 
         $sDesc = $this->callMethod($this->_oController, 'getCJIDDesc', array($aCjId));
-        $this->assertContains('testid', $sDesc);
-        $this->assertContains('5', $sDesc);
+        $this->assertStringContainsStringIgnoringCase('testid', $sDesc);
+        $this->assertStringContainsStringIgnoringCase('5', $sDesc);
         $this->assertTrue(strlen($sDesc) > 11);
     }
 
@@ -461,7 +461,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
         $sVarName = $this->callMethod($this->_oController, 'getCronTimestampVarName', array('testid'));
 
         $this->assertTrue(strlen($sVarName) > 6);
-        $this->assertContains('testid', $sVarName);
+        $this->assertStringContainsStringIgnoringCase('testid', $sVarName);
     }
 
     /**
@@ -488,13 +488,13 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3filegeneratorcronsh|MockObject $oFileGeneratorCronShMock */
         $oFileGeneratorCronShMock = $this->getMockBuilder(d3filegeneratorcronsh::class)
-            ->setMethods(['getContentList'])
+            ->onlyMethods(['getContentList'])
             ->getMock();
         $oFileGeneratorCronShMock->method('getContentList')->willReturn($expected);
 
         /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
-            ->setMethods(['getFileGeneratorCronSh'])
+            ->onlyMethods(['getFileGeneratorCronSh'])
             ->getMock();
         $oControllerMock->method('getFileGeneratorCronSh')->willReturn($oFileGeneratorCronShMock);
 
@@ -543,19 +543,19 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ShopCompatibilityAdapterHandler|MockObject $oShopCompatibilityAdapterHandlerMock */
         $oShopCompatibilityAdapterHandlerMock = $this->getMockBuilder(d3ShopCompatibilityAdapterHandler::class)
-            ->setMethods(['call'])
+            ->onlyMethods(['call'])
             ->getMock();
         $oShopCompatibilityAdapterHandlerMock->method('call')->willReturnCallback(array($this, 'shopCompatHandlerCallback'));
 
         /** @var Shop|MockObject $oShopMock */
         $oShopMock = $this->getMockBuilder(Shop::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $oShopMock->method('getId')->willReturn('shopid');
 
         /** @var d3filegeneratorcronsh|MockObject $oFileGeneratorCronShMock */
         $oFileGeneratorCronShMock = $this->getMockBuilder(d3filegeneratorcronsh::class)
-            ->setMethods([
+            ->onlyMethods([
                 'setContentType',
                 'setScriptPath',
                 'setSortedParameterList',
@@ -570,7 +570,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_cfg_ordermanagerset_main|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getCompatibilityAdapterHandler',
                 'd3GetActiveShop',
                 'getFileGeneratorCronSh'

@@ -41,14 +41,14 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_settings::class);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         parent::tearDown();
 
@@ -74,8 +74,7 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
      */
     public function getItemFoldersReturnArray()
     {
-        $this->assertInternalType(
-            'array',
+        $this->assertIsArray(
             $this->callMethod($this->_oController, 'getItemFolders')
         );
     }
@@ -89,7 +88,7 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3_cfg_ordermanageritem_settings|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_settings::class)
-            ->setMethods(['_getObjectList'])
+            ->onlyMethods(['_getObjectList'])
             ->getMock();
         $oControllerMock->method('_getObjectList')->will($this->returnCallback(function ($arg1) {
             return $arg1;
@@ -112,9 +111,9 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     {
         /** @var BaseModel|MockObject $oBaseMock */
         $oBaseMock = $this->getMockBuilder(BaseModel::class)
-            ->setMethods([
+            ->addMethods(['setLanguage'])
+            ->onlyMethods([
                 'isMultilang',
-                'setLanguage',
                 'getSelectFields',
                 'getViewName'])
             ->getMock();
@@ -125,7 +124,7 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
 
         /** @var ListModel|MockObject $oListMock */
         $oListMock = $this->getMockBuilder(ListModel::class)
-            ->setMethods([
+            ->onlyMethods([
                 'selectString',
                 'getBaseObject'
             ])

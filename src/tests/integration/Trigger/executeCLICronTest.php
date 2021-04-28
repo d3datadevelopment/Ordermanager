@@ -58,7 +58,7 @@ class executeCLICronTest extends d3IntegrationTestCase
     public $dCurrentValue = 1.23;
     public $dExpectedValue = 2.34;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 

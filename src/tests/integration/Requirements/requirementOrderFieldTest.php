@@ -43,7 +43,7 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -56,7 +56,7 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->cleanTestData();
 

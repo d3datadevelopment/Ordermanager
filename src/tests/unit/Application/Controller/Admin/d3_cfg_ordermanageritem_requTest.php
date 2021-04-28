@@ -40,7 +40,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
      * setup basic requirements
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -65,7 +65,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     /**
      * @throws Exception
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         parent::tearDown();
 
@@ -87,14 +87,14 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $getValueMap = [['blCheckTrackcode_status', true]];
         $oProfileMock->method('getValue')->willReturnMap($getValueMap);
 
         /** @var d3_cfg_ordermanageritem_requ|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_requ::class)
-            ->setMethods(['getProfile'])
+            ->onlyMethods(['getProfile'])
             ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);
 
@@ -113,14 +113,14 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $getValueMap = [['blCheckDelivery_status', true]];
         $oProfileMock->method('getValue')->willReturnMap($getValueMap);
 
         /** @var d3_cfg_ordermanageritem_requ|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_requ::class)
-            ->setMethods(['getProfile'])
+            ->onlyMethods(['getProfile'])
             ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);
 
@@ -128,7 +128,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
 
         $this->callMethod($this->_oController, 'save');
         $aMissing = $this->_oController->getViewDataElement('missingRequValuesActions');
-        $this->assertInternalType('array', $aMissing);
+        $this->assertIsArray($aMissing);
         $this->assertCount(1, $aMissing);
         $this->assertContains('deliveryFilter', $aMissing);
     }
@@ -227,10 +227,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
             'getLanguageList'
         );
 
-        $this->assertInternalType(
-            "array",
-            $aList
-        );
+        $this->assertIsArray($aList);
         $this->assertTrue(count($aList) > 0);
     }
 
@@ -247,10 +244,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
             'getTransStatusList'
         );
 
-        $this->assertInternalType(
-            "array",
-            $aTransStatusList
-        );
+        $this->assertIsArray($aTransStatusList);
         $this->assertTrue(count($aTransStatusList) > 0);
     }
 
@@ -322,8 +316,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     public function canGetRequirementList()
     {
         $aRequList = $this->callMethod($this->_oController, 'getRequirementList');
-        $this->assertInternalType(
-            'array',
+        $this->assertIsArray(
             $aRequList
         );
         $this->assertTrue(count($aRequList) > 0);
@@ -340,19 +333,19 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_conf|MockObject $oManagerConfMock */
         $oManagerConfMock = $this->getMockBuilder(d3ordermanager_conf::class)
-            ->setMethods(['getGroupedRequirementIdList'])
+            ->onlyMethods(['getGroupedRequirementIdList'])
             ->getMock();
         $oManagerConfMock->method('getGroupedRequirementIdList')->willReturn([]);
 
         /** @var d3ordermanager|MockObject $oProfileMock */
         $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
-            ->setMethods(['getConfiguration'])
+            ->onlyMethods(['getConfiguration'])
             ->getMock();
         $oProfileMock->method('getConfiguration')->willReturn($oManagerConfMock);
 
         /** @var d3ordermanager_requirementgrouplist|MockObject $oRequGroupListMock */
         $oRequGroupListMock = $this->getMockBuilder(d3ordermanager_requirementgrouplist::class)
-            ->setMethods([
+            ->onlyMethods([
                 'setGroups',
                 'getGroupList'
             ])
@@ -363,7 +356,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_cfg_ordermanageritem_requ|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_requ::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getProfile',
                 'getRequirementGroupList'
             ])

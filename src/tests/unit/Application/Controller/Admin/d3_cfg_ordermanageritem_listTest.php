@@ -39,14 +39,14 @@ class d3_cfg_ordermanageritem_listTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_list::class);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         parent::tearDown();
 
@@ -62,7 +62,7 @@ class d3_cfg_ordermanageritem_listTest extends d3OrdermanagerUnitTestCase
     {
         /** @var d3_cfg_ordermanageritem_list|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_list::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getListFilter',
                 'getItemList'
             ])
@@ -83,7 +83,7 @@ class d3_cfg_ordermanageritem_listTest extends d3OrdermanagerUnitTestCase
 
         // key check
         $this->assertRegExp(
-            '@oxv_d3modprofile_(\d+_)?de.oxsort--oxv_d3modprofile_(\d+_)?de.oxtitle@is',
+            '@oxv_d3modprofile_(\d+).oxsort--oxv_d3modprofile_(\d+).oxtitle@is',
             implode('--', array_keys($return))
         );
 

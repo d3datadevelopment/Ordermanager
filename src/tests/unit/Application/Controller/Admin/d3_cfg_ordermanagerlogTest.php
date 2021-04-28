@@ -37,14 +37,14 @@ class d3_cfg_ordermanagerlogTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanagerlog::class);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         parent::tearDown();
 
@@ -58,8 +58,7 @@ class d3_cfg_ordermanagerlogTest extends d3OrdermanagerUnitTestCase
      */
     public function additionalUrlParamsPass()
     {
-        $this->assertInternalType(
-            'string',
+        $this->assertIsString(
             $this->callMethod($this->_oController, 'd3getAdditionalUrlParams')
         );
     }
@@ -72,7 +71,7 @@ class d3_cfg_ordermanagerlogTest extends d3OrdermanagerUnitTestCase
     public function additionalUrlParamsWithModIdPass()
     {
         $this->setValue($this->_oController, '_sModId', 'testid');
-        $this->assertContains(
+        $this->assertStringContainsStringIgnoringCase(
             'testid',
             $this->callMethod($this->_oController, 'd3getAdditionalUrlParams')
         );

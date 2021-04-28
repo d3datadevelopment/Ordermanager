@@ -93,7 +93,7 @@ abstract class d3OrdermanagerUnitTestCase extends d3ModCfgUnitTestCase
      * @throws DatabaseErrorException
      * @throws ExceptionAlias
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -102,7 +102,7 @@ abstract class d3OrdermanagerUnitTestCase extends d3ModCfgUnitTestCase
         $this->_setLicenseKeyBackup(d3_cfg_mod::get($this->sModId)->getFieldData('oxserial'));
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         parent::tearDown();
 
@@ -245,7 +245,7 @@ kkxd0c2',
     protected function getContainerMock($serviceName, $serviceMock)
     {
         $container = $this->getMockBuilder(ContainerInterface::class)
-                          ->setMethods(['get', 'has'])
+                          ->onlyMethods(['get', 'has'])
                           ->getMock();
         $container->expects($this->any())
                   ->method('get')
