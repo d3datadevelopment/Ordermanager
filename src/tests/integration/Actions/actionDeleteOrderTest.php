@@ -102,9 +102,7 @@ class actionDeleteOrderTest extends d3OrdermanagerActionIntegrationTestCase
     }
 
     /**
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     * @throws Exception
+     * @throws DBALException
      */
     public function cleanTestData()
     {

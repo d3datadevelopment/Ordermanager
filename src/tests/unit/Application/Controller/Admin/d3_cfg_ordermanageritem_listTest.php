@@ -73,10 +73,13 @@ class d3_cfg_ordermanageritem_listTest extends d3OrdermanagerUnitTestCase
 
         $this->_oController = $oControllerMock;
 
+        /** @var d3ordermanager $ordermanager */
+        $ordermanager = d3GetModCfgDIC()->get(d3ordermanager::class);
+
         $this->assertSame(
             array(
-                'd3modprofile.oxsort' => '%5000%',
-                'd3modprofile.oxtitle' => '%foo%'
+                $ordermanager->getViewName().'.oxsort' => '%5000%',
+                $ordermanager->getViewName().'.oxtitle' => '%foo%'
             ),
             $this->callMethod($this->_oController, 'buildWhere')
         );

@@ -476,17 +476,18 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::canGenerateOxidPdf
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
-    public function canGeneratePdfStatusPass()
+    public function canGenerateOxidPdfStatusPass()
     {
         /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
-            'canGeneratePdf',
+            'canGenerateOxidPdf',
         ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
-        $oPdfHandlerMock->method('canGeneratePdf')->willReturn(true);
+        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(true);
 
         /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
@@ -497,22 +498,23 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertTrue(
-            $this->callMethod($this->_oController, 'canGeneratePdf')
+            $this->callMethod($this->_oController, 'canGenerateOxidPdf')
         );
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::canGenerateOxidPdf
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
-    public function canGeneratePdfStatusDontPass()
+    public function canGenerateOxidPdfStatusDontPass()
     {
         /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
-            'canGeneratePdf',
+            'canGenerateOxidPdf',
         ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
-        $oPdfHandlerMock->method('canGeneratePdf')->willReturn(false);
+        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(false);
 
         /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
@@ -523,7 +525,61 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertFalse(
-            $this->callMethod($this->_oController, 'canGeneratePdf')
+            $this->callMethod($this->_oController, 'canGenerateOxidPdf')
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::canGeneratePdfDocuments
+     * @test
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function canGeneratePdfDocumentsStatusPass()
+    {
+        /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
+        $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
+            'canGeneratePdfDocuments',
+        ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
+        $oPdfHandlerMock->method('canGeneratePdfDocuments')->willReturn(true);
+
+        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
+            'getPdfHandler',
+        ));
+        $oControllerMock->method('getPdfHandler')->willReturn($oPdfHandlerMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertTrue(
+            $this->callMethod($this->_oController, 'canGeneratePdfDocuments')
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::canGeneratePdfDocuments
+     * @test
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function canGeneratePdfDocumentsStatusDontPass()
+    {
+        /** @var d3ordermanager_pdfhandler|PHPUnit_Framework_MockObject_MockObject $oPdfHandlerMock */
+        $oPdfHandlerMock = $this->getMock(d3ordermanager_pdfhandler::class, array(
+            'canGeneratePdfDocuments',
+        ), array(d3GetModCfgDIC()->get(d3ordermanager::class), d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class)));
+        $oPdfHandlerMock->method('canGeneratePdfDocuments')->willReturn(false);
+
+        /** @var d3_cfg_ordermanageritem_action|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3_cfg_ordermanageritem_action::class, array(
+            'getPdfHandler',
+        ));
+        $oControllerMock->method('getPdfHandler')->willReturn($oPdfHandlerMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertFalse(
+            $this->callMethod($this->_oController, 'canGeneratePdfDocuments')
         );
     }
 

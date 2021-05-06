@@ -97,7 +97,7 @@ class d3ordermanagerlist extends d3modprofilelist
             $sQ = "select $sFieldList from " . $oListObject->getViewName();
 
             $sQ .= " where ";
-            $sQ = $this->d3AddActiveSnippet($oListObject, $sQ, true, false);
+            $sQ = $this->d3AddActiveSnippet($oListObject, $sQ, false, false);
             $sQ .= ' AND ' . $oListObject->getViewName() . '.D3_OM_ORDERSAVETRIGGERED = 1';
             $sQ .= " ORDER BY " . $oListObject->getViewName() . ".oxsort ASC, " . $oListObject->getViewName() . ".oxfolder ASC";
             $this->selectString($sQ);
@@ -137,7 +137,7 @@ class d3ordermanagerlist extends d3modprofilelist
             $sQ = "select $sFieldList from " . $oListObject->getViewName();
 
             $sQ .= " where ";
-            $sQ = $this->d3AddActiveSnippet($oListObject, $sQ, true, false);
+            $sQ = $this->d3AddActiveSnippet($oListObject, $sQ, false, false);
             $sQ .= ' AND ' . $oListObject->getViewName() . '.D3_OM_ORDERFINISHTRIGGERED = 1';
             $sQ .= " ORDER BY " . $oListObject->getViewName() . ".oxsort ASC, " . $oListObject->getViewName() . ".oxfolder ASC";
             $this->selectString($sQ);
@@ -244,7 +244,7 @@ class d3ordermanagerlist extends d3modprofilelist
 
     /**
      * @return d3_cfg_mod
-     * @throws \Exception
+     * @throws Exception
      */
     public function d3GetSet()
     {

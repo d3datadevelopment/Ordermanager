@@ -239,6 +239,9 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
                 //P collect discount values for basket items which are discountable
                 if (!$oArticle->skipDiscounts()) {
                     $this->_oDiscountProductsPriceList->addToPriceList($oBasketPrice);
+                    if (false === isset($this->_aDiscountedVats[$oBasketPrice->getVat()])) {
+                        $this->_aDiscountedVats[$oBasketPrice->getVat()] = 0;
+                    }
                     $this->_aDiscountedVats[$oBasketPrice->getVat()] += $oBasketPrice->getVatValue();
                 } else {
                     $this->_oNotDiscountedProductsPriceList->addToPriceList($oBasketPrice);

@@ -172,6 +172,8 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
         $oFileSystemMock->method('splitFilename')->willReturn(
             array('name' => 'filename', 'ext' => 'html')
         );
+
+        $definitions = d3GetModCfgDIC()->getDefinitions();
         d3GetModCfgDIC()->set(d3filesystem::class, $oFileSystemMock);
 
         /** @var Language|PHPUnit_Framework_MockObject_MockObject $oLangMock */
@@ -202,6 +204,9 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
             'https://faq.d3data.de/module/modulepath',
             $this->callMethod($this->_oController, 'getHelpURL')
         );
+
+        d3GetModCfgDIC()->reset();
+        d3GetModCfgDIC()->setDefinitions($definitions);
     }
 
     /**
@@ -218,6 +223,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
             array('name' => 'filename', 'ext' => '')
         );
 
+        $definitions = d3GetModCfgDIC()->getDefinitions();
         d3GetModCfgDIC()->set(d3filesystem::class, $oFileSystemMock);
 
         /** @var d3str|PHPUnit_Framework_MockObject_MockObject $oD3StrMock */
@@ -258,6 +264,9 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
             'https://faq.d3data.de/module/modulepath',
             $this->callMethod($this->_oController, 'getHelpURL')
         );
+
+        d3GetModCfgDIC()->reset();
+        d3GetModCfgDIC()->setDefinitions($definitions);
     }
 
     /**

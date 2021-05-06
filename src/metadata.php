@@ -1,12 +1,24 @@
 <?php
 
+/**
+ * This Software is the property of Data Development and is protected
+ * by copyright law - it is NOT Freeware.
+ *
+ * Any unauthorized use of this software without a valid license
+ * is a violation of the license agreement and will be prosecuted by
+ * civil and criminal law.
+ *
+ * http://www.shopmodule.com
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+ * @link      http://www.oxidmodule.com
+ */
+
 use D3\Ordermanager\Setup as ModuleSetup;
 use D3\Ordermanager\Modules\Application\Model as ModuleModel;
 use D3\Ordermanager\Application\Controller as OMController;
 use D3\Ordermanager\Application\Controller\Admin as OMControllerAdmin;
-use D3\Ordermanager\Modules\Application\Controller\Admin as ModuleControllerAdmin;
-use D3\ModCfg\Application\Model\d3utils;
-use OxidEsales\Eshop\Application\Controller as OxidController;
 use OxidEsales\Eshop\Application\Model as OxidModel;
 use OxidEsales\Eshop\Core as OxidCore;
 
@@ -14,31 +26,34 @@ use OxidEsales\Eshop\Core as OxidCore;
  * Metadata version
  */
 $sMetadataVersion = '2.0';
+$sLogo = '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="height:1em;width:1em"> ';
 
 /**
  * Module information
  */
-$aModule = array(
+$aModule = [
     'id'            => 'd3ordermanager',
-    'title'         =>
-        (class_exists(d3utils::class) ? d3utils::getInstance()->getD3Logo() : 'D&sup3;') .
-        ' Auftragsmanager / Order Manager',
-    'description'  => array(
+    'title'         => [
+        'de'    => $sLogo . 'Auftragsmanager',
+        'en'    => $sLogo . 'Order Manager'
+    ],
+    'description'  => [
         'de'    => 'Bearbeitet frei definierbare Auftr&auml;ge auf Basis von einstellbaren Bestellungslisten.',
-        'en'    => ''),
+        'en'    => 'Processes freely definable tasks on the basis of adjustable order lists.'
+    ],
     'thumbnail'     => 'picture.png',
-    'version'       => '3.2.0.3',
+    'version'       => '3.3.1.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'http://www.oxidmodule.com/',
-    'extend'        => array(
+    'extend'        => [
         OxidCore\Email::class                   => ModuleModel\d3_oxemail_ordermanager::class,
         OxidModel\Order::class                  => ModuleModel\d3_oxorder_ordermanager::class,
         OxidModel\User::class                   => ModuleModel\d3_oxuser_ordermanager::class,
         OxidModel\Basket::class                 => ModuleModel\d3_oxbasket_ordermanager::class,
         OxidModel\BasketItem::class             => ModuleModel\d3_oxbasketitem_ordermanager::class
-    ),
-    'controllers'   => array(
+    ],
+    'controllers'   => [
         'd3ordermanager_response'           => OMController\d3ordermanager_response::class,
         
         'd3_cfg_ordermanagerset'            => OMControllerAdmin\d3_cfg_ordermanagerset::class,
@@ -59,8 +74,8 @@ $aModule = array(
         'd3_cfg_ordermanageritem_requ'      => OMControllerAdmin\d3_cfg_ordermanageritem_requ::class,
         'd3_cfg_ordermanageritem_action'    => OMControllerAdmin\d3_cfg_ordermanageritem_action::class,
         'd3_ordermanager_jobs'              => OMControllerAdmin\d3_ordermanager_jobs::class,
-    ),
-    'templates'   => array(
+    ],
+    'templates'   => [
         'd3_cfg_ordermanagerset_main.tpl'       => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanagerset_main.tpl',
         'd3_cfg_ordermanageritem_list.tpl'      => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_list.tpl',
         'd3_cfg_ordermanageritem_main.tpl'      => 'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_main.tpl',
@@ -154,6 +169,8 @@ $aModule = array(
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_changediscount.tpl',
         'd3ordermanager_action_generatepdf.tpl'         =>
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_generatepdf.tpl',
+        'd3ordermanager_action_getpdfdocuments.tpl'         =>
+            'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_getpdfdocuments.tpl',
         'd3ordermanager_action_custaddtogroup.tpl'      =>
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_custaddtogroup.tpl',
         'd3ordermanager_action_custdelfromgroup.tpl'    =>
@@ -162,18 +179,18 @@ $aModule = array(
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_sendmail.tpl',
         'd3ordermanager_action_exportlist.tpl'          =>
             'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_exportlist.tpl',
-    ),
+    ],
     'events'      => [
         'onActivate'    => '\D3\Ordermanager\Setup\Events::onActivate',
     ],
-    'blocks'      => array(
-        array(
+    'blocks'      => [
+        [
             'template'  => 'order_remark.tpl',
             'block'     => 'admin_order_remark_type',
             'file'      => 'Application/views/admin/blocks/d3ordermanager_order_remark_type.tpl',
-        )
-    ),
-    'd3FileRegister'    => array(
+        ]
+    ],
+    'd3FileRegister'    => [
         'd3/ordermanager/IntelliSenseHelper.php',
         'd3/ordermanager/metadata.php',
         'd3/ordermanager/models/Requirements/d3ordermanager_requirement_orderarticlefilter_abstract.php',
@@ -210,9 +227,20 @@ $aModule = array(
         'd3/ordermanager/Application/Model/d3ordermanager.php',
         'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_cronUnavailableException.php',
         'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_requirementException.php',
+        'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_templaterendererExceptionInterface.php',
+        'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_smartyException.php',
         'd3/ordermanager/Application/Model/d3ordermanager_toorderassignment.php',
         'd3/ordermanager/Application/Model/d3ordermanager_execute.php',
         'd3/ordermanager/Application/Model/d3ordermanager_conf.php',
+        'd3/ordermanager/Application/Model/d3ordermanager_renderererrorhandler.php',
+        'd3/ordermanager/Application/Model/d3ordermanager_actionrequirement_interface.php',
+        'd3/ordermanager/Application/Model/d3ordermanager_configurationcheck.php',
+        'd3/ordermanager/Application/Model/Exceptions/d3ActionRequirementInterface.php',
+        'd3/ordermanager/Application/Model/Exceptions/d3ActionRequirementAbstract.php',
+        'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_actionException.php',
+        'd3/ordermanager/Application/Model/Output/d3ordermanager_debugoutput.php',
+        'd3/ordermanager/Application/Model/Output/d3ordermanager_abstractoutput.php',
+        'd3/ordermanager/Application/Model/Output/d3ordermanager_nulloutput.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_custaddtogroup.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_setsendednowdate.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_exportlist.php',
@@ -231,6 +259,8 @@ $aModule = array(
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_sendmail.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_setfieldvalue.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_interface.php',
+        'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_getpdfdocuments.php',
+        'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_testaction.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_notinfolderfilter.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_folderfilter.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirementgrouplist.php',
@@ -269,6 +299,7 @@ $aModule = array(
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_currencyfilter.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_timespanfilter_abstract.php',
         'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_countryfilter.php',
+        'd3/ordermanager/Application/Model/Requirements/d3ordermanager_requirement_testfilter.php',
         'd3/ordermanager/Application/Model/d3ordermanager_partgrouplist_abstract.php',
         'd3/ordermanager/Application/Model/d3ordermanager_partgrouplist_interface.php',
         'd3/ordermanager/Application/Model/d3ordermanager_remark.php',
@@ -302,6 +333,7 @@ $aModule = array(
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractionsetfieldvalueTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractioncustaddtogroupTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractionsetsendednowdateTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractiongetpdfdocumentsTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3OrdermanagerActionUnitTestCase.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractionexportlistTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractiongrouplistTest.php',
@@ -341,10 +373,13 @@ $aModule = array(
         'd3/ordermanager/tests/unit/Application/Model/Requirements/d3ordermanagerrequnotingroupfilterTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Requirements/d3ordermanagerrequotherjobTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Requirements/d3OrdermanagerRequirementUnitTestCase.php',
+        'd3/ordermanager/tests/unit/Application/Model/Exceptions/d3ordermanager_actionExceptionTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/Output/d3ordermanager_debugoutputTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanagerTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_executeTest.php',
         'd3/ordermanager/tests/unit/Modules/Application/Model/d3_oxbasket_ordermanagerTest.php',
         'd3/ordermanager/tests/unit/Modules/Application/Model/d3_oxbasketitem_ordermanagerTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_renderererrorhandlerTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_listgeneratorTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_pdfhandlerTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_remarkTest.php',
@@ -373,6 +408,7 @@ $aModule = array(
         'd3/ordermanager/tests/unit/Modules/Application/Model/d3_oxemail_ordermanagerTest.php',
         'd3/ordermanager/tests/unit/public/d3_ordermanager_cronTest.php',
         'd3/ordermanager/tests/unit/Setup/d3ordermanager_updateTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_configurationcheckTest.php',
         'd3/ordermanager/tests/integration/Requirements/d3OrdermanagerRequirementIntegrationTestCase.php'.
         'd3/ordermanager/tests/integration/Requirements/requirementOrderSumTest.php',
         'd3/ordermanager/tests/integration/Requirements/requirementInvoiceNoTest.php',
@@ -416,12 +452,19 @@ $aModule = array(
         'd3/ordermanager/tests/integration/Actions/actionCustAddToGroupTest.php',
         'd3/ordermanager/tests/integration/Requirements/d3OrdermanagerRequirementIntegrationTestCase.php',
         'd3/ordermanager/tests/integration/Requirements/requirementOrderSumTest.php',
-        'd3/ordermanager/tests/integration/executeCronTest.php',
-    ),
-    'd3SetupClasses'    => array(
+        'd3/ordermanager/tests/integration/executeCronTest.php',    // outdated
+        'd3/ordermanager/tests/integration/Trigger/executeCLICronTest.php',
+        'd3/ordermanager/tests/integration/Trigger/executeGUICronTest.php',
+        'd3/ordermanager/tests/integration/Trigger/finalizeOrderTest.php',
+        'd3/ordermanager/tests/integration/Trigger/orderSaveTest.php',
+        'd3/ordermanager/tests/integration/Admin/jobListTest.php',
+        'd3/ordermanager/tests/integration/Admin/jobExecuteTest.php',
+        'd3/ordermanager/tests/tools/Intercept.php',
+    ],
+    'd3SetupClasses'    => [
         ModuleSetup\d3ordermanager_update::class,
-    ),
+    ],
     'd3DICDefinitionFiles'  => [
         'd3/ordermanager/Config/services.yaml',
     ]
-);
+];

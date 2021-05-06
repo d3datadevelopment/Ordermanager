@@ -212,6 +212,39 @@
                         </div>
 
                         <div>
+                            <dl>
+                                <dt>
+                                    <label for="MainMarkOrder">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_MARKORDER"}]</label>&nbsp;
+                                </dt>
+                                <dd>
+                                    <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_OM_MARKORDER')}]]" value="0">
+                                    <input id="MainMarkOrder" type="checkbox" onclick="if(this.checked){document.getElementById('delayTime').style.display = 'block';}else{document.getElementById('delayTime').style.display = 'none';}" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_MARKORDER')}]]" value="1" [{if $edit->getFieldData('D3_OM_MARKORDER')}]checked[{/if}] [{$readonly}]>
+                                    [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_MARKORDER_DESC"}]
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                        </div>
+
+                        <div id="delayTime" style="display:[{if $edit->getFieldData('D3_OM_MARKORDER')}]table-row[{else}]none[{/if}];">
+                            <dl>
+                                <dt>
+                                    <label for="MainMarkOrderDelay">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY"}]</label>&nbsp;
+                                </dt>
+                                <dd>
+                                    <input id="MainMarkOrderDelay" type="text" name="value[iUnmarkExecDelayTimeValue]" class="edittext ext_edittext" size="3" maxlength="5" value="[{if $edit->getValue('iUnmarkExecDelayTimeValue')}][{$edit->getValue('iUnmarkExecDelayTimeValue')}][{else}]1[{/if}]" [{$readonly}]>
+                                    <label for="MainMarkOrderUnit" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDORDERUNIT"}]</label>
+                                    <select id="MainMarkOrderUnit" name="value[sUnmarkExecDelayTimeUnit]" class="edittext ext_edittext" size="1" [{$readonly}]>
+                                        <option value="days" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'days'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_DAY"}]</option>
+                                        <option value="hours" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'hours'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_HOUR"}]</option>
+                                        <option value="minutes" [{if $edit->getValue('sUnmarkExecDelayTimeUnit') == 'minutes'}]selected[{/if}]>[{oxmultilang ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_MINUTE"}]</option>
+                                    </select>
+                                    [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_UNMARKEDEXECDELAY_DESC"}]
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                        </div>
+
+                        <div>
                             <dl class="[{$blActionScriptsRestriction}]">
                                 <dt>
                                     <label for="MainCronPreExecScript">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT"}]</label>&nbsp;

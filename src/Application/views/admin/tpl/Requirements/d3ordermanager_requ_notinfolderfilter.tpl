@@ -11,7 +11,7 @@
                     <input type="hidden" name="value[sNotInFolderId]" value="">
                     <label for="sNotInFolderId" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_NOTINFOLDER"}]</label>
                     <SELECT class="editinput" name="value[sNotInFolderId][]" id="sNotInFolderId" multiple [{$blActionRestriction}] [{$readonly}]>
-                        [{foreach from=$oView->getItemFolders() key="field" item="color"}]
+                        [{foreach from=$oView->getOrderFolders() key="field" item="color"}]
                             <option value="[{$field}]" [{if is_array($edit->getValue('sNotInFolderId')) && in_array($field, $edit->getValue('sNotInFolderId'))}]selected[{/if}] style="color: [{$color}];">[{oxmultilang ident=$field noerror=true}]</option>
                         [{/foreach}]
                     </SELECT><br>
@@ -21,7 +21,7 @@
             [{else}]
                 [{block name="ordermanager_admin_requ_notinfolder_viewer"}]
                     <ul>
-                        [{foreach from=$oView->getItemFolders() key="field" item="color"}]
+                        [{foreach from=$oView->getOrderFolders() key="field" item="color"}]
                             [{if is_array($edit->getValue('sNotInFolderId')) && in_array($field, $edit->getValue('sNotInFolderId'))}]
                                 <li>
                                     [{oxmultilang ident=$field noerror=true}]
