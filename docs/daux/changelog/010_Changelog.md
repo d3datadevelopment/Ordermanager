@@ -2,6 +2,16 @@
 title: Changelog
 --- 
 
+## 4.1.2.2 - (2021-05-07)
+
+### Fixed
+- Warnung bei Verwendung der Standardsprache bei CLI-Aufrufen entfernt
+- Fehler bei undefinierter STDOUT Konstante behoben
+- Verwendung leerer Tasklisten optimiert
+- Einstellungszuordnungen optimiert
+
+--- 
+
 ## 4.1.2.1 - (2021-04-27)
 
 ### Added
