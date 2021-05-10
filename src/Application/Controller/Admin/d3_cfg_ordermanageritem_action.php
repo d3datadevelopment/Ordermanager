@@ -28,6 +28,7 @@ use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler as PdfHandler;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_actionException;
+use D3\OxidServiceBridges\Internal\Framework\Module\Path\ModulePathResolverBridgeInterface;
 use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\Order as Item;
@@ -44,7 +45,6 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Path\ModulePathResolverInterface;
 use OxidEsales\Eshop\Core\UtilsView;
 
 class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
@@ -366,8 +366,9 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
         $shopConfiguration = $container->get(ShopConfigurationDaoBridgeInterface::class)->get();
 
         foreach ($shopConfiguration->getModuleConfigurations() as $moduleConfiguration) {
-            $pathResolver = ContainerFactory::getInstance()->getContainer()->get(ModulePathResolverInterface::class);
-            $sModulePath = $pathResolver->getFullModulePathFromConfiguration(
+            /** @var ModulePathResolverBridgeInterface $pathResolverBridge */
+            $pathResolverBridge = ContainerFactory::getInstance()->getContainer()->get(ModulePathResolverBridgeInterface::class);
+            $sModulePath = $pathResolverBridge->getFullModulePathFromConfiguration(
                 $moduleConfiguration->getId(),
                 Registry::getConfig()->getShopId()
             );
