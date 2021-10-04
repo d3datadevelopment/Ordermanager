@@ -46,15 +46,15 @@ class d3ordermanager_update extends d3install_updatebase
 {
     public $sModKey = 'd3_ordermanager';
     public $sModName = 'Auftragsmanager';
-    public $sModVersion = '5.0.0.0';
-    public $sModRevision = '5000';
+    public $sModVersion = '5.0.1.0';
+    public $sModRevision = '5010';
     public $sBaseConf =
-    '8v8v2==YS9qUE5Bckl3YnVOZTJTZ3kyb0RkMkdERGxIUlpMem5VT3NGVnJwNGRxVDJ4S3RMaE45OC96c
-nRNb2d5aEtGem9iYTB4b0F5SVBhdVR0amZlU0pxTFBKYS9lYlNhL0RKYy9MVWlPR2w5RGhicmI0YzBCV
-TFxdkU4NC9vWThUeGFGb1JXaUZVdy9xeHI2dkZjT2xWU2UzVVZ6dFhJMkMwZzBGNUJsT0JkUjZRd2s2d
-TNYMlJWdng1eGJoclBRQ3dYZVI4aElMYWZDbEFTMFNMQWdyQ0w1cTltRE4vTzFYRnA5UjgyTE1KN0k5Z
-Xg3S1VxeWRUMGlPdHJ2c1oyR0ZKb0lTZ1NYWjduZGZacmI0eEtXNjRFSmNOcGRzT0dJSi8wUWVkaTNxM
-jJvYTdncnR4aW5idkgyS1RVbGh2VXJ6WTFXUDBjbm1QMnFabWhDdXBBZUo1K1JRPT0=';
+    '4N2v2==ZWhiWnNQM3FLTENrRGdiSFM0SDJNekNLMmRmQlFRb2lKL2R2MVdVME00TERDRGI5eWVVbHpUS
+TlqdktDaUxOcjAwdXpzS3J4ODlYdWE0WEpWZE5sK3NYVExleUpqQjgyUkxVd0tFZEVoUC9XRXJOY3dSe
+Uh5ZnpxZFBTaHZua1UyYkZxUWZCVVB0blFnNVZaOWNZNlRxQ1NDRUtNc0U2dWtDem40Vm9jelJXUFg5W
+XVFTTRMTFFrdnhRTmhwL2hmTGNVWXJSd2hFS1R4QnNGV3R1a2d5dzFOK0UzU0g4aHcrL3djYjdwVlREM
+DZBVngwVXY1aGpJTmpiRy85UGpHUGIrdmU0ZDlrdkZEamtZb3doRmNqUERaTDFHT01vV2MxeXRWZ3E4T
+1ZYbmVCWTZCTzZiOVIwWFdFT1gySThtdkZNa3F1NEpFYm1sTmhPVHNQMEUzWDRRPT0=';
     public $sRequirements = '';
     public $sBaseValue = 'TyUzQTglM0ElMjJzdGRDbGFzcyUyMiUzQTUlM0ElN0JzJTNBMjMlM0ElMjJkM19jZmdfbW9kX19hRm9sZGVyTGlzdCUyMiUzQmElM0E1JTNBJTdCaSUzQTAlM0JzJTNBMjUlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfTkVXJTIyJTNCaSUzQTElM0JzJTNBMzIlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfUEFZQURWQU5DRSUyMiUzQmklM0EyJTNCcyUzQTM2JTNBJTIyRDNfT1JERVJNQU5BR0VSX09SREVSX1BBWVNUQVRVU0NIRUNLJTIyJTNCaSUzQTMlM0JzJTNBMzYlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfREVMSVZFUllTVEFUVVMlMjIlM0JpJTNBNCUzQnMlM0EzNyUzQSUyMkQzX09SREVSTUFOQUdFUl9PUkRFUl9PUkRFUlBST0NFU1NJTkclMjIlM0IlN0RzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19ibENyb25BY3RpdmUlMjIlM0JzJTNBMSUzQSUyMjAlMjIlM0JzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19pTWF4T3JkZXJDbnQlMjIlM0JzJTNBMiUzQSUyMjUwJTIyJTNCcyUzQTI1JTNBJTIyZDNfY2ZnX21vZF9fc0Nyb25QYXNzd29yZCUyMiUzQnMlM0EwJTNBJTIyJTIyJTNCcyUzQTMwJTNBJTIyZDNfY2ZnX21vZF9fYmxDYWxjU3RhdE9uRGVtYW5kJTIyJTNCcyUzQTElM0ElMjIwJTIyJTNCJTdE';
 
@@ -509,7 +509,7 @@ jJvYTdncnR4aW5idkgyS1RVbGh2VXJ6WTFXUDBjbm1QMnFabWhDdXBBZUo1K1JRPT0=';
                     ->from('d3ordermanager')
                     ->where('1');
 
-                $aRecords = $qb->execute()->fetchAll(FetchMode::ASSOCIATIVE);
+                $aRecords = $qb->execute()->fetchAllAssociative();
                 if ($aRecords && is_array($aRecords) && count($aRecords)) {
                     foreach ($aRecords as $aRecord) {
                         $aRecord = array_change_key_case($aRecord, CASE_UPPER);

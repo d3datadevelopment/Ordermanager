@@ -301,12 +301,12 @@ services:
       - 'OxidEsales\Eshop\Core\Email'
     shared:     false
 
-  # DeliveryList
-  d3ox.ordermanager.OxidEsales\Eshop\Application\Model\DeliveryList:
-    class:      'OxidEsales\Eshop\Application\Model\DeliveryList'
+  # DeliverySetList
+  d3ox.ordermanager.OxidEsales\Eshop\Application\Model\DeliverySetList:
+    class:      'OxidEsales\Eshop\Application\Model\DeliverySetList'
     factory:    'oxNew'
     arguments:
-      - 'OxidEsales\Eshop\Application\Model\DeliveryList'
+      - 'OxidEsales\Eshop\Application\Model\DeliverySetList'
     shared:     false
 
   # CountryList

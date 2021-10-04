@@ -243,7 +243,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oLogMock = $this->getMockBuilder(d3log::class)
             ->onlyMethods(['log'])
             ->getMock();
-        $oLogMock->method('log')->willReturn(true);
+        $oLogMock->method('log')->willReturnSelf();
 
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
@@ -287,7 +287,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oLogMock = $this->getMockBuilder(d3log::class)
             ->onlyMethods(['log'])
             ->getMock();
-        $oLogMock->method('log')->willReturn(true);
+        $oLogMock->method('log')->willReturnSelf();
 
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
@@ -403,7 +403,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oLogMock = $this->getMockBuilder(d3log::class)
             ->onlyMethods(['log'])
             ->getMock();
-        $oLogMock->method('log')->willReturn(true);
+        $oLogMock->method('log')->willReturnSelf();
 
         /** @var d3ordermanager|MockObject $oManagerMock */
         $oManagerMock = $this->getMockBuilder(d3ordermanager::class)

@@ -269,7 +269,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
         $oD3LogMock = $this->getMockBuilder(d3log::class)
             ->onlyMethods(['log'])
             ->getMock();
-        $oD3LogMock->method('log')->willReturn(true);
+        $oD3LogMock->method('log')->willReturnSelf();
 
         return $oD3LogMock;
     }

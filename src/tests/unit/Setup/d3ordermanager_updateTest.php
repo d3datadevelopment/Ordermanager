@@ -412,7 +412,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
                 'setErrorMessage'])
             ->getMock();
         $oModelMock->method('getMaxLanguages')->willReturn($iLangCount);
-        $oModelMock->method('_addMultiLangAddOn')->willReturn(true);
+        $oModelMock->method('_addMultiLangAddOn')->willReturn('oxvalue_3');
         $oModelMock->method('hasExecute')->willReturn(true);
         $oModelMock->expects($this->exactly($iLangCount))->method('setUpdateBreak')->willReturn(true);
         $oModelMock->expects($this->exactly($iLangCount))->method('setActionLog')->willReturn(true);
@@ -497,7 +497,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
                 'setErrorMessage'])
             ->getMock();
         $oModelMock->method('getMaxLanguages')->willReturn($iLangCount);
-        $oModelMock->method('_addMultiLangAddOn')->willReturn(true);
+        $oModelMock->method('_addMultiLangAddOn')->willReturn('oxvalue_3');
         $oModelMock->method('hasExecute')->willReturn(true);
         $oModelMock->expects($this->exactly($iLangCount))->method('setUpdateBreak')->willReturn(true);
         $oModelMock->expects($this->exactly($iLangCount))->method('setActionLog')->willReturn(true);
@@ -570,7 +570,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
                 'setErrorMessage'])
             ->getMock();
         $oModelMock->method('getMaxLanguages')->willReturn($iLangCount);
-        $oModelMock->method('_addMultiLangAddOn')->willReturn(true);
+        $oModelMock->method('_addMultiLangAddOn')->willReturn('oxvalue_3');
         $oModelMock->method('hasExecute')->willReturn(false);
         $oModelMock->expects($this->exactly($iLangCount))->method('setUpdateBreak')->willReturn(true);
         $oModelMock->expects($this->exactly($iLangCount))->method('setActionLog')->willReturn(true);
@@ -594,6 +594,11 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     {
         $iLangCount = 2;
 
+        /** @var QueryBuilder|MockObject $queryBuilderMock */
+        $queryBuilderMock = $this->getMockBuilder(QueryBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         /** @var d3database|MockObject $od3databaseMock */
         $od3databaseMock = $this->getMockBuilder(d3database::class)
             ->onlyMethods([
@@ -602,7 +607,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
                 'checkFieldExist'
             ])
             ->getMock();
-        $od3databaseMock->expects($this->never())->method('getQueryBuilder')->willReturn(true);
+        $od3databaseMock->expects($this->never())->method('getQueryBuilder')->willReturn($queryBuilderMock);
         $od3databaseMock->method('checkTableExist')->willReturn(false);
         $od3databaseMock->method('checkFieldExist')->willReturn(false);
 
@@ -619,7 +624,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
                 'setErrorMessage'])
             ->getMock();
         $oModelMock->method('getMaxLanguages')->willReturn($iLangCount);
-        $oModelMock->method('_addMultiLangAddOn')->willReturn(true);
+        $oModelMock->method('_addMultiLangAddOn')->willReturn('oxvalue_3');
         $oModelMock->method('hasExecute')->willReturn(false);
         $oModelMock->expects($this->never())->method('setUpdateBreak')->willReturn(true);
         $oModelMock->expects($this->never())->method('setActionLog')->willReturn(true);

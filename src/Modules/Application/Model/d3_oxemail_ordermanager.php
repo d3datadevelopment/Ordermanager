@@ -33,6 +33,7 @@ use D3\ModCfg\Application\Model\d3str;
 use D3\Ordermanager\Application\Model\d3ordermanager_renderererrorhandler;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_smartyException;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_templaterendererExceptionInterface;
+use D3\OxidServiceBridges\Internal\Framework\Module\Path\ModulePathResolverBridgeInterface;
 use D3\PdfDocuments\Application\Model\Interfaces\pdfdocumentsOrderInterface;
 use Doctrine\DBAL\DBALException;
 use Exception;
@@ -56,8 +57,6 @@ use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\UtilsView;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Path\ModulePathResolver;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Path\ModulePathResolverInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Smarty\Legacy\LegacySmartyEngine;
 use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateEngineInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateRendererBridgeInterface;
@@ -482,9 +481,9 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
     {
         if ($oManager->getValue('sSendMailFromTheme') == 'module') {
             $sModuleId = $oManager->getValue('sSendMailFromModulePath');
-            /** @var ModulePathResolver $pathResolver */
-            $pathResolver = $this->d3getOrderManagerDIContainer()->get(ModulePathResolverInterface::class);
-            $sModulePath = $pathResolver->getFullModulePathFromConfiguration(
+            /** @var ModulePathResolverBridgeInterface $pathResolverBridge */
+            $pathResolverBridge = $this->d3getOrderManagerDIContainer()->get(ModulePathResolverBridgeInterface::class);
+            $sModulePath = $pathResolverBridge->getFullModulePathFromConfiguration(
                 $sModuleId,
                 Registry::getConfig()->getShopId()
             );

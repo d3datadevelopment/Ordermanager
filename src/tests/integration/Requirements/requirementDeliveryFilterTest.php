@@ -80,7 +80,7 @@ class requirementDeliveryFilterTest extends d3OrdermanagerRequirementIntegration
 
         foreach ($this->aDeliveryIdList as $delId) {
             $this->createBaseModelObject(
-                'oxdelivery',
+                'oxdeliveryset',
                 $delId,
                 ['oxtitle'  => __METHOD__]
             );
@@ -140,7 +140,7 @@ class requirementDeliveryFilterTest extends d3OrdermanagerRequirementIntegration
 
         foreach ($this->aDeliveryIdList as $delId) {
             $this->deleteBaseModelObject(
-                'oxdelivery',
+                'oxdeliveryset',
                 $delId
             );
         }

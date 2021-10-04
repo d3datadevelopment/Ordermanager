@@ -254,9 +254,9 @@ $aLang = array(
     'D3_ORDERMANAGER_REQU_MULTIPLE'                      => '(multiple selection possible with pressed Ctrl key)',
 
     'D3_ORDERMANAGER_REQU_INDIV'                         => 'from individual requirements',
-    'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD'            => 'execute the method of the order list object',
+    'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD'            => 'execute the method of the order list object (Please note!)',
     'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD_NAME'       => 'method name',
-    'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD_DESC'       => '<p> Only specify the name of the method here. Parameters or parentheses must not be used. </p> <p> The method must exist "public" on the order list object ("OrderList / ListModel" and its extensions). The method call is <b> not </b> static. </p> <p> Within the method, the oxOrderList / oxList object can be arbitrarily manipulated. It is not necessary to return the job list. </p> <p> These parameters are passed to the method: <ul> <li> currently used job manager job object ("d3ordermanager" or its overload) </li> </ul> </p> <p> A return value is not processed. </p>',
+    'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD_DESC'       => '<p> Only specify the name of the method here. Parameters or parentheses must not be used. </p> <p> The method must exist "public" on the order list object ("OrderList / ListModel" and its extensions). The method call is <b> not </b> static. </p> <p> Within the method, the oxOrderList / oxList object can be arbitrarily manipulated. It is not necessary to return the job list. </p> <p> These parameters are passed to the method: <ul> <li> currently used job manager job object ("d3ordermanager" or its overload) </li> </ul> </p> <p> A return value is not processed. </p><p><b>Using a programmed filter will cause an increased execution load depending on the result set. In principle, the other filters should be used in preference. Even when using this option, try to pre-select the hit list with one of the other filters.</b></p>',
     'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD_ERR_UNVALID'=> 'no valid method name set',
 
     'D3_ORDERMANAGER_ACTION'                             => 'Order Manager - actions',

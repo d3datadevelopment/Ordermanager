@@ -2,6 +2,23 @@
 title: Changelog
 --- 
 
+## 5.0.1.0 - (2021-10-01)
+
+### Added
+- Templateblöcke hinzugefügt
+- installierbar in OXID 6.3.1
+
+### Changed
+- #10850: Limitierung wird vorzeitig auf das Ergebnis des Filterqueries angewandt
+
+### Fixed
+- #10933: Übersicht zeigt falsche Anzahlen
+- #10841: Bedingung: bei diesen Versandarten - gibt Versandkostenregeln aus
+- Übersicht zeigt richtige Templatequelle der Exportaktion an
+- Namen der Versandkostenregelbedingung angepasst
+
+---
+
 ## 5.0.0.0 - (2021-04-27)
 
 ### Added
@@ -14,6 +31,23 @@ title: Changelog
 - Eingabekonvertierung bei Rabatt ändern Aktion optimiert
 
 ---
+
+## 4.1.2.3 - (2021-05-10)
+
+### Fixed
+- fehlender OXID-Service im no-dev-Modus führt zu Fehlern im Modul
+
+--- 
+
+## 4.1.2.2 - (2021-05-07)
+
+### Fixed
+- Warnung bei Verwendung der Standardsprache bei CLI-Aufrufen entfernt
+- Fehler bei undefinierter STDOUT Konstante behoben
+- Verwendung leerer Tasklisten optimiert
+- Einstellungszuordnungen optimiert
+
+--- 
 
 ## 4.1.2.1 - (2021-04-27)
 

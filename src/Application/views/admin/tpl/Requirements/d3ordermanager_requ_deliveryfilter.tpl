@@ -7,8 +7,8 @@
                     <input type="hidden" name="value[sDeliveryId]" value="">
                     <label for="sDeliveryId" style="position: absolute; left: -2000px">[{oxmultilang ident="D3_ORDERMANAGER_REQU_DELIVERY"}]</label>
                     <SELECT class="editinput" name="value[sDeliveryId][]" id="sDeliveryId" size="5" multiple [{$blActionRestriction}] [{$readonly}]>
-                        [{foreach from=$oView->getDeliveryList() item="oDelivery"}]
-                            <option value="[{$oDelivery->getId()}]" [{if is_array($edit->getValue('sDeliveryId')) && in_array($oDelivery->getId(), $edit->getValue('sDeliveryId'))}]selected[{/if}]>[{$oDelivery->getFieldData('oxtitle')}]</option>
+                        [{foreach from=$oView->getDeliverySetList() item="oDeliverySet"}]
+                            <option value="[{$oDeliverySet->getId()}]" [{if is_array($edit->getValue('sDeliveryId')) && in_array($oDeliverySet->getId(), $edit->getValue('sDeliveryId'))}]selected[{/if}]>[{$oDeliverySet->getFieldData('oxtitle')}]</option>
                         [{/foreach}]
                     </SELECT><br>
                     [{oxmultilang ident="D3_ORDERMANAGER_REQU_MULTIPLE"}]<br>
@@ -17,10 +17,10 @@
             [{else}]
                 [{block name="ordermanager_admin_requ_deliveryfilter_viewer"}]
                     <ul>
-                        [{foreach from=$oView->getDeliveryList() item="oDelivery"}]
-                            [{if is_array($edit->getValue('sDeliveryId')) && in_array($oDelivery->getId(), $edit->getValue('sDeliveryId'))}]
+                        [{foreach from=$oView->getDeliverySetList() item="oDeliverySet"}]
+                            [{if is_array($edit->getValue('sDeliveryId')) && in_array($oDeliverySet->getId(), $edit->getValue('sDeliveryId'))}]
                                 <li>
-                                    [{$oDelivery->getFieldData('oxtitle')}]
+                                    [{$oDeliverySet->getFieldData('oxtitle')}]
                                 </li>
                             [{/if}]
                         [{/foreach}]

@@ -153,7 +153,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oD3LogMock = $this->getMockBuilder(d3log::class)
             ->onlyMethods(['log'])
             ->getMock();
-        $oD3LogMock->method('log')->willReturn(true);
+        $oD3LogMock->method('log')->willReturnSelf();
         
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
