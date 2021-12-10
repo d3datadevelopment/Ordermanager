@@ -290,8 +290,9 @@ $aLang = array(
     'D3_ORDERMANAGER_ACTION_ORDEREXECUTEMETHOD_ERR_INVALID' => 'keine gültiger Methodenname gesetzt',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION'   => 'Push-Benachrichtigung senden',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_URL' => 'Dienst-URL',
+    'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_URL_DESC' => '<p>Geben Sie hier die URL des Dienstes oder Scriptes an, der die Nachricht empfangen soll.</p><p>Soll die URL dynamische Parameter enthalten, setzen Sie diese in doppelte geschweifte Klammern "{{value1}}". Diese Parameter stehen im Standard zur Verfügung und werden auch als Body mitgegeben:</p><ul><li>value1 + orderNr -> Bestellnummer</li><li>value2 + userName -> Mail des Bestellers</li><li>value3 + shopUrl -> URL dieses Shops</li></ul><p>Bei Verwendung der POST-Methode werden optionale GET-Parameter an den Body angehängt.</p>',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_METHOD' => 'Übertragungsmethode',
-    'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_DESC' => '<p>Geben Sie hier die URL des Dienstes oder Scriptes an, der die Nachricht empfangen soll und wählen Sie die bevorzuge Übertragungsmethode (POST ist für die Fälle Standard).</p>',
+    'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_DESC' => '<p>Wählen Sie die bevorzuge Übertragungsmethode (POST ist für die Fälle Standard).</p>',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_ERR' => 'keine gültige Push-URL gesetzt',
 
     'D3_ORDERMANAGER_ACTION_ORDERCHANGEDELCOSTS'         => 'Versandkosten ändern zu',

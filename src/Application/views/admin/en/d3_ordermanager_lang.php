@@ -286,8 +286,9 @@ $aLang = array(
     'D3_ORDERMANAGER_ACTION_ORDEREXECUTEMETHOD_ERR_INVALID' => 'no valid method name set',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION'   => 'send push notification',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_URL' => 'service URL',
+    'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_URL_DESC' => '<p>Enter the URL of the service or script that is to receive the message.</p><p>If the URL should contain dynamic parameters, put them in double curly brackets "{{value1}}". These parameters are available in the standard and are also given as a body:</p><ul><li>value1 + orderNr -> order number</li><li>value2 + userName -> mail of the orderer</li><li>value3 + shopUrl -> URL of this shop</li></ul><p> When using the POST method, optional GET parameters are appended to the body.</p>',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_METHOD' => 'transmission method',
-    'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_DESC' => '<p>Enter the URL of the service or script that should receive the message and select the preferred transmission method (POST is the default for cases).</p>',
+    'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_DESC' => '<p>Select the preferred transmission method (POST is the default for cases).</p>',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_ERR' => 'no valid push URL set',
 
     'D3_ORDERMANAGER_ACTION_ORDERCHANGEDELCOSTS'         => 'change delivery cost',

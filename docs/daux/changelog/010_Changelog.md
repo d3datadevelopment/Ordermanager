@@ -2,6 +2,21 @@
 title: Changelog
 --- 
 
+## 5.0.2.0 - (2021-12-02)
+
+### Added
+- Platzhalter in Push Notification URLs werden nun für dynamische Parameter geparst
+- zusätzliche GET Parameter werden bei POST Verwendung an den POST Body angehängt
+
+### Changed
+- Dateiregister für kommende Connector-Version angepasst
+- CLI-Prüfung für PHP interne Server angepasst
+
+### Fixed
+- Type cast Fehler korrigiert
+
+---
+
 ## 5.0.1.0 - (2021-10-01)
 
 ### Added
