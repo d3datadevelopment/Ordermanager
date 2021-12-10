@@ -26,7 +26,7 @@ use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
 use Exception;
 use OxidEsales\Eshop\Application\Model\CountryList;
 use OxidEsales\Eshop\Application\Model\Delivery;
-use OxidEsales\Eshop\Application\Model\DeliveryList;
+use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
@@ -158,16 +158,16 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
      * @test
      * @throws ReflectionException
      */
-    public function getDeliveryListPass()
+    public function getDeliverySetListPass()
     {
-        /** @var DeliveryList $oList */
+        /** @var DeliverySetList $oList */
         $oList = $this->callMethod(
             $this->_oController,
-            'getDeliveryList'
+            'getDeliverySetList'
         );
 
         $this->assertInstanceOf(
-            DeliveryList::class,
+            DeliverySetList::class,
             $oList
         );
         $this->assertTrue(count($oList) > 0);

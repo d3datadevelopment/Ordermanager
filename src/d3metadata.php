@@ -24,6 +24,8 @@ use D3\Ordermanager\Setup as ModuleSetup;
  */
 $aModule = [
     'd3FileRegister'    => [
+        /********** deprecated ***********/
+
         'd3/ordermanager/IntelliSenseHelper.php',
         'd3/ordermanager/metadata.php',
         'd3/ordermanager/d3metadata.php',

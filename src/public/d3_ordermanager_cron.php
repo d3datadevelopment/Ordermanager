@@ -143,7 +143,7 @@ class d3_ordermanager_cron extends CLI
      */
     public function isCLI(): bool
     {
-        return 'cli' == php_sapi_name();
+        return 'cli' == substr(php_sapi_name(), 0, 3);
     }
 
     /**

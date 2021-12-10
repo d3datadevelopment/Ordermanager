@@ -52,6 +52,10 @@ Bei Push-Benachrichtigungen können der Benachrichtung Daten mitgegeben werden, 
 
 In den meisten Fällen wird das Anpassen des Nachrichtenbody ausreichen. Im Standard werden dort benötigte Felder als json encodetes Array zurückgegeben.
 
+GET-Parameter innerhalb der Anfrage-URL können mit Platzhaltern angepasst werden. Platzhaltervariablen werden in doppelte geschweifte Klammern gefasst "{{var1}}". Die verfügbaren Variablen sehen Sie am Hilfetext der URL im Adminbereich der Aktion.
+
+Bei der Verwendung der POST-Übertragsmethode werden optionale GET-Parameter der URL automatisch an den schon bestehenden Nachrichtenbody angefügt.
+
 Innerhalb der Methoden stehen folgende Objekte und deren Eigenschaften zur Verfügung:
 
 | Aufruf                                                | Inhalt                                                                |

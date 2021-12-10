@@ -39,6 +39,7 @@ use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Request;
 use OxidEsales\Eshop\Core\UtilsView;
+use ReflectionException;
 
 class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 {
@@ -246,7 +247,11 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws ReflectionException
      * @throws d3ParameterNotFoundException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
      */
     public function getFinishedCount(): int
     {
@@ -257,7 +262,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         if ($this->canRequestData(__FUNCTION__)) {
             /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
-            return (int) $oProfile->getListGenerator()->getFinishedItemCount();
+            return $oProfile->getListGenerator()->getFinishedItemCount();
         } elseif ($this->canUseRequestData($requestCount)) {
             return (int) $requestCount;
         }

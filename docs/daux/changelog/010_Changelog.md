@@ -2,6 +2,24 @@
 title: Changelog
 --- 
 
+## 4.1.3.0 - (2021-12-10)
+
+### Added
+- Platzhalter in Push Notification URLs werden nun für dynamische Parameter geparst
+- zusätzliche GET Parameter werden bei POST Verwendung an den POST Body angehängt
+- #10850: Limitierung wird vorzeitig auf das Ergebnis des Filterqueries angewandt
+
+### Changed
+- Dateiregister für kommende Connector-Version angepasst
+- CLI-Prüfung für PHP interne Server angepasst
+
+### Fixed
+- Type cast Fehler korrigiert
+- #10841: Bedingung: bei diesen Versandarten - gibt Versandkostenregeln aus
+- Übersicht zeigt richtige Templatequelle der Exportaktion an
+
+---
+
 ## 4.1.2.3 - (2021-05-10)
 
 ### Fixed

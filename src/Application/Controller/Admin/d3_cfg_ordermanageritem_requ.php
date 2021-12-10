@@ -27,6 +27,7 @@ use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_in
 use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist as RequirementGroupListModel;
 use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist as RequirementListModel;
 use OxidEsales\Eshop\Application\Model\DeliveryList;
+use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\CountryList;
 use OxidEsales\Eshop\Core\Language;
@@ -77,13 +78,13 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     }
 
     /**
-     * @return ListModel
+     * @return DeliverySetList
      */
-    public function getDeliveryList(): ListModel
+    public function getDeliverySetList(): DeliverySetList
     {
-        /** @var DeliveryList $oDeliveryList */
-        $oDeliveryList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.DeliveryList::class);
-        return $this->_getObjectList($oDeliveryList, null, 'oxtitle ASC');
+        /** @var DeliverySetList $oDeliverySetList */
+        $oDeliverySetList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.DeliverySetList::class);
+        return $this->_getObjectList($oDeliverySetList, null, 'oxtitle ASC');
     }
 
     /**

@@ -258,9 +258,9 @@ $aLang = array(
     'D3_ORDERMANAGER_REQU_MULTIPLE'                      => '(Mehrfachauswahl mit gedrückter Strg-Taste möglich)',
 
     'D3_ORDERMANAGER_REQU_INDIV'                         => 'aus Individualbedingungen',
-    'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD'            => 'Methode des Auftragslistenobjekts ausführen',
+    'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD'            => 'Methode des Auftragslistenobjekts ausführen (Hinweise beachten!)',
     'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD_NAME'       => 'Methodenname',
-    'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD_DESC'       => '<p>Geben Sie hier ausschließlich den Namen der Methode an. Parameter oder Klammern dürfen nicht verwendet werden.</p><p>Die Methode muss "public" am Auftragslistenobjekt ("OrderList/ListModel" und deren Erweiterungen) existieren. Der Methodenaufruf erfolgt <b>nicht</b> statisch.</p><p>Innerhalb der Methode kann das OrderList/ListModel-Objekt beliebig manipuliert werden. Eine Rückgabe der Auftragsliste ist nicht erforderlich.</p><p>Diese Parameter werden der Methode übergeben: <ul><li>aktuell verwendetes Auftragsmanagerauftragsobjekt ("d3ordermanager" bzw. dessen Überladung)</li></ul></p><p>Ein Rückgabewert wird nicht verarbeitet.</p>',
+    'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD_DESC'       => '<p>Geben Sie hier ausschließlich den Namen der Methode an. Parameter oder Klammern dürfen nicht verwendet werden.</p><p>Die Methode muss "public" am Auftragslistenobjekt ("OrderList/ListModel" und deren Erweiterungen) existieren. Der Methodenaufruf erfolgt <b>nicht</b> statisch.</p><p>Innerhalb der Methode kann das OrderList/ListModel-Objekt beliebig manipuliert werden. Eine Rückgabe der Auftragsliste ist nicht erforderlich.</p><p>Diese Parameter werden der Methode übergeben: <ul><li>aktuell verwendetes Auftragsmanagerauftragsobjekt ("d3ordermanager" bzw. dessen Überladung)</li></ul></p><p>Ein Rückgabewert wird nicht verarbeitet.</p><p><b>Die Nutzung eines programmierten Filters wird je nach Ergebnismenge eine erhöhte Ausführungslast verursachen. Grundsätzlich sollten die anderen Filter bevorzugt genutzt werden. Versuchen Sie auch bei Nutzung dieser Option, die Trefferliste mit einem der anderen Filter vorzuselektieren.</b></p>',
     'D3_ORDERMANAGER_REQU_ORDEREXECUTEMETHOD_ERR_UNVALID'=> 'kein gültiger Methodenname gesetzt',
 
     'D3_ORDERMANAGER_ACTION'                             => 'Auftragsmanager - Aktionen',
@@ -290,8 +290,9 @@ $aLang = array(
     'D3_ORDERMANAGER_ACTION_ORDEREXECUTEMETHOD_ERR_INVALID' => 'keine gültiger Methodenname gesetzt',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION'   => 'Push-Benachrichtigung senden',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_URL' => 'Dienst-URL',
+    'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_URL_DESC' => '<p>Geben Sie hier die URL des Dienstes oder Scriptes an, der die Nachricht empfangen soll.</p><p>Soll die URL dynamische Parameter enthalten, setzen Sie diese in doppelte geschweifte Klammern "{{value1}}". Diese Parameter stehen im Standard zur Verfügung und werden auch als Body mitgegeben:</p><ul><li>value1 + orderNr -> Bestellnummer</li><li>value2 + userName -> Mail des Bestellers</li><li>value3 + shopUrl -> URL dieses Shops</li></ul><p>Bei Verwendung der POST-Methode werden optionale GET-Parameter an den Body angehängt.</p>',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_METHOD' => 'Übertragungsmethode',
-    'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_DESC' => '<p>Geben Sie hier die URL des Dienstes oder Scriptes an, der die Nachricht empfangen soll und wählen Sie die bevorzuge Übertragungsmethode (POST ist für die Fälle Standard).</p>',
+    'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_DESC' => '<p>Wählen Sie die bevorzuge Übertragungsmethode (POST ist für die Fälle Standard).</p>',
     'D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_ERR' => 'keine gültige Push-URL gesetzt',
 
     'D3_ORDERMANAGER_ACTION_ORDERCHANGEDELCOSTS'         => 'Versandkosten ändern zu',
