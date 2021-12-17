@@ -16,6 +16,7 @@ title: Systemanforderungen
 * Shopversionen
     * OXID eShop in Compilation Version 
         * 6.3.x
+        * 6.4.x
 * Themes
     * Das Modul benötigt keine Einbindung ins Frontend und ist damit von diesen Themes unabhängig.
 * (D3) Modul-Connector ([kostenfrei bei D3 erhältlich](https://www.oxidmodule.com/connector/)) ab Version 6.0.0.0 

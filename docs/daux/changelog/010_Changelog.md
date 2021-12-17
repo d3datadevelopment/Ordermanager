@@ -2,6 +2,13 @@
 title: Changelog
 --- 
 
+## 5.0.3.0 - (2021-12-17)
+
+### Added
+- installierbar in OXID 6.4.0
+
+---
+
 ## 5.0.2.0 - (2021-12-02)
 
 ### Added
