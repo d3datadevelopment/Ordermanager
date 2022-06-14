@@ -1,0 +1,44 @@
+# This Software is the property of Data Development and is protected
+# by copyright law - it is NOT Freeware.
+#
+# Any unauthorized use of this software without a valid license
+# is a violation of the license agreement and will be prosecuted by
+# civil and criminal law.
+#
+# https://www.d3data.de
+#
+# @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+# @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+# @link      https://www.oxidmodule.com
+
+parameters:
+  d3.ordermanager.modcfgid:     'd3_ordermanager'
+
+services:
+  d3.ordermanager.modcfg:
+    class:      'D3\ModCfg\Application\Model\Configuration\d3_cfg_mod'
+    factory:
+      - 'D3\ModCfg\Application\Model\Configuration\d3_cfg_mod'
+      - 'get'
+    arguments:
+      - '%d3.ordermanager.modcfgid%'
+
+  d3.ordermanager.log:
+    class:      'D3\ModCfg\Application\Model\Log\d3log'
+    factory:
+      - '@d3.ordermanager.modcfg'
+      - 'd3getLog'
+
+  d3.ordermanager.database:
+    class:      'D3\ModCfg\Application\Model\d3database'
+    factory:
+      - 'D3\ModCfg\Application\Model\d3database'
+      - 'getInstance'
+
+  # d3filesystem
+  d3ox.ordermanager.D3\ModCfg\Application\Model\d3filesystem:
+    class: D3\ModCfg\Application\Model\d3filesystem
+    factory: 'oxNew'
+    shared: false
+    arguments:
+      - D3\ModCfg\Application\Model\d3filesystem

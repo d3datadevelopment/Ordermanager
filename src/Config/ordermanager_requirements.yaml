@@ -1,0 +1,403 @@
+# This Software is the property of Data Development and is protected
+# by copyright law - it is NOT Freeware.
+#
+# Any unauthorized use of this software without a valid license
+# is a violation of the license agreement and will be prosecuted by
+# civil and criminal law.
+#
+# https://www.d3data.de
+#
+# @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+# @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+# @link      https://www.oxidmodule.com
+
+services:
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent1:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent1
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent1
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent1.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent1.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent2:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent2
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent2
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent2.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlecontent2.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlestorno:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlestorno
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlestorno
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlestorno.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_articlestorno.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_countryfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_countryfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_countryfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_countryfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_countryfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_currencyfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_currencyfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_currencyfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_currencyfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_currencyfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_datenotset:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_datenotset
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_datenotset
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_datenotset.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_datenotset.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_deliveryfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_deliveryfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_deliveryfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_deliveryfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_deliveryfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_executemethodfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_executemethodfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_executemethodfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_executemethodfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_executemethodfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_folderfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_folderfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_folderfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_folderfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_folderfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_fromordernr:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_fromordernr
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_fromordernr
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_fromordernr.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_fromordernr.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ingroupfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ingroupfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ingroupfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ingroupfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ingroupfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_invoiceno:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_invoiceno
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_invoiceno
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_invoiceno.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_invoiceno.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_languagefilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_languagefilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_languagefilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_languagefilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_languagefilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_mailregexpfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_mailregexpfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_mailregexpfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_mailregexpfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_mailregexpfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent1:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent1
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent1
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent1.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent1.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent2:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent2
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent2
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent2.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_noarticlecontent2.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notinfolderfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notinfolderfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notinfolderfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notinfolderfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notinfolderfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notingroupfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notingroupfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notingroupfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notingroupfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_notingroupfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderfield:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderfield
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderfield
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderfield.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderfield.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordernonstorno:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordernonstorno
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordernonstorno
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordernonstorno.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordernonstorno.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderstorno:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderstorno
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderstorno
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderstorno.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderstorno.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordersum:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordersum
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordersum
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordersum.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_ordersum.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_otherjob:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_otherjob
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_otherjob
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_otherjob.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_otherjob.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_paymentfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_paymentfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_paymentfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_paymentfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_paymentfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter1:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter1
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter1
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter1.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter1.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter2:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter2
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter2
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter2.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_timespanfilter2.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_toordernr:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_toordernr
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_toordernr
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_toordernr.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_toordernr.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_trackcodefilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_trackcodefilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_trackcodefilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_trackcodefilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_trackcodefilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_transactionfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_transactionfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_transactionfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_transactionfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_transactionfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
+    
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_weekdayfilter:
+    class:      D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_weekdayfilter
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_weekdayfilter
+      - '@D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_weekdayfilter.args.ordermanager'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_weekdayfilter.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    public:     false
