@@ -23,7 +23,7 @@
                     <label for="RequTimespan[{$oRequ->getSlotId()}]Type">[{oxmultilang ident="D3_ORDERMANAGER_REQU_TIMESPAN_AFTER"}]</label>
                     <SELECT id="RequTimespan[{$oRequ->getSlotId()}]Type" class="editinput" name="value[sTimespan[{$oRequ->getSlotId()}]Type]" size="1" [{$blActionRestriction}] [{$readonly}]>
                         [{foreach from=$oRequ->getTypeList() key="type" item="translation"}]
-                            <option value="[{$type}]" [{if $edit->getValue($sUnitVarName) == $type}]selected[{/if}]>[{oxmultilang ident=$translation}]</option>
+                            <option value="[{$type}]" [{if $edit->getValue($sTypeVarName) == $type}]selected[{/if}]>[{oxmultilang ident=$translation}]</option>
                         [{/foreach}]
                     </SELECT>
                 [{/block}]
