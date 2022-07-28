@@ -2,6 +2,12 @@
 title: Changelog
 --- 
 
+## 4.1.3.1 - (2022-07-28)
+### Fixed
+- timespan requirement option in admin panel does not represent the saved type
+
+---
+
 ## 4.1.3.0 - (2021-12-10)
 
 ### Added
