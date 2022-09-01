@@ -37,8 +37,8 @@ use Psr\Container\ContainerInterface;
 
 abstract class d3OrdermanagerUnitTestCase extends d3ModCfgUnitTestCase
 {
-    CONST D3CLI_COLOR_YELLOW    = "\033[33m";
-    CONST D3CLI_COLOR_DEFAULT   = "\033[0m";
+    public const D3CLI_COLOR_YELLOW    = "\033[33m";
+    public const D3CLI_COLOR_DEFAULT   = "\033[0m";
 
     protected $_sCurrentLicenseKeyBackup;
 
@@ -75,8 +75,8 @@ abstract class d3OrdermanagerUnitTestCase extends d3ModCfgUnitTestCase
                 PHP_EOL.PHP_EOL.self::D3CLI_COLOR_DEFAULT;
         }
         foreach (['d3usermanager', 'd3bonimascore'] as $incompatibleModuleId) {
-            if ( true === $shopConfiguration->hasModuleConfiguration( $incompatibleModuleId ) &&
-                 true === $moduleState->isActive( $incompatibleModuleId, Registry::getConfig()->getShopId() )
+            if (true === $shopConfiguration->hasModuleConfiguration($incompatibleModuleId) &&
+                 true === $moduleState->isActive($incompatibleModuleId, Registry::getConfig()->getShopId())
             ) {
                 echo self::D3CLI_COLOR_YELLOW .
                      PHP_EOL . "      - inaccurate test results possible due to installed ".
@@ -93,16 +93,18 @@ abstract class d3OrdermanagerUnitTestCase extends d3ModCfgUnitTestCase
      * @throws DatabaseErrorException
      * @throws ExceptionAlias
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
+
+        d3DicHandler::getUncompiledInstance();
 
         d3GetModCfgDIC()->set('d3.ordermanager.log', d3GetModCfgDIC()->get(d3NullLogger::class));
 
         $this->_setLicenseKeyBackup(d3_cfg_mod::get($this->sModId)->getFieldData('oxserial'));
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 

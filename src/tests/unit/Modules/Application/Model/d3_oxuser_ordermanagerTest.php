@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
 
@@ -41,14 +41,14 @@ class d3_oxuser_ordermanagerTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oModel = d3GetModCfgDIC()->get('d3ox.ordermanager.'.User::class);
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -71,7 +71,7 @@ class d3_oxuser_ordermanagerTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oModel,
                 '__get',
-                array('testProperty')
+                ['testProperty']
             )
         );
 
@@ -79,7 +79,7 @@ class d3_oxuser_ordermanagerTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oModel,
                 '__get',
-                array('testUnsetProperty')
+                ['testUnsetProperty']
             )
         );
     }

@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use D3\Ordermanager\Modules\Application\Model as ModuleModel;
 use D3\Ordermanager\Application\Controller as OMController;
@@ -36,14 +36,14 @@ $aModule = [
     'id'            => 'd3ordermanager',
     'title'         => [
         'de'    => $sLogo . 'Auftragsmanager',
-        'en'    => $sLogo . 'Order Manager'
+        'en'    => $sLogo . 'Order Manager',
     ],
     'description'  => [
         'de'    => 'Bearbeitet frei definierbare Auftr&auml;ge auf Basis von einstellbaren Bestellungslisten.',
-        'en'    => 'Processes freely definable tasks on the basis of adjustable order lists.'
+        'en'    => 'Processes freely definable tasks on the basis of adjustable order lists.',
     ],
     'thumbnail'     => 'picture.png',
-    'version'       => '5.0.3.1',
+    'version'       => '5.1.0.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'https://www.oxidmodule.com/',
@@ -52,7 +52,7 @@ $aModule = [
         OxidModel\Order::class                  => ModuleModel\d3_oxorder_ordermanager::class,
         OxidModel\User::class                   => ModuleModel\d3_oxuser_ordermanager::class,
         OxidModel\Basket::class                 => ModuleModel\d3_oxbasket_ordermanager::class,
-        OxidModel\BasketItem::class             => ModuleModel\d3_oxbasketitem_ordermanager::class
+        OxidModel\BasketItem::class             => ModuleModel\d3_oxbasketitem_ordermanager::class,
     ],
     'controllers'   => [
         'd3ordermanager_response'           => OMController\d3ordermanager_response::class,
@@ -187,6 +187,6 @@ $aModule = [
             'template'  => 'order_remark.tpl',
             'block'     => 'admin_order_remark_type',
             'file'      => 'Application/views/admin/blocks/d3ordermanager_order_remark_type.tpl',
-        ]
-    ]
+        ],
+    ],
 ];

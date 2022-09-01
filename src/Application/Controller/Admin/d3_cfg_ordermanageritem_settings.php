@@ -15,10 +15,11 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
+use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -45,12 +46,12 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
     protected $_sModId = 'd3_ordermanager';
     protected $_sMenuItemTitle = 'd3mxordermanager';
     protected $_blUseOwnOxid = true;
-    protected $_aNaviItems = array(
-        'new' => array(
+    protected $_aNaviItems = [
+        'new' => [
             'sScript' => 'top.oxid.admin.editThis( -1 );return false;',
             'sTranslationId' => 'D3_TOOLTIPS_NEWORDERMANAGER',
-        ),
-    );
+        ],
+    ];
     protected $_sD3ObjectClass = Manager::class;
 
     /**
@@ -58,7 +59,9 @@ class d3_cfg_ordermanageritem_settings extends d3_cfg_mod_main
      */
     public function __construct()
     {
-        d3GetModCfgDIC()->setParameter($this->_DIC_Instance_Id.'modcfgid', $this->_sModId);
+        if (d3GetModCfgDIC()->getParameter($this->_DIC_Instance_Id . 'modcfgid') !== $this->_sModId) {
+            throw oxNew(wrongModIdException::class, $this->_sModId);
+        }
 
         parent::__construct();
     }

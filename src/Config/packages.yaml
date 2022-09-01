@@ -20,6 +20,10 @@ parameters:
   Html2Text\Html2Text.args.html:
 
 services:
+  _defaults:
+    autowire: false
+    public: true
+
   League\Flysystem\Filesystem:
     class:      League\Flysystem\Filesystem
     shared:     false
@@ -29,7 +33,6 @@ services:
   League\Flysystem\Filesystem.args.adapter:
     synthetic:  true
     shared:     false
-    public:     false
 
   League\Flysystem\Adapter\Local:
     class:      League\Flysystem\Adapter\Local
@@ -44,7 +47,20 @@ services:
     class:      Html2Text\Html2Text
     shared:     false
     arguments:
-      - '%Html2Text\Html2Text.args.html%'
+      - '@d3ox.ordermanager.Html2Text.context.html'
+
+  D3\Ordermanager\Application\Model\Context\Html2TextContextInterface:
+    class:      D3\Ordermanager\Application\Model\Context\Html2TextContext
+    public:     true
+    factory:    'oxNew'
+    shared:     true
+    arguments:
+      - 'D3\Ordermanager\Application\Model\Context\Html2TextContext'
+
+  d3ox.ordermanager.Html2Text.context.html:
+    class: D3\Ordermanager\Application\Model\Context\Html2TextContextInterface
+    factory: ['@D3\Ordermanager\Application\Model\Context\Html2TextContextInterface', 'getMessage']
+    shared: false
 
   d3.ordermanager.D3\OxidSqlLogger\OxidEsalesDatabase:
     class:      D3\OxidSqlLogger\OxidEsalesDatabase
@@ -55,3 +71,7 @@ services:
     shared:     false
     arguments:
       - '@ReflectionClass.args.object'
+    # arg #1 ordermanager
+  ReflectionClass.args.object:
+    synthetic:  true
+    shared:     false

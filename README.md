@@ -7,6 +7,9 @@ Lassen Sie wiederkehrende Aufgaben automatisch nach frei definierbaren Regeln au
 
 Die Anforderungen des Moduls, Installations- und Konfigurationshinweise, Changelog und weitere Informationen entnehmen Sie bitte der Dokumentation [online](https://docs.oxidmodule.com/Auftragsmanager/) und im docs-Verzeichnis dieses Paketes. 
 
+## Changelog
+Siehe [CHANGELOG](docs/daux/changelog/010_Changelog.md) für weitere Informationen.
+
 ## Lizenz
 (Stand: 15.01.2012)
 

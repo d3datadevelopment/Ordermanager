@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Modules\Application\Model
 {
@@ -25,13 +25,23 @@ namespace D3\Ordermanager\Modules\Application\Model
     use OxidEsales\Eshop\Application\Model\User;
     use OxidEsales\Eshop\Core\Email;
 
-    class d3_oxbasket_ordermanager_parent extends Basket {}
+    class d3_oxbasket_ordermanager_parent extends Basket
+    {
+    }
 
-    class d3_oxbasketitem_ordermanager_parent extends BasketItem {}
+    class d3_oxbasketitem_ordermanager_parent extends BasketItem
+    {
+    }
 
-    class d3_oxemail_ordermanager_parent extends Email {}
+    class d3_oxemail_ordermanager_parent extends Email
+    {
+    }
 
-    class d3_oxorder_ordermanager_parent extends Order {}
+    class d3_oxorder_ordermanager_parent extends Order
+    {
+    }
 
-    class d3_oxuser_ordermanager_parent extends User {}
+    class d3_oxuser_ordermanager_parent extends User
+    {
+    }
 }

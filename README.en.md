@@ -7,6 +7,9 @@ Have recurring tasks performed automatically according to freely definable rules
 
 Please refer to the documentation [online](https://docs.oxidmodule.com/Auftragsmanager/) and the docs directory of this package for the requirements of this plugin, installation and configuration instructions, changelog and further informations.
 
+## Changelog
+See [CHANGELOG](docs/daux/changelog/010_Changelog.md) for further informations.
+
 ## License
 (status: 2012-01-15)
 

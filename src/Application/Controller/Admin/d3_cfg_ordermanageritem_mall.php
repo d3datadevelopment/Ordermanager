@@ -14,12 +14,13 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
 use D3\ModCfg\Application\Model\d3filesystem;
 use D3\ModCfg\Application\Model\d3str;
+use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
@@ -49,7 +50,9 @@ if (false == class_exists("\OxidEsales\Eshop\Application\Controller\Admin\AdminM
         }
     }
 } else {
-    class d3AdminMall extends AdminMall {}
+    class d3AdminMall extends AdminMall
+    {
+    }
 }
 // @codeCoverageIgnoreEnd
 
@@ -69,12 +72,12 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
     protected $_sMenuItemTitle = 'd3mxordermanager';
     protected $_sMenuSubItemTitle = 'd3tbclordermanager_items_mall';
     protected $_sHelpLinkMLAdd;
-    protected $_aNaviItems = array(
-        'new' => array(
+    protected $_aNaviItems = [
+        'new' => [
             'sScript' => 'top.oxid.admin.editThis( -1 );return false;',
             'sTranslationId' => 'D3_TOOLTIPS_NEWORDERMANAGER',
-        ),
-    );
+        ],
+    ];
     /**
      * Class name of object to load
      */
@@ -85,7 +88,9 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
      */
     public function __construct()
     {
-        d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', $this->_sModId);
+        if (d3GetModCfgDIC()->getParameter($this->_DIC_Instance_Id . 'modcfgid') !== $this->_sModId) {
+            throw oxNew(wrongModIdException::class, $this->_sModId);
+        }
 
         parent::__construct();
     }
@@ -103,7 +108,7 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
     /**
      * @return string
      */
-    public function render() : string
+    public function render(): string
     {
         $oProfile = $this->getProfile();
         /** @var Request $request */

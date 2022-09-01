@@ -50,7 +50,7 @@ class jobListTest extends d3IntegrationTestCase
     {
         $controller = oxNew(d3_cfg_ordermanageritem_list::class);
         $list = $controller->getItemList();
-// ToDo: check if it use page navigation and doesn't contain all items
+        // ToDo: check if it use page navigation and doesn't contain all items
         $this->assertGreaterThan(
             0,
             $list->count()
@@ -69,8 +69,8 @@ class jobListTest extends d3IntegrationTestCase
     {
         $_POST['where'] = [
             'd3modprofile'  => [
-                'oxtitle'   => 'orderManagerTestTitle'
-            ]
+                'oxtitle'   => 'orderManagerTestTitle',
+            ],
         ];
 
         $controller = oxNew(d3_cfg_ordermanageritem_list::class);

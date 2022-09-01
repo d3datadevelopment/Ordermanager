@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Setup;
 
@@ -29,7 +29,7 @@ use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\ModCfg\Application\Model\Install\d3install_updatebase;
 use D3\ModCfg\Application\Model\Installwizzard\d3installdbrecord;
 use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Statement;
 use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\ConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -46,68 +46,68 @@ class d3ordermanager_update extends d3install_updatebase
 {
     public $sModKey = 'd3_ordermanager';
     public $sModName = 'Auftragsmanager';
-    public $sModVersion = '5.0.3.1';
-    public $sModRevision = '5031';
+    public $sModVersion = '5.1.0.0';
+    public $sModRevision = '5100';
     public $sBaseConf =
-    'MB2v2==SktVZllBNlJJM3VrK2pkZFJQUFhJTm1wSlU0djlwTVFNeHlVV0pqTTNlTklOMnRBQ1o1ZDZ5T
-UwwVDRoWGorWThaMmxWMVAwWitsYlBuQWxXWGZoT3pCMjVMMlVsakRBYStBOTNUdHN1Nzl4cElvOFhCK
-zVFM2s3WmVBYXQrbzNXUDRMNEZOVkdrUkk1aDByWjRJbTROZ0VjSGJuUFpqQWZsMG9FN0I4YkM2aXY3U
-1BZZE1FbnhrNTY2WnlSbjFmeER5UkpkT3JmNjFMbHdyL3hESExjRVRzeXRPSEZKR1VGdWhVQ0VwSEhJZ
-GRzMGNneUdoZEpyMlpReVk2eVFCUmphMUVmUnlqNkJ6ZTJ1dEt5QzQwTDVSSGo2OXI5VjdNcXp6RjRKb
-zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
+    'EgRv2==eHM5VlVJL3lRV0ROQ0hFckZTYldremVrYWYwZWFoTjJpd08wNTZBRHdBZ2Rvb1ZqS2xzSlZ6c
+ExDSWxvcCt3QlkvMWZmM1hKK0lkc2VzeDdiUjVBVXZRT0xwalpycFFOSEYyQWN2cnFqamxzNC9UNm8ra
+0FDTzBXMVdxSnZKWjFXY2pQZWdvWlBVREJzVGljMGloR3JwaXAzLzdiWjU2ZjdEUno3R1lQRHQ0akh5N
+i9tUUthQllsWGlOM0tydWJUWHdoYkc2a2dHOGI5MldqczVsOUJHbG1ZQVhhcTFwQUp5dTFuRDlDdC8xc
+XBnVUxNRFJwMEZVRjNObU5ZSHFLWHdzR1lTeklQSjIyd3NrRGJFenppb1cvRWlTL3BYTTJSNE1teFdPT
+2hjQlVxdHpXV3REUlIxVkZCRnQxRzZKeHd1YXdPNHhhYzhhSUYzRlRodzlZK1NRPT0=';
     public $sRequirements = '';
     public $sBaseValue = 'TyUzQTglM0ElMjJzdGRDbGFzcyUyMiUzQTUlM0ElN0JzJTNBMjMlM0ElMjJkM19jZmdfbW9kX19hRm9sZGVyTGlzdCUyMiUzQmElM0E1JTNBJTdCaSUzQTAlM0JzJTNBMjUlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfTkVXJTIyJTNCaSUzQTElM0JzJTNBMzIlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfUEFZQURWQU5DRSUyMiUzQmklM0EyJTNCcyUzQTM2JTNBJTIyRDNfT1JERVJNQU5BR0VSX09SREVSX1BBWVNUQVRVU0NIRUNLJTIyJTNCaSUzQTMlM0JzJTNBMzYlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfREVMSVZFUllTVEFUVVMlMjIlM0JpJTNBNCUzQnMlM0EzNyUzQSUyMkQzX09SREVSTUFOQUdFUl9PUkRFUl9PUkRFUlBST0NFU1NJTkclMjIlM0IlN0RzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19ibENyb25BY3RpdmUlMjIlM0JzJTNBMSUzQSUyMjAlMjIlM0JzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19pTWF4T3JkZXJDbnQlMjIlM0JzJTNBMiUzQSUyMjUwJTIyJTNCcyUzQTI1JTNBJTIyZDNfY2ZnX21vZF9fc0Nyb25QYXNzd29yZCUyMiUzQnMlM0EwJTNBJTIyJTIyJTNCcyUzQTMwJTNBJTIyZDNfY2ZnX21vZF9fYmxDYWxjU3RhdE9uRGVtYW5kJTIyJTNCcyUzQTElM0ElMjIwJTIyJTNCJTdE';
 
-    public $sMinModCfgVersion = '6.0.0.0';
-    
+    public $sMinModCfgVersion = '6.1.0.0';
+
     protected $_aUpdateMethods = [
         [
             'check' => 'doesOrder2OrderManagerTableNotExist',
-            'do'    => 'addOrder2OrderManagerTable'
+            'do'    => 'addOrder2OrderManagerTable',
         ],
         [
             'check' => 'doesModCfgItemNotExist',
-            'do'    => 'addModCfgItem'
+            'do'    => 'addModCfgItem',
         ],
         [
             'check' => 'checkFields',
-            'do'    => 'fixFields'
+            'do'    => 'fixFields',
         ],
         [
             'check' => 'checkIndizes',
-            'do'    => 'fixIndizes'
+            'do'    => 'fixIndizes',
         ],
         [
             'check' => 'checkOrderManagerTableExist',
-            'do'    => 'convertOrderManagerItems'
+            'do'    => 'convertOrderManagerItems',
         ],
         [
             'check' => 'checkCronPasswordSet',
-            'do'    => 'createCronPassword'
+            'do'    => 'createCronPassword',
         ],
         [
             'check' => 'needExampleJobList',
-            'do'    => 'addExampleJobList'
+            'do'    => 'addExampleJobList',
         ],
         [
             'check' => 'isExampleContentMissingInDatabase',
-            'do'    => 'addExampleContentList'
+            'do'    => 'addExampleContentList',
         ],
         [
             'check' => 'requireExample2ShopRelation',
-            'do'    => 'addExample2ShopRelation'
+            'do'    => 'addExample2ShopRelation',
         ],
         [
             'check' => 'hasNotOrderArticlesParentId',
-            'do'    => 'addOrderArticlesParentId'
+            'do'    => 'addOrderArticlesParentId',
         ],
         [
             'check' => 'hasUnregisteredFiles',
-            'do'    => 'showUnregisteredFiles'
+            'do'    => 'showUnregisteredFiles',
         ],
         [
             'check' => 'checkModCfgSameRevision',
-            'do'    => 'updateModCfgSameRevision'
+            'do'    => 'updateModCfgSameRevision',
         ],
     ];
 
@@ -324,7 +324,7 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
         $blReturn = false;
         if ($this->checkOrderManagerTableExist()) {
             $this->_changeItemContent('d3ordermanager__', '');
-// ToDo: move this to generic methods in install_updatebase
+            // ToDo: move this to generic methods in install_updatebase
             $aWhere = [];
 
             $aFieldLists = $this->_prepareConvertAssignments(
@@ -347,7 +347,7 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
                 try {
                     $this->getDb()->execute($sSql);
                     $blReturn = true;
-                } catch  (PDOException $exception) {
+                } catch (PDOException $exception) {
                     if ($exception->errorInfo[1]) {
                         $this->setErrorMessage($exception->errorInfo[2]);
                     }
@@ -382,108 +382,108 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
             'oxid'   =>  [
                 'from'      => 'oxid',
                 'to'        => 'oxid',
-                'multilang' => 0
+                'multilang' => 0,
             ],
             'oxshopid'   =>  [
                 'from'      => 'oxshopid',
                 'to'        => 'oxshopid',
-                'multilang' => 0
+                'multilang' => 0,
             ],
             4   => [
                 'from'      =>  'oxactive',
                 'to'        =>  'oxactive',
                 'multilang' => 1,
                 'from_content'    => 1,
-                'from_use_quote'  => 0
+                'from_use_quote'  => 0,
             ],
             5   => [
                 'from'      =>  'oxactivefrom',
                 'to'        =>  'oxactivefrom',
                 'multilang' => 1,
                 'from_content'    => '0000-00-00 00:00:00',
-                'from_use_quote'  => 1
+                'from_use_quote'  => 1,
             ],
             6   => [
                 'from'      =>  'oxactiveto',
                 'to'        =>  'oxactiveto',
                 'multilang' => 1,
                 'from_content'    => '0000-00-00 00:00:00',
-                'from_use_quote'  => 1
+                'from_use_quote'  => 1,
             ],
             7   => [
                 'from_content' =>  'd3_ordermanager',
                 'from_use_quote'    => true,
                 'to'        =>  'oxmodid',
-                'multilang' => 0
+                'multilang' => 0,
             ],
             8   => [
                 'from'      =>  'oxtitle',
                 'to'        =>  'oxtitle',
-                'multilang' => 1
+                'multilang' => 1,
             ],
             9   => [
                 'from'      =>  'oxcreate',
                 'to'        =>  'oxcreate',
                 'multilang' => 0,
                 'from_content'    => 'NOW()',
-                'from_use_quote'  => 0
+                'from_use_quote'  => 0,
             ],
             10   => [
                 'from'      =>  'oxupdate',
                 'to'        =>  'oxupdate',
                 'multilang' => 1,
                 'from_content'    => 'NOW()',
-                'from_use_quote'  => 0
+                'from_use_quote'  => 0,
             ],
             11   => [
                 'from'      =>  'oxmodversion',
                 'to'        =>  'oxmodversion',
                 'multilang' => 0,
                 'from_content'    => $this->sModVersion,
-                'from_use_quote'  => 1
+                'from_use_quote'  => 1,
             ],
             12   => [
                 'from'      =>  'oxlog',
                 'to'        =>  'oxlog',
                 'multilang' => 1,
                 'from_content'    => 15,
-                'from_use_quote'  => 0
+                'from_use_quote'  => 0,
             ],
             13   => [
                 'from'      =>  'oxvalue',
                 'to'        =>  'oxvalue',
-                'multilang' => 1
+                'multilang' => 1,
             ],
             14   => [
                 'from'      =>  'oxfolder',
                 'to'        =>  'oxfolder',
-                'multilang' => 0
+                'multilang' => 0,
             ],
             15   => [
                 'from'      =>  'oxsort',
                 'to'        =>  'oxsort',
-                'multilang' => 0
+                'multilang' => 0,
             ],
             16   => [
                 'from'      =>  'oxwriteprotection',
                 'to'        =>  'oxwriteprotection',
                 'multilang' => 0,
                 'from_content'    => '0',
-                'from_use_quote'  => 0
+                'from_use_quote'  => 0,
             ],
             17   => [
                 'from'      =>  'oxexecmanually',
                 'to'        =>  'd3_om_execmanually',
                 'multilang' => 0,
                 'from_content'    => '0',
-                'from_use_quote'  => 0
+                'from_use_quote'  => 0,
             ],
             18   => [
                 'from'      =>  'oxmarkorder',
                 'to'        =>  'd3_om_markorder',
                 'multilang' => 0,
                 'from_content'    => '1',
-                'from_use_quote'  => 0
+                'from_use_quote'  => 0,
             ],
         ];
     }
@@ -509,13 +509,15 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
                     ->from('d3ordermanager')
                     ->where('1');
 
-                $aRecords = $qb->execute()->fetchAllAssociative();
+                /** @var Statement $stm */
+                $stm = $qb->execute();
+                $aRecords = $stm->fetchAllAssociative();
                 if ($aRecords && is_array($aRecords) && count($aRecords)) {
                     foreach ($aRecords as $aRecord) {
                         $aRecord = array_change_key_case($aRecord, CASE_UPPER);
                         if (strlen($aRecord['VALUE'])) {
                             $aValues = unserialize(rawurldecode(base64_decode($aRecord['VALUE'])));
-                            $aNewValues = new stdClass;
+                            $aNewValues = new stdClass();
 
                             foreach ($aValues as $sKey => $mValue) {
                                 $sNew = str_replace($sOldKey, $sNewKey, $sKey);
@@ -534,7 +536,7 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
                             if ($this->hasExecute()) {
                                 try {
                                     $qb1->execute();
-                                } catch  (PDOException $exception) {
+                                } catch (PDOException $exception) {
                                     if ($exception->errorInfo[1]) {
                                         $this->setErrorMessage($exception->errorInfo[2]);
                                     }
@@ -751,7 +753,7 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
                             'force_update'  => true,
                             'use_quote'     => true,
                             'use_multilang' => false,
-                        ]
+                        ],
                     ];
 
                     $this->setInitialExecMethod(__METHOD__);
@@ -877,13 +879,13 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
             $qb->select('count(oxid) < '.count($aIdentList))
                 ->from('oxcontents')
                 ->where(
-                        $qb->expr()->in('oxloadid', implode(', ', array_map(
-                            function($value) use ($qb) {
+                    $qb->expr()->in('oxloadid', implode(', ', array_map(
+                        function ($value) use ($qb) {
                                 return $qb->createNamedParameter($value);
                             },
-                            $aIdentList
-                        )))
-                    )
+                        $aIdentList
+                    )))
+                )
                 ->setMaxResults(1);
 
             return (bool) $qb->execute()->fetchColumn();
@@ -931,7 +933,7 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
 
         foreach ($this->getExampleJobInsertList() as $aJobContentInfos) {
             $sGetFieldContentMethodName = $aJobContentInfos['content'];
-            /** @var $oShop Shop */
+            /** @var Shop $oShop */
             foreach ($this->getShopListByActiveModule('d3ordermanager') as $oShop) {
                 $aCheckFields = $this->{$sGetFieldContentMethodName}($oShop);
 
@@ -959,7 +961,7 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
 
         foreach ($this->getExampleJobInsertList() as $aJobContentInfos) {
             $sGetFieldContentMethodName = $aJobContentInfos['content'];
-            /** @var $oShop Shop */
+            /** @var Shop $oShop */
             foreach ($this->getShopListByActiveModule('d3ordermanager') as $oShop) {
                 $aInsertFields = $this->{$sGetFieldContentMethodName}($oShop);
                 $blRet = $this->_add2ShopRelation($aJobContentInfos['table'], $aInsertFields);
@@ -983,43 +985,43 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
         return [
             [
                 'content'   => 'getExampleJobItem1InsertFields',
-                'table'     => 'd3modprofile'
+                'table'     => 'd3modprofile',
             ],
             [
                 'content'   => 'getExampleJobItem2InsertFields',
-                'table'     => 'd3modprofile'
+                'table'     => 'd3modprofile',
             ],
             [
                 'content'   => 'getExampleJobItem3InsertFields',
-                'table'     => 'd3modprofile'
+                'table'     => 'd3modprofile',
             ],
             [
                 'content'   => 'getExampleJobItem4InsertFields',
-                'table'     => 'd3modprofile'
+                'table'     => 'd3modprofile',
             ],
             [
                 'content'   => 'getExampleJobItem5InsertFields',
-                'table'     => 'd3modprofile'
+                'table'     => 'd3modprofile',
             ],
             [
                 'content'   => 'getExampleJobItem6InsertFields',
-                'table'     => 'd3modprofile'
+                'table'     => 'd3modprofile',
             ],
             [
                 'content'   => 'getExampleJobItem7InsertFields',
-                'table'     => 'd3modprofile'
+                'table'     => 'd3modprofile',
             ],
             [
                 'content'   => 'getExampleJobItem8InsertFields',
-                'table'     => 'd3modprofile'
+                'table'     => 'd3modprofile',
             ],
             [
                 'content'   => 'getExampleJobItem9InsertFields',
-                'table'     => 'd3modprofile'
+                'table'     => 'd3modprofile',
             ],
             [
                 'content'   => 'getExampleJobItem10InsertFields',
-                'table'     => 'd3modprofile'
+                'table'     => 'd3modprofile',
             ],
         ];
     }
@@ -1032,11 +1034,11 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
         return [
             [
                 'content'   => 'getExampleContent1InsertFields',
-                'table'     => 'oxcontents'
+                'table'     => 'oxcontents',
             ],
             [
                 'content'   => 'getExampleContent2InsertFields',
-                'table'     => 'oxcontents'
+                'table'     => 'oxcontents',
             ],
         ];
     }
@@ -3138,7 +3140,7 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
     {
         $blRet = false;
 
-        /** @var $oShop Shop */
+        /** @var Shop $oShop */
         foreach ($this->getShopListByActiveModule('d3ordermanager') as $oShop) {
             $aWhere = [];
             $aInsertFields = $this->{$sGetFieldContentMethodName}($oShop);
@@ -3251,7 +3253,7 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
      */
     public function hasUnregisteredFiles(): bool
     {
-        return $this->_hasUnregisteredFiles('d3ordermanager', array('d3FileRegister'));
+        return $this->_hasUnregisteredFiles('d3ordermanager', ['d3FileRegister']);
     }
 
     /**
@@ -3266,6 +3268,6 @@ zRhRTJ0OTZ3M0RnUmFRYnJvYysxOHgrbWxPYXlRYWtURFBEbGQ0ZTRabWx2eGNnPT0=';
      */
     public function showUnregisteredFiles(): bool
     {
-        return $this->_showUnregisteredFiles('d3ordermanager', array('d3FileRegister'));
+        return $this->_showUnregisteredFiles('d3ordermanager', ['d3FileRegister']);
     }
 }

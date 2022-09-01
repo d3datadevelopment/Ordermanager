@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Application\Model;
 
@@ -99,7 +99,7 @@ class d3ordermanagerlist extends d3modprofilelist
         if ($this->d3GetSet()->isDemo() ||
             in_array(
                 true,
-                array_map(array($this->d3GetSet(),'getLicenseConfigData'),array(d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION))
+                array_map([$this->d3GetSet(),'getLicenseConfigData'], [d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION])
             )
         ) {
             /** @var Manager $oListObject */
@@ -149,7 +149,7 @@ class d3ordermanagerlist extends d3modprofilelist
         if ($this->d3GetSet()->isDemo() ||
             in_array(
                 true,
-                array_map(array($this->d3GetSet(),'getLicenseConfigData'),array(d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION))
+                array_map([$this->d3GetSet(),'getLicenseConfigData'], [d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION])
             )
         ) {
             /** @var Manager $oListObject */
@@ -228,7 +228,7 @@ class d3ordermanagerlist extends d3modprofilelist
         $queryBuilder->andWhere(
             $queryBuilder->expr()->eq(
                 $oListObject->getViewName() . "." . $sFieldName,
-                    $queryBuilder->createNamedParameter(1, ParameterType::INTEGER)
+                $queryBuilder->createNamedParameter(1, ParameterType::INTEGER)
             )
         );
 

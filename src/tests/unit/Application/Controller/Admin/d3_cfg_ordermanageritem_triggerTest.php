@@ -40,14 +40,14 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_trigger::class);
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -87,8 +87,8 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertSame(
-            array('foo' => 'bar'),
-            $this->callMethod($this->_oController, 'addDefaultValues', array(array('foo' => 'bar')))
+            ['foo' => 'bar'],
+            $this->callMethod($this->_oController, 'addDefaultValues', [['foo' => 'bar']])
         );
 
         $this->assertEquals('newCjId', $_POST['editval']['d3modprofile__d3_cronjobid']);
@@ -114,8 +114,8 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertSame(
-            array('foo' => 'bar'),
-            $this->callMethod($this->_oController, 'addDefaultValues', array(array('foo' => 'bar')))
+            ['foo' => 'bar'],
+            $this->callMethod($this->_oController, 'addDefaultValues', [['foo' => 'bar']])
         );
 
         $this->assertEquals('newCjId', $_GET['editval']['d3modprofile__d3_cronjobid']);
@@ -133,7 +133,7 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 'fixCronjobId',
-                array('test Id')
+                ['test Id']
             )
         );
         $this->assertEquals(
@@ -141,7 +141,7 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 'fixCronjobId',
-                array('test-Id')
+                ['test-Id']
             )
         );
     }

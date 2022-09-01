@@ -15,13 +15,14 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Application\Controller;
 
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
+use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\ModCfg\Application\Model\Log\d3LogInterface;
 use D3\ModCfg\Application\Model\Log\d3log;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
@@ -52,7 +53,9 @@ class d3ordermanager_response extends Base
      */
     public function __construct()
     {
-        d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', $this->_sModId);
+        if (d3GetModCfgDIC()->getParameter($this->_DIC_Instance_Id . 'modcfgid') !== $this->_sModId) {
+            throw oxNew(wrongModIdException::class, $this->_sModId);
+        }
 
         parent::__construct();
     }
@@ -261,7 +264,7 @@ class d3ordermanager_response extends Base
         /** @var Request $request */
         $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
         $sGetAccessKey  = $request->getRequestEscapedParameter("key");
-        $sRegisteredAccessKey = $sSetCronPassword ? : $this->getManager()->getBaseCronPW();
+        $sRegisteredAccessKey = $sSetCronPassword ?: $this->getManager()->getBaseCronPW();
 
         return $this->hasValidAccessKey($sRegisteredAccessKey, $sGetAccessKey);
     }
@@ -335,19 +338,11 @@ class d3ordermanager_response extends Base
      */
     public function getCronUnavailableException($sMessage): cronUnavailableException
     {
-        d3GetModCfgDIC()->setParameter(
-            cronUnavailableException::class.'.args.message',
-            $sMessage
-        );
-
-        /** @var cronUnavailableException $cronUnavailableExc */
-        $cronUnavailableExc = d3GetModCfgDIC()->get(cronUnavailableException::class);
-
-        return $cronUnavailableExc;
+        return oxNew(cronUnavailableException::class, $sMessage);
     }
 
     /**
-     * @return string
+     * @return string|int
      */
     protected function _getCronJobIdParameter()
     {
@@ -367,13 +362,7 @@ class d3ordermanager_response extends Base
      */
     protected function _getCronTimestampVarName(): string
     {
-        $sVarName = "sCronExecTimestamp";
-
-        if ($this->_getCronJobIdParameter() !== false) {
-            $sVarName .= $this->_getCronJobIdParameter();
-        }
-
-        return $sVarName;
+        return "sCronExecTimestamp".$this->_getCronJobIdParameter();
     }
 
     public function getLastExecDate(): string
@@ -392,7 +381,7 @@ class d3ordermanager_response extends Base
         $taskCount = current(
             array_filter(
                 $this->getManager()->getAvailableCronjobIds(),
-                function($entry) use ($sCronJobId) {
+                function ($entry) use ($sCronJobId) {
                     return $entry['id'] == $sCronJobId;
                 }
             )
@@ -408,7 +397,7 @@ class d3ordermanager_response extends Base
                 $this->getLang()->translateString('D3_GENERAL_ORDERMANAGER_LASTEXEC_CRONID'),
                 $sCronJobId,
                 $this->getLastExecDate()
-            )
+            ),
         ];
     }
 

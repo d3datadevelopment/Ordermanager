@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Modules\Application\Model;
 
@@ -102,7 +102,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
      *
      * @throws Exception
      */
-    public function calculateBasket4OrderManager( bool $blForceUpdate, $oOrder )
+    public function calculateBasket4OrderManager(bool $blForceUpdate, $oOrder)
     {
         if (!$this->isEnabled()) {
             return;
@@ -112,7 +112,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
             return;
         }
 
-        $this->_aCosts = array();
+        $this->_aCosts = [];
 
         $this->_oPrice = $this->d3GetOrderManagerPriceObject();
         $this->_oPrice->setBruttoPriceMode();
@@ -199,7 +199,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
         $this->setSkipDiscounts(false);
 
         // resetting
-        $this->_aItemDiscounts = array();
+        $this->_aItemDiscounts = [];
 
         $this->_oProductsPriceList = $this->d3GetOrderManagerPriceList();
         $this->_oDiscountProductsPriceList = $this->d3GetOrderManagerPriceList();
@@ -209,7 +209,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
 
         /** @var $oBasketItem BasketItem */
         foreach ($this->_aBasketContents as $oBasketItem) {
-            if (!$oBasketItem->isDiscountArticle() && ( $oArticle = $oBasketItem->getArticle())) {
+            if (!$oBasketItem->isDiscountArticle() && ($oArticle = $oBasketItem->getArticle())) {
                 $oBasketPrice = $oBasketItem->getUnitPrice();
                 $oBasketItem->setRegularUnitPrice(clone $oBasketPrice);
                 $oBasketItem->setPrice($oBasketPrice);
@@ -290,12 +290,12 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
         $oDiscount->dDiscount     = $oOrder->getFieldData('oxdiscount');
         $oDiscount->fDiscount     = $oOrder->getFieldData('oxdiscount');
 
-        $this->_aDiscounts = array($oDiscount);
+        $this->_aDiscounts = [$oDiscount];
 
         if (false == is_array($this->_aDiscountedVats)) {
-            $this->_aDiscountedVats = array(
-                '0' => 0
-            );
+            $this->_aDiscountedVats = [
+                '0' => 0,
+            ];
         }
     }
 

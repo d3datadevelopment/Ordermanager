@@ -42,14 +42,14 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_oController = oxNew( d3_ordermanager_cron::class);
+        $this->_oController = oxNew(d3_ordermanager_cron::class);
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -60,14 +60,15 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
      * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::__construct
      * @test
      * @throws ReflectionException
+     * @dataProvider constructorPassDataProvider
      */
-    public function constructorCLIPass()
+    public function constructorPass($isCli)
     {
         $controllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
             ->onlyMethods(['isCLI'])
             ->disableOriginalConstructor()
             ->getMock();
-        $controllerMock->method('isCLI')->willReturn(true);
+        $controllerMock->method('isCLI')->willReturn($isCli);
 
         $this->callMethod(
             $controllerMock,
@@ -84,29 +85,14 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\publicDir\d3_ordermanager_cron::__construct
-     * @test
-     * @throws ReflectionException
+     * @return array
      */
-    public function constructorNonCLIPass()
+    public function constructorPassDataProvider(): array
     {
-        $controllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
-            ->onlyMethods(['isCLI'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $controllerMock->method('isCLI')->willReturn(false);
-
-        $this->callMethod(
-            $controllerMock,
-            '__construct'
-        );
-
-        $this->assertNull(
-            $this->getValue(
-                $controllerMock,
-                'options'
-            )
-        );
+        return [
+            'is CLI'    => [true],
+            'no CLI'    => [false],
+        ];
     }
 
     /**
@@ -136,7 +122,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'registerOption',
                 'registerCommand',
-                'registerArgument'
+                'registerArgument',
             ])
             ->getMock();
         $oOptionsMock->expects($this->exactly(3))->method('registerOption')->willReturn(true);
@@ -146,9 +132,9 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oController,
             'setup',
-            array(
-                $oOptionsMock
-            )
+            [
+                $oOptionsMock,
+            ]
         );
     }
 
@@ -169,7 +155,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->setValue(
             $oOptionsMock,
             'args',
-            array()
+            []
         );
         $oOptionsMock->parseOptions();
 
@@ -192,12 +178,12 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $oOptionsMock = $this->getMockBuilder(Options::class)
             ->onlyMethods([
                 'getOpt',
-                'getCmd'
+                'getCmd',
             ])
             ->setConstructorArgs([$this->getValue($this->_oController, 'colors')])
             ->getMock();
         $oOptionsMock->method('getOpt')->will($this->returnCallback(
-            function($param) {
+            function ($param) {
                 return $param == d3_ordermanager_cron::OPTION_VERSION;
             }
         ));
@@ -206,7 +192,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->setValue(
             $oOptionsMock,
             'args',
-            array()
+            []
         );
         $oOptionsMock->parseOptions();
 
@@ -221,7 +207,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oController,
             'main',
-            array($oOptionsMock)
+            [$oOptionsMock]
         );
     }
 
@@ -236,12 +222,12 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $oOptionsMock = $this->getMockBuilder(Options::class)
             ->onlyMethods([
                 'getOpt',
-                'getCmd'
+                'getCmd',
             ])
             ->setConstructorArgs([$this->getValue($this->_oController, 'colors')])
             ->getMock();
         $oOptionsMock->method('getOpt')->will($this->returnCallback(
-            function($param) {
+            function ($param) {
                 return $param == d3_ordermanager_cron::OPTION_QUIET;
             }
         ));
@@ -250,7 +236,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->setValue(
             $oOptionsMock,
             'args',
-            array()
+            []
         );
         $oOptionsMock->parseOptions();
 
@@ -265,7 +251,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oController,
             'main',
-            array($oOptionsMock)
+            [$oOptionsMock]
         );
     }
 
@@ -281,7 +267,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'getOpt',
                 'getCmd',
-                'getArgs'
+                'getArgs',
             ])
             ->setConstructorArgs(
                 [$this->getValue($this->_oController, 'colors')]
@@ -303,14 +289,14 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods(['initCli'])
             ->getMock();
         $oResponseMock->expects($this->never())->method('initCli')->willReturn(true);
-        d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
+        d3GetModCfgDIC()->set(d3ordermanager_response::class, $oResponseMock);
 
         /** @var d3_ordermanager_cron|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
             ->onlyMethods([
                 'translateFixedStrings',
                 'success',
-                'error'
+                'error',
             ])
             ->getMock();
         $oControllerMock->expects($this->never())->method('translateFixedStrings')->willReturn('');
@@ -322,7 +308,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oController,
             'main',
-            array($oOptionsMock)
+            [$oOptionsMock]
         );
     }
 
@@ -338,7 +324,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'getOpt',
                 'getCmd',
-                'getArgs'
+                'getArgs',
             ])
             ->setConstructorArgs(
                 [$this->getValue($this->_oController, 'colors')]
@@ -368,21 +354,21 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods(['initCli'])
             ->getMock();
         $oResponseMock->expects($this->never())->method('initCli')->willReturn(true);
-        d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
+        d3GetModCfgDIC()->set(d3ordermanager_response::class, $oResponseMock);
 
         /** @var Config|MockObject $oConfigMock */
         $oConfigMock = $this->getMockBuilder(Config::class)
             ->onlyMethods(['getShopIds'])
             ->getMock();
         $oConfigMock->method('getShopIds')->willReturn([0, 1, 2]);
-        d3GetModCfgDIC()->set( 'd3ox.ordermanager.' . Config::class , $oConfigMock);
+        d3GetModCfgDIC()->set('d3ox.ordermanager.' . Config::class, $oConfigMock);
 
         /** @var d3_ordermanager_cron|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
             ->onlyMethods([
                 'translateFixedStrings',
                 'success',
-                'error'
+                'error',
             ])
             ->getMock();
         $oControllerMock->expects($this->never())->method('translateFixedStrings')->willReturn('');
@@ -394,7 +380,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oController,
             'main',
-            array($oOptionsMock)
+            [$oOptionsMock]
         );
     }
 
@@ -416,7 +402,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'getOpt',
                 'getCmd',
-                'getArgs'
+                'getArgs',
             ])
             ->setConstructorArgs(
                 [$this->getValue($this->_oController, 'colors')]
@@ -438,14 +424,14 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods(['initCli'])
             ->getMock();
         $oResponseMock->expects($this->once())->method('initCli')->willReturn(true);
-        d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
+        d3GetModCfgDIC()->set(d3ordermanager_response::class, $oResponseMock);
 
         /** @var d3_ordermanager_cron|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
             ->onlyMethods([
                 'translateFixedStrings',
                 'success',
-                'error'
+                'error',
             ])
             ->getMock();
         $oControllerMock->expects($this->never())->method('translateFixedStrings')->willReturn('');
@@ -457,7 +443,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oController,
             'main',
-            array($oOptionsMock)
+            [$oOptionsMock]
         );
     }
 
@@ -472,7 +458,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $oOptionsMock = $this->getMockBuilder(Options::class)
             ->onlyMethods([
                 'getOpt',
-                'getCmd'
+                'getCmd',
             ])
             ->setConstructorArgs([$this->getValue($this->_oController, 'colors')])
             ->getMock();
@@ -482,7 +468,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->setValue(
             $oOptionsMock,
             'args',
-            array()
+            []
         );
         $oOptionsMock->parseOptions();
 
@@ -491,7 +477,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods(['initCli'])
             ->getMock();
         $oResponseMock->expects($this->once())->method('initCli')->willReturn(true);
-        d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
+        d3GetModCfgDIC()->set(d3ordermanager_response::class, $oResponseMock);
 
         /** @var d3_ordermanager_cron|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
@@ -504,7 +490,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oController,
             'main',
-            array($oOptionsMock)
+            [$oOptionsMock]
         );
     }
 
@@ -521,13 +507,13 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->getMock();
         $oResponseMock->expects($this->atLeastOnce())->method('getLastExecDateInfo')->willReturn(['content1', 'content2']);
 
-        d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock );
+        d3GetModCfgDIC()->set(d3ordermanager_response::class, $oResponseMock);
 
         /** @var Options|MockObject $oOptionsMock */
         $oOptionsMock = $this->getMockBuilder(Options::class)
             ->onlyMethods([
                 'getOpt',
-                'getCmd'
+                'getCmd',
             ])
             ->setConstructorArgs([$this->getValue($this->_oController, 'colors')])
             ->getMock();
@@ -537,7 +523,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->setValue(
             $oOptionsMock,
             'args',
-            array()
+            []
         );
         $oOptionsMock->parseOptions();
 
@@ -567,7 +553,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $oOptionsMock = $this->getMockBuilder(Options::class)
             ->onlyMethods([
                 'getOpt',
-                'getCmd'
+                'getCmd',
             ])
             ->setConstructorArgs([$this->getValue($this->_oController, 'colors')])
             ->getMock();
@@ -577,7 +563,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->setValue(
             $oOptionsMock,
             'args',
-            array()
+            []
         );
         $oOptionsMock->parseOptions();
 
@@ -586,7 +572,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods(['initCli'])
             ->getMock();
         $oResponseMock->expects($this->once())->method('initCli')->willThrowException(new Exception('excMsg'));
-        d3GetModCfgDIC()->set( d3ordermanager_response::class, $oResponseMock);
+        d3GetModCfgDIC()->set(d3ordermanager_response::class, $oResponseMock);
 
         /** @var d3_ordermanager_cron|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_ordermanager_cron::class)
@@ -599,7 +585,7 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oController,
             'main',
-            array($oOptionsMock)
+            [$oOptionsMock]
         );
     }
 
@@ -638,9 +624,9 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 'translateFixedStrings',
-                array(
-                    'abc This tool accepts a command as first parameter as outlined below: def'
-                )
+                [
+                    'abc This tool accepts a command as first parameter as outlined below: def',
+                ]
             )
         );
     }
@@ -657,9 +643,9 @@ class d3_ordermanager_cronTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 'translateFixedStrings',
-                array(
-                    'abc This tool accepts a foo command as first parameter as outlined below: def'
-                )
+                [
+                    'abc This tool accepts a foo command as first parameter as outlined below: def',
+                ]
             )
         );
     }

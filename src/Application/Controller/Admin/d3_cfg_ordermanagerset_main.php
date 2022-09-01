@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
@@ -23,6 +23,7 @@ use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
 use D3\ModCfg\Application\Model\d3str;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
+use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\ModCfg\Application\Model\Filegenerator\d3filegeneratorcronsh;
 use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
@@ -55,7 +56,9 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
      */
     public function __construct()
     {
-        d3GetModCfgDIC()->setParameter($this->_DIC_Instance_Id.'modcfgid', $this->_sModId);
+        if (d3GetModCfgDIC()->getParameter($this->_DIC_Instance_Id . 'modcfgid') !== $this->_sModId) {
+            throw oxNew(wrongModIdException::class, $this->_sModId);
+        }
 
         parent::__construct();
     }
@@ -118,9 +121,9 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
     {
         $sBaseUrl = $this->getViewConfig()->getModuleUrl('d3ordermanager').'public/d3_ordermanager_cron.php';
 
-        $aParameters = array(
+        $aParameters = [
             'shp' => $this->getViewConfig()->getActiveShopId(),
-        );
+        ];
 
         if ($iCronJobId !== false) {
             $aParameters['cjid'] = $iCronJobId;
@@ -144,10 +147,10 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
     {
         $sScriptPath = VENDOR_PATH.'bin/d3_ordermanager_cron';
 
-        $aParameters = array(
+        $aParameters = [
             'task'  => 'run',
             'shp'   => $this->getViewConfig()->getActiveShopId(),
-        );
+        ];
 
         if ($iCronJobId !== false) {
             $aParameters['cjid'] = $iCronJobId;
@@ -261,11 +264,11 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         $sCronId = $request->getRequestEscapedParameter('cronid');
 
         $oShop = $this->d3GetActiveShop();
-        $aParameters = array(
+        $aParameters = [
             0 => 'run',
             1 => $oShop->getId(),
             2 => $sCronId,
-        );
+        ];
 
         $oD3ShGenerator = $this->getFileGeneratorCronSh();
         $oD3ShGenerator->setContentType($request->getRequestEscapedParameter('crontype'));

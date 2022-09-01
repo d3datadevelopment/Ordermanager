@@ -31,23 +31,23 @@ class jobExecuteTest extends d3IntegrationTestCase
     /** @var d3_ordermanager_jobs */
     public $_oController;
     public $sManagerId = 'managerTestId';
-    public $aArticleIdList = array(
-        'articleTestIdNo1'
-    );
-    public $aCountryIdList = [
-        'testCountryId1Pass'
+    public $aArticleIdList = [
+        'articleTestIdNo1',
     ];
-    public $aOrderIdList = array(
-        'orderTestIdNo1'
-    );
-    public $aOrderArticleIdList = array(
-        'orderTestIdNo1Article1'
-    );
+    public $aCountryIdList = [
+        'testCountryId1Pass',
+    ];
+    public $aOrderIdList = [
+        'orderTestIdNo1',
+    ];
+    public $aOrderArticleIdList = [
+        'orderTestIdNo1Article1',
+    ];
 
     public $dCurrentValue = 1.23;
     public $dExpectedValue = 2.34;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -62,21 +62,21 @@ class jobExecuteTest extends d3IntegrationTestCase
         $this->createManager($this->sManagerId);
 
         foreach ($this->aCountryIdList as $sId) {
-            $this->createBaseModelObject( 'oxcountry', $sId, [ 'oxtitle' => __METHOD__ ] );
+            $this->createBaseModelObject('oxcountry', $sId, [ 'oxtitle' => __METHOD__ ]);
         }
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxdelcost'     => $this->dCurrentValue,
                 'oxcurrate'     => 1,
                 'oxbillcountryid'   => $this->aCountryIdList[0],
                 'oxdelcountryid'    => '',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[0] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[0] => [
                     'oxartnum'      => 'expArtNum1',
                     'oxtitle'       => 'expTitle1',
                     'oxshortdesc'   => 'expShortDesc1',
@@ -84,8 +84,8 @@ class jobExecuteTest extends d3IntegrationTestCase
                     'oxpersparam'   => 'expPersParam1',
                     'oxstorno'      => '0',
                     'oxartid'       => $this->aArticleIdList[0],
-                ),
-            )
+                ],
+            ]
         );
 
         $this->getConfiguredManager()->save();
@@ -101,7 +101,7 @@ class jobExecuteTest extends d3IntegrationTestCase
         $this->deleteManager($this->sManagerId);
 
         foreach ($this->aCountryIdList as $sId) {
-            $this->deleteBaseModelObject( 'oxcountry', $sId);
+            $this->deleteBaseModelObject('oxcountry', $sId);
         }
 
         $this->deleteOrder($this->aOrderIdList[0]);
@@ -116,16 +116,16 @@ class jobExecuteTest extends d3IntegrationTestCase
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->assign(
-            array(
-                'D3_CRONJOBID'    => 'testId'
-            )
+            [
+                'D3_CRONJOBID'    => 'testId',
+            ]
         );
 
         $oManager->setValue('blActionOrderChangeDeliveryCost_status', true);
         $oManager->setValue('sActionChangeDelCostValue', $this->dExpectedValue);
 
         $oManager->setValue('blCheckCountry_status', true);
-        $oManager->setValue( 'sCustCountryId', [ $this->aCountryIdList[0] ] );
+        $oManager->setValue('sCustCountryId', [ $this->aCountryIdList[0] ]);
 
         $oManager->setValue('blItemExecute', true);
 
@@ -174,8 +174,8 @@ class jobExecuteTest extends d3IntegrationTestCase
         $_GET['oxid'] = $this->aOrderIdList[0];
 
         $manager = $this->getConfiguredManager();
-        $manager->setValue( 'sCustCountryId', [ 'notExistingCountryId' ] );
-        $manager->setValue( 'sManuallyExecMeetCondition', false );
+        $manager->setValue('sCustCountryId', [ 'notExistingCountryId' ]);
+        $manager->setValue('sManuallyExecMeetCondition', false);
         $manager->save();
 
         // prevent trigger action in test preparation
@@ -212,8 +212,8 @@ class jobExecuteTest extends d3IntegrationTestCase
         $_GET['oxid'] = $this->aOrderIdList[0];
 
         $manager = $this->getConfiguredManager();
-        $manager->setValue( 'sCustCountryId', [ 'notExistingCountryId' ] );
-        $manager->setValue( 'sManuallyExecMeetCondition', true );
+        $manager->setValue('sCustCountryId', [ 'notExistingCountryId' ]);
+        $manager->setValue('sManuallyExecMeetCondition', true);
         $manager->save();
 
         $this->callMethod(
@@ -269,7 +269,7 @@ class jobExecuteTest extends d3IntegrationTestCase
     {
         return [
             'instantExecute'        => ['d3execordermanager'],
-            'changedContentExecute' => ['d3ExecChangedOrderManager']
+            'changedContentExecute' => ['d3ExecChangedOrderManager'],
         ];
     }
 
@@ -306,8 +306,8 @@ class jobExecuteTest extends d3IntegrationTestCase
         $_GET['oxid'] = $this->aOrderIdList[0];
 
         $manager = $this->getConfiguredManager();
-        $manager->setValue( 'sCustCountryId', [ 'notExistingCountryId' ] );
-        $manager->setValue( 'sManuallyExecMeetCondition', false );
+        $manager->setValue('sCustCountryId', [ 'notExistingCountryId' ]);
+        $manager->setValue('sManuallyExecMeetCondition', false);
         $manager->save();
 
         $this->callMethod(
@@ -336,8 +336,8 @@ class jobExecuteTest extends d3IntegrationTestCase
         $_GET['oxid'] = $this->aOrderIdList[0];
 
         $manager = $this->getConfiguredManager();
-        $manager->setValue( 'sCustCountryId', [ 'notExistingCountryId' ] );
-        $manager->setValue( 'sManuallyExecMeetCondition', true );
+        $manager->setValue('sCustCountryId', [ 'notExistingCountryId' ]);
+        $manager->setValue('sManuallyExecMeetCondition', true);
         $manager->save();
 
         $this->callMethod(

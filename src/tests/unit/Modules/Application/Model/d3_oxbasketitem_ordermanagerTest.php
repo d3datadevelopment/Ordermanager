@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
 
@@ -47,14 +47,14 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oModel = d3GetModCfgDIC()->get('d3ox.ordermanager.'.BasketItem::class);
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -85,9 +85,9 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
             /** @var OrderArticle $oOrderArticle */
             $oOrderArticle = d3GetModCfgDIC()->get('d3ox.ordermanager.'.OrderArticle::class);
             $oOrderArticle->assign(
-                array(
+                [
                     'oxartid' => $sOXID,
-                )
+                ]
             );
 
             $this->setValue($this->_oModel, '_oArticle', $oOrderArticle);
@@ -112,9 +112,9 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
         /** @var OrderArticle $oOrderArticle */
         $oOrderArticle = d3GetModCfgDIC()->get('d3ox.ordermanager.'.OrderArticle::class);
         $oOrderArticle->assign(
-            array(
+            [
                 'oxartid' => 'foobar',
-            )
+            ]
         );
 
         $this->setValue($this->_oModel, '_oArticle', $oOrderArticle);

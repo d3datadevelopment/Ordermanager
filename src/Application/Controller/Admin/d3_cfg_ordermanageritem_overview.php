@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
@@ -51,12 +51,12 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     protected $_sMenuItemTitle = 'd3mxordermanager';
     protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
     protected $_blUseOwnOxid = true;
-    protected $_aNaviItems = array(
-        'new' => array(
+    protected $_aNaviItems = [
+        'new' => [
             'sScript' => 'top.oxid.admin.editThis( -1 );return false;',
             'sTranslationId' => 'D3_TOOLTIPS_NEWORDERMANAGER',
-        ),
-    );
+        ],
+    ];
     protected $_sD3ObjectClass = Manager::class;
     protected $_sRequestData;
 
@@ -76,13 +76,9 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
                 d3ordermanager_configurationcheck::class.'.args.ordermanager',
                 $this->getManager()
             );
-            d3GetModCfgDIC()->setParameter(
-                d3ordermanager_configurationcheck::class.'.args.checktypes',
-                d3ordermanager_configurationcheck::REQUIREMENTS_AND_ACTIONS
-            );
             /** @var d3ordermanager_configurationcheck $confCheck */
             $confCheck = d3GetModCfgDIC()->get(d3ordermanager_configurationcheck::class);
-            $confCheck->checkThrowingExceptions();
+            $confCheck->checkThrowingExceptions(d3ordermanager_configurationcheck::REQUIREMENTS_AND_ACTIONS);
         } catch (d3ActionRequirementInterface $e) {
             /** @var UtilsView $utilsView */
             $utilsView = d3GetModCfgDIC()->get('d3ox.ordermanager.'.UtilsView::class);
@@ -121,16 +117,16 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     public function __call($method, $arguments)
     {
         $oActionView = $this->getActionAdminController();
-        if (method_exists( $oActionView, $method)) {
-            return call_user_func_array( array( $oActionView, $method), $arguments);
+        if (method_exists($oActionView, $method)) {
+            return call_user_func_array([ $oActionView, $method], $arguments);
         }
 
         $oRequView = $this->getRequirementAdminController();
-        if (method_exists( $oRequView, $method)) {
-            return call_user_func_array( array( $oRequView, $method), $arguments);
+        if (method_exists($oRequView, $method)) {
+            return call_user_func_array([ $oRequView, $method], $arguments);
         }
 
-        return parent::__call( $method, $arguments);
+        return parent::__call($method, $arguments);
     }
 
     /**
@@ -234,7 +230,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         if ($this->canRequestData(__FUNCTION__)) {
             /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
-            return (int) $oProfile->getListGenerator()->getConcernedItemCount();
+            return $oProfile->getListGenerator()->getConcernedItemCount();
         } elseif ($this->canUseRequestData($requestCount)) {
             return (int) $requestCount;
         }
@@ -286,7 +282,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         if ($this->canRequestData(__FUNCTION__)) {
             /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
-            return (int) $oProfile->getListGenerator()->getFinishedMonthItemCount();
+            return $oProfile->getListGenerator()->getFinishedMonthItemCount();
         } elseif ($this->canUseRequestData($requestCount)) {
             return (int) $requestCount;
         }
@@ -310,7 +306,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         if ($this->canRequestData(__FUNCTION__)) {
             /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
-            return (int) $oProfile->getListGenerator()->getNotFinishedItemCount();
+            return $oProfile->getListGenerator()->getNotFinishedItemCount();
         } elseif ($this->canUseRequestData($requestCount)) {
             return (int) $requestCount;
         }
@@ -343,7 +339,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     public function canUseRequestData($requestCount): bool
     {
         return $this->getDataOnDemand()
-            && isset( $requestCount ) && false !== $requestCount;
+            && isset($requestCount) && false !== $requestCount;
     }
 
     /**
