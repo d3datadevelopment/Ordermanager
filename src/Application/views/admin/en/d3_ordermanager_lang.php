@@ -21,7 +21,7 @@ $sLangName = "English";
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
-$aLang = array(
+$aLang = [
     'charset'                                            => 'UTF-8',
 
     'd3mxordermanager'                                   => '<i class="fa fa-fw fa-clipboard"></i> Order Manager',
@@ -550,6 +550,6 @@ $aLang = array(
     'D3_ORDERMANAGER_EXC_CRON_WRONGPASSWORD'             => 'Missing or wrong cron call password.',
     'D3_ORDERMANAGER_EXC_ACTION'                         => 'job "%1$s" -> action "%2$s": %3$s',
     'D3_ORDERMANAGER_EXC_REQU'                           => 'job "%1$s" -> requirement "%2$s": %3$s',
-);
+];
 
 // @codeCoverageIgnoreEnd

@@ -21,7 +21,7 @@ parameters:
   d3ox.ordermanager.InvoicepdfPDF.args.format:      'A4'
   d3ox.ordermanager.InvoicepdfPDF.args.unicode:     true
   d3ox.ordermanager.InvoicepdfPDF.args.encoding:    'UTF-8'
-  d3ox.ordermanager.InvoicepdfPDF.args.diskcache:   false
+  d3ox.ordermanager.InvoicepdfPDF.args.disccache:   false
   d3ox.ordermanager.OxidEsales\Eshop\Core\Model\ListModel.args.objectname:
   d3ox.ordermanager.OxidEsales\Eshop\Core\Field.args.value:
   d3ox.ordermanager.OxidEsales\Eshop\Core\Field.args.type:
@@ -29,6 +29,10 @@ parameters:
   d3ox.ordermanager.OxidEsales\Eshop\Core\Exception\StandardException.args.code:
 
 services:
+  _defaults:
+    autowire: false
+    public: true
+
   # config
   d3ox.ordermanager.OxidEsales\Eshop\Core\Config:
     class:      'OxidEsales\Eshop\Core\Config'
@@ -235,13 +239,12 @@ services:
     factory:    'oxNew'
     arguments:
       - 'InvoicepdfPDF'
-      # - "@=container.hasParameter('d3ox.ordermanager.InvoicepdfPDF.args.orientation') ?: '@=service("d3ox.ordermanager.InvoicepdfPDF_noArguments").CurOrientation'"
-      - '%d3ox.ordermanager.InvoicepdfPDF.args.orientation%'
-      - '%d3ox.ordermanager.InvoicepdfPDF.args.unit%'
-      - '%d3ox.ordermanager.InvoicepdfPDF.args.format%'
-      - '%d3ox.ordermanager.InvoicepdfPDF.args.unicode%'
-      - '%d3ox.ordermanager.InvoicepdfPDF.args.encoding%'
-      - '%d3ox.ordermanager.InvoicepdfPDF.args.diskcache%'
+      - '@d3ox.ordermanager.InvoicePdf.context.orientation'
+      - '@d3ox.ordermanager.InvoicePdf.context.unit'
+      - '@d3ox.ordermanager.InvoicePdf.context.format'
+      - '@d3ox.ordermanager.InvoicePdf.context.unicode'
+      - '@d3ox.ordermanager.InvoicePdf.context.encoding'
+      - '@d3ox.ordermanager.InvoicePdf.context.disccache'
     shared:     false
 
   # InvoicePdf
@@ -394,4 +397,41 @@ services:
     # D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.exception:
     #   synthetic:  true
     #   shared:     false
-    #   public:     false
+
+  D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface:
+    class:      D3\Ordermanager\Application\Model\Context\InvoicePdfContext
+    public:     true
+    factory:    'oxNew'
+    shared:     true
+    arguments:
+      - 'D3\Ordermanager\Application\Model\Context\InvoicePdfContext'
+
+  d3ox.ordermanager.InvoicePdf.context.orientation:
+    class: D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface
+    factory: ['@D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface', 'getInvoicePdfOrientation']
+    shared: false
+
+  d3ox.ordermanager.InvoicePdf.context.unit:
+    class: D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface
+    factory: ['@D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface', 'getInvoicePdfUnit']
+    shared: false
+
+  d3ox.ordermanager.InvoicePdf.context.format:
+    class: D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface
+    factory: ['@D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface', 'getInvoicePdfFormat']
+    shared: false
+
+  d3ox.ordermanager.InvoicePdf.context.unicode:
+    class: D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface
+    factory: ['@D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface', 'getInvoicePdfUnicode']
+    shared: false
+
+  d3ox.ordermanager.InvoicePdf.context.encoding:
+    class: D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface
+    factory: ['@D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface', 'getInvoicePdfEncoding']
+    shared: false
+
+  d3ox.ordermanager.InvoicePdf.context.disccache:
+    class: D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface
+    factory: ['@D3\Ordermanager\Application\Model\Context\InvoicePdfContextInterface', 'getInvoicePdfDisccache']
+    shared: false

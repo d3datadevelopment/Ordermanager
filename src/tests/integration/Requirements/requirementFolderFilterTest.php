@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Requirements;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -31,27 +32,27 @@ use PHPUnit\Framework\MockObject\MockObject;
 class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
         'orderTestIdNo3',
-    );
+    ];
     public $aOrderFolderIdList = [
         'sFolderId1Pass',
         'sFolderId2Pass',
         'sFolderId3Pass',
     ];
-    public $aOrderArticleIdList = array(
+    public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
         'orderTestIdNo3Article1',
-    );
+    ];
 
     /**
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -63,7 +64,7 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->cleanTestData();
 
@@ -88,44 +89,44 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxfolder'      => $this->aOrderFolderIdList[0],
-            ),
-            array(
-                $this->aOrderArticleIdList[0] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[0] => [
                     'oxtitle'           => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxfolder'      => $this->aOrderFolderIdList[1],
-            ),
-            array(
-                $this->aOrderArticleIdList[1] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[1] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[2],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxfolder'      => $this->aOrderFolderIdList[2],
-            ),
-            array(
-                $this->aOrderArticleIdList[2] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[2] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
     }
 
@@ -157,7 +158,7 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckInFolder_status', true);
-        $oManager->setValue( 'sInFolderId', [ $this->aOrderFolderIdList[0] ] );
+        $oManager->setValue('sInFolderId', [ $this->aOrderFolderIdList[0] ]);
 
         return $oManager;
     }
@@ -171,7 +172,7 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckInFolder_status', true);
-        $oManager->setValue( 'sInFolderId', [ $this->aOrderFolderIdList[0], $this->aOrderFolderIdList[1] ] );
+        $oManager->setValue('sInFolderId', [ $this->aOrderFolderIdList[0], $this->aOrderFolderIdList[1] ]);
 
         return $oManager;
     }
@@ -269,7 +270,7 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
             'unknown'=> ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
-            'false'  => [false]
+            'false'  => [false],
         ];
     }
 }

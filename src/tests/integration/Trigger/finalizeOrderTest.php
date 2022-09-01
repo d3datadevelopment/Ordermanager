@@ -41,22 +41,22 @@ class finalizeOrderTest extends d3IntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
     public $aArticleIdList = [
-        'articleTestIdNo1'
+        'articleTestIdNo1',
     ];
     public $aCountryIdList = [
-        'testCountryId1Pass'
+        'testCountryId1Pass',
     ];
     public $aOrderIdList = [
-        'orderTestIdNo1'
+        'orderTestIdNo1',
     ];
     public $aOrderArticleIdList = [
-        'orderTestIdNo1Article1'
+        'orderTestIdNo1Article1',
     ];
     public $aPaymentIdList = [
-        'paymentTestIdNo1'
+        'paymentTestIdNo1',
     ];
     public $aUserIdList = [
-        'userTestIdNo1'
+        'userTestIdNo1',
     ];
 
     public $dCurrentValue = 1.23;
@@ -71,29 +71,29 @@ class finalizeOrderTest extends d3IntegrationTestCase
 
         $this->createArticle(
             $this->aArticleIdList[0],
-            array(
+            [
                 'oxtitle'       => __CLASS__,
                 'oxparentid'    => null,
-                'oxstock'       => 20
-            )
+                'oxstock'       => 20,
+            ]
         );
 
         foreach ($this->aCountryIdList as $sId) {
-            $this->createBaseModelObject( 'oxcountry', $sId, [ 'oxtitle' => __METHOD__ ] );
+            $this->createBaseModelObject('oxcountry', $sId, [ 'oxtitle' => __METHOD__ ]);
         }
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxdelcost'     => $this->dCurrentValue,
                 'oxcurrate'     => 1,
                 'oxbillcountryid'   => $this->aCountryIdList[0],
                 'oxdelcountryid'    => '',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[0] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[0] => [
                     'oxartnum'      => 'expArtNum1',
                     'oxtitle'       => 'expTitle1',
                     'oxshortdesc'   => 'expShortDesc1',
@@ -101,14 +101,14 @@ class finalizeOrderTest extends d3IntegrationTestCase
                     'oxpersparam'   => 'expPersParam1',
                     'oxstorno'      => '0',
                     'oxartid'       => $this->aArticleIdList[0],
-                ),
-            )
+                ],
+            ]
         );
 
         $this->createUser(
             $this->aUserIdList[0],
             [
-                'oxcountryid'  => $this->aCountryIdList[0]
+                'oxcountryid'  => $this->aCountryIdList[0],
             ]
         );
 
@@ -125,7 +125,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
         $this->deleteManager($this->sManagerId);
 
         foreach ($this->aCountryIdList as $sId) {
-            $this->deleteBaseModelObject( 'oxcountry', $sId);
+            $this->deleteBaseModelObject('oxcountry', $sId);
         }
 
         $this->deleteOrder($this->aOrderIdList[0]);
@@ -158,17 +158,17 @@ class finalizeOrderTest extends d3IntegrationTestCase
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->assign(
-            array(
+            [
                 'D3_CRONJOBID'               => 'testId',
-                'D3_OM_ORDERFINISHTRIGGERED' => '1'
-            )
+                'D3_OM_ORDERFINISHTRIGGERED' => '1',
+            ]
         );
 
         $oManager->setValue('blActionOrderChangeDeliveryCost_status', true);
         $oManager->setValue('sActionChangeDelCostValue', $this->dExpectedValue);
 
         $oManager->setValue('blCheckCountry_status', true);
-        $oManager->setValue( 'sCustCountryId', [ $this->aCountryIdList[0] ] );
+        $oManager->setValue('sCustCountryId', [ $this->aCountryIdList[0] ]);
 
         $oManager->setValue('blItemExecute', true);
 
@@ -188,7 +188,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
     public function runTriggerOk()
     {
         $set = d3_cfg_mod::get('d3_ordermanager');
-        $set->assign( [ 'oxactive' => 1 ] );
+        $set->assign([ 'oxactive' => 1 ]);
         $set->saveNoLicenseRefresh();
 
         $user = oxNew(User::class);
@@ -257,7 +257,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
     public function runTriggerCanceledInvalidRequirementConfig()
     {
         $set = d3_cfg_mod::get('d3_ordermanager');
-        $set->assign( [ 'oxactive' => 1 ] );
+        $set->assign([ 'oxactive' => 1 ]);
         $set->saveNoLicenseRefresh();
 
         $user = oxNew(User::class);
@@ -275,7 +275,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
         $oItem->method('_sendOrderByEmail')->willReturn(Item::ORDER_STATE_OK);
 
         $manager = $this->getConfiguredManager();
-        $manager->setValue( 'sCustCountryId', [ 'notExistingCountryId' ] );
+        $manager->setValue('sCustCountryId', [ 'notExistingCountryId' ]);
         $manager->save();
 
         /** @var d3ordermanagerlist|MockObject $managerListMock */
@@ -329,7 +329,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
     public function runTriggerCanceledInvalidActionConfig()
     {
         $set = d3_cfg_mod::get('d3_ordermanager');
-        $set->assign( [ 'oxactive' => 1 ] );
+        $set->assign([ 'oxactive' => 1 ]);
         $set->saveNoLicenseRefresh();
 
         $user = oxNew(User::class);

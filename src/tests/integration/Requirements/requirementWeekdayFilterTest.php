@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Requirements;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -46,7 +47,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -58,7 +59,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->cleanTestData();
 
@@ -85,7 +86,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
             [
                 $this->aOrderArticleIdList[0] => [
                     'oxtitle'           => __CLASS__,
-                ]
+                ],
             ]
         );
 
@@ -100,7 +101,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
             [
                 $this->aOrderArticleIdList[1] => [
                     'oxtitle'       => __CLASS__,
-                ]
+                ],
             ]
         );
 
@@ -115,7 +116,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
             [
                 $this->aOrderArticleIdList[2] => [
                     'oxtitle'       => __CLASS__,
-                ]
+                ],
             ]
         );
     }
@@ -409,7 +410,7 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
             'unknown'=> ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
-            'false'  => [false]
+            'false'  => [false],
         ];
     }
 }

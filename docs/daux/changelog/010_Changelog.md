@@ -7,12 +7,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://git.d3data.de/D3Private/Ordermanager/compare/5.0.3.1...rel_5.x)
+## [Unreleased](https://git.d3data.de/D3Private/Ordermanager/compare/5.1.0.0...rel_5.x)
+
+## [5.1.0.0](https://git.d3data.de/D3Private/Ordermanager/compare/5.0.4.0...5.1.0.0) - 2022-09-01
+### Added
+- installable in OXID 6.5 (CE 6.12) and PHP 8.1
+
+### Changed
+- adjust DI container to updated container dependency
+- adjust tests
+
+### Fixed
+- prevent "undefined array key" warning
+
+## [5.0.4.0](https://git.d3data.de/D3Private/Ordermanager/compare/5.0.3.1...5.0.4.0) - 2022-08-15
+### Changed
+- extract message content creator from mail class
 
 ## [5.0.3.1](https://git.d3data.de/D3Private/Ordermanager/compare/5.0.3.0...5.0.3.1) - 2022-07-28
 ### Changed
 - make mySQL content check more compatible
-- adjust documention to Source Guardian Loader based installation
+- adjust documentation to Source Guardian Loader based installation
 - changelog improved
 
 ### Fixed
@@ -109,7 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - nicht generierbare Statusmails korrigiert
 - Debugmodus verwendet SQL-Logger für optimierte Anzeige
 - nicht geladenes Manager-Objekt im Admincontroller korrigiert
-- "Einträge als erledigt markieren" ignoriert "Einträge nich als erledigt markieren"-Option 
+- "Einträge als erledigt markieren" ignoriert "Einträge nicht als erledigt markieren"-Option 
 
 ## [4.1.1.0](https://git.d3data.de/D3Private/Ordermanager/compare/4.1.0.0...4.1.1.0) - 2020-12-21
 

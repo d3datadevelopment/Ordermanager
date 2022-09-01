@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Actions;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -32,10 +33,10 @@ class actionExportListTest extends d3OrdermanagerActionIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
 
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
-    );
+    ];
 
     public $given    = 'CurrentCity';
     public $expected = 'TestCity';
@@ -49,20 +50,20 @@ class actionExportListTest extends d3OrdermanagerActionIntegrationTestCase
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbilllname'       => 'order1',
                 'oxbillcompany' => __CLASS__,
-            )
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbilllname'   => 'order2',
                 'oxbillcompany' => __CLASS__,
-            )
+            ]
         );
     }
 
@@ -114,7 +115,7 @@ class actionExportListTest extends d3OrdermanagerActionIntegrationTestCase
         foreach ([
             $time->format('Y-m-d_H-i-s'),
             $time->modify("-1 second")->format('Y-m-d_H-i-s'),
-            $time->modify("-2 second")->format('Y-m-d_H-i-s')
+            $time->modify("-2 second")->format('Y-m-d_H-i-s'),
         ] as $date) {
             $fileName = "d3ordermananger_orderManagerTestTitle_".$date.".txt";
             $filePath = Registry::getConfig()->getConfigParam('sShopDir').'/export/'.$fileName;
@@ -127,7 +128,6 @@ class actionExportListTest extends d3OrdermanagerActionIntegrationTestCase
                 break;
             }
         }
-
     }
 
     /**
@@ -136,6 +136,6 @@ class actionExportListTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function getFilledResultList()
     {
-        return $this->getResultList(array($this->aOrderIdList[0]));
+        return $this->getResultList([$this->aOrderIdList[0]]);
     }
 }

@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Requirements;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -33,24 +34,24 @@ class requirementDeliveryFilterTest extends d3OrdermanagerRequirementIntegration
     public $aDeliveryIdList = [
         'sDelId1Pass',
         'sDelId2Pass',
-        'sDelIdDontPass'
+        'sDelIdDontPass',
     ];
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
         'orderTestIdNo3',
-    );
-    public $aOrderArticleIdList = array(
+    ];
+    public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
         'orderTestIdNo3Article1',
-    );
+    ];
 
     /**
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -62,7 +63,7 @@ class requirementDeliveryFilterTest extends d3OrdermanagerRequirementIntegration
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->cleanTestData();
 
@@ -88,44 +89,44 @@ class requirementDeliveryFilterTest extends d3OrdermanagerRequirementIntegration
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxdeltype'     => $this->aDeliveryIdList[0],   // pass
-            ),
-            array(
-                $this->aOrderArticleIdList[0] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[0] => [
                     'oxtitle'           => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxdeltype'     => $this->aDeliveryIdList[1],   // pass
-            ),
-            array(
-                $this->aOrderArticleIdList[1] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[1] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[2],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxdeltype'     => $this->aDeliveryIdList[2],   // don't pass
-            ),
-            array(
-                $this->aOrderArticleIdList[2] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[2] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
     }
 
@@ -159,7 +160,7 @@ class requirementDeliveryFilterTest extends d3OrdermanagerRequirementIntegration
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckDelivery_status', true);
-        $oManager->setValue('sDeliveryId', array($this->aDeliveryIdList[0]));
+        $oManager->setValue('sDeliveryId', [$this->aDeliveryIdList[0]]);
 
         return $oManager;
     }
@@ -173,7 +174,7 @@ class requirementDeliveryFilterTest extends d3OrdermanagerRequirementIntegration
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckDelivery_status', true);
-        $oManager->setValue('sDeliveryId', array($this->aDeliveryIdList[0], $this->aDeliveryIdList[1]));
+        $oManager->setValue('sDeliveryId', [$this->aDeliveryIdList[0], $this->aDeliveryIdList[1]]);
 
         return $oManager;
     }
@@ -271,7 +272,7 @@ class requirementDeliveryFilterTest extends d3OrdermanagerRequirementIntegration
             'unknown'=> ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
-            'false'  => [false]
+            'false'  => [false],
         ];
     }
 }

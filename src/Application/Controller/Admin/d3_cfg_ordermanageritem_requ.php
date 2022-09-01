@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
@@ -37,7 +37,7 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     use VariablesTrait;
 
     protected $_sThisTemplate = "d3_cfg_ordermanageritem_requ.tpl";
-    protected $_aTransStatus = array('OK', 'ERROR', 'NOT_OK');
+    protected $_aTransStatus = ['OK', 'ERROR', 'NOT_OK'];
     protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
 
     public function save()
@@ -48,7 +48,7 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
         }
         // @codeCoverageIgnoreEnd
 
-        $aMissingRequiredValues = array();
+        $aMissingRequiredValues = [];
         /** @var RequirementModelInterface $oRequirement */
         foreach ($this->getRequirementList() as $sId => $oRequirement) {
             if ($this->getProfile()->getValue($oRequirement->getActiveSwitchParameter())) {

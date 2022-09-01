@@ -13,13 +13,18 @@
 
 parameters:
   D3\Ordermanager\Application\Model\d3ordermanagerlist.args.objectname:
-  D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck.args.checktypes:
   D3\Ordermanager\Application\Model\d3ordermanager_export.args.filename:
+  D3\Ordermanager\Application\Model\Exceptions\emptyMessageException.args.message:
+  D3\Ordermanager\Application\Model\Exceptions\emptyMessageException.args.code:
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.message:
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.code:
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_smartyException.args.message:
 
 services:
+  _defaults:
+    autowire: false
+    public: true
+
   # ordermanager
   D3\Ordermanager\Application\Model\d3ordermanager:
     class:      D3\Ordermanager\Application\Model\d3ordermanager
@@ -44,11 +49,9 @@ services:
     arguments:
       - D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck
       - '@D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck.args.ordermanager'
-      - '%D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck.args.checktypes%'
   D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck.args.ordermanager:
     synthetic: true
     shared: false
-    public: false
 
   # d3ordermanager_debugoutput
   D3\Ordermanager\Application\Model\Output\d3ordermanager_debugoutput:
@@ -110,7 +113,6 @@ services:
   D3\Ordermanager\Application\Model\d3ordermanager_listgenerator.args.ordermanager:
     synthetic:  true
     shared:     false
-    public:     false
 
   # d3ordermanager_actionlist
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist:
@@ -125,12 +127,10 @@ services:
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist.args.ordermanager:
     synthetic:  true
     shared:     false
-    public:     false
     # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist.args.order:
     synthetic:  true
     shared:     false
-    public:     false
 
   # d3ordermanager_pdfhandler
   D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler:
@@ -145,12 +145,10 @@ services:
   D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler.args.ordermanager:
     synthetic:  true
     shared:     false
-    public:     false
     # arg #2 order
   D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler.args.order:
     synthetic:  true
     shared:     false
-    public:     false
 
   # d3ordermanager_remark
   D3\Ordermanager\Application\Model\d3ordermanager_remark:
@@ -164,7 +162,6 @@ services:
   D3\Ordermanager\Application\Model\d3ordermanager_remark.args.ordermanager:
     synthetic:  true
     shared:     false
-    public:     false
 
   # d3ordermanager_requirementlist
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist:
@@ -178,7 +175,6 @@ services:
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist.args.ordermanager:
     synthetic:  true
     shared:     false
-    public:     false
 
   # d3ordermanager_requirementgrouplist
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist:
@@ -192,7 +188,6 @@ services:
   D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementgrouplist.args.ordermanager:
     synthetic:  true
     shared:     false
-    public:     false
 
   # d3ordermanager_actiongrouplist
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist:
@@ -207,12 +202,10 @@ services:
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist.args.ordermanager:
     synthetic:  true
     shared:     false
-    public:     false
     # arg #2 order
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist.args.order:
     synthetic:  true
     shared:     false
-    public:     false
 
   # d3ordermanager_execute
   D3\Ordermanager\Application\Model\d3ordermanager_execute:
@@ -226,7 +219,24 @@ services:
   D3\Ordermanager\Application\Model\d3ordermanager_execute.args.ordermanager:
     synthetic:  true
     shared:     false
-    public:     false
+
+  # MessageContentGenerator
+  D3\Ordermanager\Application\Model\MessageContentGenerator:
+    class:      D3\Ordermanager\Application\Model\MessageContentGenerator
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\MessageContentGenerator
+      - '@D3\Ordermanager\Application\Model\MessageContentGenerator.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\MessageContentGenerator.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\MessageContentGenerator.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\MessageContentGenerator.args.order:
+    synthetic:  true
+    shared:     false
 
   # d3ordermanager_export
   D3\Ordermanager\Application\Model\d3ordermanager_export:
@@ -242,12 +252,26 @@ services:
   D3\Ordermanager\Application\Model\d3ordermanager_export.args.ordermanager:
     synthetic:  true
     shared:     false
-    public:     false
     # arg #2 parametercontainer
   D3\Ordermanager\Application\Model\d3ordermanager_export.args.parametercontainer:
     synthetic:  true
     shared:     false
-    public:     false
+
+  # emptyMessageException
+  D3\Ordermanager\Application\Model\Exceptions\emptyMessageException:
+    class:      D3\Ordermanager\Application\Model\Exceptions\emptyMessageException
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Exceptions\emptyMessageException
+      - '%D3\Ordermanager\Application\Model\Exceptions\emptyMessageException.args.message%'
+      - '%D3\Ordermanager\Application\Model\Exceptions\emptyMessageException.args.code%'
+      - '@?D3\Ordermanager\Application\Model\Exceptions\emptyMessageException.args.exception'
+    # arg #3 exception
+    # no synthetic instance, because it's an optional argument
+ # D3\Ordermanager\Application\Model\Exceptions\emptyMessageException.args.exception:
+ #   synthetic:  true
+ #   shared:     false
 
   # d3ordermanager_cronUnavailableException
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException:
@@ -264,7 +288,6 @@ services:
  # D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException.args.exception:
  #   synthetic:  true
  #   shared:     false
- #   public:     false
 
   # d3ordermanager_actionException
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_actionException:
@@ -278,7 +301,6 @@ services:
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_actionException.args.actionobject:
     synthetic:  true
     shared:     false
-    public:     false
 
   # d3ordermanager_smartyException
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_smartyException:
@@ -301,7 +323,6 @@ services:
   D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException.args.requirementobject:
     synthetic:  true
     shared:     false
-    public:     false
 
   # d3ordermanager_toorderassignment
   D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment:
@@ -315,7 +336,6 @@ services:
   D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment.args.ordermanager:
     synthetic:  true
     shared:     false
-    public:     false
 
   # d3ordermanager_renderererrorhandler
   D3\Ordermanager\Application\Model\d3ordermanager_renderererrorhandler:

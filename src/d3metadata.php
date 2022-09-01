@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use D3\Ordermanager\Setup as ModuleSetup;
 
@@ -134,6 +134,7 @@ $aModule = [
         'd3/ordermanager/Application/Model/d3ordermanager_partlist_interface.php',
         'd3/ordermanager/Application/Model/d3ordermanager_vars.php',
         'd3/ordermanager/Application/Model/d3ordermanager_remark.php',
+        'd3/ordermanager/Application/Model/MessageContentGenerator.php',
         'd3/ordermanager/Application/Model/Actions/example.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_custaddtogroup.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_setsendednowdate.php',
@@ -156,6 +157,10 @@ $aModule = [
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_setfieldvalue.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_interface.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_testaction.php',
+        'd3/ordermanager/Application/Model/Context/Html2TextContext.php',
+        'd3/ordermanager/Application/Model/Context/Html2TextContextInterface.php',
+        'd3/ordermanager/Application/Model/Context/InvoicePdfContext.php',
+        'd3/ordermanager/Application/Model/Context/InvoicePdfContextInterface.php',
         'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_cronUnavailableException.php',
         'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_requirementException.php',
         'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_templaterendererExceptionInterface.php',
@@ -163,6 +168,7 @@ $aModule = [
         'd3/ordermanager/Application/Model/Exceptions/d3ActionRequirementInterface.php',
         'd3/ordermanager/Application/Model/Exceptions/d3ActionRequirementAbstract.php',
         'd3/ordermanager/Application/Model/Exceptions/d3ordermanager_actionException.php',
+        'd3/ordermanager/Application/Model/Exceptions/emptyMessageException.php',
         'd3/ordermanager/Application/Model/Output/d3ordermanager_debugoutput.php',
         'd3/ordermanager/Application/Model/Output/d3ordermanager_abstractoutput.php',
         'd3/ordermanager/Application/Model/Output/d3ordermanager_nulloutput.php',
@@ -246,6 +252,7 @@ $aModule = [
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanagerlistTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_confTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_toorderassignmentTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/MessageContentGeneratorTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3testscript.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractiongeneratepdfTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractionchangediscountTest.php',
@@ -267,9 +274,13 @@ $aModule = [
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractionsendpushnotificationTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractionexecutemethodTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/exampleTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/Context/AbstractContextTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/Context/Html2TextContextTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/Context/InvoicePdfContextTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Exceptions/d3ordermanager_cronUnavailableExceptionTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Exceptions/d3ordermanager_requirementExceptionTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Exceptions/d3ordermanager_actionExceptionTest.php',
+        'd3/ordermanager/tests/unit/Application/Model/Exceptions/emptyMessageExceptionTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Requirements/d3ordermanagerrequweekdayfilterTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Requirements/d3ordermanagerrequinvoicenoTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Requirements/d3ordermanagerrequnoarticlecontent2Test.php',
@@ -366,13 +377,13 @@ $aModule = [
         'd3/ordermanager/tests/integration/Admin/jobListTest.php',
         'd3/ordermanager/tests/integration/Admin/jobExecuteTest.php',
         'd3/ordermanager/tests/tools/Intercept.php',
-        
+
         /****** deprecated end *******/
-        
+
         'IntelliSenseHelper.php',
         'metadata.php',
         'd3metadata.php',
-        
+
         'Application/views/admin/blocks/d3ordermanager_order_remark_type.tpl',
         'Application/views/admin/de/d3_ordermanager_lang.php',
         'Application/views/admin/en/d3_ordermanager_lang.php',
@@ -437,7 +448,7 @@ $aModule = [
         'Application/views/admin/tpl/Requirements/d3ordermanager_requ_countryfilter.tpl',
         'Application/views/admin/tpl/Requirements/d3ordermanager_requ_transactionfilter.tpl',
         'Application/views/admin/tpl/Requirements/d3ordermanager_requ_fromordernr.tpl',
-        
+
         'Application/views/tpl/email/html/d3ordermanager_delivery_delay.tpl',
         'Application/views/tpl/email/html/d3ordermanager_delivery_delay_subject.tpl',
         'Application/views/tpl/email/plain/d3ordermanager_delivery_delay.tpl',
@@ -459,7 +470,7 @@ $aModule = [
         'Application/Controller/Admin/d3_cfg_ordermanageritem_overview.php',
         'Application/Controller/Admin/d3_cfg_ordermanagerset_licence.php',
         'Application/Controller/Admin/d3_cfg_ordermanageritem_trigger.php',
-        
+
         'Application/Model/d3ordermanager_pdfhandler.php',
         'Application/Model/d3ordermanagerlist.php',
         'Application/Model/d3ordermanager_listgenerator.php',
@@ -505,6 +516,7 @@ $aModule = [
         'Application/Model/Exceptions/d3ActionRequirementInterface.php',
         'Application/Model/Exceptions/d3ActionRequirementAbstract.php',
         'Application/Model/Exceptions/d3ordermanager_actionException.php',
+        'Application/Model/Exceptions/emptyMessageExceptionTest.php',
         'Application/Model/Output/d3ordermanager_debugoutput.php',
         'Application/Model/Output/d3ordermanager_abstractoutput.php',
         'Application/Model/Output/d3ordermanager_nulloutput.php',
@@ -609,6 +621,9 @@ $aModule = [
         'tests/unit/Application/Model/Actions/d3ordermanageractionsendpushnotificationTest.php',
         'tests/unit/Application/Model/Actions/d3ordermanageractionexecutemethodTest.php',
         'tests/unit/Application/Model/Actions/exampleTest.php',
+        'tests/unit/Application/Model/Context/AbstractContextTest.php',
+        'tests/unit/Application/Model/Context/Html2TextContextTest.php',
+        'tests/unit/Application/Model/Context/InvoicePdfContextTest.php',
         'tests/unit/Application/Model/Exceptions/d3ordermanager_cronUnavailableExceptionTest.php',
         'tests/unit/Application/Model/Exceptions/d3ordermanager_requirementExceptionTest.php',
         'tests/unit/Application/Model/Exceptions/d3ordermanager_actionExceptionTest.php',
@@ -710,9 +725,9 @@ $aModule = [
         'tests/tools/Intercept.php',
     ],
     'd3SetupClasses'    => [
-        ModuleSetup\d3ordermanager_update::class
+        ModuleSetup\d3ordermanager_update::class,
     ],
     'd3DICDefinitionFiles'  => [
         'd3/ordermanager/Config/services.yaml',
-    ]
+    ],
 ];

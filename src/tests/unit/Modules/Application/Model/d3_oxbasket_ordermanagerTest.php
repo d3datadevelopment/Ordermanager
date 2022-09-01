@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
 
@@ -53,14 +53,14 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oModel = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Basket::class);
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -94,7 +94,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oOrderArticleMock = $this->getMockBuilder(OrderArticle::class)
             ->onlyMethods([
                 'getFieldData',
-                'getId'
+                'getId',
             ])
             ->getMock();
         $oOrderArticleMock->method('getFieldData')->willReturn(2);
@@ -109,7 +109,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'setWrapping',
                 'setBundle',
                 'd3OrderManagerChangeOrderArticle2RealArticle',
-                'setAmount'
+                'setAmount',
             ])
             ->getMock();
         $oBasketItemMock->method('setStockCheckStatus')->willReturn(true);
@@ -124,14 +124,14 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock = $this->getMockBuilder(Basket::class)
             ->onlyMethods([
                 'd3getOrderManagerBasketItemInstance',
-                'onUpdate'
+                'onUpdate',
             ])
             ->getMock();
         $oModelMock->method('d3getOrderManagerBasketItemInstance')->willReturn($oBasketItemMock);
         $oModelMock->expects($this->once())->method('onUpdate')->willReturn(true);
         $this->_oModel = $oModelMock;
 
-        $this->callMethod($this->_oModel, 'addOrderArticleToBasket4OrderManager', array($oOrderArticleMock));
+        $this->callMethod($this->_oModel, 'addOrderArticleToBasket4OrderManager', [$oOrderArticleMock]);
     }
 
     /**
@@ -177,7 +177,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oOrderArticleMock = $this->getMockBuilder(OrderArticle::class)
             ->onlyMethods([
                 'getFieldData',
-                'getId'
+                'getId',
             ])
             ->getMock();
         $oOrderArticleMock->method('getFieldData')->willReturn(0);
@@ -191,7 +191,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'setPrice',
                 'setWrapping',
                 'setBundle',
-                'd3OrderManagerChangeOrderArticle2RealArticle'
+                'd3OrderManagerChangeOrderArticle2RealArticle',
             ])
             ->getMock();
         $oBasketItemMock->method('setStockCheckStatus')->willReturn(true);
@@ -205,7 +205,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock = $this->getMockBuilder(Basket::class)
             ->onlyMethods([
                 'd3getOrderManagerBasketItemInstance',
-                'onUpdate'
+                'onUpdate',
             ])
             ->getMock();
         $oModelMock->method('d3getOrderManagerBasketItemInstance')->willReturn($oBasketItemMock);
@@ -213,7 +213,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         $this->_oModel = $oModelMock;
 
-        $this->callMethod($this->_oModel, 'addOrderArticleToBasket4OrderManager', array($oOrderArticleMock));
+        $this->callMethod($this->_oModel, 'addOrderArticleToBasket4OrderManager', [$oOrderArticleMock]);
     }
 
     /**
@@ -271,7 +271,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 '_calcPaymentCost4OrderManager',
                 '_calcTotalPrice',
                 'formatDiscount',
-                'afterUpdate'
+                'afterUpdate',
             ])
             ->getMock();
         $oModelMock->method('isEnabled')->willReturn(true);
@@ -305,7 +305,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oModel,
             'calculateBasket4OrderManager',
-            array(false, $oOrder)
+            [false, $oOrder]
         );
     }
 
@@ -364,7 +364,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 '_calcPaymentCost4OrderManager',
                 '_calcTotalPrice',
                 'formatDiscount',
-                'afterUpdate'
+                'afterUpdate',
             ])
             ->getMock();
         $oModelMock->method('isEnabled')->willReturn(false);
@@ -398,7 +398,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oModel,
             'calculateBasket4OrderManager',
-            array(false, $oOrder)
+            [false, $oOrder]
         );
     }
 
@@ -457,7 +457,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 '_calcPaymentCost4OrderManager',
                 '_calcTotalPrice',
                 'formatDiscount',
-                'afterUpdate'
+                'afterUpdate',
             ])
             ->getMock();
         $oModelMock->method('isEnabled')->willReturn(true);
@@ -491,7 +491,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oModel,
             'calculateBasket4OrderManager',
-            array(false, $oOrder)
+            [false, $oOrder]
         );
     }
 
@@ -550,7 +550,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 '_calcPaymentCost4OrderManager',
                 '_calcTotalPrice',
                 'formatDiscount',
-                'afterUpdate'
+                'afterUpdate',
             ])
             ->getMock();
         $oModelMock->method('isEnabled')->willReturn(true);
@@ -584,7 +584,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oModel,
             'calculateBasket4OrderManager',
-            array(true, $oOrder)
+            [true, $oOrder]
         );
     }
 
@@ -631,7 +631,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oDiscountMock = $this->getMockBuilder(Discount::class)
             ->onlyMethods([
                 'getAddSum',
-                'getAddSumType'
+                'getAddSumType',
             ])
             ->getMock();
         $oDiscountMock->method('getAddSum')->willReturn(true);
@@ -641,16 +641,16 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oDiscountListMock = $this->getMockBuilder(DiscountList::class)
             ->onlyMethods(['getBasketItemDiscounts'])
             ->getMock();
-        $oDiscountListMock->method('getBasketItemDiscounts')->willReturn(array(
-            'discNo1' => $oDiscountMock
-        ));
-        
+        $oDiscountListMock->method('getBasketItemDiscounts')->willReturn([
+            'discNo1' => $oDiscountMock,
+        ]);
+
         /** @var Article|MockObject $oArticleMock */
         $oArticleMock = $this->getMockBuilder(Article::class)
             ->onlyMethods(['skipDiscounts'])
             ->getMock();
         $oArticleMock->method('skipDiscounts')->willReturn(false);
-        
+
         /** @var Price|MockObject $oPriceMock */
         $oPriceMock = $this->getMockBuilder(Price::class)
             ->onlyMethods([
@@ -659,7 +659,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'calculateDiscount',
                 'multiply',
             'getVat',
-            'getVatValue'])
+            'getVatValue', ])
             ->getMock();
         $oPriceMock->method('setBruttoPriceMode')->willReturn(true);
         $oPriceMock->expects($this->once())->method('setDiscount')->willReturn(true);
@@ -679,7 +679,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'setPrice',
                 'getPrice',
                 'setSkipDiscounts',
-                'getAmount'
+                'getAmount',
             ])
             ->getMock();
         $oBasketItemMock->method('isDiscountArticle')->willReturn(false);
@@ -697,7 +697,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods(['addToPriceList'])
             ->getMock();
         $oPriceListMock->expects($this->exactly(2))->method('addToPriceList')->willReturn(true);
-        
+
         /** @var d3_oxbasket_ordermanager|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(Basket::class)
             ->onlyMethods([
@@ -706,7 +706,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'canCalcDiscounts',
                 'd3GetOrderManagerDiscountList',
                 'getBasketUser',
-                'd3GetOrderManagerPriceObject'
+                'd3GetOrderManagerPriceObject',
             ])
             ->getMock();
         $oModelMock->method('setSkipDiscounts')->willReturn(true);
@@ -717,13 +717,13 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock->method('d3GetOrderManagerPriceObject')->willReturn($oPriceMock);
 
         $this->_oModel = $oModelMock;
-        
+
         $this->setValue(
             $this->_oModel,
             '_aBasketContents',
-            array(
-                'itemNo1'   => $oBasketItemMock
-            )
+            [
+                'itemNo1'   => $oBasketItemMock,
+            ]
         );
 
         $this->setValue(
@@ -749,7 +749,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oDiscountMock = $this->getMockBuilder(Discount::class)
             ->onlyMethods([
                 'getAddSum',
-                'getAddSumType'
+                'getAddSumType',
             ])
             ->getMock();
         $oDiscountMock->method('getAddSum')->willReturn(true);
@@ -759,9 +759,9 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oDiscountListMock = $this->getMockBuilder(DiscountList::class)
             ->onlyMethods(['getBasketItemDiscounts'])
             ->getMock();
-        $oDiscountListMock->method('getBasketItemDiscounts')->willReturn(array(
-            'discNo1' => $oDiscountMock
-        ));
+        $oDiscountListMock->method('getBasketItemDiscounts')->willReturn([
+            'discNo1' => $oDiscountMock,
+        ]);
 
         /** @var Article|MockObject $oArticleMock */
         $oArticleMock = $this->getMockBuilder(Article::class)
@@ -777,7 +777,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'calculateDiscount',
                 'multiply',
                 'getVat',
-                'getVatValue'
+                'getVatValue',
             ])
             ->getMock();
         $oPriceMock->method('setBruttoPriceMode')->willReturn(true);
@@ -798,7 +798,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'setPrice',
                 'getPrice',
                 'setSkipDiscounts',
-                'getAmount'
+                'getAmount',
             ])
             ->getMock();
         $oBasketItemMock->method('isDiscountArticle')->willReturn(false);
@@ -825,7 +825,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'canCalcDiscounts',
                 'd3GetOrderManagerDiscountList',
                 'getBasketUser',
-                'd3GetOrderManagerPriceObject'
+                'd3GetOrderManagerPriceObject',
             ])
             ->getMock();
         $oModelMock->expects($this->exactly(3))->method('setSkipDiscounts')->willReturn(true);
@@ -840,9 +840,9 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $this->setValue(
             $this->_oModel,
             '_aBasketContents',
-            array(
-                'itemNo1'   => $oBasketItemMock
-            )
+            [
+                'itemNo1'   => $oBasketItemMock,
+            ]
         );
 
         $this->setValue(
@@ -868,7 +868,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oDiscountMock = $this->getMockBuilder(Discount::class)
             ->onlyMethods([
                 'getAddSum',
-                'getAddSumType'
+                'getAddSumType',
             ])
             ->getMock();
         $oDiscountMock->method('getAddSum')->willReturn(true);
@@ -878,9 +878,9 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oDiscountListMock = $this->getMockBuilder(DiscountList::class)
             ->onlyMethods(['getBasketItemDiscounts'])
             ->getMock();
-        $oDiscountListMock->method('getBasketItemDiscounts')->willReturn(array(
-            'discNo1' => $oDiscountMock
-        ));
+        $oDiscountListMock->method('getBasketItemDiscounts')->willReturn([
+            'discNo1' => $oDiscountMock,
+        ]);
 
         /** @var Article|MockObject $oArticleMock */
         $oArticleMock = $this->getMockBuilder(Article::class)
@@ -896,7 +896,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'calculateDiscount',
                 'multiply',
                 'getVat',
-                'getVatValue'
+                'getVatValue',
             ])
             ->getMock();
         $oPriceMock->method('setBruttoPriceMode')->willReturn(true);
@@ -917,7 +917,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'setPrice',
                 'getPrice',
                 'setSkipDiscounts',
-                'getAmount'
+                'getAmount',
             ])
             ->getMock();
         $oBasketItemMock->method('isDiscountArticle')->willReturn(true);
@@ -944,7 +944,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'canCalcDiscounts',
                 'd3GetOrderManagerDiscountList',
                 'getBasketUser',
-                'd3GetOrderManagerPriceObject'
+                'd3GetOrderManagerPriceObject',
             ])
             ->getMock();
         $oModelMock->method('setSkipDiscounts')->willReturn(true);
@@ -959,9 +959,9 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $this->setValue(
             $this->_oModel,
             '_aBasketContents',
-            array(
-                'itemNo1'   => $oBasketItemMock
-            )
+            [
+                'itemNo1'   => $oBasketItemMock,
+            ]
         );
 
         $this->setValue(
@@ -1005,12 +1005,12 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ->getMock();
         $map = [['oxpaycost', 123.45]];
         $oOrderMock->method('getFieldData')->willReturnMap($map);
-        
+
         /** @var Price|MockObject $oPriceMock */
         $oPriceMock = $this->getMockBuilder(Price::class)
             ->onlyMethods([
                 'setBruttoPriceMode',
-                'setPrice'
+                'setPrice',
             ])
             ->getMock();
         $oPriceMock->method('setBruttoPriceMode')->willReturn(true);
@@ -1029,7 +1029,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oModel,
                 '_calcPaymentCost4OrderManager',
-                array($oOrderMock)
+                [$oOrderMock]
             )
         );
     }
@@ -1045,14 +1045,14 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function calcBasketDiscount4OrderManagerPass()
     {
         $oOrder = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Order::class);
-        $oOrder->assign(array(
+        $oOrder->assign([
             'oxdiscount' => 3.75,
-        ));
+        ]);
 
         $this->callMethod(
             $this->_oModel,
             '_calcBasketDiscount4OrderManager',
-            array($oOrder)
+            [$oOrder]
         );
 
         $aDiscounts = $this->callMethod($this->_oModel, 'd3GetOrderManagerDiscounts');

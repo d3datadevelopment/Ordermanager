@@ -50,14 +50,14 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_action::class);
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -126,7 +126,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
      */
     public function getContentListReturnsItems()
     {
-        $oContentList = $this->callMethod($this->_oController, 'getContentList', array());
+        $oContentList = $this->callMethod($this->_oController, 'getContentList', []);
 
         $this->assertInstanceOf(ContentList::class, $oContentList);
         $this->assertTrue($oContentList->count() > 0);
@@ -173,7 +173,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
 
         $this->_oController = $oControllerMock;
 
-        $sDir = $this->callMethod($this->_oController, 'getManagerTemplateDirs', array(true));
+        $sDir = $this->callMethod($this->_oController, 'getManagerTemplateDirs', [true]);
         $this->assertSame(
             $sExpected,
             $sDir
@@ -197,7 +197,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $oConfigMock->expects($this->any())->method('getTemplateDir')->with(
             $this->isFalse()
         )->willReturn($sExpected);
-        
+
         /** @var d3_cfg_ordermanageritem_action|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
             ->onlyMethods(['d3GetConfig'])
@@ -205,8 +205,8 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $oControllerMock->method('d3GetConfig')->willReturn($oConfigMock);
 
         $this->_oController = $oControllerMock;
-        
-        $sDir = $this->callMethod($this->_oController, 'getManagerTemplateDirs', array(false));
+
+        $sDir = $this->callMethod($this->_oController, 'getManagerTemplateDirs', [false]);
         $this->assertSame(
             $sExpected,
             $sDir
@@ -302,7 +302,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'loadInLang',
                 'getStartTime',
-                'getListExportFilePath'
+                'getListExportFilePath',
             ])
             ->getMock();
         $oProfileMock->expects($this->once())->method('loadInLang')->willReturn(true);
@@ -313,7 +313,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
             ->onlyMethods([
                 'getProfile',
-                '_d3LoadInOtherLang'
+                '_d3LoadInOtherLang',
             ])
             ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);
@@ -356,7 +356,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
             ->onlyMethods([
                 'getFieldNameTitle',
-                'getLang'
+                'getLang',
             ])
             ->getMock();
         $oControllerMock->method('getFieldNameTitle')->willReturn('barfoo');
@@ -366,7 +366,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
 
         $this->assertSame(
             'barfoo (foobar_5)',
-            $this->callMethod($this->_oController, 'getFieldNameDescription', array('foobar_5'))
+            $this->callMethod($this->_oController, 'getFieldNameDescription', ['foobar_5'])
         );
     }
 
@@ -387,7 +387,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
 
         $this->assertSame(
             'foobar_5',
-            $this->callMethod($this->_oController, 'getFieldNameDescription', array('foobar_5'))
+            $this->callMethod($this->_oController, 'getFieldNameDescription', ['foobar_5'])
         );
     }
 
@@ -424,7 +424,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
 
         $this->assertSame(
             'Sprache %u Sprache 0 ',
-            $this->callMethod($this->_oController, 'getFieldNameTitle', array('foobar_1'))
+            $this->callMethod($this->_oController, 'getFieldNameTitle', ['foobar_1'])
         );
     }
 
@@ -453,7 +453,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
 
         $this->assertSame(
             'Sprache %u ',
-            $this->callMethod($this->_oController, 'getFieldNameTitle', array('foobar'))
+            $this->callMethod($this->_oController, 'getFieldNameTitle', ['foobar'])
         );
     }
 
@@ -481,7 +481,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertNull(
-            $this->callMethod($this->_oController, 'getFieldNameTitle', array('FOOBAR'))
+            $this->callMethod($this->_oController, 'getFieldNameTitle', ['FOOBAR'])
         );
     }
 
@@ -651,7 +651,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $this->assertIsArray(
             $aActionList
         );
-        $this->assertTrue(count($aActionList) > 0);
+        $this->assertNotEmpty($aActionList);
     }
 
     /**
@@ -662,15 +662,15 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
      */
     public function canGetGroupList()
     {
-        $groupedList = array(
-            'D3_ORDERMANAGER_ACTION_ORDER'   => array(
+        $groupedList = [
+            'D3_ORDERMANAGER_ACTION_ORDER'   => [
                 'moveOrderToFolder'     => Actions\d3ordermanager_action_moveordertofolder::class,
-                'stornoOrder'           => Actions\d3ordermanager_action_stornoorder::class
-            ),
-            'D3_ORDERMANAGER_ACTION_CUSTOMER'       => array(
+                'stornoOrder'           => Actions\d3ordermanager_action_stornoorder::class,
+            ],
+            'D3_ORDERMANAGER_ACTION_CUSTOMER'       => [
                 'custAddToGroup'        => Actions\d3ordermanager_action_custaddtogroup::class,
-            )
-        );
+            ],
+        ];
 
         /** @var d3ordermanager_conf|MockObject $oConfigurationMock */
         $oConfigurationMock = $this->getMockBuilder(d3ordermanager_conf::class)
@@ -688,7 +688,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_action::class)
             ->onlyMethods([
                 'getProfile',
-                'getActionList'
+                'getActionList',
             ])
             ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);
@@ -713,10 +713,10 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
             ->onlyMethods([
                 'getAvailableInLangs',
-                'loadInLang'
+                'loadInLang',
             ])
             ->getMock();
-        $oProfileMock->method('getAvailableInLangs')->willReturn(array('de' => 'deutsch'));
+        $oProfileMock->method('getAvailableInLangs')->willReturn(['de' => 'deutsch']);
         $oProfileMock->expects($this->once())->method('loadInLang')->willReturn(true);
 
         $this->setValue($this->_oController, '_iEditLang', 'en');
@@ -726,7 +726,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 '_d3LoadInOtherLang',
-                array($oProfileMock, 'oxid')
+                [$oProfileMock, 'oxid']
             )
         );
     }
@@ -742,10 +742,10 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $oProfileMock = $this->getMockBuilder(d3ordermanager::class)
             ->onlyMethods([
                 'getAvailableInLangs',
-                'loadInLang'
+                'loadInLang',
             ])
             ->getMock();
-        $oProfileMock->method('getAvailableInLangs')->willReturn(array('de' => 'deutsch'));
+        $oProfileMock->method('getAvailableInLangs')->willReturn(['de' => 'deutsch']);
         $oProfileMock->expects($this->never())->method('loadInLang')->willReturn(true);
 
         $this->setValue($this->_oController, '_iEditLang', 'de');
@@ -755,7 +755,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 '_d3LoadInOtherLang',
-                array($oProfileMock, 'oxid')
+                [$oProfileMock, 'oxid']
             )
         );
     }
@@ -777,7 +777,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
             ->setPath('d3module1Path')
             ->setTitle([
                 'de' => 'TestModule A '.__METHOD__,
-                'en' => 'TestModule A '.__METHOD__
+                'en' => 'TestModule A '.__METHOD__,
             ]);
 
         $moduleB = new ModuleConfiguration();
@@ -786,7 +786,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
             ->setPath('d3module2Path')
             ->setTitle([
                 'de' => 'TestModule B '.__METHOD__,
-                'en' => 'TestModule B '.__METHOD__
+                'en' => 'TestModule B '.__METHOD__,
             ]);
 
         $shopConfiguration->addModuleConfiguration($moduleB);
@@ -795,13 +795,13 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         $container->get(ShopConfigurationDaoBridgeInterface::class)->save($shopConfiguration);
 
         try {
-            $aList = $this->callMethod( $this->_oController, 'getModulePathList' );
+            $aList = $this->callMethod($this->_oController, 'getModulePathList');
 
-            $this->assertArrayHasKey( 'd3module1', $aList );
-            $this->assertArrayHasKey( 'd3module2', $aList );
-            $this->assertArrayNotHasKey( 'd3module3', $aList );
-            $this->assertStringContainsStringIgnoringCase( 'source/modules/d3module1Path', implode('-', $aList));
-            $this->assertStringContainsStringIgnoringCase( 'source/modules/d3module2Path', implode('-', $aList));
+            $this->assertArrayHasKey('d3module1', $aList);
+            $this->assertArrayHasKey('d3module2', $aList);
+            $this->assertArrayNotHasKey('d3module3', $aList);
+            $this->assertStringContainsStringIgnoringCase('source/modules/d3module1Path', implode('-', $aList));
+            $this->assertStringContainsStringIgnoringCase('source/modules/d3module2Path', implode('-', $aList));
             $this->assertStringNotContainsStringIgnoringCase('source/modules/d3module3Path', implode('-', $aList));
         } finally {
             $shopConfiguration->deleteModuleConfiguration($moduleA->getId());

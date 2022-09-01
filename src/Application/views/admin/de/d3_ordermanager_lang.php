@@ -22,7 +22,7 @@ $sLangName = 'Deutsch';
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
-$aLang = array(
+$aLang = [
     'charset'                                            => 'UTF-8',
 
     'd3mxordermanager'                                   => '<i class="fa fa-fw fa-clipboard"></i> Auftragsmanager',
@@ -554,6 +554,6 @@ $aLang = array(
     'D3_ORDERMANAGER_EXC_CRON_WRONGPASSWORD'             => 'Fehlendes oder falsches Cronjobpasswort.',
     'D3_ORDERMANAGER_EXC_ACTION'                         => 'Aufgabe "%1$s" -> Aktion "%2$s": %3$s',
     'D3_ORDERMANAGER_EXC_REQU'                           => 'Aufgabe "%1$s" -> Bedingung "%2$s": %3$s',
-);
+];
 
 // @codeCoverageIgnoreEnd

@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Requirements;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -30,24 +31,24 @@ use PHPUnit\Framework\MockObject\MockObject;
 class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
         'orderTestIdNo3',
         'orderTestIdNo4',
-    );
-    public $aOrderArticleIdList = array(
+    ];
+    public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
         'orderTestIdNo3Article1',
         'orderTestIdNo4Article1',
-    );
+    ];
 
     /**
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -59,7 +60,7 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->cleanTestData();
 
@@ -77,62 +78,62 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxsenddate'   => '0000-00-00 00:00:00',
                 'oxpaid'   => '0000-00-00 00:00:00',
-            ),
-            array(
-                $this->aOrderArticleIdList[0] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[0] => [
                     'oxtitle'           => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxsenddate'   => '2018-01-01 00:00:00',
                 'oxpaid'   => '0000-00-00 00:00:00',
-            ),
-            array(
-                $this->aOrderArticleIdList[1] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[1] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[2],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxsenddate'   => '0000-00-00 00:00:00',
                 'oxpaid'   => '2018-01-01 00:00:00',
-            ),
-            array(
-                $this->aOrderArticleIdList[2] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[2] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[3],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxsenddate'   => '2018-01-01 00:00:00',
                 'oxpaid'   => '2018-01-01 00:00:00',
-            ),
-            array(
-                $this->aOrderArticleIdList[3] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[3] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
     }
 
@@ -273,7 +274,7 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
             'unknown'=> ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
-            'false'  => [false]
+            'false'  => [false],
         ];
     }
 }

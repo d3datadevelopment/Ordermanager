@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Requirements;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -30,26 +31,26 @@ use PHPUnit\Framework\MockObject\MockObject;
 class requirementOtherJobTest extends d3OrdermanagerRequirementIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
         'orderTestIdNo3',
-    );
-    public $aOrderArticleIdList = array(
+    ];
+    public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
         'orderTestIdNo3Article1',
-    );
-    public $aAssignIdList = array(
+    ];
+    public $aAssignIdList = [
         'toOrderManagerAssignIdNo1',
         'toOrderManagerAssignIdNo2',
-    );
+    ];
 
     /**
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -61,7 +62,7 @@ class requirementOtherJobTest extends d3OrdermanagerRequirementIntegrationTestCa
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->cleanTestData();
 
@@ -79,59 +80,59 @@ class requirementOtherJobTest extends d3OrdermanagerRequirementIntegrationTestCa
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[0] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[0] => [
                     'oxtitle'           => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createBaseModelObject(
             'd3order2ordermanager',
             $this->aAssignIdList[0],
-            array(
+            [
                 'oxorderid'    => $this->aOrderIdList[0],
                 'oxordermanagerid'    => 'TestJobIdPass',
-            )
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[1] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[1] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createBaseModelObject(
             'd3order2ordermanager',
             $this->aAssignIdList[1],
-            array(
+            [
                 'oxorderid'    => $this->aOrderIdList[1],
                 'oxordermanagerid'    => 'TestJobIdNotPass',
-            )
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[2],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[2] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[2] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
     }
 
@@ -274,7 +275,7 @@ class requirementOtherJobTest extends d3OrdermanagerRequirementIntegrationTestCa
             'unknown'=> ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
-            'false'  => [false]
+            'false'  => [false],
         ];
     }
 }

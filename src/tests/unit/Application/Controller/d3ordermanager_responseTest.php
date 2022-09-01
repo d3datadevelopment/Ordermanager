@@ -17,6 +17,7 @@
 namespace D3\Ordermanager\tests\unit\Application\Controller;
 
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
+use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\ModCfg\Application\Model\Log\d3log;
 use D3\ModCfg\Application\Model\Log\d3NullLogger;
 use D3\Ordermanager\Application\Controller\d3ordermanager_response;
@@ -51,14 +52,14 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3ordermanager_response::class);
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -78,6 +79,27 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
+     * @covers \D3\Ordermanager\Application\Controller\d3ordermanager_response::__construct
+     * @test
+     */
+    public function constructorException()
+    {
+        /** @var d3ordermanager_response|MockObject $controller */
+        $controller = $this->getMockBuilder(d3ordermanager_response::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', 'differentModCfgid');
+
+        $this->expectException(wrongModIdException::class);
+
+        $this->callMethod(
+            $controller,
+            '__construct'
+        );
+    }
+
+    /**
      * @covers \D3\Ordermanager\Application\Controller\d3ordermanager_response::init
      * @test
      * @throws ReflectionException
@@ -88,7 +110,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
             ->onlyMethods([
                 '_startExecution',
-                'isBrowserCall'
+                'isBrowserCall',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('_startExecution')->willReturn(false);
@@ -111,7 +133,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
             ->onlyMethods([
                 '_startExecution',
-                'isBrowserCall'
+                'isBrowserCall',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('_startExecution')->willReturn(true);
@@ -149,7 +171,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
             ->onlyMethods([
                 '_startExecution',
-                'isBrowserCall'
+                'isBrowserCall',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('_startExecution')->willThrowException($exception);
@@ -173,7 +195,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
             ->onlyMethods([
                 '_startExecution',
-                'isBrowserCall'
+                'isBrowserCall',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('_startExecution')->willReturn(true);
@@ -199,7 +221,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
             ->onlyMethods([
                 '_startExecution',
-                'isBrowserCall'
+                'isBrowserCall',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('_startExecution')->willThrowException($exc);
@@ -261,7 +283,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
                 '_getSet',
                 '_checkUnavailableCronjob',
                 '_getCronTimestampVarName',
-                '_startJobs'])
+                '_startJobs', ])
             ->getMock();
         $oControllerMock->method('_getSet')->willReturn($oModCfgMock);
         $oControllerMock->method('_checkUnavailableCronjob')->willReturn(null);
@@ -305,10 +327,10 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
                 '_getSet',
                 '_checkUnavailableCronjob',
                 '_getCronTimestampVarName',
-                '_startJobs'])
+                '_startJobs', ])
             ->getMock();
         $oControllerMock->method('_getSet')->willReturn($oModCfgMock);
-        $oControllerMock->method('_checkUnavailableCronjob')->will($this->returnCallback(array($this, 'unavailableCronjobCallback')));
+        $oControllerMock->method('_checkUnavailableCronjob')->will($this->returnCallback([$this, 'unavailableCronjobCallback']));
         $oControllerMock->method('_getCronTimestampVarName')->willReturn('varName');
         $oControllerMock->expects($this->never())->method('_startJobs')->willReturn(true);
 
@@ -387,7 +409,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 'getManagerExecute',
-                array(d3GetModCfgDIC()->get(d3ordermanager::class))
+                [d3GetModCfgDIC()->get(d3ordermanager::class)]
             )
         );
     }
@@ -410,7 +432,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'd3GetLog',
                 'getId',
-                'load'
+                'load',
             ])
             ->getMock();
         $oManagerMock->method('getId')->willReturn('sId');
@@ -422,7 +444,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'setManager',
                 'startJobExecution',
-                'finishJobExecution'
+                'finishJobExecution',
             ])
             ->setConstructorArgs([$oManagerMock])
             ->getMock();
@@ -435,7 +457,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'setCronJobId',
                 'setCustomSorting',
-                'selectString'
+                'selectString',
             ])
             ->getMock();
         $oListMock->method('setCronJobId')->willReturn(true);
@@ -450,7 +472,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'getManagerList',
                 'getManager',
-                'getManagerExecute'
+                'getManagerExecute',
             ])
             ->getMock();
         $oControllerMock->method('getManagerList')->willReturn($oListMock);
@@ -502,7 +524,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 '_getSet',
                 'hasValidAccessKey',
-                'getManager'
+                'getManager',
             ])
             ->getMock();
         $oControllerMock->method('_getSet')->willReturn($oModCfgMock);
@@ -548,7 +570,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 '_getSet',
                 'hasValidAccessKey',
-                'getManager'
+                'getManager',
             ])
             ->getMock();
         $oControllerMock->method('_getSet')->willReturn($oModCfgMock);
@@ -651,7 +673,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 'hasValidAccessKey',
-                array('requAccessKey', 'requAccessKey')
+                ['requAccessKey', 'requAccessKey']
             )
         );
     }
@@ -675,7 +697,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 'hasValidAccessKey',
-                array('requAccessKey', 'passedAccessKey')
+                ['requAccessKey', 'passedAccessKey']
             )
         );
     }
@@ -699,7 +721,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 'hasValidAccessKey',
-                array('requAccessKey', 'passedAccessKey')
+                ['requAccessKey', 'passedAccessKey']
             )
         );
     }
@@ -728,7 +750,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 '_checkAccessKey',
                 'getCronUnavailableException',
-                '_getSet'
+                '_getSet',
             ])
             ->getMock();
         $oControllerMock->method('_checkAccessKey')->willReturn(true);
@@ -766,7 +788,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 '_checkAccessKey',
                 'getCronUnavailableException',
-                '_getSet'
+                '_getSet',
             ])
             ->getMock();
         $oControllerMock->method('_checkAccessKey')->willReturn(false);
@@ -805,7 +827,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 '_checkAccessKey',
                 'getCronUnavailableException',
-                '_getSet'
+                '_getSet',
             ])
             ->getMock();
         $oControllerMock->method('_checkAccessKey')->willReturn(true);
@@ -846,7 +868,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 '_checkAccessKey',
                 'getCronUnavailableException',
-                '_getSet'
+                '_getSet',
             ])
             ->getMock();
         $oControllerMock->expects($this->any())->method('_checkAccessKey')->willReturn(true);
@@ -869,7 +891,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oInstance = $this->callMethod(
             $this->_oController,
             'getCronUnavailableException',
-            array('testMessage')
+            ['testMessage']
         );
 
         $this->assertInstanceOf(
@@ -955,7 +977,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             ->addMethods(['getValue'])
             ->getMock();
         $map = [
-            ['tsVarName', $testValue]
+            ['tsVarName', $testValue],
         ];
         $oModCfgMock->method('getValue')->willReturnMap($map);
 
@@ -963,7 +985,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3ordermanager_response::class)
             ->onlyMethods([
                 '_getCronTimestampVarName',
-                '_getSet'
+                '_getSet',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('_getCronTimestampVarName')->willReturn('tsVarName');
@@ -974,7 +996,8 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $this->assertSame(
             $testValue,
             $this->callMethod(
-                $this->_oController, 'getLastExecDate'
+                $this->_oController,
+                'getLastExecDate'
             )
         );
     }
@@ -1000,16 +1023,16 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
             [
                 [
                     'id'    => 0,
-                    'count' => 5
+                    'count' => 5,
                 ],
                 [
                     'id'    => 1,
-                    'count' => 9
+                    'count' => 9,
                 ],
                 [
                     'id'    => 4,
-                    'count' => 12
-                ]
+                    'count' => 12,
+                ],
             ]
         );
 
@@ -1019,7 +1042,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
                 '_getCronJobIdParameter',
                 'getManager',
                 'getLastExecDate',
-                'getLang'
+                'getLang',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('_getCronJobIdParameter')->willReturn('1');
@@ -1032,7 +1055,7 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $this->assertSame(
             [
                 0 => '1 -- 9',
-                1 => '1 -- 2020-02-02'
+                1 => '1 -- 2020-02-02',
             ],
             $this->callMethod(
                 $this->_oController,

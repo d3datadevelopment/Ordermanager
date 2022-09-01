@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Actions;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -33,10 +34,10 @@ use OxidEsales\Eshop\Core\Registry;
 class actionMoveOrderToFolderTest extends d3OrdermanagerActionIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
-    );
+    ];
 
     public $sCurrentValue = 'currentFolder';
     public $sExpectedValue = 'newFolder';
@@ -50,20 +51,20 @@ class actionMoveOrderToFolderTest extends d3OrdermanagerActionIntegrationTestCas
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxfolder'     => $this->sCurrentValue,
                 'oxbillcompany' => __CLASS__,
-            )
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxfolder'     => $this->sCurrentValue,
                 'oxbillcompany' => __CLASS__,
-            )
+            ]
         );
     }
 
@@ -113,7 +114,7 @@ class actionMoveOrderToFolderTest extends d3OrdermanagerActionIntegrationTestCas
      */
     public function getFilledResultList()
     {
-        return $this->getResultList(array($this->aOrderIdList[0]));
+        return $this->getResultList([$this->aOrderIdList[0]]);
     }
 
     /**
@@ -132,10 +133,10 @@ class actionMoveOrderToFolderTest extends d3OrdermanagerActionIntegrationTestCas
         $config = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
         $config->setConfigParam(
             'aOrderfolder',
-            array(
+            [
                 $this->sCurrentValue => '#FF0000',
                 $this->sExpectedValue => '#FF0000',
-            )
+            ]
         );
 
         // prevent save trigger action in test
@@ -179,9 +180,9 @@ class actionMoveOrderToFolderTest extends d3OrdermanagerActionIntegrationTestCas
         $config = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Config::class);
         $config->setConfigParam(
             'aOrderfolder',
-            array(
+            [
                 $this->sCurrentValue => '#FF0000',
-            )
+            ]
         );
 
         // prevent save trigger action in test

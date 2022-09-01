@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Requirements;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -53,7 +54,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -65,7 +66,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->cleanTestData();
 
@@ -86,7 +87,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
                 'oxcountry',
                 $sCountryId,
                 [
-                    'oxtitle' => __METHOD__
+                    'oxtitle' => __METHOD__,
                 ]
             );
         }
@@ -102,7 +103,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
             [
                 $this->aOrderArticleIdList[0] => [
                     'oxtitle'           => __CLASS__,
-                ]
+                ],
             ]
         );
 
@@ -117,7 +118,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
             [
                 $this->aOrderArticleIdList[1] => [
                     'oxtitle'       => __CLASS__,
-                ]
+                ],
             ]
         );
 
@@ -127,12 +128,12 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxbillcountryid'   => $this->aCountryIdList[2], // passed
-                'oxdelcountryid'    => $this->aCountryIdList[2]  // passed
+                'oxdelcountryid'    => $this->aCountryIdList[2],  // passed
             ],
             [
                 $this->aOrderArticleIdList[2] => [
                     'oxtitle'       => __CLASS__,
-                ]
+                ],
             ]
         );
 
@@ -147,7 +148,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
             [
                 $this->aOrderArticleIdList[3] => [
                     'oxtitle'       => __CLASS__,
-                ]
+                ],
             ]
         );
     }
@@ -182,7 +183,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckCountry_status', true);
-        $oManager->setValue('sCustCountryId', array($this->aCountryIdList[0]));
+        $oManager->setValue('sCustCountryId', [$this->aCountryIdList[0]]);
 
         return $oManager;
     }
@@ -220,7 +221,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckCountry_status', true);
-        $oManager->setValue('sCustCountryId', array($this->aCountryIdList[1]));
+        $oManager->setValue('sCustCountryId', [$this->aCountryIdList[1]]);
 
         return $oManager;
     }
@@ -258,7 +259,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckCountry_status', true);
-        $oManager->setValue('sCustCountryId', array($this->aCountryIdList[2]));
+        $oManager->setValue('sCustCountryId', [$this->aCountryIdList[2]]);
 
         return $oManager;
     }
@@ -372,7 +373,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
             'unknown'=> [['unknownValue']],
             'space'  => [' '],
             'empty'  => [''],
-            'false'  => [false]
+            'false'  => [false],
         ];
     }
 }

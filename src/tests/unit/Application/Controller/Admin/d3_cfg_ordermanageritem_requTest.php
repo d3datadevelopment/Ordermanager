@@ -40,7 +40,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
      * setup basic requirements
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -56,7 +56,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
 
         $aViewData = array_merge(
             $this->_oController->getViewData(),
-            array('edit' => $oSampleManager)
+            ['edit' => $oSampleManager]
         );
 
         $this->_oController->setViewData($aViewData);
@@ -65,7 +65,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     /**
      * @throws Exception
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -150,11 +150,11 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
             PaymentList::class,
             $oList
         );
-        $this->assertTrue(count($oList) > 0);
+        $this->assertNotEmpty($oList);
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getDeliveryList
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getDeliverySetList
      * @test
      * @throws ReflectionException
      */
@@ -170,7 +170,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
             DeliverySetList::class,
             $oList
         );
-        $this->assertTrue(count($oList) > 0);
+        $this->assertNotEmpty($oList);
     }
 
     /**
@@ -190,7 +190,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
             CountryList::class,
             $oList
         );
-        $this->assertTrue(count($oList) > 0);
+        $this->assertNotEmpty($oList);
     }
 
     /**
@@ -210,7 +210,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
             d3ordermanagerlist::class,
             $oList
         );
-        $this->assertTrue(count($oList) > 0, 'ordermanager job list shouldn\t empty');
+        $this->assertNotEmpty($oList, 'ordermanager job list shouldn\t empty');
         $this->assertFalse($oList->offsetExists('testId'), 'current object shouldn\'t contain in job list');
     }
 
@@ -228,7 +228,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
         );
 
         $this->assertIsArray($aList);
-        $this->assertTrue(count($aList) > 0);
+        $this->assertNotEmpty($aList);
     }
 
     /**
@@ -245,7 +245,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
         );
 
         $this->assertIsArray($aTransStatusList);
-        $this->assertTrue(count($aTransStatusList) > 0);
+        $this->assertNotEmpty($aTransStatusList);
     }
 
     /**
@@ -255,17 +255,17 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
      */
     public function addDefaultValuesReturnValues()
     {
-        $aValues = array(
+        $aValues = [
             'key1'  => 'value1',
             'key2'  => 'value2',
-        );
+        ];
 
         $this->assertSame(
             $aValues,
             $this->callMethod(
                 $this->_oController,
                 'addDefaultValues',
-                array($aValues)
+                [$aValues]
             )
         );
     }
@@ -285,7 +285,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 'getRequirementGroupList',
-                array($oManager)
+                [$oManager]
             )
         );
     }
@@ -303,7 +303,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 'getRequirementListObject',
-                array(d3GetModCfgDIC()->get(d3ordermanager::class))
+                [d3GetModCfgDIC()->get(d3ordermanager::class)]
             )
         );
     }
@@ -319,7 +319,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
         $this->assertIsArray(
             $aRequList
         );
-        $this->assertTrue(count($aRequList) > 0);
+        $this->assertNotEmpty($aRequList);
     }
 
     /**
@@ -329,7 +329,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
      */
     public function getGroupedRequirementListPass()
     {
-        $mExpected = array('item1', 'item2');
+        $mExpected = ['item1', 'item2'];
 
         /** @var d3ordermanager_conf|MockObject $oManagerConfMock */
         $oManagerConfMock = $this->getMockBuilder(d3ordermanager_conf::class)
@@ -347,7 +347,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
         $oRequGroupListMock = $this->getMockBuilder(d3ordermanager_requirementgrouplist::class)
             ->onlyMethods([
                 'setGroups',
-                'getGroupList'
+                'getGroupList',
             ])
             ->setConstructorArgs([$oProfileMock])
             ->getMock();
@@ -358,7 +358,7 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_requ::class)
             ->onlyMethods([
                 'getProfile',
-                'getRequirementGroupList'
+                'getRequirementGroupList',
             ])
             ->getMock();
         $oControllerMock->method('getProfile')->willReturn($oProfileMock);

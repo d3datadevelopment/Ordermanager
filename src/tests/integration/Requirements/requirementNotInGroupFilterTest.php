@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Requirements;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -30,32 +31,32 @@ use PHPUnit\Framework\MockObject\MockObject;
 class requirementNotInGroupFilterTest extends d3OrdermanagerRequirementIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
         'orderTestIdNo3',
-    );
+    ];
     public $aGroupsIdList = [
         'sGroupId1Pass',
         'sGroupId2Pass',
         'sGroupId3Pass',
     ];
-    public $aOrderArticleIdList = array(
+    public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
         'orderTestIdNo3Article1',
-    );
-    public $aGroupAssignIdList = array(
+    ];
+    public $aGroupAssignIdList = [
         'groupAssignIdNo1',
         'groupAssignIdNo2',
         'groupAssignIdNo3',
-    );
+    ];
 
     /**
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -67,7 +68,7 @@ class requirementNotInGroupFilterTest extends d3OrdermanagerRequirementIntegrati
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->cleanTestData();
 
@@ -93,71 +94,71 @@ class requirementNotInGroupFilterTest extends d3OrdermanagerRequirementIntegrati
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxuserid'      => 'sUserIdNo1',
-            ),
-            array(
-                $this->aOrderArticleIdList[0] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[0] => [
                     'oxtitle'           => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createBaseModelObject(
             'oxobject2group',
             $this->aGroupAssignIdList[0],
-            array(
+            [
                 'oxobjectid'    => 'sUserIdNo1',
                 'oxgroupsid'    => $this->aGroupsIdList[2],
-            )
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxuserid'      => 'sUserIdNo2',
-            ),
-            array(
-                $this->aOrderArticleIdList[1] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[1] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createBaseModelObject(
             'oxobject2group',
             $this->aGroupAssignIdList[1],
-            array(
+            [
                 'oxobjectid'    => 'sUserIdNo2',
                 'oxgroupsid'    => $this->aGroupsIdList[1],
-            )
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[2],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxuserid'      => 'sUserIdNo3',
-            ),
-            array(
-                $this->aOrderArticleIdList[2] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[2] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createBaseModelObject(
             'oxobject2group',
             $this->aGroupAssignIdList[2],
-            array(
+            [
                 'oxobjectid'    => 'sUserIdNo3',
                 'oxgroupsid'    => $this->aGroupsIdList[0],
-            )
+            ]
         );
     }
 
@@ -307,7 +308,7 @@ class requirementNotInGroupFilterTest extends d3OrdermanagerRequirementIntegrati
             'unknown'=> ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
-            'false'  => [false]
+            'false'  => [false],
         ];
     }
 }

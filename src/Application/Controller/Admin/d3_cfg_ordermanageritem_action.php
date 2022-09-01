@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
@@ -73,7 +73,7 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
         }
         // @codeCoverageIgnoreEnd
 
-        $aMissingRequiredValues = array();
+        $aMissingRequiredValues = [];
         /** @var ActionModelInterface $oAction */
         foreach ($this->getActionList() as $sId => $oAction) {
             if ($this->getProfile()->getValue($oAction->getActiveSwitchParameter())) {
@@ -148,7 +148,7 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
 
             // load object in other languages
             $oOtherLang = $oProfile->getAvailableInLangs();
-            if (false == isset($oOtherLang[$this->_iEditLang])) {
+            if (!isset($oOtherLang[$this->_iEditLang])) {
                 $oProfile->loadInLang(key($oOtherLang), $soxId);
             }
         }
@@ -166,16 +166,16 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
         $request = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Request::class);
         $soxId    = $request->getRequestEscapedParameter("oxid");
 
-        if (isset( $soxId) && $soxId && $soxId != "-1") {
+        if (isset($soxId) && $soxId && $soxId != "-1") {
             // load object
             $oProfile->loadInLang($this->_iEditLang, $soxId);
             $oProfile = $this->_d3LoadInOtherLang($oProfile, $soxId);
         }
 
-        $aSearch = array(date('Y-m-d_H-i-s', $oProfile->getStartTime()));
+        $aSearch = [date('Y-m-d_H-i-s', $oProfile->getStartTime())];
         /** @var Language $oLang */
         $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
-        $aReplace = array($oLang->translateString('D3_ORDERMANAGER_ACTION_DATEPLACEHOLDER'));
+        $aReplace = [$oLang->translateString('D3_ORDERMANAGER_ACTION_DATEPLACEHOLDER')];
 
         return str_replace($aSearch, $aReplace, $oProfile->getListExportFilePath());
     }
@@ -347,7 +347,7 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
     {
         // load object in other languages
         $oOtherLang = $oProfile->getAvailableInLangs();
-        if (false == isset($oOtherLang[$this->_iEditLang])) {
+        if (!isset($oOtherLang[$this->_iEditLang])) {
             $oProfile->loadInLang(key($oOtherLang), $soxId);
         }
 

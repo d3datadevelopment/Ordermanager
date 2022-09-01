@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
@@ -42,12 +42,12 @@ class d3_cfg_ordermanageritem_trigger extends d3_cfg_mod_main
     protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
     protected $_sThisTemplate = "d3_cfg_ordermanageritem_trigger.tpl";
     protected $_blUseOwnOxid = true;
-    protected $_aNaviItems = array(
-        'new' => array(
+    protected $_aNaviItems = [
+        'new' => [
             'sScript' => 'top.oxid.admin.editThis( -1 );return false;',
             'sTranslationId' => 'D3_TOOLTIPS_NEWORDERMANAGER',
-        ),
-    );
+        ],
+    ];
     protected $_sD3ObjectClass = Manager::class;
 
     /**
@@ -88,9 +88,9 @@ class d3_cfg_ordermanageritem_trigger extends d3_cfg_mod_main
      */
     public function fixCronjobId($sId)
     {
-        $aSearch = array(
+        $aSearch = [
             ' ',
-        );
+        ];
         $sReplace = '_';
 
         return str_replace($aSearch, $sReplace, $sId);
@@ -110,7 +110,7 @@ class d3_cfg_ordermanageritem_trigger extends d3_cfg_mod_main
         return $this->d3GetSet()->isDemo() ||
             in_array(
                 true,
-                array_map(array($this->d3GetSet(),'getLicenseConfigData'),array(ConfModel::SERIAL_BIT_STANDARD_EDITION))
+                array_map([$this->d3GetSet(),'getLicenseConfigData'], [ConfModel::SERIAL_BIT_STANDARD_EDITION])
             );
     }
 
@@ -128,7 +128,7 @@ class d3_cfg_ordermanageritem_trigger extends d3_cfg_mod_main
         return $this->d3GetSet()->isDemo() ||
             in_array(
                 true,
-                array_map(array($this->d3GetSet(),'getLicenseConfigData'),array(ConfModel::SERIAL_BIT_PREMIUM_EDITION))
+                array_map([$this->d3GetSet(),'getLicenseConfigData'], [ConfModel::SERIAL_BIT_PREMIUM_EDITION])
             );
     }
 }

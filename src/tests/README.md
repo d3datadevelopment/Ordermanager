@@ -50,5 +50,5 @@ To execute unit tests run the following:
 
 ```
 cd /var/www/oxideshop/
-vendor/bin/runtests
+PHPBIN=/usr/bin/php7.4 ./vendor/bin/runtests
 ```

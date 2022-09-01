@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Requirements;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -50,7 +51,7 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -62,7 +63,7 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->cleanTestData();
 
@@ -79,49 +80,49 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
         );
 
         foreach ($this->aPaymentIdList as $sId) {
-            $this->createBaseModelObject( 'oxpayments', $sId, ['oxdesc'  => __METHOD__] );
+            $this->createBaseModelObject('oxpayments', $sId, ['oxdesc'  => __METHOD__]);
         }
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxpaymenttype'     => $this->aPaymentIdList[0],    // pass
-            ),
-            array(
-                $this->aOrderArticleIdList[0] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[0] => [
                     'oxtitle'           => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxpaymenttype'     => $this->aPaymentIdList[1],    // pass
-            ),
-            array(
-                $this->aOrderArticleIdList[1] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[1] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[2],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
                 'oxpaymenttype'     => $this->aPaymentIdList[2],    // pass
-            ),
-            array(
-                $this->aOrderArticleIdList[2] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[2] => [
                     'oxtitle'       => __CLASS__,
-                )
-            )
+                ],
+            ]
         );
     }
 
@@ -133,7 +134,7 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
         $this->deleteManager($this->sManagerId);
 
         foreach ($this->aPaymentIdList as $sId) {
-            $this->deleteBaseModelObject( 'oxpayments', $sId);
+            $this->deleteBaseModelObject('oxpayments', $sId);
         }
 
         foreach ($this->aOrderIdList as $sOrderId) {
@@ -150,7 +151,7 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckPayment_status', true);
-        $oManager->setValue( 'sPaymentId', [$this->aPaymentIdList[0]]);     // pass
+        $oManager->setValue('sPaymentId', [$this->aPaymentIdList[0]]);     // pass
 
         return $oManager;
     }
@@ -164,7 +165,7 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckPayment_status', true);
-        $oManager->setValue( 'sPaymentId', [ $this->aPaymentIdList[0], $this->aPaymentIdList[1] ] );    // pass
+        $oManager->setValue('sPaymentId', [ $this->aPaymentIdList[0], $this->aPaymentIdList[1] ]);    // pass
 
         return $oManager;
     }
@@ -262,7 +263,7 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
             'unknown'=> ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
-            'false'  => [false]
+            'false'  => [false],
         ];
     }
 }

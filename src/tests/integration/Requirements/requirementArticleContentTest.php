@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Requirements;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -31,29 +32,29 @@ use PHPUnit\Framework\MockObject\MockObject;
 class requirementArticleContentTest extends d3OrdermanagerRequirementIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
         'orderTestIdNo3',
         'orderTestIdNo4',
         'orderTestIdNo5',
-    );
-    public $aOrderArticleIdList = array(
+    ];
+    public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
         'orderTestIdNo3Article1',
         'orderTestIdNo4Article1',
         'orderTestIdNo5Article1',
-    );
-    public $aArt2CatIdList = array(
+    ];
+    public $aArt2CatIdList = [
         'a2cTestIdNo1',
-    );
+    ];
 
     /**
      * Set up fixture.
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -65,7 +66,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->cleanTestData();
 
@@ -83,12 +84,12 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[0] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[0] => [
                     'oxartnum'      => 'expArtNum1',
                     'oxtitle'       => 'expTitle1',
                     'oxshortdesc'   => 'expShortDesc1',
@@ -96,28 +97,28 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
                     'oxpersparam'   => 'expPersParam1',
                     'oxstorno'      => '0',
                     'oxartid'       => 'artIdTestNo1',
-                )
-            )
+                ],
+            ]
         );
 
         $this->createObject(
             'd3ox.ordermanager.'.Object2Category::class,
             $this->aArt2CatIdList[0],
-            array(
+            [
                 'oxshopid'      => '1',
                 'oxobjectid'    => 'artIdTestNo1',
                 'oxcatnid'      => 'catTestId',
-            )
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[1] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[1] => [
                     'oxartnum'      => 'expArtNum2',
                     'oxtitle'       => 'expTitle2',
                     'oxshortdesc'   => 'expShortDesc2',
@@ -126,18 +127,18 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
                     'oxstorno'      => '0',
                     'oxorderid'     => $this->aOrderIdList[1],
                     'oxartid'       => 'artIdTestNo2',
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[2],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[2] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[2] => [
                     'oxartnum'      => 'expArtNum3',
                     'oxtitle'       => 'expTitle3',
                     'oxshortdesc'   => 'expShortDesc3',
@@ -145,18 +146,18 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
                     'oxpersparam'   => 'expPersParam3',
                     'oxstorno'      => '0',
                     'oxartid'       => 'artIdTestNo3',
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[3],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[3] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[3] => [
                     'oxartnum'      => 'expArtNum4',
                     'oxtitle'       => 'expTitle4',
                     'oxshortdesc'   => 'expShortDesc4',
@@ -165,18 +166,18 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
                     'oxstorno'      => '0',
                     'oxorderid'     => $this->aOrderIdList[3],
                     'oxartid'       => 'artIdTestNo4',
-                )
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[4],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[4] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[4] => [
                     'oxartnum'      => 'expArtNum5',
                     'oxtitle'       => 'expTitle5',
                     'oxshortdesc'   => 'expShortDesc5',
@@ -184,8 +185,8 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
                     'oxpersparam'   => 'expPersParam5',
                     'oxstorno'      => '0',
                     'oxartid'       => 'artIdTestNo5',
-                )
-            )
+                ],
+            ]
         );
     }
 
@@ -464,7 +465,7 @@ class requirementArticleContentTest extends d3OrdermanagerRequirementIntegration
             'unknown'=> ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
-            'false'  => [false]
+            'false'  => [false],
         ];
     }
 }

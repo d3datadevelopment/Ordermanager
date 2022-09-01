@@ -15,7 +15,7 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\publicDir;
 
@@ -65,7 +65,7 @@ if (!(file_exists($bootstrapFileName) && !is_dir($bootstrapFileName))) {
     $items = [
         "Unable to find eShop bootstrap.php file.",
         "You can override the path by using ESHOP_BOOTSTRAP_PATH environment variable.",
-        "\n"
+        "\n",
     ];
 
     $message = implode(" ", $items);
@@ -110,31 +110,47 @@ Registry::getLang()->setTplLanguage(
     )->id
 );
 
-if(!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'rb'));
-if(!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'wb'));
-if(!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
+if (!defined('STDIN')) {
+    define('STDIN', fopen('php://stdin', 'rb'));
+}
+if (!defined('STDOUT')) {
+    define('STDOUT', fopen('php://stdout', 'wb'));
+}
+if (!defined('STDERR')) {
+    define('STDERR', fopen('php://stderr', 'wb'));
+}
 
 // @codeCoverageIgnoreEnd
 
 // ToDo: extract to separate file because of circular reference in d3ordermanager_execute class
 class d3_ordermanager_cron extends CLI
 {
-    const OPTION_VERSION = 'version';
-    const OPTION_QUIET = 'quiet';
-    const OPTION_LANG = 'lang';
+    public const OPTION_VERSION = 'version';
+    public const OPTION_QUIET = 'quiet';
+    public const OPTION_LANG = 'lang';
 
-    const COMMAND_RUN = 'run';
-    const COMMAND_STATUS = 'status';
+    public const COMMAND_RUN = 'run';
+    public const COMMAND_STATUS = 'status';
 
-    const ARGUMENT_SHOPID = 'shop id';
-    const ARGUMENT_CJID = 'cronjob id';
-    const ARGUMENT_KEY = 'key';
+    public const ARGUMENT_SHOPID = 'shop id';
+    public const ARGUMENT_CJID = 'cronjob id';
+    public const ARGUMENT_KEY = 'key';
 
     public function __construct()
     {
         // there are argv setting in CLI mode only
         if ($this->isCLI()) {
             parent::__construct();
+        } else {
+            try {
+                parent::__construct();
+                // @codeCoverageIgnoreStart
+            } catch (\splitbrain\phpcli\Exception $e) {
+                if ($e->getCode() !== \splitbrain\phpcli\Exception::E_ARG_READ) {
+                    throw new \splitbrain\phpcli\Exception($e->getMessage(), $e->getCode());
+                }
+            }
+            // @codeCoverageIgnoreEnd
         }
     }
 
@@ -157,7 +173,7 @@ class d3_ordermanager_cron extends CLI
         $lang = Registry::getLang();
 
         /** @var Config $config */
-        $config = d3GetModCfgDIC()->get( 'd3ox.ordermanager.' . Config::class );
+        $config = d3GetModCfgDIC()->get('d3ox.ordermanager.' . Config::class);
         $sShopIdList = implode(
             $lang->translateString('D3_ORDERMANAGER_CLI_ARGUMENT_ENCLOSER'),
             $config->getShopIds()
@@ -215,7 +231,7 @@ class d3_ordermanager_cron extends CLI
      */
     protected function main(Options $options)
     {
-        if ( $options->getOpt( self::OPTION_VERSION ) ) {
+        if ($options->getOpt(self::OPTION_VERSION)) {
             $container = ContainerFactory::getInstance()->getContainer();
             $shopConfiguration = $container->get(ShopConfigurationDaoBridgeInterface::class)->get();
             $moduleConfiguration = $shopConfiguration->getModuleConfiguration('d3ordermanager');
@@ -224,20 +240,20 @@ class d3_ordermanager_cron extends CLI
             return;
         }
 
-        if ( $options->getOpt( self::OPTION_QUIET ) ) {
-            d3GetModCfgDIC()->get('d3ox.ordermanager.'.Session::class)->setVariable( 'd3ordermanager_quiet', true );
+        if ($options->getOpt(self::OPTION_QUIET)) {
+            d3GetModCfgDIC()->get('d3ox.ordermanager.'.Session::class)->setVariable('d3ordermanager_quiet', true);
         }
 
         $arguments = $options->getArgs();
         $aTranslation         = [];
         $aTranslation['shp']  = $arguments[0] ?? '';
         $aTranslation['cjid'] = $arguments[1] ?? '';
-        $aTranslation['key']  = $arguments[2] ?: '';
+        $aTranslation['key']  = $arguments[2] ?? '';
 
-        $_GET = array_merge( $_GET, $aTranslation );
+        $_GET = array_merge($_GET, $aTranslation);
 
         /** @var Config $config */
-        $config = d3GetModCfgDIC()->get( 'd3ox.ordermanager.' . Config::class );
+        $config = d3GetModCfgDIC()->get('d3ox.ordermanager.' . Config::class);
 
         try {
             if ($aTranslation['shp']) {
@@ -245,16 +261,16 @@ class d3_ordermanager_cron extends CLI
                     throw new RuntimeException(Registry::getLang()->translateString('D3_ORDERMANAGER_CLI_COMMON_UNVALIDSHOPID'));
                 }
 
-                $config->setShopId( (int) $aTranslation['shp'] );
+                $config->setShopId((int) $aTranslation['shp']);
             }
 
-            /** @var $oResponse ResponseController */
-            $oResponse = d3GetModCfgDIC()->get( ResponseController::class );
+            /** @var ResponseController $oResponse */
+            $oResponse = d3GetModCfgDIC()->get(ResponseController::class);
 
-            switch ( $options->getCmd() ) {
+            switch ($options->getCmd()) {
                 case self::COMMAND_RUN:
                     $oResponse->initCli();
-                    if ( !$options->getOpt( self::OPTION_QUIET ) ) {
+                    if (!$options->getOpt(self::OPTION_QUIET)) {
                         $this->success(
                             Registry::getLang()->translateString('D3_ORDERMANAGER_CLI_FINISHED_SUCCESSFULLY')
                         );
@@ -267,31 +283,31 @@ class d3_ordermanager_cron extends CLI
                     // old command without 'run' task
                     if (false === in_array($aTranslation['cjid'], ['', false, null], true)) {
                         if (false === in_array($aTranslation['cjid'], array_map(
-                                function ($entry) {
-                                    return $entry['id'];
-                                },
-                                d3GetModCfgDIC()->get(Manager::class)->getAvailableCronjobIds()
-                            ))
+                            function ($entry) {
+                                return $entry['id'];
+                            },
+                            d3GetModCfgDIC()->get(Manager::class)->getAvailableCronjobIds()
+                        ))
                         ) {
                             throw new RuntimeException(Registry::getLang()->translateString('D3_ORDERMANAGER_CLI_COMMON_UNVALIDCJID'));
                         }
                         $oResponse->initCli();
-                        if ( !$options->getOpt( self::OPTION_QUIET ) ) {
+                        if (!$options->getOpt(self::OPTION_QUIET)) {
                             $this->success(
                                 Registry::getLang()->translateString('D3_ORDERMANAGER_CLI_FINISHED_SUCCESSFULLY')
                             );
                         }
                     } else {
-                        echo $this->translateFixedStrings( $options->help() );
+                        echo $this->translateFixedStrings($options->help());
                     }
             }
-        } catch ( Exception $oEx ) {
+        } catch (Exception $oEx) {
             if (!Registry::getSession()->getVariable('d3ordermanager_quiet')) {
-                $this->error( $oEx->getMessage() );
+                $this->error($oEx->getMessage());
             }
         } finally {
             /** @var Config $config */
-            $config = d3GetModCfgDIC()->get( 'd3ox.ordermanager.' . Config::class );
+            $config = d3GetModCfgDIC()->get('d3ox.ordermanager.' . Config::class);
             // @codeCoverageIgnoreStart
             if (false === defined('OXID_PHP_UNIT')) {
                 $config->pageClose();
@@ -319,13 +335,14 @@ class d3_ordermanager_cron extends CLI
         // run cron script from browser
         if (false === $this->isCLI()) {
             // browser call don't handle CLI options and arguments
-            /** @var $oResponse ResponseController */
-            $oResponse = d3GetModCfgDIC()->get( ResponseController::class );
+            /** @var ResponseController $oResponse */
+            $oResponse = d3GetModCfgDIC()->get(ResponseController::class);
             $oResponse->init();
         } else {
             try {
                 parent::run();
-            } catch (d3PreventExitException $e) {}
+            } catch (d3PreventExitException $e) {
+            }
         }
 
         if ($blDebug) {
@@ -353,11 +370,11 @@ class d3_ordermanager_cron extends CLI
     public function translateFixedStrings($text): string
     {
         $search = [
-            'This tool accepts a command as first parameter as outlined below:'
+            'This tool accepts a command as first parameter as outlined below:',
         ];
 
         $replace = [
-            Registry::getLang()->translateString('D3_ORDERMANAGER_CLI_COMMAND')
+            Registry::getLang()->translateString('D3_ORDERMANAGER_CLI_COMMAND'),
         ];
 
         return str_replace($search, $replace, $text);
@@ -367,10 +384,11 @@ class d3_ordermanager_cron extends CLI
 // @codeCoverageIgnoreStart
 /** @var d3_ordermanager_cron $cli */
 $cli = d3GetModCfgDIC()->get(d3_ordermanager_cron::class);
-if (false === defined('OXID_PHP_UNIT')) {
+$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+if (false === defined('OXID_PHP_UNIT') && !count($trace)) {
     try {
         $cli->run();
-    } catch ( Exception $e) {
+    } catch (Exception $e) {
         $cli->error($e->getMessage());
     }
 }

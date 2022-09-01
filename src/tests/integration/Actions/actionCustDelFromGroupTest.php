@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Actions;
 
 use D3\ModCfg\Application\Model\d3database;
@@ -31,23 +32,23 @@ use OxidEsales\Eshop\Core\Model\ListModel;
 class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
-    );
-    public $aUserIdList = array(
+    ];
+    public $aUserIdList = [
         'orderUserTestIdNo1',
         'orderUserTestIdNo2',
-    );
-    public $aO2GroupIdList = array(
+    ];
+    public $aO2GroupIdList = [
         'o2groupTestIdNo1',
         'o2groupTestIdNo2',
         'o2groupTestIdNo3',
-    );
-    public $aGroupsIdList = array(
+    ];
+    public $aGroupsIdList = [
         'groupTestIdNo1',
         'groupTestIdNo2',
-    );
+    ];
 
     /**
      * @throws Exception
@@ -61,24 +62,24 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxuserid'     => $this->aUserIdList[0],
                 'oxcurrate'     => 1,
                 'oxbillcompany' => __CLASS__,
-            )
+            ]
         );
 
         $this->createUser($this->aUserIdList[0]);
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxuserid'     => $this->aUserIdList[1],
                 'oxcurrate'     => 1,
                 'oxbillcompany' => __CLASS__,
-            )
+            ]
         );
 
         $this->createUser($this->aUserIdList[1]);
@@ -117,7 +118,7 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blActionCustFromGroup_status', true);
-        $oManager->setValue('sCustRemoveGroup', array($this->aGroupsIdList[0]));
+        $oManager->setValue('sCustRemoveGroup', [$this->aGroupsIdList[0]]);
         $oManager->setValue('blItemExecute', true);
 
         return $oManager;
@@ -132,7 +133,7 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blActionCustFromGroup_status', true);
-        $oManager->setValue('sCustRemoveGroup', array($this->aGroupsIdList[0], $this->aGroupsIdList[1]));
+        $oManager->setValue('sCustRemoveGroup', [$this->aGroupsIdList[0], $this->aGroupsIdList[1]]);
         $oManager->setValue('blItemExecute', true);
 
         return $oManager;
@@ -147,7 +148,7 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blActionCustFromGroup_status', true);
-        $oManager->setValue('sCustRemoveGroup', array('unknownGroupId'));
+        $oManager->setValue('sCustRemoveGroup', ['unknownGroupId']);
         $oManager->setValue('blItemExecute', true);
 
         return $oManager;
@@ -162,7 +163,7 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blActionCustFromGroup_status', true);
-        $oManager->setValue('sCustRemoveGroup', array());
+        $oManager->setValue('sCustRemoveGroup', []);
         $oManager->setValue('blItemExecute', true);
 
         return $oManager;
@@ -174,7 +175,7 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function getFilledResultList()
     {
-        return $this->getResultList(array($this->aOrderIdList[0]));
+        return $this->getResultList([$this->aOrderIdList[0]]);
     }
 
     /**
@@ -192,31 +193,31 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[0],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
-            )
+            ]
         );
 
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[1],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[1],
-            )
+            ]
         );
 
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[3],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[1],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
-            )
+            ]
         );
 
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerSingleGroupsExists());
@@ -230,11 +231,11 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
-                            $this->aGroupsIdList[1]
+                            $this->aGroupsIdList[1],
                         ]
                     ))),
                     $qb->expr()->notIn('oxgroupsid', implode(', ', array_map(
@@ -242,7 +243,7 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                             return $qb->createNamedParameter($value);
                         },
                         [
-                            $this->aGroupsIdList[0]
+                            $this->aGroupsIdList[0],
                         ]
                     )))
                 )
@@ -261,11 +262,11 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[1])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
-                            $this->aGroupsIdList[0]
+                            $this->aGroupsIdList[0],
                         ]
                     )))
                 )
@@ -292,31 +293,31 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[0],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
-            )
+            ]
         );
 
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[1],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[1],
-            )
+            ]
         );
 
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[2],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[1],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
-            )
+            ]
         );
 
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerMultiGroupsExists());
@@ -330,12 +331,12 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
                             $this->aGroupsIdList[0],
-                            $this->aGroupsIdList[1]
+                            $this->aGroupsIdList[1],
                         ]
                     )))
                 )
@@ -353,11 +354,11 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[1])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
-                            $this->aGroupsIdList[0]
+                            $this->aGroupsIdList[0],
                         ]
                     )))
                 )
@@ -383,21 +384,21 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[0],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[1],
-            )
+            ]
         );
 
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[1],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[1],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
-            )
+            ]
         );
 
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerSingleGroupsExists());
@@ -411,12 +412,12 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
                             $this->aGroupsIdList[0],
-                            $this->aGroupsIdList[1]
+                            $this->aGroupsIdList[1],
                         ]
                     )))
                 )
@@ -435,11 +436,11 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[1])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
-                            $this->aGroupsIdList[0]
+                            $this->aGroupsIdList[0],
                         ]
                     )))
                 )
@@ -466,31 +467,31 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[0],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
-            )
+            ]
         );
 
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[1],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[1],
-            )
+            ]
         );
 
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[2],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[1],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
-            )
+            ]
         );
 
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerSingleGroupsNotExists());
@@ -504,12 +505,12 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
                             $this->aGroupsIdList[0],
-                            $this->aGroupsIdList[1]
+                            $this->aGroupsIdList[1],
                         ]
                     )))
                 )
@@ -527,11 +528,11 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
-                            'unknownGroupId'
+                            'unknownGroupId',
                         ]
                     )))
                 )
@@ -548,11 +549,11 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->neq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
-                            'unknownGroupId'
+                            'unknownGroupId',
                         ]
                     )))
                 )
@@ -569,11 +570,11 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[1])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
-                            $this->aGroupsIdList[0]
+                            $this->aGroupsIdList[0],
                         ]
                     )))
                 )
@@ -599,31 +600,31 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[0],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
-            )
+            ]
         );
 
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[1],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[1],
-            )
+            ]
         );
 
         $this->createObject(
             'd3ox.ordermanager.'.Object2Group::class,
             $this->aO2GroupIdList[2],
-            array(
+            [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[1],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
-            )
+            ]
         );
 
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerNoGroups());
@@ -637,12 +638,12 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[0])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
                             $this->aGroupsIdList[0],
-                            $this->aGroupsIdList[1]
+                            $this->aGroupsIdList[1],
                         ]
                     )))
                 )
@@ -659,11 +660,11 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb->expr()->andX(
                     $qb->expr()->eq('oxobjectid', $qb->createNamedParameter($this->aUserIdList[1])),
                     $qb->expr()->in('oxgroupsid', implode(', ', array_map(
-                        function($value) use ($qb) {
+                        function ($value) use ($qb) {
                             return $qb->createNamedParameter($value);
                         },
                         [
-                            $this->aGroupsIdList[0]
+                            $this->aGroupsIdList[0],
                         ]
                     )))
                 )

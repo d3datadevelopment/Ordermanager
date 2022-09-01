@@ -15,13 +15,13 @@
  * @link      https://www.oxidmodule.com
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_licence;
 
-class d3_cfg_ordermanagerset_licence extends d3_cfg_mod_licence 
+class d3_cfg_ordermanagerset_licence extends d3_cfg_mod_licence
 {
     protected $_sModId = 'd3_ordermanager';
     protected $_hasNewsletterForm = false;

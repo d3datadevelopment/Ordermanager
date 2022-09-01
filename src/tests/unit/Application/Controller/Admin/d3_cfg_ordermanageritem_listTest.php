@@ -39,14 +39,14 @@ class d3_cfg_ordermanageritem_listTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_list::class);
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -64,16 +64,16 @@ class d3_cfg_ordermanageritem_listTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_list::class)
             ->onlyMethods([
                 'getListFilter',
-                'getItemList'
+                'getItemList',
             ])
             ->getMock();
         $oControllerMock->method('getListFilter')->willReturn(
-            array(
-                'd3modprofile' => array(
+            [
+                'd3modprofile' => [
                     'oxsort' => '5000',
-                    'oxtitle'   => 'foo'
-                )
-            )
+                    'oxtitle'   => 'foo',
+                ],
+            ]
         );
         $oControllerMock->method('getItemList')->willReturn(oxNew(ListModel::class));
 
@@ -91,7 +91,7 @@ class d3_cfg_ordermanageritem_listTest extends d3OrdermanagerUnitTestCase
         $this->assertSame(
             [
                 0 => '%5000%',
-                1 => '%foo%'
+                1 => '%foo%',
             ],
             array_values($return)
         );

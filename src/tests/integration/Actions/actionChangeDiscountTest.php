@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Actions;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -32,14 +33,14 @@ use OxidEsales\Eshop\Core\Registry;
 class actionChangeDiscountTest extends d3OrdermanagerActionIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
-    );
-    public $aOrderArticleIdList = array(
+    ];
+    public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
-    );
+    ];
 
     public $dCurrentValue = 1.23;
     public $dExpectedValue = 2.34;
@@ -53,14 +54,14 @@ class actionChangeDiscountTest extends d3OrdermanagerActionIntegrationTestCase
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxdiscount'     => $this->dCurrentValue,
                 'oxcurrate'     => 1,
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[0] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[0] => [
                     'oxartnum'      => 'expArtNum1',
                     'oxtitle'       => 'expTitle1',
                     'oxshortdesc'   => 'expShortDesc1',
@@ -68,20 +69,20 @@ class actionChangeDiscountTest extends d3OrdermanagerActionIntegrationTestCase
                     'oxpersparam'   => 'expPersParam1',
                     'oxstorno'      => '0',
                     'oxartid'       => 'artIdTestNo1',
-                ),
-            )
+                ],
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxdiscount'     => $this->dCurrentValue,
                 'oxcurrate'     => 1,
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[1] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[1] => [
                     'oxartnum'      => 'expArtNum1',
                     'oxtitle'       => 'expTitle1',
                     'oxshortdesc'   => 'expShortDesc1',
@@ -89,8 +90,8 @@ class actionChangeDiscountTest extends d3OrdermanagerActionIntegrationTestCase
                     'oxpersparam'   => 'expPersParam1',
                     'oxstorno'      => '0',
                     'oxartid'       => 'artIdTestNo1',
-                ),
-            )
+                ],
+            ]
         );
     }
 
@@ -155,7 +156,7 @@ class actionChangeDiscountTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function getFilledResultList()
     {
-        return $this->getResultList(array($this->aOrderIdList[0]));
+        return $this->getResultList([$this->aOrderIdList[0]]);
     }
 
     /**

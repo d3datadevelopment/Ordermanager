@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Actions;
 
 use D3\Ordermanager\Application\Model\d3ordermanager;
@@ -33,7 +34,7 @@ abstract class d3OrdermanagerActionIntegrationTestCase extends d3IntegrationTest
      * @return ListModel
      * @throws Exception
      */
-    public function getResultList($aOrderIdList = array())
+    public function getResultList($aOrderIdList = [])
     {
         /** @var ListModel $oList */
         $oList = d3GetModCfgDIC()->get('d3ox.ordermanager.'.ListModel::class);

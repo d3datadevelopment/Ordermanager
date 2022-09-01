@@ -14,6 +14,7 @@
  * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
  * @link      https://www.oxidmodule.com
  */
+
 namespace D3\Ordermanager\tests\integration\Actions;
 
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
@@ -32,20 +33,20 @@ use OxidEsales\Eshop\Core\Registry;
 class actionExecuteMethodTest extends d3OrdermanagerActionIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
-    public $aArticleIdList = array(
+    public $aArticleIdList = [
         'articleTestIdNo1',
         'articleTestIdNo2',
-    );
+    ];
 
-    public $aOrderIdList = array(
+    public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
-    );
+    ];
 
-    public $aOrderArticleIdList = array(
+    public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
-    );
+    ];
 
     /**
      * @throws Exception
@@ -56,50 +57,50 @@ class actionExecuteMethodTest extends d3OrdermanagerActionIntegrationTestCase
 
         $this->createArticle(
             $this->aArticleIdList[0],
-            array(
+            [
                 'oxtitle'       => __CLASS__,
                 'oxparentid'    => null,
-                'oxstock'       => 20
-            )
+                'oxstock'       => 20,
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[0],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxparentid'    => '',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[0] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[0] => [
                     'oxtitle'       => __CLASS__,
                     'oxartid'       => $this->aArticleIdList[0],
-                ),
-            )
+                ],
+            ]
         );
 
         $this->createArticle(
             $this->aArticleIdList[1],
-            array(
+            [
                 'oxtitle'       => __CLASS__,
                 'oxparentid'    => null,
-                'oxstock'       => 20
-            )
+                'oxstock'       => 20,
+            ]
         );
 
         $this->createOrder(
             $this->aOrderIdList[1],
-            array(
+            [
                 'oxorderdate'   => '2018-01-01 00:00:00',
                 'oxparentid'    => '',
                 'oxbillcompany' => __CLASS__,
-            ),
-            array(
-                $this->aOrderArticleIdList[1] => array(
+            ],
+            [
+                $this->aOrderArticleIdList[1] => [
                     'oxtitle'       => __CLASS__,
                     'oxartid'       => $this->aArticleIdList[1],
-                ),
-            )
+                ],
+            ]
         );
     }
 
@@ -136,7 +137,7 @@ class actionExecuteMethodTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function getFilledResultList()
     {
-        return $this->getResultList(array($this->aOrderIdList[0]));
+        return $this->getResultList([$this->aOrderIdList[0]]);
     }
 
     /**

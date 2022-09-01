@@ -16,6 +16,7 @@
 
 namespace D3\Ordermanager\tests\unit\Application\Controller\Admin;
 
+use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
@@ -41,14 +42,14 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oController = d3GetModCfgDIC()->get(d3_cfg_ordermanageritem_settings::class);
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -64,6 +65,27 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
         $this->assertSame(
             'd3_ordermanager',
             d3GetModCfgDIC()->getParameter('d3.ordermanager.modcfgid')
+        );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::__construct
+     * @test
+     */
+    public function constructorException()
+    {
+        /** @var d3_cfg_ordermanageritem_settings|MockObject $controller */
+        $controller = $this->getMockBuilder(d3_cfg_ordermanageritem_settings::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        d3GetModCfgDIC()->setParameter('d3.ordermanager.modcfgid', 'differentModCfgid');
+
+        $this->expectException(wrongModIdException::class);
+
+        $this->callMethod(
+            $controller,
+            '__construct'
         );
     }
 
@@ -115,7 +137,7 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'isMultilang',
                 'getSelectFields',
-                'getViewName'])
+                'getViewName', ])
             ->getMock();
         $oBaseMock->method('isMultilang')->willReturn(true);
         $oBaseMock->method('setLanguage')->willReturn(true);
@@ -126,7 +148,7 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
         $oListMock = $this->getMockBuilder(ListModel::class)
             ->onlyMethods([
                 'selectString',
-                'getBaseObject'
+                'getBaseObject',
             ])
             ->getMock();
         $oListMock->expects($this->once())->method('selectString')->with(
@@ -144,7 +166,7 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 '_getObjectList',
-                array($oListMock, 'testwhere', 'testorderby')
+                [$oListMock, 'testwhere', 'testorderby']
             )
         );
     }
