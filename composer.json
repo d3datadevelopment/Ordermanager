@@ -35,7 +35,7 @@
     "php": "7.3 - 8.0",
     "ext-ionCube-Loader": "*",
     "ext-pdo": "*",
-    "oxid-esales/oxideshop-ce": "6.8 - 6.12",
+    "oxid-esales/oxideshop-ce": "6.8 - 6.13",
     "d3/modcfg": "^6.1.0.000",
     "league/flysystem": "^1.0",
     "splitbrain/php-cli": "^1.1",
