@@ -137,7 +137,7 @@ class jobExecuteTest extends d3IntegrationTestCase
      * @throws ReflectionException
      * @dataProvider execMethodDataProvider
      */
-    public function testExecOrdermanagerOk($methodname)
+    public function canExecOrdermanagerOk($methodname)
     {
         $_GET['ordermanagerid'] = $this->sManagerId;
         $_GET['oxid'] = $this->aOrderIdList[0];
@@ -168,7 +168,7 @@ class jobExecuteTest extends d3IntegrationTestCase
      * @throws ReflectionException
      * @dataProvider execMethodDataProvider
      */
-    public function testExecOrdermanagerInvalidRequirementConfigUnchecked($methodname)
+    public function canExecOrdermanagerInvalidRequirementConfigUnchecked($methodname)
     {
         $_GET['ordermanagerid'] = $this->sManagerId;
         $_GET['oxid'] = $this->aOrderIdList[0];
@@ -206,7 +206,7 @@ class jobExecuteTest extends d3IntegrationTestCase
      * @throws ReflectionException
      * @dataProvider execMethodDataProvider
      */
-    public function testExecOrdermanagerInvalidRequirementConfigChecked($methodname)
+    public function canExecOrdermanagerInvalidRequirementConfigChecked($methodname)
     {
         $_GET['ordermanagerid'] = $this->sManagerId;
         $_GET['oxid'] = $this->aOrderIdList[0];
@@ -237,7 +237,7 @@ class jobExecuteTest extends d3IntegrationTestCase
      * @throws ReflectionException
      * @dataProvider execMethodDataProvider
      */
-    public function testExecOrdermanagerInvalidActionConfig($methodname)
+    public function canExecOrdermanagerInvalidActionConfig($methodname)
     {
         $_GET['ordermanagerid'] = $this->sManagerId;
         $_GET['oxid'] = $this->aOrderIdList[0];
@@ -277,7 +277,7 @@ class jobExecuteTest extends d3IntegrationTestCase
      * @test
      * @throws ReflectionException
      */
-    public function testExecChangedContentsOk()
+    public function canExecChangedContentsOk()
     {
         $_GET['ordermanagerid'] = $this->sManagerId;
         $_GET['oxid'] = $this->aOrderIdList[0];
@@ -300,7 +300,7 @@ class jobExecuteTest extends d3IntegrationTestCase
      * @test
      * @throws ReflectionException
      */
-    public function testExecChangedContentsInvalidRequirementConfigUnchecked()
+    public function canExecChangedContentsInvalidRequirementConfigUnchecked()
     {
         $_GET['ordermanagerid'] = $this->sManagerId;
         $_GET['oxid'] = $this->aOrderIdList[0];
@@ -330,7 +330,7 @@ class jobExecuteTest extends d3IntegrationTestCase
      * @test
      * @throws ReflectionException
      */
-    public function testExecChangedContentsInvalidRequirementConfigChecked()
+    public function canExecChangedContentsInvalidRequirementConfigChecked()
     {
         $_GET['ordermanagerid'] = $this->sManagerId;
         $_GET['oxid'] = $this->aOrderIdList[0];
@@ -360,7 +360,7 @@ class jobExecuteTest extends d3IntegrationTestCase
      * @test
      * @throws ReflectionException
      */
-    public function testExecChangedContentsInvalidActionConfig()
+    public function canExecChangedContentsInvalidActionConfig()
     {
         $_GET['ordermanagerid'] = $this->sManagerId;
         $_GET['oxid'] = $this->aOrderIdList[0];
