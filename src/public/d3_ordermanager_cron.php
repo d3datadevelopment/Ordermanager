@@ -385,7 +385,7 @@ class d3_ordermanager_cron extends CLI
 /** @var d3_ordermanager_cron $cli */
 $cli = d3GetModCfgDIC()->get(d3_ordermanager_cron::class);
 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
-if (false === defined('OXID_PHP_UNIT') && !count($trace)) {
+if (false === defined('OXID_PHP_UNIT') && (!count($trace) || (bool) stristr($trace[0]['file'], 'bin/d3_ordermanager_cron'))) {
     try {
         $cli->run();
     } catch (Exception $e) {
