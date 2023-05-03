@@ -697,6 +697,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
                 $oShop->__get('oxshops__oxname')->getRawValue()
             );
         } else {
+            $this->setFrom($oShop->getFieldData('oxinfoemail'), $oShop->__get('oxshops__oxname')->getRawValue());
             $this->setReplyTo($oShop->getFieldData('oxinfoemail'), $oShop->__get('oxshops__oxname')->getRawValue());
         }
     }
