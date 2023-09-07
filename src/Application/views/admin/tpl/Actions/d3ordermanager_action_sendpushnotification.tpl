@@ -9,7 +9,7 @@
                     [{oxinputhelp ident="D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_URL_DESC"}]<br>
 
                     <label for="ActionOrderSendPushNotificationMethod">[{oxmultilang ident="D3_ORDERMANAGER_ACTION_ORDERSENDPUSHNOTIFICATION_METHOD"}]</label>
-                    <select id="ActionOrderSendPushNotificationMethod" name="value[sActionSendPushNotification_method]">
+                    <select id="ActionOrderSendPushNotificationMethod" name="value[sActionSendPushNotification_method]" [{$readonly}]>
                         <option value="GET" [{if $edit->getValue('sActionSendPushNotification_method') == 'GET'}]selected="selected"[{/if}]>GET</option>
                         <option value="POST" [{if $edit->getValue('sActionSendPushNotification_method') == 'POST' || $edit->getValue('sActionSendPushNotification_method') == ''}]selected="selected"[{/if}]>POST</option>
                         <option value="PUT" [{if $edit->getValue('sActionSendPushNotification_method') == 'PUT'}]selected="selected"[{/if}]>PUT</option>

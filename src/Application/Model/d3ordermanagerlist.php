@@ -195,9 +195,74 @@ class d3ordermanagerlist extends d3modprofilelist
      * @throws DatabaseErrorException
      * @throws StandardException
      */
+    public function canExecutedByCron(Manager $oManager): bool
+    {
+        return $oManager->isActive() &&
+               $oManager->getLicenseActive();
+    }
+
+    /**
+     * @param Manager $oManager
+     *
+     * @return bool
+     * @throws DatabaseConnectionException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws DBALException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     */
     public function canExecutedManually(Manager $oManager): bool
     {
-        return $oManager->getFieldData('D3_OM_EXECMANUALLY') &&
+        return $this->canExecutedByConfField($oManager, 'D3_OM_EXECMANUALLY');
+    }
+
+    /**
+     * @param Manager $oManager
+     *
+     * @return bool
+     * @throws DatabaseConnectionException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws DBALException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     */
+    public function canExecutedOrderSaveTriggered(Manager $oManager): bool
+    {
+        return $this->canExecutedByConfField($oManager, 'D3_OM_ORDERSAVETRIGGERED');
+    }
+
+    /**
+     * @param Manager $oManager
+     *
+     * @return bool
+     * @throws DatabaseConnectionException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws DBALException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     */
+    public function canExecutedOrderFinishTriggered(Manager $oManager): bool
+    {
+        return $this->canExecutedByConfField($oManager, 'D3_OM_ORDERFINISHTRIGGERED');
+    }
+
+    /**
+     * @param Manager $oManager
+     *
+     * @return bool
+     * @throws DatabaseConnectionException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws DBALException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     */
+    protected function canExecutedByConfField(Manager $oManager, $fieldname): bool
+    {
+        return $oManager->getFieldData($fieldname) &&
                $oManager->getLicenseActive();
     }
 
