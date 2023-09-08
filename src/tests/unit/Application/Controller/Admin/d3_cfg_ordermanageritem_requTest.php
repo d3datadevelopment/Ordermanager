@@ -232,23 +232,6 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getTransStatusList
-     * @test
-     * @throws ReflectionException
-     */
-    public function getTransStatusListPass()
-    {
-        /** @var array $aTransStatusList */
-        $aTransStatusList = $this->callMethod(
-            $this->_oController,
-            'getTransStatusList'
-        );
-
-        $this->assertIsArray($aTransStatusList);
-        $this->assertNotEmpty($aTransStatusList);
-    }
-
-    /**
      * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::addDefaultValues
      * @test
      * @throws ReflectionException

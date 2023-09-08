@@ -117,6 +117,12 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ]
         );
 
+        $articleMock = $this->getMockBuilder(Article::class)
+            ->onlyMethods(['exists'])
+            ->getMock();
+        $articleMock->method('exists')->willReturn(false);
+        d3GetModCfgDIC()->set('d3ox.ordermanager.'.Article::class, $articleMock);
+
         $this->setValue($this->_oModel, '_oArticle', $oOrderArticle);
         $this->callMethod($this->_oModel, 'd3OrderManagerChangeOrderArticle2RealArticle');
         $this->assertInstanceOf(OrderArticle::class, $this->_oModel->getArticle());

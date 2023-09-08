@@ -250,6 +250,7 @@ $aLang = [
     'D3_ORDERMANAGER_REQU_NOTINFOLDERERR_UNVALID'        => 'no valid folder set',
     'D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_OK'           => 'OK',
     'D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_ERROR'        => 'ERROR',
+    'D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_NOT_FINISHED' => 'NOT_FINISHED',
     'D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_NOT_OK'       => 'all states except OK',
     'D3_ORDERMANAGER_REQU_MULTIPLE'                      => '(multiple selection possible with pressed Ctrl key)',
 
