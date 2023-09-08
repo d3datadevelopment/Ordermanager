@@ -254,6 +254,7 @@ $aLang = [
     'D3_ORDERMANAGER_REQU_NOTINFOLDERERR_UNVALID'        => 'kein gültiger Ordner gesetzt',
     'D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_OK'           => 'OK',
     'D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_ERROR'        => 'ERROR',
+    'D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_NOT_FINISHED' => 'NOT_FINISHED',
     'D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_NOT_OK'       => 'alle Stati außer OK',
     'D3_ORDERMANAGER_REQU_MULTIPLE'                      => '(Mehrfachauswahl mit gedrückter Strg-Taste möglich)',
 

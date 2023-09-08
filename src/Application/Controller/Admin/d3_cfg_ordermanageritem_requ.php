@@ -37,7 +37,6 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     use VariablesTrait;
 
     protected $_sThisTemplate = "d3_cfg_ordermanageritem_requ.tpl";
-    protected $_aTransStatus = ['OK', 'ERROR', 'NOT_OK'];
     protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
 
     public function save()
@@ -117,14 +116,6 @@ class d3_cfg_ordermanageritem_requ extends d3_cfg_ordermanageritem_settings
     {
         $oLang = d3GetModCfgDIC()->get('d3ox.ordermanager.'.Language::class);
         return $oLang->getLanguageArray();
-    }
-
-    /**
-     * @return array
-     */
-    public function getTransStatusList(): array
-    {
-        return $this->_aTransStatus;
     }
 
     /**
