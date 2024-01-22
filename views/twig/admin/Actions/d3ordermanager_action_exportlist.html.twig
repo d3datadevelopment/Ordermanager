@@ -1,0 +1,62 @@
+{% block ordermanager_admin_action_exportlist %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oAction, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd style="margin-left: 30%;">
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_action_exportlist_editor %}
+                    <label for="fieldList">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_EXPORTCONTAINS" }) }}</label>
+                    <input type="hidden" name="value[aExportFieldList]" value="">
+                    <SELECT id="fieldList" class="editinput" name="value[aExportFieldList][]" id="aExportFieldList" size="7" multiple {{ blActionRestriction }} {{ readonly }}>
+                        {% for sFieldName in oView.getItemFieldNames() %}
+                            <option value="{{ sFieldName }}" {% if edit.getValue('aExportFieldList') is iterable and sFieldName in edit.getValue('aExportFieldList') %}selected{% endif %}>{{ oView.getFieldNameDescription(sFieldName) }}</option>
+                        {% endfor %}
+                    </SELECT><br>
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_MULTIPLE" }) }}<br>
+                    {% if not blActionRestriction %}
+                        <input type="button" href="#" onclick="selectAllListElems(document.getElementById('fieldList')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_ALL" }) }}" {{ readonly }}> <input type="button" href="#" onclick="selectNoListElems(document.getElementById('fieldList')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_NONE" }) }}" {{ readonly }}>
+                    {% endif %}
+
+                    <br><br>
+                    <label for="ExportTpl">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_EXPORTTEMPLATE" }) }}</label>
+                    <input id="ExportTpl" type="text" name="value[sExportTemplatename]" size="50" maxlength="250" value="{{ edit.getValue('sExportTemplatename') }}" {{ blActionRestriction }} {{ readonly }}>
+                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_EXPORTTEMPLATE_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_EXPORTTEMPLATE_DESC")} %}<br>
+
+                    <br><br>
+                    <input style="margin-left: 20px;" id="FromThemeAdmin" type="radio" name="value[sExportListFromTheme]" value="admin" {% if edit.getValue('sExportListFromTheme') == 'admin' %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}> <label for="FromThemeAdmin">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_ADMIN" }) }}</label><br>
+                    <input style="margin-left: 20px;" id="FromThemeFrontend" type="radio" name="value[sExportListFromTheme]" value="frontend" {% if edit.getValue('sExportListFromTheme') == 'frontend' %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}> <label for="FromThemeFrontend">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_FRONTEND" }) }}</label> {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_DESC")} %}<br>
+
+                    <br><br>
+                    <label for="ExportExtension">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_EXPORTEXTENSION" }) }}</label>
+                    <input id="ExportExtension" type="text" name="value[sExportExtension]" size="50" maxlength="250" value="{{ edit.getValue('sExportExtension') }}" {{ blActionRestriction }} {{ readonly }}> {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_EXPORTEXTENSION_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_EXPORTEXTENSION_DESC")} %}<br>
+
+                    <br><br>{{ translate({ ident: "D3_ORDERMANAGER_ACTION_EXPORTLOCATION" }) }}<br><b>{{ oView.getExportExamplePath() }}</b>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_action_exportlist_viewer %}
+                    {{ translate({ ident: "D3_ORDERMANAGER_ACTION_EXPORTCONTAINS" }) }}
+                    <ul>
+                        {% for sFieldName in oView.getItemFieldNames() %}
+                            {% if edit.getValue('aExportFieldList') is iterable and sFieldName in edit.getValue('aExportFieldList') %}
+                                <li>
+                                    {{ oView.getFieldNameDescription(sFieldName) }}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    <br><br>
+                    {{ translate({ ident: "D3_ORDERMANAGER_ACTION_EXPORTTEMPLATE" }) }} {{ edit.getValue('sExportTemplatename') }} {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_EXPORTTEMPLATE_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_EXPORTTEMPLATE_DESC")} %}<br>
+                    {% if edit.getValue('sExportListFromTheme') == 'admin' %}
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_ADMIN" }) }}
+                    {% elseif edit.getValue('sExportListFromTheme') == 'frontend' %}
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_FRONTEND" }) }}
+                    {% endif %}
+                    <br><br>
+                    {{ translate({ ident: "D3_ORDERMANAGER_ACTION_EXPORTEXTENSION" }) }} {{ edit.getValue('sExportExtension') }} {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_EXPORTEXTENSION_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_EXPORTEXTENSION_DESC")} %}<br>
+                    <br>{{ translate({ ident: "D3_ORDERMANAGER_ACTION_EXPORTLOCATION" }) }}<br><b>{{ oView.getExportExamplePath() }}</b>
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_EXPORT_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_EXPORT_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

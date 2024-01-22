@@ -1,0 +1,19 @@
+{% block ordermanager_admin_requ_toordernr %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_toordernr_editor %}
+                    <label for="sToOrderNrValue" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_TOORDERNR" }) }}</label>
+                    <input id="sToOrderNrValue" style="text-align: right;" class="edittext ext_edittext" type="text" size="8" maxlength="10" name="value[sToOrderNrValue]" value='{{ edit.getValue('sToOrderNrValue') }}' {{ blActionRestriction }} {{ readonly }}>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_toordernr_viewer %}
+                    {{ edit.getValue('sToOrderNrValue') }}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_TOORDERNR_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_TOORDERNR_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

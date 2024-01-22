@@ -1,0 +1,40 @@
+{% block ordermanager_admin_requ_paymentfilter %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_paymentfilter_editor %}
+                    <input type="hidden" name="value[sPaymentId]" value="">
+                    <label for="sPaymentId" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_PAYMENT" }) }}</label>
+                    <SELECT class="editinput" name="value[sPaymentId][]" id="sPaymentId" size="5" multiple {{ blActionRestriction }} {{ readonly }}>
+                        {% for oPayment in oView.getPaymentList() %}
+                            <option value="{{ oPayment.getId() }}" {% if edit.getValue('sPaymentId') is iterable and oPayment.getId() in edit.getValue('sPaymentId') %}selected{% endif %}>
+                                {% block ordermanager_admin_requ_paymentfilter_editor_paymentname %}
+                                    {{ oPayment.getFieldData('oxdesc') }}
+                                {% endblock %}
+                            </option>
+                        {% endfor %}
+                    </SELECT><br>
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_MULTIPLE" }) }}<br>
+                    <input type="button" onclick="selectAllListElems(document.getElementById('sPaymentId')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_ALL" }) }}" {{ blActionRestriction }} {{ readonly }}> <input type="button" onclick="selectNoListElems(document.getElementById('sPaymentId')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_NONE" }) }}" {{ blActionRestriction }} {{ readonly }}>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_paymentfilter_viewer %}
+                    <ul>
+                        {% for oPayment in oView.getPaymentList() %}
+                            {% if edit.getValue('sPaymentId') is iterable and oPayment.getId() in edit.getValue('sPaymentId') %}
+                                <li>
+                                    {% block ordermanager_admin_requ_paymentfilter_viewer_paymentname %}
+                                        {{ oPayment.getFieldData('oxdesc') }}
+                                    {% endblock %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_PAYMENT_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_PAYMENT_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

@@ -1,0 +1,323 @@
+{% include "headitem.html.twig" with {title: "D3_ORDERMANAGER_OVERVIEW"|translate} %}
+
+<style>
+    .ext_edittext {
+        padding: 2px;
+    }
+</style>
+
+<script type="text/javascript">
+    <!--
+    {% if updatelist == 1 %}
+        UpdateList('{{ oxid }}');
+    {% endif %}
+
+    function UpdateList( sID)
+    {
+        let oSearch = parent.list.document.getElementById("search");
+        oSearch.oxid.value=sID;
+        oSearch.fnc.value='';
+        oSearch.submit();
+    }
+
+    function EditThis( sID)
+    {
+        let oTransfer = document.getElementById("transfer");
+        oTransfer.oxid.value=sID;
+        oTransfer.cl.value='';
+        oTransfer.submit();
+
+        let oSearch = parent.list.document.getElementById("search");
+        oSearch.actedit.value = 0;
+        oSearch.oxid.value=sID;
+        oSearch.submit();
+    }
+
+    function _groupExp(el)
+    {
+        let _cur = el.parentNode;
+
+        if (_cur.className === "exp") _cur.className = "";
+          else _cur.className = "exp";
+    }
+
+    function selectAllListElems(el)
+    {
+        let aSelectLen = el.length;
+        for(let i = 0; i < aSelectLen; i++)
+        {
+            el.options[i].selected = true;
+        }
+    }
+
+    function selectNoListElems(el)
+    {
+        let aSelectLen = el.length;
+        for(let i = 0; i < aSelectLen; i++)
+        {
+            el.options[i].selected = false;
+        }
+    }
+
+    -->
+</script>
+
+<style>
+    <!--
+    fieldset{
+        border: 1px inset black;
+        background-color: #F0F0F0;
+    }
+
+    legend{
+        font-weight: bold;
+    }
+
+    .groupExp dl dt{
+        font-weight: normal;
+        width: 40%;
+        padding-left: 10px;
+    }
+
+    .groupExp dl dd {
+        margin-left: 42%;
+    }
+
+    details, .restrictioninfo {
+        margin: 0 0 15px;
+        padding: 6px 9px 2px 18px;
+        border: 1px solid silver;
+        color: silver;
+        border-radius: .25rem;
+        border-left: .25rem #028fe8 solid;
+    }
+    details summary {
+        margin: 0 0 3px -12px;
+        cursor: pointer;
+    }
+    .restrictioninfo {
+        color: black;
+    }
+
+    .fixConfigError {
+        padding: 10px;
+    }
+    -->
+</style>
+
+
+{% set readonly = "readonly disabled" %}
+
+<form name="transfer" id="transfer" action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+    {{ oViewConf.getHiddenSid()|raw }}
+    <input type="hidden" name="oxid" value="{{ oxid }}">
+    <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+    <input type="hidden" name="actshop" value="{{ shop.id }}">
+    <input type="hidden" name="editlanguage" value="{{ editlanguage }}">
+</form>
+
+{% if oView.getDataOnDemand() %}
+    <form name="myedit" id="myedit" action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+        {{ oViewConf.getHiddenSid()|raw }}
+        <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+        <input type="hidden" name="fnc" value="setRequestData">
+        <input type="hidden" name="oxid" value="{{ oxid }}">
+        <input type="hidden" name="sRequestData" value="">
+        <input type="hidden" name="editval[d3_cfg_mod__oxid]" value="{{ oxid }}">
+{% endif %}
+
+    <table style="border: none; width: 100%">
+        {% if edit.getId() and not edit.getLicenseActive() %}
+            <tr>
+                <td  style="vertical-align: top;" class="edittext" colspan="2">
+                    <div class="extension_warning">{{ translate({ ident: "D3_ORDERMANAGER_ERROR_IEXECJOBSLIMIT" }) }}</div>
+                </td>
+            </tr>
+        {% endif %}
+
+        <tr>
+            <td style="vertical-align: top;" class="edittext">
+
+                <details>
+                    <summary>{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_DESCRIPTION" }) }}</summary>
+                    {{ translate({ ident: "d3tbclordermanager_items_overview_desc" }) }}
+                </details>
+
+                {% if edit.getBasicRestrictionSettings() %}
+                    <div class="restrictioninfo">
+                        {{ translate({ ident: "D3_GENERAL_ORDERMANAGER_BASICRESTRICTIONS" }) }}
+                    </div>
+                {% endif %}
+
+                {% if Errors.default is iterable and count(Errors.default)>0 %}
+                    <div class="fixConfigError errorbox" role="alert">
+                        {{ translate({ ident: "D3_ORDERMANAGER_OVERVIEW_STAT_FIXSETTINGS" }) }}
+                    </div>
+                {% else %}
+                    <div class="groupExp">
+                        <div class="exp">
+                            <a class="rc" onclick="_groupExp(this); return false;" href="#">
+                                <b>
+                                    {{ translate({ ident: "D3_ORDERMANAGER_OVERVIEW_STAT" }) }}
+                                </b>
+                            </a>
+                            <dl>
+                                <dt>
+                                    {{ translate({ ident: "D3_ORDERMANAGER_STAT_FINISHED" }) }} {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_STAT_FINISHED_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_STAT_FINISHED_DESC")} %}
+                                </dt>
+                                <dd>
+                                    {% set mFinishedCount = oView.getFinishedCount() %}
+                                    {{ mFinishedCount }}
+                                    {% if oView.getDataOnDemand() %}
+                                        <input type="hidden" name="finishedCount" value="{{ mFinishedCount }}">
+                                        {% if false == oView.hasRequestedData('finishedCount', 'getFinishedCount') %}
+                                            <span style="float: left;">
+                                                <span class="d3modcfg_btn icon d3color-green">
+                                                    <button type="submit" name="requestData" onclick="oForm = document.getElementById('myedit'); oForm.sRequestData.value='getFinishedCount'; oForm.submit();">
+                                                        <i class="fa fa-check-circle fa-inverse"></i>
+                                                        {{ translate({ ident: "D3_ORDERMANAGER_STAT_REQUESTDATA" }) }}
+                                                    </button>
+                                                </span>
+                                            </span>
+                                        {% endif %}
+                                    {% endif %}
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ translate({ ident: "D3_ORDERMANAGER_STAT_FINISHEDMONTH" }) }} {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_STAT_FINISHEDMONTH_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_STAT_FINISHEDMONTH_DESC")} %}
+                                </dt>
+                                <dd>
+                                    {% set mFinishedMonthCount = oView.getFinishedMonthCount() %}
+                                    {{ mFinishedMonthCount }}
+                                    {% if oView.getDataOnDemand() %}
+                                        <input type="hidden" name="finishedMonthCount" value="{{ mFinishedMonthCount }}">
+                                        {% if false == oView.hasRequestedData('finishedMonthCount', 'getFinishedMonthCount') %}
+                                            <span style="float: left;">
+                                                <span class="d3modcfg_btn icon d3color-green">
+                                                    <button type="submit" name="requestData" onclick="oForm = document.getElementById('myedit'); oForm.sRequestData.value='getFinishedMonthCount'; oForm.submit();">
+                                                        <i class="fa fa-check-circle fa-inverse"></i>
+                                                        {{ translate({ ident: "D3_ORDERMANAGER_STAT_REQUESTDATA" }) }}
+                                                    </button>
+                                                </span>
+                                            </span>
+                                        {% endif %}
+                                    {% endif %}
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ translate({ ident: "D3_ORDERMANAGER_STAT_TOFINISHED" }) }} {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_STAT_TOFINISHED_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_STAT_TOFINISHED_DESC")} %}
+                                </dt>
+                                <dd>
+                                    {% set mToFinishedCount = oView.getToFinishedCount() %}
+                                    {{ mToFinishedCount }}
+                                    {% if oView.getDataOnDemand() %}
+                                        <input type="hidden" name="toFinishedCount" value="{{ mToFinishedCount }}">
+                                        {% if false == oView.hasRequestedData('toFinishedCount', 'getToFinishedCount') %}
+                                            <span style="float: left;">
+                                                <span class="d3modcfg_btn icon d3color-green">
+                                                    <button type="submit" name="requestData" onclick="oForm = document.getElementById('myedit'); oForm.sRequestData.value='getToFinishedCount'; oForm.submit();">
+                                                        <i class="fa fa-check-circle fa-inverse"></i>
+                                                        {{ translate({ ident: "D3_ORDERMANAGER_STAT_REQUESTDATA" }) }}
+                                                    </button>
+                                                </span>
+                                            </span>
+                                        {% endif %}
+                                    {% endif %}
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ translate({ ident: "D3_ORDERMANAGER_STAT_NOTFINISHED" }) }} {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_STAT_NOTFINISHED_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_STAT_NOTFINISHED_DESC")} %}
+                                </dt>
+                                <dd>
+                                    {% set mNotFinishedCount = oView.getNotFinishedCount() %}
+                                    {{ mNotFinishedCount }}
+                                    {% if oView.getDataOnDemand() %}
+                                        <input type="hidden" name="notFinishedCount" value="{{ mNotFinishedCount }}">
+                                        {% if false == oView.hasRequestedData('notFinishedCount', 'getNotFinishedCount') %}
+                                            <span style="float: left;">
+                                                <span class="d3modcfg_btn icon d3color-green">
+                                                    <button type="submit" name="requestData" onclick="oForm = document.getElementById('myedit'); oForm.sRequestData.value='getNotFinishedCount'; oForm.submit();">
+                                                        <i class="fa fa-check-circle fa-inverse"></i>
+                                                        {{ translate({ ident: "D3_ORDERMANAGER_STAT_REQUESTDATA" }) }}
+                                                    </button>
+                                                </span>
+                                            </span>
+                                        {% endif %}
+                                    {% endif %}
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="groupExp">
+                    <div class="">
+                        <a class="rc" onclick="_groupExp(this); return false;" href="#">
+                            <b>
+                                {{ translate({ ident: "D3_ORDERMANAGER_OVERVIEW_REQU" }) }}
+                            </b>
+                        </a>
+
+                        {% set aRequList = oView.getRequirementList() %}
+                        {% set blActiveRequ = false %}
+
+                        {% for oRequ in aRequList %}
+                            {% if oRequ.isActive() %}
+                                {% include oRequ.getTplName() %}
+                                {% set blActiveRequ = true %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if blActiveRequ == false %}
+                            <dl>
+                                <dd>
+                                    {{ translate({ ident: "D3_ORDERMANAGER_OVERVIEW_NOREQUEST" }) }}
+                                </dd>
+                            </dl>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+                <div class="groupExp">
+                    <div class="">
+                        <a class="rc" onclick="_groupExp(this); return false;" href="#">
+                            <b>
+                                {{ translate({ ident: "D3_ORDERMANAGER_OVERVIEW_ACTION" }) }}
+                            </b>
+                        </a>
+
+                        {% set aActionList = oView.getActionList() %}
+                        {% set blActiveAction = false %}
+
+                        {% for oAction in aActionList %}
+                            {% if oAction.isActive() %}
+                                {% include oAction.getTplName() %}
+                                {% set blActiveAction = true %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if blActiveAction == false %}
+                            <dl>
+                                <dd>
+                                    {{ translate({ ident: "D3_ORDERMANAGER_OVERVIEW_NOACTION" }) }}
+                                </dd>
+                            </dl>
+                        {% endif %}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+{% if oView.getDataOnDemand() %}
+    </form>
+{% endif %}
+
+{% include "@d3modcfg_lib/admin/inc/inc.html.twig" %}

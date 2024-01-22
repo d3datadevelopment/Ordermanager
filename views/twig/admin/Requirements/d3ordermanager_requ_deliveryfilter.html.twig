@@ -1,0 +1,34 @@
+{% block ordermanager_admin_requ_deliveryfilter %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_deliveryfilter_editor %}
+                    <input type="hidden" name="value[sDeliveryId]" value="">
+                    <label for="sDeliveryId" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_DELIVERY" }) }}</label>
+                    <SELECT class="editinput" name="value[sDeliveryId][]" id="sDeliveryId" size="5" multiple {{ blActionRestriction }} {{ readonly }}>
+                        {% for oDeliverySet in oView.getDeliverySetList() %}
+                            <option value="{{ oDeliverySet.getId() }}" {% if edit.getValue('sDeliveryId') is iterable and oDeliverySet.getId() in edit.getValue('sDeliveryId') %}selected{% endif %}>{{ oDeliverySet.getFieldData('oxtitle') }}</option>
+                        {% endfor %}
+                    </SELECT><br>
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_MULTIPLE" }) }}<br>
+                    <input type="button" href="#" onclick="selectAllListElems(document.getElementById('sDeliveryId')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_ALL" }) }}" {{ blActionRestriction }} {{ readonly }}> <input type="button" href="#" onclick="selectNoListElems(document.getElementById('sDeliveryId')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_NONE" }) }}" {{ blActionRestriction }} {{ readonly }}>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_deliveryfilter_viewer %}
+                    <ul>
+                        {% for oDeliverySet in oView.getDeliverySetList() %}
+                            {% if edit.getValue('sDeliveryId') is iterable and oDeliverySet.getId() in edit.getValue('sDeliveryId') %}
+                                <li>
+                                    {{ oDeliverySet.getFieldData('oxtitle') }}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_DELIVERY_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_DELIVERY_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

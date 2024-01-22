@@ -1,0 +1,261 @@
+{% include "headitem.html.twig" with {title: "GENERAL_ADMIN_TITLE"|translate} %}
+
+{% if readonly %}
+    {% set readonly = "readonly disabled" %}
+{% else %}
+    {% set readonly = "" %}
+{% endif %}
+
+<style>
+    .box td.listitem,
+    .box td.listitem2 {
+        padding-left: 5px;
+        padding-right: 5px;
+        height: 50px;
+    }
+    .box tr:nth-child(odd) td {
+        background-color: #f0f0f0;
+    }
+    .box tr:nth-child(even) td {
+        background-color: #fafafa;
+    }
+    textarea {
+        width: 95%;
+        height: 180px;
+        padding: 5px;
+    }
+    body #ddoew .note-editor.note-frame {
+        width: 96%;
+        float: left;
+        margin-bottom: 0;
+    }
+    body #ddoew .note-editor.note-frame .note-editable.panel-body {
+        min-height: 180px !important;
+    }
+</style>
+
+<script type="text/javascript">
+    function d3TogglePlain(checkelement) {
+        if (checkelement.checked) {
+            document.getElementById('mailplaintr').style.display = 'none';
+        } else {
+            document.getElementById('mailplaintr').style.display = 'table-row';
+        }
+    }
+</script>
+
+{% set oCurr = edit.getOrderCurrency() %}
+
+<form name="transfer" id="transfer" action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+    {{ oViewConf.getHiddenSid()|raw }}
+    <input type="hidden" name="cur" value="{{ oCurr.id }}">
+    <input type="hidden" name="oxid" value="{{ oxid }}">
+    <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+</form>
+
+<table style="border: none; padding: 0; width: 100%">
+    <tr>
+        {% d3modcfgcheck modid="d3_ordermanager" %}
+            {% if sAction == "execChangedContents" %}
+                <td>
+                    <form name="d3execordermanager" id="d3execordermanager" action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+                        {{ oViewConf.getHiddenSid()|raw }}
+                        <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+                        <input type="hidden" name="fnc" value="">
+                        <input type="hidden" name="oxid" value="{{ oxid }}">
+                        <input type="hidden" name="editval[oxorder__oxid]" value="{{ oxid }}">
+                        <input type="hidden" name="ordermanagerid" value="-1">
+                        <table  style="border: none; padding: 0; width: 100%;">
+                            <tr>
+                                <td class="listitem" style="padding: 5px; height: auto;">
+                                    {{ translate({ ident: "D3_ORDERMANAGER_GENERAL_ORDER" }) }}
+                                </td>
+                                <td class="listitem" style="padding: 5px; height: auto;">
+                                    {{ oManager.getFieldData('oxtitle') }} &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="listitem2" style="padding: 5px; height: auto;"></td>
+                                <td class="listitem2" style="padding: 5px; height: auto;">
+                                    <span class="d3modcfg_btn icon d3color-green" style="margin-right: 10px;">
+                                        <button onclick="document.getElementById('d3execordermanager').ordermanagerid.value = '{{ oManager.getId() }}'; document.getElementById('d3execordermanager').fnc.value = 'd3ExecChangedOrderManager'; document.getElementById('d3execordermanager').submit();">
+                                            <i class="fa fa-check-circle fa-inverse"></i>
+                                            {{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_SAVEEXEC" }) }}
+                                        </button>
+                                    </span>
+                                    <span class="d3modcfg_btn icon d3color-red" style="margin-right: 10px;">
+                                        <button onclick="document.getElementById('d3execordermanager').submit();">
+                                            <i class="fa fa-times-circle fa-inverse"></i>
+                                            {{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_CANCELEXEC" }) }}
+                                        </button>
+                                    </span>
+                                    {{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_EXECINCLALLACTIONS" }) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="listitem" style="padding: 5px; height: auto;">
+                                    {{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_RECIPIENT" }) }}
+                                </td>
+                                <td class="listitem" style="padding: 5px; height: auto;">
+                                    <input type="hidden" name="aContent[blSendMailToCustomer]" value="0">
+                                    <input id="ToCustomer" class="edittext ext_edittext" type="checkbox" name="aContent[blSendMailToCustomer]" value='1' {% if oManager.getValue('blSendMailToCustomer') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}>
+                                    <label for="ToCustomer">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER" }) }}</label>
+                                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER_DESC")} %}<br>
+                                    <input type="hidden" name="aContent[blSendMailToOwner]" value="0">
+                                    <input id="ToOwner" class="edittext ext_edittext" type="checkbox" name="aContent[blSendMailToOwner]" value='1' {% if oManager.getValue('blSendMailToOwner') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}>
+                                    <label for="ToOwner">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER" }) }}</label>
+                                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER_DESC")} %}<br>
+                                    <input type="hidden" name="aContent[blSendMailToCustom]" value="0">
+                                    <input id="ToMail" class="edittext ext_edittext" type="checkbox" name="aContent[blSendMailToCustom]" value='1' {% if oManager.getValue('blSendMailToCustom') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}>
+                                    <label for="ToMail">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL" }) }}</label>
+                                    <input id="ToMailInput" type="text" name="aContent[sSendMailToCustomAddress]" size="30" maxlength="60" value="{{ oManager.getValue('sSendMailToCustomAddress') }}" {{ blActionRestriction }} {{ readonly }}>
+                                    <label for="ToMailInput" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL" }) }}</label>
+                                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL_DESC")} %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="listitem2" style="padding: 5px; height: auto;">
+                                    <label for="mailsubject">{{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_SUBJECT" }) }}</label>
+                                </td>
+                                <td class="listitem2" style="padding: 5px; height: auto;">
+                                    <input id="mailsubject" type="text" name="aContent[mail][subject]" value="{{ aMailContent.subject }}" style="width: 95%;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="listitem" style="padding: 5px; height: auto;">
+                                    <label for="mailhtml">{{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_HTML" }) }}</label>
+                                </td>
+                                <td class="listitem" style="padding: 5px; height: auto;">
+                                    {{ htmleditor|raw }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="listitem2" style="padding: 5px; height: auto;">
+                                </td>
+                                <td class="listitem2" style="padding: 5px; height: auto;">
+                                    <input type="hidden" name="aContent[mail][genplain]" value="0">
+                                    <input id="mailgenplain" type="checkbox" name="aContent[mail][genplain]" value="1" {% if not aMailContent.plain %}checked="checked"{% endif %} onclick="d3TogglePlain(this);">&nbsp;
+                                    <label for="mailgenplain">{{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_GENPLAIN" }) }}</label> {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ORDERMAIN_GENPLAIN_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ORDERMAIN_GENPLAIN_DESC")} %}
+                                </td>
+                            </tr>
+                            <tr id="mailplaintr" style="display: {% if aMailContent.plain %}table-row{% else %}none{% endif %};">
+                                <td class="listitem2" style="padding: 5px; height: auto;">
+                                    <label for="mailplain">{{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_PLAIN" }) }}</label>
+                                </td>
+                                <td class="listitem2" style="padding: 5px; height: auto;">
+                                    <textarea id="mailplain" name="aContent[mail][plain]">{{ aMailContent.plain }}</textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </td>
+            {% else %}
+                <td style="vertical-align: top;" class="edittext">
+                    <fieldset>
+                        <form name="d3folderselector" id="d3folderselector" action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+                            {{ oViewConf.getHiddenSid()|raw }}
+                            <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+                            <input type="hidden" name="oxid" value="{{ oxid }}">
+                            <input type="hidden" name="editval[oxorder__oxid]" value="{{ oxid }}">
+                            <input type="hidden" name="ordermanagerid" value="-1">
+                            <input type="hidden" name="fnc" value="changeFolder">
+                            <label for="folderselector" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_FIELDTITLE_OXFOLDER" }) }}</label>
+                            <select id="folderselector" size="1" class="editinput" name="jobfolder" onchange="document.getElementById('d3folderselector').submit();">
+                                {% for sMLItem, sTranslation in oView.getFolderList() %}
+                                    <option value="{{ sMLItem }}" {% if sMLItem == jobfolder %} selected{% endif %}>{{ sTranslation }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                        {% if oView.d3GetJobList() %}
+                            <form name="d3execordermanager" id="d3execordermanager" action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+                                {{ oViewConf.getHiddenSid()|raw }}
+                                <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+                                <input type="hidden" name="fnc" value="d3execordermanager">
+                                <input type="hidden" name="oxid" value="{{ oxid }}">
+                                <input type="hidden" name="editval[oxorder__oxid]" value="{{ oxid }}">
+                                <input type="hidden" name="ordermanagerid" value="-1">
+                                <table  style="border: none; padding: 0; width: 100%;">
+                                    {% set listclass = "listitem" %}
+                                    {% for oManager in oView.d3GetJobList() %}
+                                        <tr>
+                                            {% set sExecTime = oManager.getLastExecutedTime(oxid) %}
+                                            {% set sExecStatus = oManager.getExecutedStatus(oxid) %}
+                                            <td class="{{ listclass }}">{{ oManager.getFieldData('oxtitle') }}</td>
+                                            <td class="{{ listclass }}">
+                                                {% if sExecStatus == 'finished' %}
+                                                    <span class="d3modcfg_btn icon d3color-blue">
+                                                        <button style="width: 300px;" onclick="if (confirm('{{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_EXECRESETCONFIRM" }) }}')) {document.getElementById('d3execordermanager').fnc.value = 'd3resetOrderManagerAssignment'; document.getElementById('d3execordermanager').ordermanagerid.value = '{{ oManager.getId() }}'; document.getElementById('d3execordermanager').submit();} else {return false;}">
+                                                            <i class="fa fa-trash-o"></i>
+                                                            {{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_EXECRESET" }) }}
+                                                        </button>
+                                                    </span>
+                                                {% elseif sExecStatus == 'reexecute' %}
+                                                    <span class="d3modcfg_btn icon d3color-blue">
+                                                        <button style="width: 300px;" onclick="document.getElementById('d3execordermanager').ordermanagerid.value = '{{ oManager.getId() }}'; document.getElementById('d3execordermanager').submit();">
+                                                            <i class="fa fa-circle"></i>
+                                                            {{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_REEXECSTART" }) }}{% if false == oManager.getValue('sManuallyExecMeetCondition') %}*{% endif %}
+                                                        </button>
+                                                    </span>
+                                                    {% set blExecNote = true %}
+                                                {% else %}
+                                                    <span class="d3modcfg_btn icon d3color-blue">
+                                                        <button style="width: 300px;" name="requestData" onclick="document.getElementById('d3execordermanager').ordermanagerid.value = '{{ oManager.getId() }}'; document.getElementById('d3execordermanager').submit();">
+                                                            <i class="fa fa-circle-o"></i>
+                                                            {{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_EXECSTART" }) }}{% if false == oManager.getValue('sManuallyExecMeetCondition') %}*{% endif %}
+                                                        </button>
+                                                    </span>
+                                                    {% set blExecNote = true %}
+                                                {% endif %}
+                                                {% if sExecTime %}
+                                                    <div style="float:none; clear: both;">({{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_EXECON" }) }} {{ sExecTime|format_date }})</div>
+                                                {% endif %}
+                                            </td>
+                                            <td class="{{ listclass }}">
+                                                {% if sExecStatus == 'finished' %}
+                                                {% elseif oManager.getValue('blActionMailsend_status') %}
+                                                    <span class="d3modcfg_btn icon d3color-orange">
+                                                        <button style="width: 300px;" onclick="document.getElementById('d3execordermanager').ordermanagerid.value = '{{ oManager.getId() }}'; document.getElementById('d3execordermanager').fnc.value = 'execChangedContents'; document.getElementById('d3execordermanager').submit();">
+                                                            <i class="fa fa-pencil fa-inverse"></i>
+                                                            {{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_CHANGEEXEC" }) }}{% if false == oManager.getValue('sManuallyExecMeetCondition') %}*{% endif %}
+                                                        </button>
+                                                    </span>
+                                                {% else %}
+                                                    <span class="d3modcfg_btn icon d3color-orange">
+                                                        <button style="width: 300px;" onclick="document.getElementById('d3execordermanager').ordermanagerid.value = '{{ oManager.getId() }}'; document.getElementById('d3execordermanager').fnc.value = 'execChangedContents'; document.getElementById('d3execordermanager').submit();" disabled>
+                                                            <i class="fa fa-pencil fa-inverse"></i>
+                                                            {{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_NOCHANGEEXEC" }) }}
+                                                        </button>
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% if listclass == "listitem" %}
+                                            {% set listclass = "listitem2" %}
+                                        {% else %}
+                                            {% set listclass = "listitem" %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if blExecNote %}
+                                        <tr><td colspan="2" style="text-align: right;"><sub>{{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_EXECSTART_DESC" }) }}</sub></td></tr>
+                                    {% endif %}
+                                </table>
+                            </form>
+                        {% else %}
+                            {{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_NOOMJOBS" }) }}
+                        {% endif %}
+                    </fieldset>
+                </td>
+            {% endif %}
+        {% endd3modcfgcheck %}
+
+        {% if not mod_d3_ordermanager %}
+            <td>
+                <div class="extension_error">
+                    {{ translate({ ident: "D3_CFG_MOD_NOTACTIVE" }) }}
+                </div>
+            </td>
+        {% endif %}
+    </tr>
+</table>
+
+{% include "@d3modcfg_lib/admin/inc/inc.html.twig" %}

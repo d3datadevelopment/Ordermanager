@@ -1,0 +1,36 @@
+{% block ordermanager_admin_requ_countryfilter %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_countryfilter_editor %}
+                    <input type="hidden" name="value[sCustCountryId]" value="">
+                    <label for="sCustCountryId" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_COUNTRY" }) }}</label>
+                    <SELECT id="sCustCountryId" class="editinput" name="value[sCustCountryId][]" id="sCustCountryId" size="5" multiple {{ blActionRestriction }} {{ readonly }}>
+                        {% for oCountry in oView.getCountryList() %}
+                            <option value="{{ oCountry.getId() }}" {% if edit.getValue('sCustCountryId') is iterable and oCountry.getId() in edit.getValue('sCustCountryId') %}selected{% endif %}>{{ oCountry.getFieldData('oxtitle') }}</option>
+                        {% endfor %}
+                    </SELECT><br>
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_MULTIPLE" }) }}<br>
+                    <input type="button" onclick="selectAllListElems(document.getElementById('sCustCountryId')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_ALL" }) }}" {{ blActionRestriction }} {{ readonly }}> <input type="button" onclick="selectNoListElems(document.getElementById('sCustCountryId')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_NONE" }) }}" {{ blActionRestriction }} {{ readonly }}>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_countryfilter_viewer %}
+                    {% apply spaceless %}
+                        <ul>
+                            {% for oCountry in oView.getCountryList() %}
+                                {% if edit.getValue('sCustCountryId') is iterable and oCountry.getId() in edit.getValue('sCustCountryId') %}
+                                    <li>
+                                        {{ oCountry.getFieldData('oxtitle') }}
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endapply %}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_COUNTRY_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_COUNTRY_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

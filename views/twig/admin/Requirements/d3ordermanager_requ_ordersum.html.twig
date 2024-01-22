@@ -1,0 +1,46 @@
+{% block ordermanager_admin_requ_ordersum %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_ordersum_editor %}
+                    <label for="sOrderSumType" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERSUM" }) }}</label>
+                    <SELECT id="sOrderSumType" class="editinput" name="value[sOrderSumType]" size="1" {{ blActionRestriction }} {{ readonly }}>
+                        {% for type, translation in oRequ.getSumTypeList() %}
+                            <option value="{{ type }}" {% if edit.getValue('sOrderSumType') == type %}selected{% endif %}>{{ translate({ ident: translation }) }}</option>
+                        {% endfor %}
+                    </SELECT>
+
+                    <label for="sOrderSumRelation" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERSUM" }) }}</label>
+                    <SELECT id="sOrderSumRelation" class="editinput" name="value[sOrderSumRelation]" size="1" {{ blActionRestriction }} {{ readonly }}>
+                        {% for type, translation in oRequ.getRelationList() %}
+                            <option value="{{ type }}" {% if edit.getValue('sOrderSumRelation') == type %}selected{% endif %}>{{ translate({ ident: translation }) }}</option>
+                        {% endfor %}
+                    </SELECT>
+
+                    <input id="RequOrderSumValue" style="text-align: right;" class="editinput" type="text" size="8" maxlength="20" name="value[sOrderSumValue]" value="{% if edit.getValue('sOrderSumValue') %}{{ edit.getValue('sOrderSumValue') }}{% else %}0.00{% endif %}" {{ blActionRestriction }} {{ readonly }}>
+                    <label for="RequOrderSumValue">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERSUM_DEFCUR" }) }}</label>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_ordersum_viewer %}
+                    {% for type, translation in oRequ.getSumTypeList() %}
+                        {% if edit.getValue('sOrderSumType') == type %}
+                            {{ translate({ ident: translation }) }}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% for type, translation in oRequ.getRelationList() %}
+                        {% if edit.getValue('sOrderSumRelation') == type %}
+                            {{ translate({ ident: translation }) }}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if edit.getValue('sOrderSumValue') %}{{ edit.getValue('sOrderSumValue') }}{% else %}0.00{% endif %}
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERSUM_DEFCUR" }) }}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_ORDERSUM_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_ORDERSUM_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

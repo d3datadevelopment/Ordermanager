@@ -1,0 +1,34 @@
+{% block ordermanager_admin_requ_languagefilter %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_languagefilter_editor %}
+                    <input type="hidden" name="value[sInLanguageId]" value="">
+                    <label for="sInLanguageId" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_LANGUAGE" }) }}</label>
+                    <SELECT class="editinput" name="value[sInLanguageId][]" id="sInLanguageId" multiple {{ blActionRestriction }} {{ readonly }}>
+                        {% for oLang in oView.getLanguageList() %}
+                            <option value="{{ oLang.id }}" {% if edit.getValue('sInLanguageId') is iterable and oLang.id in edit.getValue('sInLanguageId') %}selected{% endif %}>{{ oLang.name }}</option>
+                        {% endfor %}
+                    </SELECT><br>
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_MULTIPLE" }) }}<br>
+                    <input type="button" href="#" onclick="selectAllListElems(document.getElementById('sInLanguageId')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_ALL" }) }}" {{ blActionRestriction }} {{ readonly }}> <input type="button" href="#" onclick="selectNoListElems(document.getElementById('sInLanguageId')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_NONE" }) }}" {{ blActionRestriction }} {{ readonly }}>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_languagefilter_viewer %}
+                    <ul>
+                        {% for oLang in oView.getLanguageList() %}
+                            {% if edit.getValue('sInLanguageId') is iterable and oLang.id in edit.getValue('sInLanguageId') %}
+                                <li>
+                                    {{ oLang.name }}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_LANGUAGE_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_LANGUAGE_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

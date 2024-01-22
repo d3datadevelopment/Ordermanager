@@ -1,0 +1,45 @@
+{% block d3ordermanager_infomail_main %}
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+    <html lang="de">
+        <head>
+            <title>{{ translate({ ident: "D3_ORDERMANAGER_MAIL_ORDERSUBJECT" }) }}</title>
+            <meta http-equiv="Content-Type" content="text/html; charset={{ oEmailView.getCharset() }}">
+        </head>
+        <body bgcolor="#FFFFFF" link="#355222" alink="#355222" vlink="#355222" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;">
+            {{ translate({ ident: "D3_ORDERMANAGER_MAIL_OMJFROM" }) }} {{ "now"|date("d.m.Y H:i") }}
+
+            {% apply spaceless %}
+                {% for sOrderId, aManagerJobs in aNotes %}
+                    {% block d3ordermanager_infomail_order %}
+                        {% set oItem = oEmailView.d3getOrderManagerOrder(sOrderId) %}
+                        {% if oItem.getId() %}
+                            {{ translate({ ident: "D3_ORDERMANAGER_MAIL_ORDER" }) }} {{ oItem.getFieldData('oxordernr') }} {{ translate({ ident: "D3_ORDERMANAGER_MAIL_ORDERFROM" }) }} {{ oItem.getFieldData('oxorderdate') }} ({{ oItem.getFieldData('oxbilllname') }}, {{ oItem.getFieldData('oxbillfname') }}):<br>
+                        {% else %}
+                            {{ translate({ ident: "D3_ORDERMANAGER_MAIL_GENERAL" }) }}:<br>
+                        {% endif %}
+                        <ul>
+                            {% block d3ordermanager_infomail_manager %}
+                                {% for sManagerId, aJobActions in aManagerJobs %}
+                                    {% set oManager = oEmailView.d3getOrderManager(sManagerId) %}
+                                    <li>
+                                        {{ oManager.getFieldData('oxtitle') }}
+                                        <ul>
+                                            {% block d3ordermanager_infomail_job %}
+                                                {% for sJobText in aJobActions %}
+                                                    <li>
+                                                        {{ sJobText }}
+                                                    </li>
+                                                {% endfor %}
+                                            {% endblock %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+                            {% endblock %}
+                        </ul>
+                    {% endblock %}
+                {% endfor %}
+            {% endapply %}
+
+        </body>
+    </html>
+{% endblock %}

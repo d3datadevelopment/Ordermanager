@@ -1,0 +1,36 @@
+{% block ordermanager_admin_action_custdelfromgroup %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oAction, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_action_custdelfromgroup_editor %}
+                    <input type="hidden" name="value[sCustRemoveGroup]" value="">
+                    <label for="sCustRemoveGroup" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_CUSTOMERREMOVEFROMGROUP" }) }}</label>
+                    <SELECT class="editinput" name="value[sCustRemoveGroup][]" id="sCustRemoveGroup" size="7" multiple {{ blActionRestriction }} {{ readonly }}>
+                        {% for oGroup in oView.getGroupsList() %}
+                            <option value="{{ oGroup.getId() }}" {% if edit.getValue('sCustRemoveGroup') is iterable and oGroup.getId() in edit.getValue('sCustRemoveGroup') %}selected{% endif %}>{{ oGroup.getFieldData('oxtitle') }}</option>
+                        {% endfor %}
+                    </SELECT><br>
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_MULTIPLE" }) }}<br>
+                    {% if not blActionRestriction %}
+                        <input type="button" href="#" onclick="selectAllListElems(document.getElementById('sCustRemoveGroup')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_ALL" }) }}" {{ readonly }}> <input type="button" href="#" onclick="selectNoListElems(document.getElementById('sCustRemoveGroup')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_NONE" }) }}" {{ readonly }}>
+                    {% endif %}
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_action_custdelfromgroup_viewer %}
+                    <ul>
+                        {% for oGroup in oView.getGroupsList() %}
+                            {% if edit.getValue('sCustRemoveGroup') is iterable and oGroup.getId() in edit.getValue('sCustRemoveGroup') %}
+                                <li>
+                                    {{ oGroup.getFieldData('oxtitle') }}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_CUSTOMERREMOVEFROMGROUP_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_CUSTOMERREMOVEFROMGROUP_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

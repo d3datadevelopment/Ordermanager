@@ -1,0 +1,62 @@
+{% if not oView.canGenerateOxidPdf() %}
+    {% set blNoPdf = "disabled" %}
+{% else %}
+    {% set blNoPdf = "" %}
+{% endif %}
+
+{% block ordermanager_admin_action_generatepdf %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oAction, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_action_generatepdf_editor %}
+                    {% block ordermanager_admin_action_generatepdf_editor_type %}
+                        <input type="hidden" name="value[blActionOrderPdfTypeInvoice]" value="0">
+                        <input id="blActionOrderPdfTypeInvoice" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfTypeInvoice]" value='1' {% if edit.getValue('blActionOrderPdfTypeInvoice') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                        <label for="blActionOrderPdfTypeInvoice">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFINVOICE" }) }}</label><br>
+                        <input type="hidden" name="value[blActionOrderPdfTypeDelnote]" value="0">
+                        <input id="blActionOrderPdfTypeDelnote" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfTypeDelnote]" value='1' {% if edit.getValue('blActionOrderPdfTypeDelnote') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                        <label for="blActionOrderPdfTypeDelnote">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFDELNOTE" }) }}</label>
+                    {% endblock %}
+                    <hr>
+                    {% block ordermanager_admin_action_generatepdf_editor_send %}
+                        <input type="hidden" name="value[blActionOrderPdfSendAttach]" value="0">
+                        <input id="blActionOrderPdfSendAttach" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfSendAttach]" value='1' {% if edit.getValue('blActionOrderPdfSendAttach') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                        <label for="blActionOrderPdfSendAttach">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFATTACH" }) }}</label> {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFATTACH_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFATTACH_DESC")} %}<br>
+                        <input type="hidden" name="value[blActionOrderPdfSendSave]" value="0">
+                        <input id="blActionOrderPdfSendSave" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfSendSave]" value='1' {% if edit.getValue('blActionOrderPdfSendSave') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                        <label for="blActionOrderPdfSendSave">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFFILESAVE" }) }}</label> {{ edit.getShopDir() }}<label for="sActionOrderPdfSaveDir" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGENERATEPDF" }) }}</label>
+                        <input id="sActionOrderPdfSaveDir" type="text" size="30" maxlength="50" name="value[sActionOrderPdfSaveDir]" value="{{ edit.getValue('sActionOrderPdfSaveDir') }}" {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                    {% endblock %}
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_action_generatepdf_viewer %}
+                    {% block ordermanager_admin_action_generatepdf_viewer_type %}
+                        {% if edit.getValue('blActionOrderPdfTypeInvoice') == 1 %}
+                            <input id="blActionOrderPdfTypeInvoice" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfTypeInvoice]" value='1' checked {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                            <label for="blActionOrderPdfTypeInvoice">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFINVOICE" }) }}</label><br>
+                        {% endif %}
+                        {% if edit.getValue('blActionOrderPdfTypeDelnote') == 1 %}
+                            <input id="blActionOrderPdfTypeDelnote" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfTypeDelnote]" value='1' checked {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                            <label for="blActionOrderPdfTypeDelnote">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFDELNOTE" }) }}</label>
+                        {% endif %}
+                    {% endblock %}
+                    <hr>
+                    {% block ordermanager_admin_action_generatepdf_viewer_send %}
+                        {% if edit.getValue('blActionOrderPdfSendAttach') == 1 %}
+                            <input id="blActionOrderPdfSendAttach" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfSendAttach]" value='1' checked {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                            <label for="blActionOrderPdfSendAttach">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFATTACH" }) }}</label> {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFATTACH_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFATTACH_DESC")} %}<br>
+                        {% endif %}
+                        {% if edit.getValue('blActionOrderPdfSendSave') == 1 %}
+                            <input id="blActionOrderPdfSendSave" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfSendSave]" value='1' checked {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                            <label for="blActionOrderPdfSendSave">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGENERATEPDFFILESAVE" }) }}</label>
+                            {{ edit.getShopDir() }}{{ edit.getValue('sActionOrderPdfSaveDir') }}
+                        {% endif %}
+                    {% endblock %}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERGENERATEPDF_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERGENERATEPDF_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% include "headitem.html.twig" with {title: "GENERAL_ADMIN_TITLE"|translate} %}
+
+<style>
+    details {
+        margin: 0 0 15px;
+        padding: 6px 9px 2px 18px;
+        border: 1px solid silver;
+        color: silver;
+    }
+    details summary {
+        margin: 0 0 3px -12px;
+        cursor: pointer;
+    }
+</style>
+
+<form name="transfer" id="transfer" action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+    {{ oViewConf.getHiddenSid()|raw }}
+    <input type="hidden" name="oxid" value="{{ oxid }}">
+    <input type="hidden" name="oxidCopy" value="{{ oxid }}">
+    <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+    <input type="hidden" name="editlanguage" value="{{ editlanguage }}">
+</form>
+
+{% if edit.getId() and not edit.getLicenseActive() %}
+    <table style="width:98%; padding: 0; border: none;">
+        <tr>
+            <td style="vertical-align: top;" class="edittext" colspan="2">
+                <div class="extension_warning">{{ translate({ ident: "D3_ORDERMANAGER_ERROR_IEXECJOBSLIMIT" }) }}</div>
+            </td>
+        </tr>
+    </table>
+{% endif %}
+
+<details>
+    <summary>{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_DESCRIPTION" }) }}</summary>
+    {{ translate({ ident: "d3tbclordermanager_items_mall_desc" }) }}
+</details>
+
+{{ translate({ ident: "D3_ORDERMANAGER_ERROR_NOMALL" }) }}
+
+{% include "@d3modcfg_lib/admin/inc/inc.html.twig" %}

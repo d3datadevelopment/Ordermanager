@@ -1,0 +1,15 @@
+{% include "email/html/header.html.twig" with {title: oShop.oxshops__oxname.value} %}
+
+verf&uuml;gbare Variablen:<br>
+- Shop:       $oShop<br>
+- Bestellung: $oOrder<br>
+- Kunde:      $oUser<br>
+
+Hallo {{ oOrder.oxorder__oxbillsal.value|translate_salutation }} {{ oOrder.oxorder__oxbilllname.getRawValue() }},<br>
+<br>
+wegen Lieferschwierigkeiten unserer Lieferanten wird sich die Zustellung Ihrer Bestellung {{ oOrder.oxorder__oxordernr.getRawValue() }}
+leider um ca. 1 Woche verz&ouml;gern. Wir bitten um Ihr Verst&auml;ndnis.<br>
+<br>
+Ihr {{ oShop.oxshops__oxname.getRawValue()  }}-Team.
+
+{% include "email/html/footer.html.twig" %}

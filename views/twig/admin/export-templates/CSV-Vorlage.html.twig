@@ -1,0 +1,45 @@
+{% set sEnclosure = '"' %}
+{% set sLineSeparator = "@new_line@" %}
+{% set sFieldSeparator = "," %}
+
+{# ** special chars ************** #}
+{# new line => "@new_line@" #}
+{# tab => "@tab@" #}
+{# white space => "@space@" #}
+{# ******************************* #}
+
+{% autoescape false %}
+    {% if contentType == 'header' %}
+        {% block d3ordermanager_exporttemplate_csv_header %}
+            {% if aFieldList %}
+                {% for key, sFieldName in aFieldList %}
+                    {% block d3ordermanager_exporttemplate_csv_headfieldname %}
+                            {{ sEnclosure }}{{ sFieldName }}{{ sEnclosure }}
+                    {% endblock %}
+                    {% if loop.last == false %}
+                        {{ sFieldSeparator }}
+                    {% else %}
+                        {{ sLineSeparator }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
+    {% endif %}
+
+    {% if contentType == 'item' %}
+        {% block d3ordermanager_exporttemplate_csv_content %}
+            {% if aContentList %}
+                {% for contentlistkey, sContent in aContentList %}
+                    {% block d3ordermanager_exporttemplate_csv_contentfield %}
+                        {{ sEnclosure }}{{ sContent }}{{ sEnclosure }}
+                    {% endblock %}
+                    {% if loop.last == false %}
+                        {{ sFieldSeparator }}
+                    {% else %}
+                        {{ sLineSeparator }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
+    {% endif %}
+{% endautoescape %}

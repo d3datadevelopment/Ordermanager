@@ -1,0 +1,13 @@
+{{ translate({ ident: "D3_ORDERMANAGER_MAIL_OMJFROM" }) }} {{ "now"|date("d.m.Y H:i") }}
+  
+{% for sOrderId, aManagerJobs in aNotes %}
+{% set oItem = oEmailView.d3getOrderManagerOrder(sOrderId) %}
+{% if oItem.getId() %}{{ translate({ ident: "D3_ORDERMANAGER_MAIL_ORDER" }) }} {{ oItem.getFieldData('oxordernr') }} {{ translate({ ident: "D3_ORDERMANAGER_MAIL_ORDERFROM" }) }} {{ oItem.getFieldData('oxorderdate') }} ({{ oItem.getFieldData('oxbilllname') }}, {{ oItem.getFieldData('oxbillfname') }}){% else %}{{ translate({ ident: "D3_ORDERMANAGER_MAIL_GENERAL" }) }}{% endif %}:
+{% for sManagerId, aJobActions in aManagerJobs %}
+{% set oManager = oEmailView.d3getOrderManager(sManagerId) %}
+    {{ oManager.getFieldData('oxtitle') }}
+{% for sJobText in aJobActions %}
+    {{ sJobText }}
+{% endfor %}
+{% endfor %}
+{% endfor %}

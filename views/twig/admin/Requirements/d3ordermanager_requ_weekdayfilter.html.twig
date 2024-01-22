@@ -1,0 +1,47 @@
+{% block ordermanager_admin_requ_weekdayfilter %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_weekdayfilter_editor %}
+                    <label for="RequWeekdayType">{{ translate({ ident: "D3_ORDERMANAGER_REQU_WEEKDAYS_IF1" }) }}</label>
+                    <SELECT id="RequWeekdayType" class="editinput" name="value[sWeekdaysType]" size="1" {{ blActionRestriction }} {{ readonly }}>
+                        {% for type, translation in oRequ.getTypeList() %}
+                            <option value="{{ type }}" {% if edit.getValue('sWeekdaysType') == type %}selected{% endif %}>{{ translate({ ident: translation }) }}</option>
+                        {% endfor %}
+                    </SELECT>
+                    <label for="RequWeekdays">{{ translate({ ident: "D3_ORDERMANAGER_REQU_WEEKDAYS_IF2" }) }}</label>
+                    <input type="hidden" name="value[sWeekdayDays]" value="">
+                    <SELECT id="RequWeekdays" class="editinput" name="value[sWeekdayDays][]" id="sWeekDays" size="7" multiple {{ blActionRestriction }} {{ readonly }}>
+                        {% for weekdayAbbr, translIdent in oRequ.getWeekdayList() %}
+                            <option value="{{ weekdayAbbr }}" {% if edit.getValue('sWeekdayDays') is iterable and weekdayAbbr in edit.getValue('sWeekdayDays') %}selected{% endif %}>{{ translate({ ident: translIdent }) }}</option>
+                        {% endfor %}
+                    </SELECT>
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_WEEKDAYS_IF3" }) }}<br>
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_MULTIPLE" }) }}<br>
+                    <input type="button" href="#" onclick="selectAllListElems(document.getElementById('RequWeekdays')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_ALL" }) }}" {{ blActionRestriction }} {{ readonly }}> <input type="button" href="#" onclick="selectNoListElems(document.getElementById('RequWeekdays')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_NONE" }) }}" {{ blActionRestriction }} {{ readonly }}>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_weekdayfilter_viewer %}
+                    <label for="RequWeekdayType">{{ translate({ ident: "D3_ORDERMANAGER_REQU_WEEKDAYS_IF1" }) }}</label>
+                    {% for type, translation in oRequ.getTypeList() %}
+                        {% if edit.getValue('sWeekdaysType') == type %}
+                            {{ translate({ ident: translation }) }}
+                        {% endif %}
+                    {% endfor %}
+                    <label for="RequWeekdays">{{ translate({ ident: "D3_ORDERMANAGER_REQU_WEEKDAYS_IF2" }) }}</label>
+                    <ul>
+                        {% for weekdayAbbr, translIdent in oRequ.getWeekdayList() %}
+                            {% if edit.getValue('sWeekdayDays') is iterable and weekdayAbbr in edit.getValue('sWeekdayDays') %}
+                                <li>{{ translate({ ident: translIdent }) }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_WEEKDAYS_IF3" }) }}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_WEEKDAYS_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_WEEKDAYS_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

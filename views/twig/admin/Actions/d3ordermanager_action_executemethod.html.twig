@@ -1,0 +1,19 @@
+{% block ordermanager_admin_action_executemethod %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oAction, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_action_executemethod_editor %}
+                    <label for="ActionOrderExecuteMethodName">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDEREXECUTEMETHOD_NAME" }) }}</label>
+                    <input id="ActionOrderExecuteMethodName" type="text" name="value[sActionExecuteMethod_name]" size="30" maxlength="50" value="{{ edit.getValue('sActionExecuteMethod_name') }}" {{ blActionRestriction }} {{ readonly }}>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_action_executemethod_viewer %}
+                    {{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDEREXECUTEMETHOD_NAME" }) }} {{ edit.getValue('sActionExecuteMethod_name') }}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDEREXECUTEMETHOD_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDEREXECUTEMETHOD_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

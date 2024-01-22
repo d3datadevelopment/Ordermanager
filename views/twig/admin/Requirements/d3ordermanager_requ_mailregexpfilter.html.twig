@@ -1,0 +1,19 @@
+{% block ordermanager_admin_requ_mailregexpfilter %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_mailregexpfilter_editor %}
+                    <label for="sMailValue" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_MAILREGEXP" }) }}</label>
+                    <input id="sMailValue" class="edittext ext_edittext" type="text" size="50" maxlength="100" name="value[sMailValue]" value='{% if edit.getValue('sMailValue') %}{{ edit.getValue('sMailValue') }}{% endif %}' {{ blActionRestriction }} {{ readonly }}>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_mailregexpfilter_viewer %}
+                    {{ edit.getValue('sMailValue') }}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_MAILREGEXP_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_MAILREGEXP_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

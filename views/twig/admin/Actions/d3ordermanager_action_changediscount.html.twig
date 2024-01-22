@@ -1,0 +1,18 @@
+{% block ordermanager_admin_action_changediscount %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oAction, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_action_changediscount_editor %}
+                    <input id="ActionOrderChangeDiscountValue" type="text" style="text-align: right;" name="value[sActionChangeDiscountValue]" size="10" maxlength="50" value="{% if edit.getValue('sActionChangeDiscountValue') %}{{ edit.getValue('sActionChangeDiscountValue') }}{% else %}0.00{% endif %}" {{ blActionRestriction }} {{ readonly }}> <label for="ActionOrderChangeDiscountValue">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_GENERALORDERCURR" }) }}</label>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_action_changediscount_viewer %}
+                    {% if edit.getValue('sActionChangeDiscountValue') %}{{ edit.getValue('sActionChangeDiscountValue') }}{% else %}0.00{% endif %} {{ translate({ ident: "D3_ORDERMANAGER_ACTION_GENERALORDERCURR" }) }}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERCHANGEDISCOUNT_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERCHANGEDISCOUNT_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

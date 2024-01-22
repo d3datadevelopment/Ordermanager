@@ -1,0 +1,31 @@
+{% block ordermanager_admin_requ_transactionfilter %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_transactionfilter_editor %}
+                    <label for="sOrderTransStatus" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_TRANSACTION" }) }}</label>
+                    <SELECT id="sOrderTransStatus" class="editinput" name="value[sOrderTransStatus]" size="1" {{ blActionRestriction }} {{ readonly }}>
+                        {% for sStatus in oView.getTransStatusList() %}
+                            <option value="{{ sStatus }}" {% if edit.getValue('sOrderTransStatus') == sStatus %}selected{% endif %}>
+                                {% set sStatusMLIdent = "D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_"|cat(sStatus) %}
+                                {{ translate({ ident: sStatusMLIdent }) }}
+                            </option>
+                        {% endfor %}
+                    </SELECT>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_transactionfilter_viewer %}
+                    {% for sStatus in oView.getTransStatusList() %}
+                        {% if edit.getValue('sOrderTransStatus') == sStatus %}
+                            {% set sStatusMLIdent = "D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_"|cat(sStatus) %}
+                            {{ translate({ ident: sStatusMLIdent }) }},
+                        {% endif %}
+                    {% endfor %}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_TRANSACTION_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_TRANSACTION_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

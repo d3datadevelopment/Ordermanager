@@ -1,0 +1,44 @@
+{% block ordermanager_admin_requ_otherjob %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_otherjob_editor %}
+                    <label for="RequOtherJobName">{{ translate({ ident: "D3_ORDERMANAGER_REQU_OTHERJOB_NAME" }) }}</label>
+                    <SELECT class="editinput" name="value[sOtherJob_ID]" id="RequOtherJobName" {{ blActionRestriction }} {{ readonly }}>
+                        {% set blUnknownJobId = true %}
+                        {% for oJob in oView.getJobList() %}
+                            {% if oJob.getId() == edit.getValue('sOtherJob_ID') %}
+                                {% set blSelected = true %}
+                                {% set blUnknownJobId = false %}
+                            {% else %}
+                                {% set blSelected = false %}
+                            {% endif %}
+                            <option value="{{ oJob.getId() }}" {% if blSelected %}selected{% endif %}>{{ oJob.getFieldData('oxtitle') }}</option>
+                        {% endfor %}
+                        {% if edit.getValue('sOtherJob_ID') and blUnknownJobId %}
+                            <option value="{{ edit.getValue('sOtherJob_ID') }}" selected>{{ translate({ ident: "D3_ORDERMANAGER_REQU_OTHERJOB_UNKNOWNJOBID" }) }} "{{ edit.getValue('sOtherJob_ID') }}"</option>
+                        {% endif %}
+                    </SELECT>
+                    <label for="RequOtherJobType" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_OTHERJOB" }) }}</label>
+                    <SELECT class="editinput" name="value[sOtherJob_Type]" id="RequOtherJobType" {{ blActionRestriction }} {{ readonly }}>
+                        {% for type, translation in oRequ.getTypeList() %}
+                            <option value="{{ type }}" {% if type == edit.getValue('sOtherJob_Type') %}selected{% endif %}>{{ translate({ ident: translation }) }}</option>
+                        {% endfor %}
+                    </SELECT>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_otherjob_viewer %}
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_OTHERJOB_NAME" }) }} "{{ oView.getManagerTitle(edit.getValue('sOtherJob_ID')) }}"&nbsp;
+                    {% for type, translation in oRequ.getTypeList() %}
+                        {% if edit.getValue('sOtherJob_Type') == type %}
+                            {{ translate({ ident: translation }) }}
+                        {% endif %}
+                    {% endfor %}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_OTHERJOB_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_OTHERJOB_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

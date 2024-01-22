@@ -1,0 +1,61 @@
+{% if not oView.canGeneratePdfDocuments() %}
+    {% set blNoPdf = "disabled" %}
+{% else %}
+    {% set blNoPdf = "" %}
+{% endif %}
+
+{% block ordermanager_admin_action_getpdfdocument %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oAction, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_action_getpdfdocument_editor %}
+                    {% block ordermanager_admin_action_getpdfdocument_editor_type %}
+                        {% for oDocument in oAction.getDocumentList() %}
+                            {% set documentRequestId = oAction.getDocumentRequestId(oDocument) %}
+                            <input type="hidden" name="value[{{ documentRequestId }}]" value="0">
+                            <input id="{{ documentRequestId }}" class="edittext ext_edittext" type="checkbox" name="value[{{ documentRequestId }}]" value='1' {% if edit.getValue(documentRequestId) == 1 %}checked{% endif %} {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                            <label for="{{ documentRequestId }}">{{ translate({ ident: oDocument.getTitleIdent() }) }}</label><br>
+                        {% endfor %}
+                    {% endblock %}
+                    <hr>
+                    {% block ordermanager_admin_action_getpdfdocument_editor_send %}
+                        <input type="hidden" name="value[blActionOrderPdfDocumentSendAttach]" value="0">
+                        <input id="blActionOrderPdfDocumentSendAttach" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfDocumentSendAttach]" value='1' {% if edit.getValue('blActionOrderPdfDocumentSendAttach') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                        <label for="blActionOrderPdfDocumentSendAttach">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENTATTACH" }) }}</label> {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENTATTACH_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENTATTACH_DESC")} %}<br>
+                        <input type="hidden" name="value[blActionOrderPdfDocumentSendSave]" value="0">
+                        <input id="blActionOrderPdfDocumentSendSave" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfDocumentSendSave]" value='1' {% if edit.getValue('blActionOrderPdfDocumentSendSave') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                        <label for="blActionOrderPdfDocumentSendSave">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENTFILESAVE" }) }}</label> {{ edit.getShopDir() }}<label for="sActionOrderPdfDocumentSaveDir" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENT" }) }}</label>
+                        <input id="sActionOrderPdfDocumentSaveDir" type="text" size="30" maxlength="50" name="value[sActionOrderPdfDocumentSaveDir]" value="{{ edit.getValue('sActionOrderPdfDocumentSaveDir') }}" {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                    {% endblock %}
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_action_getpdfdocument_viewer %}
+                    {% block ordermanager_admin_action_getpdfdocument_viewer_type %}
+                        {% for oDocument in oAction.getDocumentList() %}
+                            {% set documentRequestId = oAction.getDocumentRequestId(oDocument) %}
+                            {% if edit.getValue(documentRequestId) == 1 %}
+                                <input id="{{ documentRequestId }}" class="edittext ext_edittext" type="checkbox" name="value[{{ documentRequestId }}]" value='1' checked {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                                <label for="{{ documentRequestId }}">{{ translate({ ident: oDocument.getTitleIdent() }) }}</label><br>
+                            {% endif %}
+                        {% endfor %}
+                    {% endblock %}
+                    <hr>
+                    {% block ordermanager_admin_action_getpdfdocument_viewer_send %}
+                        {% if edit.getValue('blActionOrderPdfDocumentSendAttach') == 1 %}
+                            <input id="blActionOrderPdfDocumentSendAttach" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfDocumentSendAttach]" value='1' checked {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                            <label for="blActionOrderPdfDocumentSendAttach">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENTATTACH" }) }}</label> {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENTATTACH_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENTATTACH_DESC")} %}<br>
+                        {% endif %}
+                        {% if edit.getValue('blActionOrderPdfDocumentSendSave') == 1 %}
+                            <input id="blActionOrderPdfDocumentSendSave" class="edittext ext_edittext" type="checkbox" name="value[blActionOrderPdfDocumentSendSave]" value='1' checked {{ blActionRestriction }} {{ blNoPdf }} {{ readonly }}>
+                            <label for="blActionOrderPdfDocumentSendSave">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENTFILESAVE" }) }}</label>
+                            {{ edit.getShopDir() }}{{ edit.getValue('sActionOrderPdfDocumentSaveDir') }}
+                        {% endif %}
+                    {% endblock %}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENT_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERGETPDFDOCUMENT_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

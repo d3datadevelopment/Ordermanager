@@ -1,0 +1,289 @@
+# This Software is the property of Data Development and is protected
+# by copyright law - it is NOT Freeware.
+#
+# Any unauthorized use of this software without a valid license
+# is a violation of the license agreement and will be prosecuted by
+# civil and criminal law.
+#
+# https://www.d3data.de
+#
+# @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+# @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+# @link      https://www.oxidmodule.com
+
+services:
+  _defaults:
+    autowire: false
+    public: true
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_stornoorder:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_stornoorder
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_stornoorder
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_stornoorder.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_stornoorder.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_stornoorder.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_stornoorder.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setpaiddate:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setpaiddate
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setpaiddate
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setpaiddate.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setpaiddate.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setpaiddate.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setpaiddate.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setsendednowdate:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setsendednowdate
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setsendednowdate
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setsendednowdate.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setsendednowdate.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setsendednowdate.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setsendednowdate.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setfieldvalue:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setfieldvalue
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setfieldvalue
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setfieldvalue.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setfieldvalue.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setfieldvalue.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_setfieldvalue.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendmail:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendmail
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendmail
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendmail.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendmail.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendmail.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendmail.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_moveordertofolder:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_moveordertofolder
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_moveordertofolder
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_moveordertofolder.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_moveordertofolder.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_moveordertofolder.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_moveordertofolder.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_exportlist:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_exportlist
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_exportlist
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_exportlist.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_exportlist.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_exportlist.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_exportlist.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_executemethod:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_executemethod
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_executemethod
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_executemethod.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_executemethod.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_executemethod.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_executemethod.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendpushnotification.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_deleteorder:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_deleteorder
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_deleteorder
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_deleteorder.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_deleteorder.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_deleteorder.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_deleteorder.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custdelfromgroup:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custdelfromgroup
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custdelfromgroup
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custdelfromgroup.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custdelfromgroup.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custdelfromgroup.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custdelfromgroup.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custaddtogroup:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custaddtogroup
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custaddtogroup
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custaddtogroup.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custaddtogroup.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custaddtogroup.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_custaddtogroup.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changediscount:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changediscount
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changediscount
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changediscount.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changediscount.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changediscount.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changediscount.args.order:
+    synthetic:  true
+    shared:     false
+
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changedelcosts:
+    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changedelcosts
+    factory:    'oxNew'
+    shared:     false
+    arguments:
+      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changedelcosts
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changedelcosts.args.ordermanager'
+      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changedelcosts.args.order'
+    # arg #1 ordermanager
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changedelcosts.args.ordermanager:
+    synthetic:  true
+    shared:     false
+    # arg #2 order
+  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_changedelcosts.args.order:
+    synthetic:  true
+    shared:     false

@@ -1,0 +1,127 @@
+{% block ordermanager_admin_action_sendmail %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oAction, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd style="margin-left: 30%;">
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_action_sendmail_editor %}
+                    {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROM1" }) }}<br>
+                    <input type="radio" id="FromSourceTpl" name="value[sSendMailFromSource]" value="template" {% if edit.getValue('sSendMailFromSource') == 'template' %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}>
+                    <label for="FromSourceTpl">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE" }) }}</label>
+                    <br>
+                    <label style="margin-left: 15px;" for="FromTplSubject">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMSUBJECT" }) }}</label><input id="FromTplSubject" type="text" name="value[sSendMailFromSubject]" size="50" maxlength="250" value="{{ edit.getValue('sSendMailFromSubject') }}" {{ blActionRestriction }} {{ readonly }}><br>
+                    <label style="margin-left: 15px;" for="FromTplHtml">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_HTML" }) }}</label><input id="FromTplHtml" type="text" name="value[sSendMailFromTemplatename]" size="50" maxlength="250" value="{{ edit.getValue('sSendMailFromTemplatename') }}" {{ blActionRestriction }} {{ readonly }}> {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_DESC")} %}<br>
+                    <label style="margin-left: 15px;" for="FromTplPlain">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_PLAIN" }) }}</label><input id="FromTplPlain" type="text" name="value[sSendMailFromTemplatenamePlain]" size="50" maxlength="250" value="{{ edit.getValue('sSendMailFromTemplatenamePlain') }}" {{ blActionRestriction }} {{ readonly }}> {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_DESC")} %}<br>
+                    <input style="margin-left: 20px;" id="FromThemeAdmin" type="radio" name="value[sSendMailFromTheme]" value="admin" {% if edit.getValue('sSendMailFromTheme') == 'admin' %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}> <label for="FromThemeAdmin">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_ADMIN" }) }}</label><br>
+                    <input style="margin-left: 20px;" id="FromThemeFrontend" type="radio" name="value[sSendMailFromTheme]" value="frontend" {% if edit.getValue('sSendMailFromTheme') == 'frontend' %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}> <label for="FromThemeFrontend">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_FRONTEND" }) }}</label> {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_DESC")} %}<br>
+                    <hr>
+                    <input type="radio" id="FromSourceCms" name="value[sSendMailFromSource]" value="cms" {% if edit.getValue('sSendMailFromSource') == 'cms' %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}> <label for="FromSourceCms">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMCMS" }) }}</label>
+                    <br>
+                    <label style="margin-left: 15px;">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMCMS_SUBJECT" }) }}</label><br>
+                    <label for="FromCmsHtml" style="margin-left: 15px;">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMCMS_HTML" }) }}</label>
+                    <SELECT id="FromCmsHtml" class="editinput" name="value[sSendMailFromContentname]" size="1" {{ blActionRestriction }} {{ readonly }}>
+                        {% for oContent in oView.getContentList() %}
+                            <option value="{{ oContent.getId() }}" {% if edit.getValue('sSendMailFromContentname') == oContent.getId() %}selected{% endif %}>{{ oContent.getFieldData('oxtitle') }} ({{ oContent.getFieldData('oxloadid') }})</option>
+                        {% endfor %}
+                    </SELECT> <br>
+
+                    <label for="FromCmsPlain" style="margin-left: 15px;">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMCMS_PLAIN" }) }}</label>
+                    <SELECT id="FromCmsPlain" class="editinput" name="value[sSendMailFromContentnamePlain]" size="1" {{ blActionRestriction }} {{ readonly }}>
+                        {% for oContent in oView.getContentList() %}
+                            <option value="{{ oContent.getId() }}" {% if edit.getValue('sSendMailFromContentnamePlain') == oContent.getId() %}selected{% endif %}>{{ oContent.getFieldData('oxtitle') }} ({{ oContent.getFieldData('oxloadid') }})</option>
+                        {% endfor %}
+                    </SELECT> <br>
+                    <hr>
+                    {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROM2" }) }}<br>
+
+                    <input type="hidden" name="value[blSendMailToCustomer]" value="0">
+                    <input id="ToCustomer" class="edittext ext_edittext" type="checkbox" name="value[blSendMailToCustomer]" value='1' {% if edit.getValue('blSendMailToCustomer') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}>
+                    <label for="ToCustomer">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER" }) }}</label>
+                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER_DESC")} %}<br>
+                    <input type="hidden" name="value[blSendMailToOwner]" value="0">
+                    <input id="ToOwner" class="edittext ext_edittext" type="checkbox" name="value[blSendMailToOwner]" value='1' {% if edit.getValue('blSendMailToOwner') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}>
+                    <label for="ToOwner">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER" }) }}</label>
+                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER_DESC")} %}<br>
+                    <input type="hidden" name="value[blSendMailToCustom]" value="0">
+                    <input id="ToMail" class="edittext ext_edittext" type="checkbox" name="value[blSendMailToCustom]" value='1' {% if edit.getValue('blSendMailToCustom') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}>
+                    <label for="ToMail">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL" }) }}</label>
+                    <label for="ToMailInput" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND" }) }}</label>
+                    <input id="ToMailInput" type="text" name="value[sSendMailToCustomAddress]" size="30" maxlength="60" value="{{ edit.getValue('sSendMailToCustomAddress') }}" {{ blActionRestriction }} {{ readonly }}>
+                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL_DESC")} %}
+
+                    <hr>
+                    <input type="hidden" name="value[blGetStornoArticles]" value="0">
+                    <input id="UseStorno" class="edittext ext_edittext" type="checkbox" name="value[blGetStornoArticles]" value='1' {% if edit.getValue('blGetStornoArticles') == 1 %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}>
+                    <label for="UseStorno">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_USESTORNOARTICLES" }) }}</label>
+                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_USESTORNOARTICLES_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_USESTORNOARTICLES_DESC")} %}<br>
+
+                    <label for="ReplyAdr">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_USEALTREPLYADR" }) }}</label>
+                    <input id="ReplyAdr" class="edittext ext_edittext" type="text" name="value[sSendMailReplyAddress]" value="{{ edit.getValue('sSendMailReplyAddress') }}" {{ readonly }}>
+                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_USEALTREPLYADR_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_USEALTREPLYADR_DESC")} %}
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_action_sendmail_viewer %}
+                    {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROM1" }) }}<br>
+                    {% if edit.getValue('sSendMailFromSource') == 'template' %}
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE" }) }}
+                        <br>
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMSUBJECT" }) }} {{ edit.getValue('sSendMailFromSubject') }}<br>
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_HTML" }) }} {{ edit.getValue('sSendMailFromTemplatename') }} {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_DESC")} %}<br>
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_PLAIN" }) }} {{ edit.getValue('sSendMailFromTemplatenamePlain') }} {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_FROMTEMPLATE_DESC")} %}<br>
+                        {% if edit.getValue('sSendMailFromTheme') == 'admin' %}
+                            {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_ADMIN" }) }}
+                        {% elseif edit.getValue('sSendMailFromTheme') == 'frontend' %}
+                            {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMTPL_FRONTEND" }) }}
+                        {% endif %}
+                    {% elseif edit.getValue('sSendMailFromSource') == 'cms' %}
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMCMS" }) }}
+                        <br>
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMCMS_SUBJECT" }) }}<br>
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMCMS_HTML" }) }}
+                        {% for oContent in oView.getContentList() %}
+                            {% if edit.getValue('sSendMailFromContentname') == oContent.getId() %}
+                                {{ oContent.getFieldData('oxtitle') }} ({{ oContent.getFieldData('oxloadid') }})
+                            {% endif %}
+                        {% endfor %}
+                        <br>
+
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROMCMS_PLAIN" }) }}
+                        {% for oContent in oView.getContentList() %}
+                            {% if edit.getValue('sSendMailFromContentnamePlain') == oContent.getId() %}
+                                {{ oContent.getFieldData('oxtitle') }} ({{ oContent.getFieldData('oxloadid') }})
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <hr>
+                    {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_FROM2" }) }}<br>
+
+                    {% if edit.getValue('blSendMailToCustomer') == 1 %}
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER" }) }}
+                        {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_TOCUSTOMER_DESC")} %},
+                    {% endif %}
+                    {% if edit.getValue('blSendMailToOwner') == 1 %}
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER" }) }}
+                        {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_TOOWNER_DESC")} %},
+                    {% endif %}
+                    {% if edit.getValue('blSendMailToCustom') == 1 %}
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL" }) }}
+                        "{{ edit.getValue('sSendMailToCustomAddress') }}"
+                        {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_TOMAIL_DESC")} %}
+                    {% endif %}
+
+                    <hr>
+                    {% if edit.getValue('blGetStornoArticles') == 1 %}
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_USESTORNOARTICLES" }) }}
+                        {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_USESTORNOARTICLES_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_USESTORNOARTICLES_DESC")} %}<br>
+                    {% endif %}
+
+                    {% if edit.getValue('sSendMailReplyAddress') %}
+                        {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MAILSEND_USEALTREPLYADR" }) }} {{ edit.getValue('sSendMailReplyAddress') }}
+                        {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_MAILSEND_USEALTREPLYADR_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_MAILSEND_USEALTREPLYADR_DESC")} %}<br>
+                    {% endif %}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_SENDMAIL_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_SENDMAIL_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

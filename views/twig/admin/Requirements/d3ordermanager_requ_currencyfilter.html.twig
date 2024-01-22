@@ -1,0 +1,19 @@
+{% block ordermanager_admin_requ_currencyfilter %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_currencyfilter_editor %}
+                    <label for="sCuurencyISOValue" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_CURRENCY" }) }}</label>
+                    <input id="sCuurencyISOValue" class="editinput" type="text" size="4" maxlength="5" name="value[sCurrencyISOValue]" value="{{ edit.getValue('sCurrencyISOValue') }}" {{ blActionRestriction }} {{ readonly }}>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_currencyfilter_viewer %}
+                    {{ edit.getValue('sCurrencyISOValue') }}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_CURRENCY_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_CURRENCY_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

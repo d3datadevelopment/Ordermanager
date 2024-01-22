@@ -1,0 +1,16 @@
+{% block ordermanager_admin_action_setpaiddate %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oAction, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_action_setpaiddate_editor %}
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_action_setpaiddate_viewer %}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERSETPAIDNOW_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERSETPAIDNOW_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

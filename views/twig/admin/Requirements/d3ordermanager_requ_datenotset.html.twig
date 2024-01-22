@@ -1,0 +1,27 @@
+{% block ordermanager_admin_requ_datenotset %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_datenotset_editor %}
+                    <label for="RequNotSetDateType" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_NOTSETDATE" }) }}</label>
+                    <SELECT id="RequNotSetDateType" class="editinput" name="value[sNotSetDateType]" size="1" {{ blActionRestriction }} {{ readonly }}>
+                        {% for type, translation in oRequ.getTypeList() %}
+                            <option value="{{ type }}" {% if edit.getValue('sNotSetDateType') == type %}selected{% endif %}>{{ translate({ ident: translation }) }}</option>
+                        {% endfor %}
+                    </SELECT>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_datenotset_viewer %}
+                    {% for type, translation in oRequ.getTypeList() %}
+                        {% if edit.getValue('sNotSetDateType') == type %}
+                            {{ translate({ ident: translation }) }}
+                        {% endif %}
+                    {% endfor %}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_NOTSETDATE_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_NOTSETDATE_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

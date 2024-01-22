@@ -1,0 +1,77 @@
+# This Software is the property of Data Development and is protected
+# by copyright law - it is NOT Freeware.
+#
+# Any unauthorized use of this software without a valid license
+# is a violation of the license agreement and will be prosecuted by
+# civil and criminal law.
+#
+# https://www.d3data.de
+#
+# @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+# @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+# @link      https://www.oxidmodule.com
+
+parameters:
+  League\Flysystem\Filesystem.args.config:
+  League\Flysystem\Adapter\Local.args.root:
+  League\Flysystem\Adapter\Local.args.writeFlags:
+  League\Flysystem\Adapter\Local.args.linkHandling:
+  League\Flysystem\Adapter\Local.args.permissions: []
+  Html2Text\Html2Text.args.html:
+
+services:
+  _defaults:
+    autowire: false
+    public: true
+
+  League\Flysystem\Filesystem:
+    class:      League\Flysystem\Filesystem
+    shared:     false
+    arguments:
+      - '@League\Flysystem\Filesystem.args.adapter'
+      - '%League\Flysystem\Filesystem.args.config%'
+  League\Flysystem\Filesystem.args.adapter:
+    synthetic:  true
+    shared:     false
+
+  League\Flysystem\Adapter\Local:
+    class:      League\Flysystem\Adapter\Local
+    shared:     false
+    arguments:
+      - '%League\Flysystem\Adapter\Local.args.root%'
+      - '%League\Flysystem\Adapter\Local.args.writeFlags%'
+      - '%League\Flysystem\Adapter\Local.args.linkHandling%'
+      - '%League\Flysystem\Adapter\Local.args.permissions%'
+
+  Html2Text\Html2Text:
+    class:      Html2Text\Html2Text
+    shared:     false
+    arguments:
+      - '@d3ox.ordermanager.Html2Text.context.html'
+
+  D3\Ordermanager\Application\Model\Context\Html2TextContextInterface:
+    class:      D3\Ordermanager\Application\Model\Context\Html2TextContext
+    public:     true
+    factory:    'oxNew'
+    shared:     true
+    arguments:
+      - 'D3\Ordermanager\Application\Model\Context\Html2TextContext'
+
+  d3ox.ordermanager.Html2Text.context.html:
+    class: D3\Ordermanager\Application\Model\Context\Html2TextContextInterface
+    factory: ['@D3\Ordermanager\Application\Model\Context\Html2TextContextInterface', 'getMessage']
+    shared: false
+
+  d3.ordermanager.D3\OxidSqlLogger\OxidEsalesDatabase:
+    class:      D3\OxidSqlLogger\OxidEsalesDatabase
+    shared:     false
+
+  ReflectionClass:
+    class:      ReflectionClass
+    shared:     false
+    arguments:
+      - '@ReflectionClass.args.object'
+    # arg #1 ordermanager
+  ReflectionClass.args.object:
+    synthetic:  true
+    shared:     false

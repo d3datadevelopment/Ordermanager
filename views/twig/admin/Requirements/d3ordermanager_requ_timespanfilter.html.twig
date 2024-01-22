@@ -1,0 +1,51 @@
+{% block ordermanager_admin_requ_timespanfilter %}
+    <dl class="{{ blActionRestriction }}">
+        <dt>
+            <input type="hidden" name="value[blCheckTimespan{{ oRequ.getSlotId() }}_status]" value="0">
+            {% set sStatusVarName = "blCheckTimespan"|cat(oRequ.getSlotId())|cat("_status") %}
+            <input id="RequTimespan{{ oRequ.getSlotId() }}" class="edittext ext_edittext" type="checkbox" name="value[blCheckTimespan{{ oRequ.getSlotId() }}_status]" value='1' {% if edit.getValue(sStatusVarName) == 1 %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}>
+            <label for="RequTimespan{{ oRequ.getSlotId() }}">{{ translate({ ident: "D3_ORDERMANAGER_REQU_TIMESPAN" }) }} ({{ oRequ.getSlotId() }})</label>
+        </dt>
+        <dd>
+            {% set sValueVarName = "sTimespan"|cat(oRequ.getSlotId())|cat("Value") %}
+            {% set sUnitVarName = "sTimespan"|cat(oRequ.getSlotId())|cat("Unit") %}
+            {% set sTypeVarName = "sTimespan"|cat(oRequ.getSlotId())|cat("Type") %}
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_timespanfilter_editor %}
+                    <label for="RequTimespan{{ oRequ.getSlotId() }}Min">{{ translate({ ident: "D3_ORDERMANAGER_REQU_TIMESPAN_MINIMUM" }) }}</label>
+                    <input id="RequTimespan{{ oRequ.getSlotId() }}Min" style="text-align: right;" class="edittext ext_edittext" type="text" size="4" maxlength="3" name="value[sTimespan{{ oRequ.getSlotId() }}Value]" value='{{ edit.getValue(sValueVarName) }}' {{ blActionRestriction }} {{ readonly }}>
+                    <label for="RequTimespan{{ oRequ.getSlotId() }}Unit" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_TIMESPAN" }) }}</label>
+                    <SELECT id="RequTimespan{{ oRequ.getSlotId() }}Unit" class="editinput" name="value[sTimespan{{ oRequ.getSlotId() }}Unit]" size="1" {{ blActionRestriction }} {{ readonly }}>
+                        {% for type, translation in oRequ.getUnitList() %}
+                            <option value="{{ type }}" {% if edit.getValue(sUnitVarName) == type %}selected{% endif %}>{{ translate({ ident: translation }) }}</option>
+                        {% endfor %}
+                    </SELECT>
+                    <label for="RequTimespan{{ oRequ.getSlotId() }}Type">{{ translate({ ident: "D3_ORDERMANAGER_REQU_TIMESPAN_AFTER" }) }}</label>
+                    <SELECT id="RequTimespan{{ oRequ.getSlotId() }}Type" class="editinput" name="value[sTimespan{{ oRequ.getSlotId() }}Type]" size="1" {{ blActionRestriction }} {{ readonly }}>
+                        {% for type, translation in oRequ.getTypeList() %}
+                            <option value="{{ type }}" {% if edit.getValue(sTypeVarName) == type %}selected{% endif %}>{{ translate({ ident: translation }) }}</option>
+                        {% endfor %}
+                    </SELECT>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_timespanfilter_viewer %}
+                    <label for="RequTimespan{{ oRequ.getSlotId() }}Min">{{ translate({ ident: "D3_ORDERMANAGER_REQU_TIMESPAN_MINIMUM" }) }}</label>
+                    {{ edit.getValue(sValueVarName) }}
+                    {% for type, translation in oRequ.getUnitList() %}
+                        {% if edit.getValue(sUnitVarName) == type %}
+                            {{ translate({ ident: translation }) }}
+                        {% endif %}
+                    {% endfor %}
+                    <label for="RequTimespan{{ oRequ.getSlotId() }}Type">{{ translate({ ident: "D3_ORDERMANAGER_REQU_TIMESPAN_AFTER" }) }}</label>
+                    {% for type, translation in oRequ.getTypeList() %}
+                        {% if edit.getValue(sTypeVarName) == type %}
+                            {{ translate({ ident: translation }) }}
+                        {% endif %}
+                    {% endfor %}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_TIMESPAN_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_TIMESPAN_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

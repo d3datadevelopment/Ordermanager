@@ -1,0 +1,40 @@
+{% set sLineSeparator = "@new_line@" %}
+
+{# ** special chars ************** #}
+{# new line => "@new_line@" #}
+{# tab => "@tab@" #}
+{# white space => "@space@" #}
+{# ******************************* #}
+
+{% autoescape false %}
+    {% if contentType == 'header' %}
+        {% block d3ordermanager_exporttemplate_xml_header %}
+            {% if aFieldList %}
+                <?xml version="1.0" encoding="UTF-8"?>{{ sLineSeparator }}
+                <ORDERLIST>{{ sLineSeparator }}
+            {% endif %}
+        {% endblock %}
+    {% endif %}
+
+    {% if contentType == 'item' %}
+        {% block d3ordermanager_exporttemplate_xml_content %}
+            {% if aContentList %}
+                @tab@<ORDER id="{{ aContentList.oxid }}">{{ sLineSeparator }}
+                {% for contentlistkey, sContent in aContentList %}
+                    @tab@@tab@<ORDERFIELD name="{{ contentlistkey }}">{{ sLineSeparator }}
+                    @tab@@tab@@tab@{{ sContent }}{{ sLineSeparator }}
+                    @tab@@tab@</ORDERFIELD>{{ sLineSeparator }}
+                {% endfor %}
+                @tab@</ORDER>{{ sLineSeparator }}
+            {% endif %}
+        {% endblock %}
+    {% endif %}
+
+    {% if contentType == 'footer' %}
+        {% block d3ordermanager_exporttemplate_xml_footer %}
+            {% if aFieldList %}
+                </ORDERLIST>
+            {% endif %}
+        {% endblock %}
+    {% endif %}
+{% endautoescape %}

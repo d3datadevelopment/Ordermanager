@@ -1,0 +1,34 @@
+{% block ordermanager_admin_requ_notingroup %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_notingroup_editor %}
+                    <input type="hidden" name="value[sCustNotInGroupId]" value="">
+                    <label for="sCustNotInGroupId" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_NOTINGROUP" }) }}</label>
+                    <SELECT class="editinput" name="value[sCustNotInGroupId][]" id="sCustNotInGroupId" size="5" multiple {{ blActionRestriction }} {{ readonly }}>
+                        {% for oGroup in oView.getGroupsList() %}
+                            <option value="{{ oGroup.getId() }}" {% if edit.getValue('sCustNotInGroupId') is iterable and oGroup.getId() in edit.getValue('sCustNotInGroupId') %}selected{% endif %}>{{ oGroup.getFieldData('oxtitle') }}</option>
+                        {% endfor %}
+                    </SELECT><br>
+                    {{ translate({ ident: "D3_ORDERMANAGER_REQU_MULTIPLE" }) }}<br>
+                    <input type="button" href="#" onclick="selectAllListElems(document.getElementById('sCustNotInGroupId')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_ALL" }) }}" {{ blActionRestriction }} {{ readonly }}> <input type="button" href="#" onclick="selectNoListElems(document.getElementById('sCustNotInGroupId')); return false;" value="{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SELECT_NONE" }) }}" {{ blActionRestriction }} {{ readonly }}>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_notingroup_viewer %}
+                    <ul>
+                        {% for oGroup in oView.getGroupsList() %}
+                            {% if edit.getValue('sCustNotInGroupId') is iterable and oGroup.getId() in edit.getValue('sCustNotInGroupId') %}
+                                <li>
+                                    {{ oGroup.getFieldData('oxtitle') }}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_NOTINGROUP_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_NOTINGROUP_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

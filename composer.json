@@ -1,0 +1,73 @@
+{
+  "name": "d3/ordermanager",
+  "description": "Order manager module for OXID eShop.",
+  "type": "oxideshop-module",
+  "keywords": [
+    "oxid",
+    "modules",
+    "eShop",
+    "d3",
+    "ordermanager",
+    "orders",
+    "requirements",
+    "actions",
+    "tasks"
+  ],
+  "authors": [
+    {
+        "name": "D3 Data Development (Inh. Thomas Dartsch)",
+        "email": "info@shopmodule.com",
+        "homepage": "https://www.d3data.de",
+        "role": "Owner"
+    }
+  ],
+  "homepage": "https://www.oxidmodule.com/",
+  "license": [
+    "proprietary"
+  ],
+  "require": {
+    "ext-pdo": "*",
+    "oxid-esales/oxideshop-ce": "7.0 - 7.0",
+    "d3/modcfg": "^7.0",
+    "league/flysystem": "^1.0",
+    "splitbrain/php-cli": "^1.1",
+    "html2text/html2text": "^4.2",
+    "d3/oxid-sql-logger": "^1.2.2",
+    "d3/oxidservicebridges": "^1.1.0",
+    "ext-mbstring": "*"
+  },
+  "require-dev": {
+    "mikey179/vfsstream": "^1.6",
+    "donatj/mock-webserver": "^2.6",
+    "php": "^7.4",
+    "friendsofphp/php-cs-fixer": "~3.13.0",
+    "phpstan/phpstan": "^1.10",
+    "boxblinkracer/phpunuhi": "^1.12",
+    "rector/rector": "^0.18.13"
+  },
+  "suggest": {
+    "d3/pdfdocuments": "enables the automatic generation, dispatch and storage of highly customizable PDF documents",
+    "oxid-projects/pdf-invoice-module": "enables the automatic generation, dispatch and storage of OXID invoice PDF documents"
+  },
+  "autoload": {
+    "psr-4": {
+      "D3\\Ordermanager\\": "",
+      "D3\\Ordermanager\\publicDir\\": "./public",
+      "D3\\Ordermanager\\tests\\unit\\publicDir\\": "./tests/unit/public"
+    }
+  },
+  "bin": ["bin/d3_ordermanager_cron"],
+  "scripts": {
+    "php-cs-fixer": "./vendor/bin/php-cs-fixer fix --config=vendor/d3/ordermanager/.php-cs-fixer.php",
+
+    "phpstan": "./vendor/bin/phpstan --configuration=vendor/d3/ordermanager/phpstan.neon analyse",
+    "phpstan-report": "./vendor/bin/phpstan --configuration=vendor/d3/ordermanager/phpstan.neon analyse --error-format=json > vendor/d3/ordermanager/tests/phpstan.report.json",
+
+    "phpunit": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --bootstrap=source/bootstrap.php --config=vendor/d3/ordermanager/tests/",
+    "phpunit-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-text --bootstrap=source/bootstrap.php --config=vendor/d3/ordermanager/tests/ --coverage-html=vendor/d3/ordermanager/tests/result/coverage",
+
+    "rector": "./vendor/bin/rector process --dry-run --config ./vendor/d3/ordermanager/rector.php",
+
+    "phpunuhi": "./vendor/bin/phpunuhi --configuration=vendor/d3/ordermanager/phpunuhi.xml validate"
+  }
+}

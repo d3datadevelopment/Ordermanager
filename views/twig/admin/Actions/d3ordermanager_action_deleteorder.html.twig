@@ -1,0 +1,16 @@
+{% block ordermanager_admin_action_deleteorder %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oAction, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_action_deleteorder_editor %}
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_action_deleteorder_viewer %}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERDELETE_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERDELETE_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

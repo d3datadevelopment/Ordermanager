@@ -1,0 +1,236 @@
+{% include "headitem.html.twig" with {title: "D3_ORDERMANAGER_ACTION"|translate} %}
+
+<style>
+    .ext_edittext {
+        padding: 2px;
+    }
+</style>
+
+<script type="text/javascript">
+    <!--
+    {% if updatelist == 1 %}
+        UpdateList('{{ oxid }}');
+    {% endif %}
+
+    function UpdateList( sID)
+    {
+        let oSearch = parent.list.document.getElementById("search");
+        oSearch.oxid.value=sID;
+        oSearch.fnc.value='';
+        oSearch.submit();
+    }
+
+    function EditThis( sID)
+    {
+        let oTransfer = document.getElementById("transfer");
+        oTransfer.oxid.value=sID;
+        oTransfer.cl.value='';
+        oTransfer.submit();
+
+        let oSearch = parent.list.document.getElementById("search");
+        oSearch.actedit.value = 0;
+        oSearch.oxid.value=sID;
+        oSearch.submit();
+    }
+
+    function _groupExp(el) {
+        let _cur = el.parentNode;
+
+        if (_cur.className === "exp") _cur.className = "";
+          else _cur.className = "exp";
+    }
+
+    function selectAllListElems(el)
+    {
+        let aSelectLen = el.length;
+        for(let i = 0; i < aSelectLen; i++)
+        {
+            el.options[i].selected = true;
+        }
+    }
+
+    function selectNoListElems(el)
+    {
+        let aSelectLen = el.length;
+        for(let i = 0; i < aSelectLen; i++)
+        {
+            el.options[i].selected = false;
+        }
+    }
+    -->
+</script>
+
+<style>
+    <!--
+    fieldset{
+        border: 1px inset black;
+        background-color: #F0F0F0;
+    }
+
+    legend{
+        font-weight: bold;
+    }
+
+    .groupExp dl dt{
+        font-weight: normal;
+        width: 40%;
+        padding-left: 10px;
+    }
+
+    .groupExp dl dd {
+        margin-left: 42%;
+        padding-top: 5px;
+    }
+
+    .groupExp.disabled dl dt,
+    .groupExp.disabled dl dd,
+    .groupExp.disabled dl dd a,
+    .groupExp.disabled .exp a.rc b,
+    .groupExp.disabled a.rc b,
+    .groupExp dl.disabled dt,
+    .groupExp dl.disabled dd,
+    .groupExp dl.disabled dd a {
+        color: darkgrey;
+    }
+
+    .groupExp dl.disabled {
+        border-top: none;
+
+        background: #ffffe0; /* Old browsers */
+        background: -moz-linear-gradient(top, #ffffe0 0%, #f0f0f0 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffe0), color-stop(100%,#f0f0f0)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top, #ffffe0 0%,#f0f0f0 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top, #ffffe0 0%,#f0f0f0 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top, #ffffe0 0%,#f0f0f0 100%); /* IE10+ */
+        background: linear-gradient(to bottom, #ffffe0 0%,#f0f0f0 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffe0', endColorstr='#f0f0f0',GradientType=0 ); /* IE6-9 */
+
+    }
+
+    .edittext select.editinput {
+        width: auto;
+    }
+    details, .restrictioninfo {
+        margin: 0 0 15px;
+        padding: 6px 9px 2px 18px;
+        border: 1px solid silver;
+        color: silver;
+        border-radius: .25rem;
+        border-left: .25rem #028fe8 solid;
+    }
+    details summary {
+        margin: 0 0 3px -12px;
+        cursor: pointer;
+    }
+    .restrictioninfo {
+        color: black;
+    }
+    -->
+</style>
+
+{% if readonly %}
+    {% set readonly = "readonly disabled" %}
+{% else %}
+    {% set readonly = "" %}
+{% endif %}
+
+<form name="transfer" id="transfer" action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+    {{ oViewConf.getHiddenSid()|raw }}
+    <input type="hidden" name="oxid" value="{{ oxid }}">
+    <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+    <input type="hidden" name="actshop" value="{{ shop.getId() }}">
+    <input type="hidden" name="editlanguage" value="{{ editlanguage }}">
+</form>
+
+<form name="myedit" id="myedit" action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+    {{ oViewConf.getHiddenSid()|raw }}
+    <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+    <input type="hidden" name="fnc" value="save">
+    <input type="hidden" name="oxid" value="{{ oxid }}">
+    <input type="hidden" name="editval[{{ edit.d3getFieldLongName('oxid') }}]" value="{{ oxid }}">
+
+    <table style="border: none; width: 98%">
+        {% if edit.getId() and not edit.getLicenseActive() %}
+            <tr>
+                <td style="vertical-align: top;" class="edittext" colspan="2">
+                    <div class="extension_warning">{{ translate({ ident: "D3_ORDERMANAGER_ERROR_IEXECJOBSLIMIT" }) }}</div>
+                </td>
+            </tr>
+        {% endif %}
+
+        {% if missingRequValuesActions %}
+            <tr>
+                <td style="vertical-align: top;" class="edittext" colspan="2">
+                    <div class="extension_error">{{ translate({ ident: "D3_ORDERMANAGER_ERROR_MISSINGREQUACTIONVALUES" }) }}</div>
+                </td>
+            </tr>
+        {% endif %}
+
+        <tr>
+            <td style="vertical-align: top" class="edittext">
+
+                <details>
+                    <summary>{{ translate({ ident: "D3_GENERAL_ORDERMANAGER_DESCRIPTION" }) }}</summary>
+                    {{ translate({ ident: "d3tbclordermanager_items_action_desc" }) }}
+                </details>
+
+                {% if edit.getBasicRestrictionSettings() %}
+                    <div class="restrictioninfo">
+                        {{ translate({ ident: "D3_GENERAL_ORDERMANAGER_BASICRESTRICTIONS" }) }}
+                    </div>
+                {% endif %}
+
+                {% set blRestricted = false %}
+                {% for sGroupId, oActionList in oView.getGroupedActionList() %}
+                    <div class="groupExp">
+                        <div class="">
+                            <a class="rc" onclick="_groupExp(this); return false;" href="#">
+                                <b>
+                                    {{ translate({ ident: sGroupId }) }}
+                                </b>
+                            </a>
+
+                            {% for sActionId, oAction in oActionList.getActionList() %}
+                                {% if oAction.isAllowed() %}
+                                    {% set blActionRestriction = "" %}
+                                {% else %}
+                                    {% set blActionRestriction = "readonly disabled" %}
+                                    {% set blRestricted = true %}
+                                {% endif %}
+
+                                <div style="{% if missingRequValuesActions and sActionId in missingRequValuesActions|keys %}border: 1px solid red; {% endif %}">
+                                    {% include oAction.getTplName() with {oAction: oAction} %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+
+                {% if blRestricted %}
+                    {% include "@d3ordermanager/admin/inc/d3_cfg_ordermanageritem_restrictions.html.twig" %}
+                {% endif %}
+
+                <table style="width: 100%">
+                    <tr>
+                        <td class="edittext ext_edittext" style="text-align: left"><br>
+                            <span class="d3modcfg_btn icon d3color-green">
+                                <button type="submit" name="save" {{ readonly }}>
+                                    <i class="fa fa-check-circle fa-inverse"></i>
+                                    {{ translate({ ident: "D3_GENERAL_MODPROFILE_SAVE" }) }}
+                                </button>
+                            </span>
+                            <span class="d3modcfg_btn icon d3color-blue" style="margin-left: 10px; max-width: none;">
+                                <button type="submit" name="save" onClick="document.myedit.fnc.value='markasfinished'" {{ readonly }}>
+                                    <i class="fa fa-tag fa-inverse"></i>
+                                    {{ translate({ ident: "D3_ORDERMANAGER_ACTION_MARKASFINISHED" }) }}
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% include "@d3modcfg_lib/admin/inc/inc.html.twig" %}

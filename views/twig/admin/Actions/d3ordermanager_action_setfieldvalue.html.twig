@@ -1,0 +1,21 @@
+{% block ordermanager_admin_action_setfieldvalue %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oAction, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_action_setfieldvalue_editor %}
+                    <label for="ActionOrderSetFieldField">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERADDFIELDVALUE_FIELD" }) }}</label> <input id="ActionOrderSetFieldField" type="text" name="value[sActionAddField_field]" size="30" maxlength="50" value="{{ edit.getValue('sActionAddField_field') }}" {{ blActionRestriction }} {{ readonly }}>
+                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERADDFIELDVALUE_FIELD_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERADDFIELDVALUE_FIELD_DESC")} %}<br>
+                    <label for="ActionOrderSetFieldValue">{{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERADDFIELDVALUE_VALUE" }) }}</label> <input id="ActionOrderSetFieldValue" type="text" name="value[sActionAddField_value]" size="30" maxlength="50" value="{{ edit.getValue('sActionAddField_value') }}" {{ blActionRestriction }} {{ readonly }}>
+                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERADDFIELDVALUE_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERADDFIELDVALUE_DESC")} %}<br>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_action_setfieldvalue_viewer %}
+                    {{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERADDFIELDVALUE_FIELD" }) }} {{ edit.getValue('sActionAddField_field') }}<br>
+                    {{ translate({ ident: "D3_ORDERMANAGER_ACTION_ORDERADDFIELDVALUE_VALUE" }) }} {{ edit.getValue('sActionAddField_value') }}<br>
+                {% endblock %}
+            {% endif %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

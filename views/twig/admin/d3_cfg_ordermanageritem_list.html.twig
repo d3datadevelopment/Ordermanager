@@ -1,0 +1,295 @@
+{% include "headitem.html.twig" with {title: "d3mxcfgmod"|translate, box: "list"} %}
+{% set where = oView.getListFilter() %}
+
+{% if readonly %}
+    {% set readonly = "readonly disabled" %}
+{% else %}
+    {% set readonly = "" %}
+{% endif %}
+
+<script type="text/javascript">
+    <!--
+    function EditThis( sID)
+    {
+        let oTransfer = parent.edit.document.getElementById("transfer");
+        oTransfer.oxid.value=sID;
+        oTransfer.cl.value='{% if actlocation %}{{ actlocation }}{% else %}{{ default_edit }}{% endif %}';
+
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
+
+        let oSearch = document.getElementById("search");
+        oSearch.oxid.value=sID;
+        oSearch.submit();
+    }
+
+    function DeleteThis( sID)
+    {
+        let blCheck = confirm("{{ translate({ ident: "GENERAL_YOUWANTTODELETE" }) }}");
+        if( blCheck === true)
+        {
+            let oSearch = document.getElementById("search");
+            oSearch.oxid.value=sID;
+            oSearch.fnc.value='deleteentry';
+            oSearch.actedit.value=0;
+            oSearch.submit();
+
+            let oTransfer = parent.edit.document.getElementById("transfer");
+            oTransfer.oxid.value='-1';
+            oTransfer.cl.value='{{ default_edit }}';
+
+            //forcing edit frame to reload after submit
+            top.forceReloadingEditFrame();
+        }
+    }
+
+    function ChangeEditBar( sLocation, sPos)
+    {
+        let oSearch = document.getElementById("search");
+        oSearch.actedit.value=sPos;
+        oSearch.submit();
+
+        let oTransfer = parent.edit.document.getElementById("transfer");
+        oTransfer.cl.value=sLocation;
+
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
+    }
+
+    function ChangeLanguage()
+    {
+        let oSearch = document.getElementById("search");
+        oSearch.language.value=oSearch.changelang.value;
+        oSearch.editlanguage.value=oSearch.changelang.value;
+        oSearch.submit();
+
+        let oTransfer = parent.edit.document.getElementById("transfer");
+        oTransfer.innerHTML += '<input type="hidden" name="language" value="'+oSearch.changelang.value+'">';
+        oTransfer.innerHTML += '<input type="hidden" name="editlanguage" value="'+oSearch.changelang.value+'">';
+
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
+    }
+
+    window.onLoad = top.reloadEditFrame();
+    //-->
+</script>
+
+<style>
+    <!--
+    .d3notallowed,
+    .d3notallowed a {
+        color: silver;
+    }
+    -->
+</style>
+
+{% if oView.d3getShowListItems() %}
+
+    {% set baseObject = mylist.getBaseObject() %}
+    {% set coreTableName = baseObject.getCoreTableName() %}
+
+    <div id="liste">
+        <form name="search" id="search" action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+            {% include "_formparams.html.twig" with {cl: oViewConf.getActiveClassName(), lstrt: lstrt, actedit: actedit, oxid: oxid, fnc: "", language: actlang, editlanguage: actlang} %}
+
+            <table style="border: none; padding: 0; width:100%;">
+                <colgroup>
+                    {% block admin_d3ordermanager_list_colgroup %}
+                        <col style="width: 3%">
+                        <col style="width: 3%">
+                        <col style="width: 14%">
+                        <col style="width: 50%">
+                        <col style="width: 20%">
+                        <col style="width: 10%">
+                    {% endblock %}
+                </colgroup>
+                <tr class="listitem">
+                    {% block admin_d3ordermanager_list_filter %}
+                        <td style="vertical-align: middle; height: 20px;" class="listfilter first" nowrap>
+                            <div class="r1"><div class="b1">&nbsp;</div></div>
+                        </td>
+                        <td style="vertical-align: middle; height: 20px;" class="listfilter" nowrap>
+                            <div class="r1"><div class="b1">&nbsp;</div></div>
+                        </td>
+                        <td style="vertical-align: middle; height: 20px;" class="listfilter" nowrap>
+                            <div class="r1">
+                                <div class="b1">
+                                    <label for="filtersorting" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_FILTER_SORTING" }) }}</label>
+                                    <input id="filtersorting" title="{{ translate({ ident: "D3_ORDERMANAGER_FILTER_SORTING" }) }}" class="listedit" type="text" size="10" maxlength="128" name="where[{{ coreTableName }}][oxsort]" value="{{ where[coreTableName].oxsort }}">
+                                </div>
+                            </div>
+                        </td>
+                        <td style="vertical-align: top;" class="listfilter" nowrap>
+                            <div class="r1">
+                                <div class="b1">
+                                    <label for="filtertitle" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_FILTER_TITLE" }) }}</label>
+                                    <input id="filtertitle" class="listedit" title="{{ translate({ ident: "D3_ORDERMANAGER_FILTER_TITLE" }) }}" type="text" size="25" maxlength="128" name="where[{{ coreTableName }}][oxtitle]" value="{{ where[coreTableName].oxtitle }}">
+                                </div>
+                            </div>
+                        </td>
+                        <td style="vertical-align: middle; height: 20px;" colspan="2" class="listfilter" nowrap>
+                            <div class="r1">
+                                <div class="b1">
+                                    <div class="find">
+                                        {% if blShowLangSwitch %}
+                                            <label for="langswitch" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_FILTER_LANGUAGE" }) }}</label>
+                                            <select id="langswitch" title="{{ translate({ ident: "D3_ORDERMANAGER_FILTER_LANGUAGE" }) }}" name="changelang" class="editinput" onChange="ChangeLanguage();">
+                                                {% for lang in languages %}
+                                                    <option value="{{ lang.id }}" {% if lang.selected %}SELECTED{% endif %}>{{ lang.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        {% endif %}
+                                        <input class="listedit" type="submit" name="submitit" value="{{ translate({ ident: "GENERAL_SEARCH" }) }}" onClick="document.search.lstrt.value=0;">
+                                    </div>
+
+                                    <label for="filterfolder" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_FILTER_FOLDER" }) }}</label>
+                                    <select id="filterfolder" name="folder" title="{{ translate({ ident: "D3_ORDERMANAGER_FILTER_FOLDER" }) }}" class="folderselect" onChange="document.search.submit();" {% include "help.html.twig" with {helpid: "searchfieldoxdynamic"} %}>
+                                        {% for sMLIdent, sTranslation in oView.getSelectableFolderList() %}
+                                            <option value="{{ sMLIdent }}" {% if sMLIdent == folder %}SELECTED{% endif %}>{{ sTranslation }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                    {% endblock %}
+                </tr>
+                <tr>
+                    {% block admin_d3ordermanager_list_sorting %}
+                        <td class="listheader first" height="15">&nbsp;
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '{{ coreTableName }}', 'oxactive', '{{ nextSortDir|default("asc") }}');document.search.submit();" class="listheader" title="{{ translate({ ident: "D3_ORDERMANAGER_GENERAL_ACTIVTITLE_DESC" }) }}">
+                                {{ translate({ ident: "D3_ORDERMANAGER_GENERAL_ACTIVTITLE" }) }}
+                            </a>
+                        </td>
+                        <td class="listheader first" height="15">&nbsp;
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '{{ coreTableName }}', 'd3_om_execmanually', '{{ nextSortDir|default("asc") }}');document.search.submit();" class="listheader" title="{{ translate({ ident: "D3_ORDERMANAGER_GENERAL_ACTIVMANTITLE_DESC" }) }}">
+                                {{ translate({ ident: "D3_ORDERMANAGER_GENERAL_ACTIVMANTITLE" }) }}
+                            </a>
+                        </td>
+                        <td class="listheader" height="15">&nbsp;
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '{{ coreTableName }}', 'oxsort', '{{ nextSortDir|default("asc") }}');document.search.submit();" class="listheader">
+                                {{ translate({ ident: "D3_GENERAL_ORDERMANAGER_SORT" }) }}
+                            </a>
+                        </td>
+                        <td class="listheader">
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '{{ coreTableName }}', 'oxtitle', '{{ nextSortDir|default("asc") }}');document.search.submit();" class="listheader">
+                                {{ translate({ ident: "D3_GENERAL_MODPROFILE_TITLE" }) }}
+                            </a>
+                        </td>
+                        <td class="listheader">
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '{{ coreTableName }}', 'oxfolder', '{{ nextSortDir|default("asc") }}');document.search.submit();" class="listheader">
+                                {{ translate({ ident: "D3_GENERAL_MODPROFILE_FOLDER" }) }}
+                            </a>
+                        </td>
+                        <td class="listheader">
+                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '{{ coreTableName }}', 'd3_cronjobid', '{{ nextSortDir|default("asc") }}');document.search.submit();" class="listheader">
+                                {{ translate({ ident: "D3_GENERAL_ORDERMANAGER_CRONID" }) }}
+                            </a>
+                        </td>
+                    {% endblock %}
+                </tr>
+
+                {% set blWhite = "" %}
+                {% set _cnt = 0 %}
+                {% for listitem in mylist %}
+                    {% set _cnt = _cnt+1 %}
+                    {% if listitem.getLicenseActive() %}
+                        {% set formatclass = "" %}
+                    {% else %}
+                        {% set formatclass = "d3notallowed" %}
+                    {% endif %}
+                    <tr id="row.{{ _cnt }}">
+                        {% block admin_d3ordermanager_list_item %}
+                            {% if listitem.blacklist == 1 %}
+                                {% set listclass = "listitem3" %}
+                            {% else %}
+                                {% set listclass = "listitem"|cat(blWhite) %}
+                            {% endif %}
+                            {% if listitem.getId() == oxid %}
+                                {% set listclass = "listitem4" %}
+                            {% endif %}
+                            <td style="vertical-align: top;" class="{{ listclass }} {{ formatclass }} {% if listitem.getFieldData('oxactive') == 1 %} active{% endif %}" height="15">
+                                <div class="listitemfloating">
+                                    &nbsp;
+                                </div>
+                            </td>
+                            <td style="vertical-align: top;" class="{{ listclass }} {{ formatclass }} {% if listitem.getFieldData('D3_OM_EXECMANUALLY') %} active{% endif %}" height="15">
+                                <div class="listitemfloating">
+                                    &nbsp;
+                                </div>
+                            </td>
+                            <td style="vertical-align: top;" class="{{ listclass }} {{ formatclass }} " height="15">
+                                <div class="listitemfloating">&nbsp;
+                                    <a href="Javascript:EditThis('{{ listitem.getId() }}');" class="{{ listclass }}">
+                                        {{ listitem.getFieldData('oxsort') }}
+                                    </a>
+                                </div>
+                            </td>
+                            <td style="vertical-align: top;" class="{{ listclass }} {{ formatclass }} " height="15">
+                                <div class="listitemfloating">&nbsp;
+                                    <a href="Javascript:EditThis('{{ listitem.getId() }}');" class="{{ listclass }}">
+                                        {{ listitem.getFieldData('oxtitle')|truncate(200, "..", false) }}
+                                    </a>
+                                </div>
+                            </td>
+                            <td style="vertical-align: top;" class="{{ listclass }} {{ formatclass }} " height="15">
+                                <div class="listitemfloating">&nbsp;
+                                    <a href="Javascript:EditThis('{{ listitem.getId() }}');" class="{{ listclass }}">
+                                        {% if listitem.getFieldData('oxfolder') %}{{ translate({ ident: listitem.getFieldData('oxfolder'), noerror: true }) }}{% endif %}
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="{{ listclass }} {{ formatclass }} ">
+                                <div class="listitemfloating" style="float: left;">&nbsp;
+                                    <a href="Javascript:EditThis('{{ listitem.getId() }}');" class="{{ listclass }}">
+                                        {{ listitem.getFieldData('d3_cronjobid') }}
+                                    </a>
+                                </div>
+                                {% if not readonly %}
+                                    <a href="Javascript:DeleteThis('{{ listitem.getId() }}');" class="delete" id="del.{{ _cnt }}" title="" {% include "help.html.twig" with {helpid: "item_delete"} %}></a>
+                                {% endif %}
+                            </td>
+                        {% endblock %}
+                    </tr>
+                    {% if blWhite == "2" %}
+                        {% set blWhite = "" %}
+                    {% else %}
+                        {% set blWhite = "2" %}
+                    {% endif %}
+                {% endfor %}
+                {% include "pagenavisnippet.html.twig" with {colspan: "6"} %}
+            </table>
+        </form>
+    </div>
+
+{% else %}
+    <form name="search" id="search" action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+        {% include "_formparams.html.twig" with {cl: oViewConf.getActiveClassName(), lstrt: lstrt, actedit: actedit, oxid: oxid, fnc: "", language: actlang, editlanguage: actlang} %}
+
+        {% if blShowLangSwitch %}
+            <label for="changelang">{{ translate({ ident: "D3_CFG_MOD_LIST_SETTLANG" }) }}</label>
+            <select id="changelang" name="changelang" class="editinput" onChange="top.oxid.admin.changeLanguage();">
+                {% for lang in languages %}
+                    <option value="{{ lang.id }}" {% if lang.selected %}SELECTED{% endif %}>{{ lang.name }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+    </form>
+{% endif %}
+
+{% include "pagetabsnippet.html.twig" %}
+
+<script type="text/javascript">
+
+    {% set rawMenuItemTitle = oView.d3GetMenuItemTitle() %}
+    {% set rawMenuSubItemTitle = oView.d3GetMenuSubItemTitle() %}
+    if (parent.parent) {
+        parent.parent.sShopTitle   = "{{ actshopobj.oxshops__oxname.getRawValue()|addslashes }}";
+        parent.parent.sMenuItem    = "{{ rawMenuItemTitle|translate|striptags }}";
+        parent.parent.sMenuSubItem = "{{ rawMenuSubItemTitle|translate|striptags }}";
+        parent.parent.sWorkArea    = "{% if isset(_act) %}{{ _act }}{% endif %}";
+        parent.parent.setTitle();
+    }
+</script>
+</body>
+</html>

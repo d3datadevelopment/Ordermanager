@@ -1,0 +1,16 @@
+{% block ordermanager_admin_action_setsendednowdate %}
+    <dl class="{{ blActionRestriction }}">
+        {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oAction, blActionRestriction: blActionRestriction, readonly: readonly} %}
+        <dd>
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_action_setsendednowdate_editor %}
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_action_setsendednowdate_viewer %}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_ACTION_ORDERSETSENDEDNOW_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_ACTION_ORDERSETSENDEDNOW_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}

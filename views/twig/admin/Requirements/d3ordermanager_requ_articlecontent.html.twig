@@ -1,0 +1,39 @@
+{% block ordermanager_admin_requ_articlecontent %}
+    <dl class="{{ blActionRestriction }}">
+        <dt>
+            <input type="hidden" name="value[blCheckOrderArticle{{ oRequ.getSlotId() }}_status]" value="0">
+            {% set sStatusVarName = "blCheckOrderArticle"|cat(oRequ.getSlotId())|cat("_status") %}
+            <input id="RequArticleContent{{ oRequ.getSlotId() }}" class="edittext ext_edittext" type="checkbox" name="value[blCheckOrderArticle{{ oRequ.getSlotId() }}_status]" value='1' {% if edit.getValue(sStatusVarName) == 1 %}checked{% endif %} {{ blActionRestriction }} {{ readonly }}>
+            <label for="RequArticleContent{{ oRequ.getSlotId() }}">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ARTICLECONTENT" }) }} ({{ oRequ.getSlotId() }})</label>
+        </dt>
+        <dd>
+            {% set sRegExpVarName = "sArticleContent"|cat(oRequ.getSlotId())|cat("RegExp") %}
+            {% set sTypeVarName = "sArticleContent"|cat(oRequ.getSlotId())|cat("Type") %}
+            {% if oView.isEditMode() %}
+                {% block ordermanager_admin_requ_articlecontent_editor %}
+                    <label for="RequArticleContent{{ oRequ.getSlotId() }}Type">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ARTICLECONTENT2" }) }}</label>
+                    <SELECT id="RequArticleContent{{ oRequ.getSlotId() }}Type" class="editinput" name="value[sArticleContent{{ oRequ.getSlotId() }}Type]" size="1" {{ blActionRestriction }} {{ readonly }}>
+                        {% for type, translation in oRequ.getTypeList() %}
+                            <option value="{{ type }}" {% if edit.getValue(sTypeVarName) == type %}selected{% endif %}>{{ translate({ ident: translation }) }}</option>
+                        {% endfor %}
+                    </SELECT>:
+
+                    <label for="sArticleContentRegExp" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ARTICLECONTENT" }) }}</label>
+                    <input id="sArticleContentRegExp" class="editinput" type="text" size="30" maxlength="100" name="value[sArticleContent{{ oRequ.getSlotId() }}RegExp]" value="{{ edit.getValue(sRegExpVarName) }}" {{ blActionRestriction }} {{ readonly }}>
+                {% endblock %}
+            {% else %}
+                {% block ordermanager_admin_requ_articlecontent_viewer %}
+                    <label for="RequArticleContent{{ oRequ.getSlotId() }}Type">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ARTICLECONTENT2" }) }}</label>
+                    {% for type, translation in oRequ.getTypeList() %}
+                        {% if edit.getValue(sTypeVarName) == type %}
+                            {{ translate({ ident: translation }) }}
+                        {% endif %}
+                    {% endfor %}
+                    : {{ edit.getValue(sRegExpVarName) }}
+                {% endblock %}
+            {% endif %}
+            {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC")} %}
+        </dd>
+        <div class="spacer"></div>
+    </dl>
+{% endblock %}
