@@ -32,14 +32,15 @@
     "league/flysystem": "^1.0",
     "splitbrain/php-cli": "^1.1",
     "html2text/html2text": "^4.2",
-    "d3/oxid-sql-logger": "^1.2.2",
-    "d3/oxidservicebridges": "^1.1.0",
+    "d3/oxid-sql-logger": "^2.0.0",
+    "d3/oxidservicebridges": "^2.0.0",
     "ext-mbstring": "*"
   },
   "require-dev": {
     "mikey179/vfsstream": "^1.6",
     "donatj/mock-webserver": "^2.6",
-    "php": "^7.4",
+    "php": "^8.0",
+    "ext-sourceguardian": "^14",
     "friendsofphp/php-cs-fixer": "~3.13.0",
     "phpstan/phpstan": "^1.10",
     "boxblinkracer/phpunuhi": "^1.12",
@@ -52,8 +53,8 @@
   "autoload": {
     "psr-4": {
       "D3\\Ordermanager\\": "",
-      "D3\\Ordermanager\\publicDir\\": "./public",
-      "D3\\Ordermanager\\tests\\unit\\publicDir\\": "./tests/unit/public"
+      "D3\\Ordermanager\\publicDir\\": "./assets",
+      "D3\\Ordermanager\\tests\\unit\\publicDir\\": "./tests/unit/assets"
     }
   },
   "bin": ["bin/d3_ordermanager_cron"],
