@@ -176,6 +176,7 @@
                                 <input type="hidden" name="ordermanagerid" value="-1">
                                 <table  style="border: none; padding: 0; width: 100%;">
                                     {% set listclass = "listitem" %}
+                                    {% set blExecNote = false %}
                                     {% for oManager in oView.d3GetJobList() %}
                                         <tr>
                                             {% set sExecTime = oManager.getLastExecutedTime(oxid) %}
@@ -236,7 +237,7 @@
                                         {% endif %}
                                     {% endfor %}
                                     {% if blExecNote %}
-                                        <tr><td colspan="2" style="text-align: right;"><sub>{{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_EXECSTART_DESC" }) }}</sub></td></tr>
+                                        <tr><td colspan="3" style="text-align: right;"><sub>{{ translate({ ident: "D3_ORDERMANAGER_ORDERMAIN_EXECSTART_DESC" }) }}</sub></td></tr>
                                     {% endif %}
                                 </table>
                             </form>

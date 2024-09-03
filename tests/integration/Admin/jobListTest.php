@@ -1,2 +1,93 @@
-<?php ?><?php /** This Software is the property of D³ Data Development and is protected by copyright law - it is NOT Freeware.  Any unauthorized use of this software without a valid license key is a violation of the license agreement and will be prosecuted by civil and criminal law.  Inhaber: Thomas Dartsch Alle Rechte vorbehalten  @package Auftragsmanager @version 6.0.0.0 SourceGuardian (09.02.2024) @author  Daniel Seifert support@shopmodule.com @copyright (C) 2024, D3 Data Development @see https://www.d3data.de */ ?><?php
-if(!function_exists('sg_load')){$__v=phpversion();$__x=explode('.',$__v);$__v2=$__x[0].'.'.(int)$__x[1];$__u=strtolower(substr(php_uname(),0,3));$__ts=(@constant('PHP_ZTS') || @constant('ZEND_THREAD_SAFE')?'ts':'');$__f=$__f0='ixed.'.$__v2.$__ts.'.'.$__u;$__ff=$__ff0='ixed.'.$__v2.'.'.(int)$__x[2].$__ts.'.'.$__u;$__ed=@ini_get('extension_dir');$__e=$__e0=@realpath($__ed);$__dl=function_exists('dl') && function_exists('file_exists') && @ini_get('enable_dl') && !@ini_get('safe_mode');if($__dl && $__e && version_compare($__v,'5.2.5','<') && function_exists('getcwd') && function_exists('dirname')){$__d=$__d0=getcwd();if(@$__d[1]==':') {$__d=str_replace('\\','/',substr($__d,2));$__e=str_replace('\\','/',substr($__e,2));}$__e.=($__h=str_repeat('/..',substr_count($__e,'/')));$__f='/ixed/'.$__f0;$__ff='/ixed/'.$__ff0;while(!file_exists($__e.$__d.$__ff) && !file_exists($__e.$__d.$__f) && strlen($__d)>1){$__d=dirname($__d);}if(file_exists($__e.$__d.$__ff)) dl($__h.$__d.$__ff); else if(file_exists($__e.$__d.$__f)) dl($__h.$__d.$__f);}if(!function_exists('sg_load') && $__dl && $__e0){if(file_exists($__e0.'/'.$__ff0)) dl($__ff0); else if(file_exists($__e0.'/'.$__f0)) dl($__f0);}if(!function_exists('sg_load')){$__ixedurl='https://www.sourceguardian.com/loaders/download.php?php_v='.urlencode($__v).'&php_ts='.($__ts?'1':'0').'&php_is='.@constant('PHP_INT_SIZE').'&os_s='.urlencode(php_uname('s')).'&os_r='.urlencode(php_uname('r')).'&os_m='.urlencode(php_uname('m'));$__sapi=php_sapi_name();if(!$__e0) $__e0=$__ed;if(function_exists('php_ini_loaded_file')) $__ini=php_ini_loaded_file(); else $__ini='php.ini';if((substr($__sapi,0,3)=='cgi')||($__sapi=='cli')||($__sapi=='embed')){$__msg="\nPHP script '".__FILE__."' is protected by SourceGuardian and requires a SourceGuardian loader '".$__f0."' to be installed.\n\n1) Download the required loader '".$__f0."' from the SourceGuardian site: ".$__ixedurl."\n2) Install the loader to ";if(isset($__d0)){$__msg.=$__d0.DIRECTORY_SEPARATOR.'ixed';}else{$__msg.=$__e0;if(!$__dl){$__msg.="\n3) Edit ".$__ini." and add 'extension=".$__f0."' directive";}}$__msg.="\n\n";}else{$__msg="<html><body>PHP script '".__FILE__."' is protected by <a href=\"https://www.sourceguardian.com/\">SourceGuardian</a> and requires a SourceGuardian loader '".$__f0."' to be installed.<br><br>1) <a href=\"".$__ixedurl."\" target=\"_blank\">Click here</a> to download the required '".$__f0."' loader from the SourceGuardian site<br>2) Install the loader to ";if(isset($__d0)){$__msg.=$__d0.DIRECTORY_SEPARATOR.'ixed';}else{$__msg.=$__e0;if(!$__dl){$__msg.="<br>3) Edit ".$__ini." and add 'extension=".$__f0."' directive<br>4) Restart the web server";}}$__msg.="</body></html>";}die($__msg);exit();}}return sg_load('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');
+<?php
+
+/**
+ * Copyright (c) D3 Data Development (Inh. Thomas Dartsch)
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ *
+ * https://www.d3data.de
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <info@shopmodule.com>
+ * @link      https://www.oxidmodule.com
+ */
+
+namespace D3\Ordermanager\tests\integration\Admin;
+
+use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_list;
+use D3\Ordermanager\tests\integration\d3IntegrationTestCase;
+use Exception;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+
+/**
+ * @coversNothing
+ */
+class jobListTest extends d3IntegrationTestCase
+{
+    public $sManagerId = 'managerTestId';
+
+    /**
+     * @throws Exception
+     */
+    public function createTestData()
+    {
+        $this->createManager($this->sManagerId);
+    }
+
+    /**
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws Exception
+     */
+    public function cleanTestData()
+    {
+        $this->deleteManager($this->sManagerId);
+    }
+
+    /**
+     * @test
+     */
+    public function getUnfilteredJobList()
+    {
+        $controller = oxNew(d3_cfg_ordermanageritem_list::class);
+        $_GET['viewListSize'] = $_POST['viewListSize'] = 300;
+        $list = $controller->getItemList();
+        // ToDo: check if it use page navigation and doesn't contain all items
+        $this->assertGreaterThan(
+            0,
+            $list->count()
+        );
+
+        $this->assertArrayHasKey(
+            $this->sManagerId,
+            $list
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function getFilteredJobList()
+    {
+        $_POST['where'] = [
+            'd3modprofile'  => [
+                'oxtitle'   => 'orderManagerTestTitle',
+            ],
+        ];
+
+        $controller = oxNew(d3_cfg_ordermanageritem_list::class);
+        $list = $controller->getItemList();
+
+        $this->assertGreaterThan(
+            0,
+            $list->count()
+        );
+
+        $this->assertArrayHasKey(
+            $this->sManagerId,
+            $list
+        );
+    }
+}

@@ -21,30 +21,38 @@
         "role": "Owner"
     }
   ],
+  "support": {
+    "email": "support@shopmodule.com"
+  },
   "homepage": "https://www.oxidmodule.com/",
   "license": [
     "proprietary"
   ],
   "require": {
+    "php": "^8.0",
+    "ext-sourceguardian": ">=14",
     "ext-pdo": "*",
-    "oxid-esales/oxideshop-ce": "7.0 - 7.0",
-    "d3/modcfg": "^7.0",
+    "oxid-esales/oxideshop-ce": "7.0 - 7.1",
+    "d3/modcfg": "^7.1.1.0",
     "league/flysystem": "^1.0",
     "splitbrain/php-cli": "^1.1",
     "html2text/html2text": "^4.2",
     "d3/oxid-sql-logger": "^2.0.0",
     "d3/oxidservicebridges": "^2.0.0",
+    "beberlei/assert": "^3.3",
+    "guzzlehttp/guzzle": "^7.8.1",
     "ext-mbstring": "*"
   },
   "require-dev": {
-    "mikey179/vfsstream": "^1.6",
+    "d3/testingtools": "^1.2.0.0",
+    "phpunit/phpunit": "^9.1.1",
+    "mikey179/vfsstream": "^1.6.8",
     "donatj/mock-webserver": "^2.6",
-    "php": "^8.0",
-    "ext-sourceguardian": "^14",
     "friendsofphp/php-cs-fixer": "~3.13.0",
     "phpstan/phpstan": "^1.10",
     "boxblinkracer/phpunuhi": "^1.12",
-    "rector/rector": "^0.18.13"
+    "rector/rector": "^0.18.13",
+    "infection/infection": "^0.29.5"
   },
   "suggest": {
     "d3/pdfdocuments": "enables the automatic generation, dispatch and storage of highly customizable PDF documents",
@@ -53,7 +61,12 @@
   "autoload": {
     "psr-4": {
       "D3\\Ordermanager\\": "",
-      "D3\\Ordermanager\\publicDir\\": "./assets",
+      "D3\\Ordermanager\\publicDir\\": "./public"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "D3\\Ordermanager\\tests\\": "./tests",
       "D3\\Ordermanager\\tests\\unit\\publicDir\\": "./tests/unit/assets"
     }
   },
@@ -64,8 +77,11 @@
     "phpstan": "./vendor/bin/phpstan --configuration=vendor/d3/ordermanager/phpstan.neon analyse",
     "phpstan-report": "./vendor/bin/phpstan --configuration=vendor/d3/ordermanager/phpstan.neon analyse --error-format=json > vendor/d3/ordermanager/tests/phpstan.report.json",
 
-    "phpunit": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --bootstrap=source/bootstrap.php --config=vendor/d3/ordermanager/tests/",
-    "phpunit-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-text --bootstrap=source/bootstrap.php --config=vendor/d3/ordermanager/tests/ --coverage-html=vendor/d3/ordermanager/tests/result/coverage",
+    "phpunit": "XDEBUG_MODE=off ./vendor/bin/phpunit --config=vendor/d3/ordermanager/tests/ --no-coverage",
+    "phpunit-line-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/ordermanager/tests/ --coverage-html=vendor/d3/ordermanager/tests/result/coverage",
+    "phpunit-path-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/ordermanager/tests/ --coverage-html=vendor/d3/ordermanager/tests/result/coverage --path-coverage",
+
+    "infection": "./vendor/bin/infection --configuration=vendor/d3/ordermanager/infection.json5",
 
     "rector": "./vendor/bin/rector process --dry-run --config ./vendor/d3/ordermanager/rector.php",
 

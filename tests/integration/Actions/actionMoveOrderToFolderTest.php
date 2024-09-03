@@ -1,2 +1,213 @@
-<?php ?><?php /** This Software is the property of D³ Data Development and is protected by copyright law - it is NOT Freeware.  Any unauthorized use of this software without a valid license key is a violation of the license agreement and will be prosecuted by civil and criminal law.  Inhaber: Thomas Dartsch Alle Rechte vorbehalten  @package Auftragsmanager @version 6.0.0.0 SourceGuardian (09.02.2024) @author  Daniel Seifert support@shopmodule.com @copyright (C) 2024, D3 Data Development @see https://www.d3data.de */ ?><?php
-if(!function_exists('sg_load')){$__v=phpversion();$__x=explode('.',$__v);$__v2=$__x[0].'.'.(int)$__x[1];$__u=strtolower(substr(php_uname(),0,3));$__ts=(@constant('PHP_ZTS') || @constant('ZEND_THREAD_SAFE')?'ts':'');$__f=$__f0='ixed.'.$__v2.$__ts.'.'.$__u;$__ff=$__ff0='ixed.'.$__v2.'.'.(int)$__x[2].$__ts.'.'.$__u;$__ed=@ini_get('extension_dir');$__e=$__e0=@realpath($__ed);$__dl=function_exists('dl') && function_exists('file_exists') && @ini_get('enable_dl') && !@ini_get('safe_mode');if($__dl && $__e && version_compare($__v,'5.2.5','<') && function_exists('getcwd') && function_exists('dirname')){$__d=$__d0=getcwd();if(@$__d[1]==':') {$__d=str_replace('\\','/',substr($__d,2));$__e=str_replace('\\','/',substr($__e,2));}$__e.=($__h=str_repeat('/..',substr_count($__e,'/')));$__f='/ixed/'.$__f0;$__ff='/ixed/'.$__ff0;while(!file_exists($__e.$__d.$__ff) && !file_exists($__e.$__d.$__f) && strlen($__d)>1){$__d=dirname($__d);}if(file_exists($__e.$__d.$__ff)) dl($__h.$__d.$__ff); else if(file_exists($__e.$__d.$__f)) dl($__h.$__d.$__f);}if(!function_exists('sg_load') && $__dl && $__e0){if(file_exists($__e0.'/'.$__ff0)) dl($__ff0); else if(file_exists($__e0.'/'.$__f0)) dl($__f0);}if(!function_exists('sg_load')){$__ixedurl='https://www.sourceguardian.com/loaders/download.php?php_v='.urlencode($__v).'&php_ts='.($__ts?'1':'0').'&php_is='.@constant('PHP_INT_SIZE').'&os_s='.urlencode(php_uname('s')).'&os_r='.urlencode(php_uname('r')).'&os_m='.urlencode(php_uname('m'));$__sapi=php_sapi_name();if(!$__e0) $__e0=$__ed;if(function_exists('php_ini_loaded_file')) $__ini=php_ini_loaded_file(); else $__ini='php.ini';if((substr($__sapi,0,3)=='cgi')||($__sapi=='cli')||($__sapi=='embed')){$__msg="\nPHP script '".__FILE__."' is protected by SourceGuardian and requires a SourceGuardian loader '".$__f0."' to be installed.\n\n1) Download the required loader '".$__f0."' from the SourceGuardian site: ".$__ixedurl."\n2) Install the loader to ";if(isset($__d0)){$__msg.=$__d0.DIRECTORY_SEPARATOR.'ixed';}else{$__msg.=$__e0;if(!$__dl){$__msg.="\n3) Edit ".$__ini." and add 'extension=".$__f0."' directive";}}$__msg.="\n\n";}else{$__msg="<html><body>PHP script '".__FILE__."' is protected by <a href=\"https://www.sourceguardian.com/\">SourceGuardian</a> and requires a SourceGuardian loader '".$__f0."' to be installed.<br><br>1) <a href=\"".$__ixedurl."\" target=\"_blank\">Click here</a> to download the required '".$__f0."' loader from the SourceGuardian site<br>2) Install the loader to ";if(isset($__d0)){$__msg.=$__d0.DIRECTORY_SEPARATOR.'ixed';}else{$__msg.=$__e0;if(!$__dl){$__msg.="<br>3) Edit ".$__ini." and add 'extension=".$__f0."' directive<br>4) Restart the web server";}}$__msg.="</body></html>";}die($__msg);exit();}}return sg_load('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');
+<?php
+
+/**
+ * Copyright (c) D3 Data Development (Inh. Thomas Dartsch)
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ *
+ * https://www.d3data.de
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <info@shopmodule.com>
+ * @link      https://www.oxidmodule.com
+ */
+
+namespace D3\Ordermanager\tests\integration\Actions;
+
+use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
+use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
+use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
+use Doctrine\DBAL\Exception as DBALException;
+use Exception;
+use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Config;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\Eshop\Core\Model\ListModel;
+use OxidEsales\Eshop\Core\Registry;
+
+/**
+ * @coversNothing
+ */
+class actionMoveOrderToFolderTest extends d3OrdermanagerActionIntegrationTestCase
+{
+    public $sManagerId = 'managerTestId';
+    public $aOrderIdList = [
+        'orderTestIdNo1',
+        'orderTestIdNo2',
+    ];
+
+    public $sCurrentValue = 'currentFolder';
+    public $sExpectedValue = 'newFolder';
+
+    /**
+     * @throws Exception
+     */
+    public function createTestData()
+    {
+        $this->createManager($this->sManagerId);
+
+        $this->createOrder(
+            $this->aOrderIdList[0],
+            [
+                'oxorderdate'   => '2018-01-01 00:00:00',
+                'oxfolder'     => $this->sCurrentValue,
+                'oxbillcompany' => __CLASS__,
+            ]
+        );
+
+        $this->createOrder(
+            $this->aOrderIdList[1],
+            [
+                'oxorderdate'   => '2018-01-01 00:00:00',
+                'oxfolder'     => $this->sCurrentValue,
+                'oxbillcompany' => __CLASS__,
+            ]
+        );
+    }
+
+    /**
+     * @throws DBALException
+     */
+    public function cleanTestData()
+    {
+        $this->deleteManager($this->sManagerId);
+        $this->deleteOrder($this->aOrderIdList[0]);
+        $this->deleteOrder($this->aOrderIdList[1]);
+    }
+
+    /**
+     * @return d3ordermanager
+     * @throws Exception
+     */
+    public function getConfiguredManagerExistingFolder()
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blActionOrder2Folder_status', true);
+        $oManager->setValue('sOrderFolder', $this->sExpectedValue);
+        $oManager->setValue('blItemExecute', true);
+
+        return $oManager;
+    }
+
+    /**
+     * @return d3ordermanager
+     * @throws Exception
+     */
+    public function getConfiguredManagerNotExistingFolder()
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blActionOrder2Folder_status', true);
+        $oManager->setValue('sOrderFolder', 'notExistingFolder');
+        $oManager->setValue('blItemExecute', true);
+
+        return $oManager;
+    }
+
+    /**
+     * @return ListModel
+     * @throws Exception
+     */
+    public function getFilledResultList()
+    {
+        return $this->getResultList([$this->aOrderIdList[0]]);
+    }
+
+    /**
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     */
+    public function actionChangeConcernedOrderExistingFolder()
+    {
+        /** @var Config $config */
+        $config = d3GetOxidDIC()->get('d3ox.ordermanager.'.Config::class);
+        $config->setConfigParam(
+            'aOrderfolder',
+            [
+                $this->sCurrentValue => '#FF0000',
+                $this->sExpectedValue => '#FF0000',
+            ]
+        );
+
+        // prevent save trigger action in test
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+
+        $oExecute = $this->getExecuteMock($this->getConfiguredManagerExistingFolder());
+        $oExecute->startJobItemExecution();
+
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
+
+        /** @var Order $oOrder */
+        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder->load($this->aOrderIdList[0]);
+        $this->assertSame(
+            $this->sExpectedValue,
+            $oOrder->getFieldData('oxfolder')
+        );
+
+        /** @var Order $oOrder */
+        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder->load($this->aOrderIdList[1]);
+        $this->assertSame(
+            $this->sCurrentValue,
+            $oOrder->getFieldData('oxfolder')
+        );
+    }
+
+    /**
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     */
+    public function actionChangeConcernedOrderNotExistingFolder()
+    {
+        /** @var Config $config */
+        $config = d3GetOxidDIC()->get('d3ox.ordermanager.'.Config::class);
+        $config->setConfigParam(
+            'aOrderfolder',
+            [
+                $this->sCurrentValue => '#FF0000',
+            ]
+        );
+
+        // prevent save trigger action in test
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+
+        $oExecute = $this->getExecuteMock($this->getConfiguredManagerNotExistingFolder());
+        $oExecute->startJobItemExecution();
+
+        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
+
+        /** @var Order $oOrder */
+        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder->load($this->aOrderIdList[0]);
+        $this->assertSame(
+            $this->sCurrentValue,
+            $oOrder->getFieldData('oxfolder')
+        );
+
+        /** @var Order $oOrder */
+        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder->load($this->aOrderIdList[1]);
+        $this->assertSame(
+            $this->sCurrentValue,
+            $oOrder->getFieldData('oxfolder')
+        );
+    }
+}

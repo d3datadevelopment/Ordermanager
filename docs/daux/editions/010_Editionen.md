@@ -6,7 +6,7 @@ Das Modul **{$modulename}** erhalten Sie in verschiedenen Editionen mit untersch
 
 ## Funktionsumfang
 
-|                                   | Free-Edition  | Standard-Edition  | Premium-Edition   |
+|                                   | Free-Edition  | Standard-Edition  |  Premium-Edition  |
 |-----------------------------------|:-------------:|:-----------------:|:-----------------:|
 | Anzahl möglicher Aufgaben         | 5             | 25                | beliebig          |
 | vor-Ausführung-Script möglich     |               |                   | X                 |
@@ -14,7 +14,7 @@ Das Modul **{$modulename}** erhalten Sie in verschiedenen Editionen mit untersch
 
 ## Aufgabenauslöser
 
-|                                               | Free-Edition  | Standard-Edition  | Premium-Edition   |
+|                                               | Free-Edition  | Standard-Edition  |  Premium-Edition  |
 |-----------------------------------------------|:-------------:|:-----------------:|:-----------------:|
 | periodischer Start per Cronjob                | X             | X                 | X                 |
 | manueller Start direkt an den Bestellungen    | X             | X                 | X                 |
@@ -23,7 +23,7 @@ Das Modul **{$modulename}** erhalten Sie in verschiedenen Editionen mit untersch
 
 ## Bedingungen
 
-|                                                   | Free-Edition  | Standard-Edition  | Premium-Edition   |
+|                                                   | Free-Edition  | Standard-Edition  |  Premium-Edition  |
 |---------------------------------------------------|:-------------:|:-----------------:|:-----------------:|
 | ab (inklusive) Bestellnummer                      | X             | X                 | X                 |
 | bis (inklusive) Bestellnummer                     | X             | X                 | X                 |
@@ -58,7 +58,7 @@ Das Modul **{$modulename}** erhalten Sie in verschiedenen Editionen mit untersch
 
 ## Aktionen
 
-|                                               | Free-Edition  | Standard-Edition  | Premium-Edition   |
+|                                               | Free-Edition  | Standard-Edition  |  Premium-Edition  |
 |-----------------------------------------------|:-------------:|:-----------------:|:-----------------:|
 | E-Mail senden                                 | X             | X                 | X                 |
 | Aufträge in Ordner verschieben                | X             | X                 | X                 |

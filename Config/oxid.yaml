@@ -114,6 +114,7 @@ services:
     arguments:
       - 2
     shared:     true
+    deprecated: ~
 
   # DB_num
   d3ox.ordermanager.OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface.num:
@@ -124,6 +125,7 @@ services:
     arguments:
       - 1
     shared:     true
+    deprecated: ~
 
   # Facts
   d3ox.ordermanager.OxidEsales\Facts\Facts:

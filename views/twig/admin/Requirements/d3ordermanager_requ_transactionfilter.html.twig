@@ -6,7 +6,7 @@
                 {% block ordermanager_admin_requ_transactionfilter_editor %}
                     <label for="sOrderTransStatus" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_TRANSACTION" }) }}</label>
                     <SELECT id="sOrderTransStatus" class="editinput" name="value[sOrderTransStatus]" size="1" {{ blActionRestriction }} {{ readonly }}>
-                        {% for sStatus in oView.getTransStatusList() %}
+                        {% for sStatus in oRequ.getTransStatusList() %}
                             <option value="{{ sStatus }}" {% if edit.getValue('sOrderTransStatus') == sStatus %}selected{% endif %}>
                                 {% set sStatusMLIdent = "D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_"|cat(sStatus) %}
                                 {{ translate({ ident: sStatusMLIdent }) }}
@@ -16,7 +16,7 @@
                 {% endblock %}
             {% else %}
                 {% block ordermanager_admin_requ_transactionfilter_viewer %}
-                    {% for sStatus in oView.getTransStatusList() %}
+                    {% for sStatus in oRequ.getTransStatusList() %}
                         {% if edit.getValue('sOrderTransStatus') == sStatus %}
                             {% set sStatusMLIdent = "D3_ORDERMANAGER_REQU_ORDERTRANSSTATUS_"|cat(sStatus) %}
                             {{ translate({ ident: sStatusMLIdent }) }},

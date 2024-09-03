@@ -1,4 +1,5 @@
 {% block ordermanager_admin_requ_ordersum %}
+    {{ script({ include: "https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js", dynamic: __oxid_include_dynamic }) }}
     <dl class="{{ blActionRestriction }}">
         {% include "@d3ordermanager/admin/inc/d3ordermanager_activeswitch.html.twig" with {oActionRequ: oRequ, blActionRestriction: blActionRestriction, readonly: readonly} %}
         <dd>
@@ -19,6 +20,18 @@
                     </SELECT>
 
                     <input id="RequOrderSumValue" style="text-align: right;" class="editinput" type="text" size="8" maxlength="20" name="value[sOrderSumValue]" value="{% if edit.getValue('sOrderSumValue') %}{{ edit.getValue('sOrderSumValue') }}{% else %}0.00{% endif %}" {{ blActionRestriction }} {{ readonly }}>
+
+                    {% set d3JsFnc %}{% apply spaceless %}
+                        new Cleave('#RequOrderSumValue', {
+                            numeral: true,
+                            numeralThousandsGroupStyle: 'thousand',
+                            numeralDecimalMark: ',',
+                            delimiter: '.',
+                            stripLeadingZeroes: false,
+                            swapHiddenInput: true
+                        });
+                    {% endapply %}{% endset %}
+                    {{ script({ add: d3JsFnc.__toString(), dynamic: __oxid_include_dynamic }) }}
                     <label for="RequOrderSumValue">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERSUM_DEFCUR" }) }}</label>
                 {% endblock %}
             {% else %}

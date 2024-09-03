@@ -177,6 +177,7 @@ function d3TogglePlain(checkelement) {
                                 <input type="hidden" name="ordermanagerid" value="-1">
                                 <table  style="border: none; padding: 0; width: 100%;">
                                     [{assign var="listclass" value="listitem"}]
+                                    [{assign var="blExecNote" value=false}]
                                     [{foreach from=$oView->d3GetJobList() item="oManager"}]
                                         <tr>
                                             [{assign var="sExecTime" value=$oManager->getLastExecutedTime($oxid)}]
@@ -237,7 +238,7 @@ function d3TogglePlain(checkelement) {
                                         [{/if}]
                                     [{/foreach}]
                                     [{if $blExecNote}]
-                                        <tr><td colspan="2" style="text-align: right;"><sub>[{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_EXECSTART_DESC"}]</sub></td></tr>
+                                        <tr><td colspan="3" style="text-align: right;"><sub>[{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_EXECSTART_DESC"}]</sub></td></tr>
                                     [{/if}]
                                 </table>
                             </form>

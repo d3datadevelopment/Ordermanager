@@ -2,17 +2,13 @@
 
 ## Requirements
 
+Please install the packages listed in the composer.json in "require-dev". Unfortunately Composer does not provide an automatic installation.
+
 ### Configuration
 
 Make sure the module has been activated with a valid license key.
-
-Please install the packages listed in the composer.json in "require-dev". Unfortunately Composer does not provide an automatic installation.
+Configure the error reporting to `error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED &~ E_WARNING);` in the `config.inc.php` due some deprecation issues in original OXID code
 
 ## Unit Tests
 
-To execute unit tests run the following:
-
-```
-cd /var/www/oxideshop/
-PHPBIN=/usr/bin/php7.4 ./vendor/bin/runtests
-```
+commands are described in composer.json scripts section
