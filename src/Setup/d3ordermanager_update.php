@@ -46,15 +46,15 @@ class d3ordermanager_update extends d3install_updatebase
 {
     public $sModKey = 'd3_ordermanager';
     public $sModName = 'Auftragsmanager';
-    public $sModVersion = '5.1.4.0';
-    public $sModRevision = '5140';
+    public $sModVersion = '5.2.0.0';
+    public $sModRevision = '5200';
     public $sBaseConf =
-    'PoPv2==UDB2My9wRkhYU29CY3lrZFBWTllCYlVPQVprUEl3U3JUOENiZmFjQi9qTDQxT0VMV1FxanJnM
-3IyditnSHc3THFqWVJRK0Z0WjduU1M2bTQrV3lhcjRMSnhaN3lvam9vNjk4ako4OWZyclZEV200Z3RVV
-ncxNDdSNkJoVnd0b04zL0FRMXV2NmZFVGZVZnFzMyt0L0hkbjVzazlkbE1tdTFBMHlsQWJaL0szZmlJT
-E5jSjNYcStVUnV0T09JMHVHY05KdnBjWjVmSUZ2bEJYaGtOQk9IZHNzL1NRNkdGSU94MjBnRGI2cE5uQ
-09jR05TRWo1SjZDUEJ1MEdSYXFhenRIb0ZHUmpKMTJXZnhvL05LNjRQM2FlV1F5QjVra2pOdzh5bGdhe
-WM5UkNtcVZOU1U0bnAvVlJwSE8rdU91RDRJM2UrSDFlNkdhRGZZR1FvWEY5dVZnPT0=';
+    '653v2==Skg3aFlYdGlWbk1JNms4Wm5ZL2UwUDRYV0hiVmFoYkV4SWtVTHpLTVBSbzN1eTR4Mi85ZUZye
+WVXMEZ6ZDk0cTVmV25LT3M0eDM4dDVOQmd3K2dicUxkajdDc1JkWU5uSEV4VXUvSmdYZitXcUVqUU5ke
+DlsdFM5bFFrWGUrRUk2Q1piTmNiVHJEZ3dqMlR0YzJmZnRFdGYxNDlOYlEraW9oTjhQSU9ZNnFxSzdnT
+1RBOFdNaW5SaUJVS05mUDlycXQ1NEE2TzBLMldhU1A5aHQzeTlhWDk4R1JtM2lnNWVHdk44NTJPdzVUc
+G5rMzdqQnJRbDExRVlEa0lkNVduVU0wNzZPYjg2bS9zWUlpYjhaaWJTTDNEQjMzQXlMdHFvS1hka0hja
+ExydXFPZGN5MFVFQnBGMG1lK0x4ODhEdGVXRXRzNk5pYnhPUE5PbmhxRk5kK3hRPT0=';
     public $sRequirements = '';
     public $sBaseValue = 'TyUzQTglM0ElMjJzdGRDbGFzcyUyMiUzQTUlM0ElN0JzJTNBMjMlM0ElMjJkM19jZmdfbW9kX19hRm9sZGVyTGlzdCUyMiUzQmElM0E1JTNBJTdCaSUzQTAlM0JzJTNBMjUlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfTkVXJTIyJTNCaSUzQTElM0JzJTNBMzIlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfUEFZQURWQU5DRSUyMiUzQmklM0EyJTNCcyUzQTM2JTNBJTIyRDNfT1JERVJNQU5BR0VSX09SREVSX1BBWVNUQVRVU0NIRUNLJTIyJTNCaSUzQTMlM0JzJTNBMzYlM0ElMjJEM19PUkRFUk1BTkFHRVJfT1JERVJfREVMSVZFUllTVEFUVVMlMjIlM0JpJTNBNCUzQnMlM0EzNyUzQSUyMkQzX09SREVSTUFOQUdFUl9PUkRFUl9PUkRFUlBST0NFU1NJTkclMjIlM0IlN0RzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19ibENyb25BY3RpdmUlMjIlM0JzJTNBMSUzQSUyMjAlMjIlM0JzJTNBMjQlM0ElMjJkM19jZmdfbW9kX19pTWF4T3JkZXJDbnQlMjIlM0JzJTNBMiUzQSUyMjUwJTIyJTNCcyUzQTI1JTNBJTIyZDNfY2ZnX21vZF9fc0Nyb25QYXNzd29yZCUyMiUzQnMlM0EwJTNBJTIyJTIyJTNCcyUzQTMwJTNBJTIyZDNfY2ZnX21vZF9fYmxDYWxjU3RhdE9uRGVtYW5kJTIyJTNCcyUzQTElM0ElMjIwJTIyJTNCJTdE';
 
@@ -1064,7 +1064,7 @@ WM5UkNtcVZOU1U0bnAvVlJwSE8rdU91RDRJM2UrSDFlNkdhRGZZR1FvWEY5dVZnPT0=';
     public function getExampleJobItem1InsertFields(Shop $oShop): array
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
+        $iShopBit = strlen((string) $sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return [
             [
@@ -1251,7 +1251,7 @@ WM5UkNtcVZOU1U0bnAvVlJwSE8rdU91RDRJM2UrSDFlNkdhRGZZR1FvWEY5dVZnPT0=';
     public function getExampleJobItem2InsertFields(Shop $oShop): array
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
+        $iShopBit = strlen((string)$sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return [
             [
@@ -1436,7 +1436,7 @@ WM5UkNtcVZOU1U0bnAvVlJwSE8rdU91RDRJM2UrSDFlNkdhRGZZR1FvWEY5dVZnPT0=';
     public function getExampleJobItem3InsertFields(Shop $oShop): array
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
+        $iShopBit = strlen((string)$sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return [
             [
@@ -1621,7 +1621,7 @@ WM5UkNtcVZOU1U0bnAvVlJwSE8rdU91RDRJM2UrSDFlNkdhRGZZR1FvWEY5dVZnPT0=';
     public function getExampleJobItem4InsertFields(Shop $oShop): array
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
+        $iShopBit = strlen((string)$sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return [
             [
@@ -1806,7 +1806,7 @@ WM5UkNtcVZOU1U0bnAvVlJwSE8rdU91RDRJM2UrSDFlNkdhRGZZR1FvWEY5dVZnPT0=';
     public function getExampleJobItem5InsertFields(Shop $oShop): array
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
+        $iShopBit = strlen((string)$sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return [
             [
@@ -1991,7 +1991,7 @@ WM5UkNtcVZOU1U0bnAvVlJwSE8rdU91RDRJM2UrSDFlNkdhRGZZR1FvWEY5dVZnPT0=';
     public function getExampleJobItem6InsertFields(Shop $oShop): array
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
+        $iShopBit = strlen((string)$sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return [
             [
@@ -2176,7 +2176,7 @@ WM5UkNtcVZOU1U0bnAvVlJwSE8rdU91RDRJM2UrSDFlNkdhRGZZR1FvWEY5dVZnPT0=';
     public function getExampleJobItem7InsertFields(Shop $oShop): array
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
+        $iShopBit = strlen((string)$sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return [
             [
@@ -2361,7 +2361,7 @@ WM5UkNtcVZOU1U0bnAvVlJwSE8rdU91RDRJM2UrSDFlNkdhRGZZR1FvWEY5dVZnPT0=';
     public function getExampleJobItem8InsertFields(Shop $oShop): array
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
+        $iShopBit = strlen((string)$sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return [
             [
@@ -2546,7 +2546,7 @@ WM5UkNtcVZOU1U0bnAvVlJwSE8rdU91RDRJM2UrSDFlNkdhRGZZR1FvWEY5dVZnPT0=';
     public function getExampleJobItem9InsertFields(Shop $oShop): array
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
+        $iShopBit = strlen((string)$sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return [
             [
@@ -2731,7 +2731,7 @@ WM5UkNtcVZOU1U0bnAvVlJwSE8rdU91RDRJM2UrSDFlNkdhRGZZR1FvWEY5dVZnPT0=';
     public function getExampleJobItem10InsertFields(Shop $oShop): array
     {
         $sShopId = $oShop->getId();
-        $iShopBit = strlen($sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
+        $iShopBit = strlen((string)$sShopId) == 1 ? $this->getD3BitMask()->getIntByBitPosition((int) $sShopId) : '1';
 
         return [
             [

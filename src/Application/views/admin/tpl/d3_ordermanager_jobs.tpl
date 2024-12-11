@@ -144,7 +144,7 @@ function d3TogglePlain(checkelement) {
                                     <label for="mailplain">[{oxmultilang ident="D3_ORDERMANAGER_ORDERMAIN_PLAIN"}]</label>
                                 </td>
                                 <td class="listitem2" style="padding: 5px; height: auto;">
-                                    <textarea id="mailplain" name="aContent[mail][plain]">[{$aMailContent.plain}]</textarea>
+                                    <textarea id="mailplain" name="aContent[mail][plain]" class="mceNoEditor">[{$aMailContent.plain}]</textarea>
                                 </td>
                             </tr>
                         </table>
