@@ -2077,7 +2077,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oPdfHandlerMock->expects($this->once())->method('createPdfDocument')->with(
             $this->isInstanceOf(invoicePdf::class),
             $this->anything()
-        )->willReturn(true);
+        );
         $oPdfHandlerMock->method('getOxidPdfSaveDir')->willReturn('saveDir');
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */

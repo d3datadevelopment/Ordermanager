@@ -214,6 +214,8 @@ return [
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_FIELD_DESC'    => 'Dieser Filter prüft auf ein frei definierbares Feld der "oxorder"-Datenbanktabelle. Tragen Sie hier den tatsächlichen Namen des zu prüfenden Feldes ein. Soll auf Inhalt in Sprachfeldern (*_1) geprüft werden, ist hier die Angabe des Multilang-Namens erforderlich.',
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_VALUE'         => 'Feldwert',
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_CONTENT'   => 'enthält Wert:',
+    'D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_NOVALUE'       => 'Feldwert',
+    'D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_NOCONTENT' => 'enthält Wert nicht:',
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_EMPTY'     => 'ist leer',
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_NOTEMPTY'  => 'ist nicht leer',
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_ERR_UNVALIDFIELD'=> 'kein gültiges Feld gesetzt',

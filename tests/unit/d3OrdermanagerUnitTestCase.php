@@ -65,12 +65,6 @@ abstract class d3OrdermanagerUnitTestCase extends d3ModCfgUnitTestCase
                 echo self::D3CLI_COLOR_YELLOW . PHP_EOL . '      - The shop should not be tested in production mode for caching reasons.'
                     . PHP_EOL . PHP_EOL . self::D3CLI_COLOR_DEFAULT;
             }
-            if (false === $shopConfiguration->hasModuleConfiguration('invoicepdf') ||
-                 false === $moduleState->isActive('invoicepdf', Registry::getConfig()->getShopId())
-            ) {
-                echo self::D3CLI_COLOR_YELLOW . PHP_EOL . '      - no OXID InvoicePdf module installed' . PHP_EOL .
-                     '        Coverage report may be incomplete.' . PHP_EOL . PHP_EOL . self::D3CLI_COLOR_DEFAULT;
-            }
             if (false === $shopConfiguration->hasModuleConfiguration('d3PdfDocuments') ||
                  false === $moduleState->isActive('d3PdfDocuments', Registry::getConfig()->getShopId())
             ) {

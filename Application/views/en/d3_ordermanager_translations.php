@@ -214,6 +214,8 @@ return [
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_FIELD_DESC'    => 'This filter checks for a freely definable field of the "oxorder" database table. Enter the actual name of the field to be checked here. If you want to check for content in language fields (* _1), the specification of the multi-length name is required here.',
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_VALUE'         => 'field value',
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_CONTENT'   => 'contains value:',
+    'D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_NOVALUE'       => 'field value',
+    'D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_NOCONTENT' => 'doesn\'t contains value:',
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_EMPTY'     => 'is empty',
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_NOTEMPTY'  => 'is not empty',
     'D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_ERR_UNVALIDFIELD'=> 'no valid field set',

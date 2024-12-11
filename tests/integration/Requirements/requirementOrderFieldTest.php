@@ -19,6 +19,7 @@ use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException;
+use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirement_orderfield;
 use Doctrine\DBAL\Exception as DBALException;
 use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -35,6 +36,8 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
     public $aOrderIdList = [
         'orderTestIdNo1',
         'orderTestIdNo2',
+        'orderTestIdNo3',
+        'orderTestIdNo4',
     ];
     public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
@@ -101,6 +104,34 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
                 ],
             ]
         );
+
+        $this->createOrder(
+            $this->aOrderIdList[2],
+            [
+                'oxorderdate'   => '2018-01-01 00:00:00',
+                'oxbillcompany' => __CLASS__,
+                'oxcardid'      => 0,
+            ],
+            [
+                $this->aOrderArticleIdList[1] => [
+                    'oxtitle'       => __CLASS__,
+                ],
+            ]
+        );
+
+        $this->createOrder(
+            $this->aOrderIdList[3],
+            [
+                'oxorderdate'   => '2018-01-01 00:00:00',
+                'oxbillcompany' => __CLASS__,
+                'oxcardid'      => '0000-00-00',
+            ],
+            [
+                $this->aOrderArticleIdList[1] => [
+                    'oxtitle'       => __CLASS__,
+                ],
+            ]
+        );
     }
 
     /**
@@ -125,8 +156,9 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
 
         $oManager->setValue('blCheckOrderField_status', true);
         $oManager->setValue('sOrderField_FieldName', ' oxcardid');
-        $oManager->setValue('sCheckOrderFieldType', 'content');
+        $oManager->setValue('sCheckOrderFieldType', d3ordermanager_requirement_orderfield::TYPE_CONTENT);
         $oManager->setValue('sOrderField_FieldValue', 'testContent');
+        $oManager->setValue('sOrderField_FieldNoValue', '');
 
         return $oManager;
     }
@@ -146,25 +178,26 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerContent());
         $oOrderList = $oListGenerator->getConcernedItems();
 
-        $this->assertTrue(
-            $oOrderList->count() === 1
-            && $oOrderList->offsetExists($this->aOrderIdList[0])
-            && false == $oOrderList->offsetExists($this->aOrderIdList[1])
-        );
+        $this->assertTrue($oOrderList->count() >= 1);
+        $this->assertTrue($oOrderList->offsetExists($this->aOrderIdList[0]));
+        $this->assertFalse($oOrderList->offsetExists($this->aOrderIdList[1]));
+        $this->assertFalse($oOrderList->offsetExists($this->aOrderIdList[2]));
+        $this->assertFalse($oOrderList->offsetExists($this->aOrderIdList[3]));
     }
 
     /**
      * @return d3ordermanager
      * @throws Exception
      */
-    public function getConfiguredManagerNotEmpty()
+    public function getConfiguredManagerNoContent()
     {
         $oManager = $this->getManagerMock($this->sManagerId);
 
         $oManager->setValue('blCheckOrderField_status', true);
         $oManager->setValue('sOrderField_FieldName', ' oxcardid');
-        $oManager->setValue('sCheckOrderFieldType', 'notempty');
+        $oManager->setValue('sCheckOrderFieldType', d3ordermanager_requirement_orderfield::TYPE_NOCONTENT);
         $oManager->setValue('sOrderField_FieldValue', '');
+        $oManager->setValue('sOrderField_FieldNoValue', 'testContent');
 
         return $oManager;
     }
@@ -179,16 +212,55 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
      * @throws d3_cfg_mod_exception
      * @throws Exception
      */
-    public function requirementsSelectsRightOrdersArticleCountryDelSingle()
+    public function requirementsSelectsRightOrdersNoContent()
+    {
+        $oListGenerator = $this->getListGenerator($this->getConfiguredManagerNoContent());
+        $oOrderList = $oListGenerator->getConcernedItems();
+
+        $this->assertTrue($oOrderList->count() >= 3, $oOrderList->count().' orders found');
+        $this->assertFalse($oOrderList->offsetExists($this->aOrderIdList[0]));
+        $this->assertTrue($oOrderList->offsetExists($this->aOrderIdList[1]));
+        $this->assertTrue($oOrderList->offsetExists($this->aOrderIdList[2]));
+        $this->assertTrue($oOrderList->offsetExists($this->aOrderIdList[3]));
+    }
+
+    /**
+     * @return d3ordermanager
+     * @throws Exception
+     */
+    public function getConfiguredManagerNotEmpty()
+    {
+        $oManager = $this->getManagerMock($this->sManagerId);
+
+        $oManager->setValue('blCheckOrderField_status', true);
+        $oManager->setValue('sOrderField_FieldName', ' oxcardid');
+        $oManager->setValue('sCheckOrderFieldType', d3ordermanager_requirement_orderfield::TYPE_NOTEMPTY);
+        $oManager->setValue('sOrderField_FieldValue', '');
+        $oManager->setValue('sOrderField_FieldNoValue', '');
+
+        return $oManager;
+    }
+
+    /**
+     * @test
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws StandardException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
+     * @throws Exception
+     */
+    public function requirementsSelectsRightOrdersNotEmpty()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerNotEmpty());
         $oOrderList = $oListGenerator->getConcernedItems();
 
-        $this->assertTrue(
-            $oOrderList->count() >= 1
-            && $oOrderList->offsetExists($this->aOrderIdList[0])
-            && false == $oOrderList->offsetExists($this->aOrderIdList[1])
-        );
+        $this->assertTrue($oOrderList->count() >= 3, $oOrderList->count().' orders found');
+        $this->assertTrue($oOrderList->offsetExists($this->aOrderIdList[0]));
+        $this->assertFalse($oOrderList->offsetExists($this->aOrderIdList[1]));
+        $this->assertTrue($oOrderList->offsetExists($this->aOrderIdList[2]));
+        $this->assertTrue($oOrderList->offsetExists($this->aOrderIdList[3]));
     }
 
     /**
@@ -201,8 +273,9 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
 
         $oManager->setValue('blCheckOrderField_status', true);
         $oManager->setValue('sOrderField_FieldName', ' oxcardid');
-        $oManager->setValue('sCheckOrderFieldType', 'empty');
+        $oManager->setValue('sCheckOrderFieldType', d3ordermanager_requirement_orderfield::TYPE_EMPTY);
         $oManager->setValue('sOrderField_FieldValue', '');
+        $oManager->setValue('sOrderField_FieldNoValue', '');
 
         return $oManager;
     }
@@ -222,11 +295,11 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
         $oListGenerator = $this->getListGenerator($this->getConfiguredManagerEmpty());
         $oOrderList = $oListGenerator->getConcernedItems();
 
-        $this->assertTrue(
-            $oOrderList->count() >= 1
-            && $oOrderList->offsetExists($this->aOrderIdList[1])
-            && false == $oOrderList->offsetExists($this->aOrderIdList[0])
-        );
+        $this->assertTrue($oOrderList->count() >= 1, $oOrderList->count().' orders found');
+        $this->assertFalse($oOrderList->offsetExists($this->aOrderIdList[0]));
+        $this->assertFalse($oOrderList->offsetExists($this->aOrderIdList[2]));
+        $this->assertFalse($oOrderList->offsetExists($this->aOrderIdList[3]));
+        $this->assertTrue($oOrderList->offsetExists($this->aOrderIdList[1]));
     }
 
     /**

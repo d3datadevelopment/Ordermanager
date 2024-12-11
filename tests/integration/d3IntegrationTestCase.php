@@ -45,9 +45,13 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
      */
     public function setUp(): void
     {
-        /** @var Connection $connection */
-        $connection = ContainerFactory::getInstance()->getContainer()->get(ConnectionProviderInterface::class)->get();
-        $connection->prepare('SET time_zone = ?')->executeStatement([date_default_timezone_get()]);
+        try {
+            /** @var Connection $connection */
+            $connection = ContainerFactory::getInstance()->getContainer()->get(ConnectionProviderInterface::class)->get();
+            $connection->prepare('SET time_zone = ?')->executeStatement([date_default_timezone_get()]);
+        } catch (\Doctrine\DBAL\Exception\DriverException $e) {
+            // catch General error: 1298 Unknown or incorrect time zone: 'Europe/Berlin' on MariaDB
+        }
 
         d3DicHandler::getUncompiledInstance();
 

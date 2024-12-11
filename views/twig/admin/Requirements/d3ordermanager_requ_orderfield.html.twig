@@ -8,13 +8,22 @@
                     <input id="RequOrderFieldField" class="editinput" type="text" size="30" maxlength="100" name="value[sOrderField_FieldName]" value="{{ edit.getValue('sOrderField_FieldName') }}" {{ readonly }} {{ blActionRestriction }}>
                     {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_FIELD_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_FIELD_DESC")} %}<br>
                     {{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_VALUE" }) }} <br>
+                    
                     <input id="RequOrderFieldTypeContent" type="radio" style="margin-left: 30px;" name="value[sCheckOrderFieldType]" value="content" {% if edit.getValue('sCheckOrderFieldType') == 'content' or edit.getValue('sCheckOrderFieldType') == '' %}checked{% endif %} {{ readonly }} {{ blActionRestriction }}>
                     <label for="RequOrderFieldTypeContent">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_CONTENT" }) }}</label>
                     <label for="sOrderFieldValue" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERFIELDVALUE" }) }}</label>
                     <input id="sOrderFieldValue" class="editinput" type="text" size="30" maxlength="100" name="value[sOrderField_FieldValue]" value="{{ edit.getValue('sOrderField_FieldValue') }}" {{ readonly }} {{ blActionRestriction }}>
                     {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC")} %}<br>
+                    
+                    <input id="RequOrderFieldTypeNoContent" type="radio" style="margin-left: 30px;" name="value[sCheckOrderFieldType]" value="nocontent" {% if edit.getValue('sCheckOrderFieldType') == 'nocontent' %}checked{% endif %} {{ readonly }} {{ blActionRestriction }}>
+                    <label for="RequOrderFieldTypeNoContent">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_NOCONTENT" }) }}</label>
+                    <label for="sOrderFieldNoValue" style="position: absolute; left: -2000px">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERFIELDNOVALUE" }) }}</label>
+                    <input id="sOrderFieldNoValue" class="editinput" type="text" size="30" maxlength="100" name="value[sOrderField_FieldNoValue]" value="{{ edit.getValue('sOrderField_FieldNoValue') }}" {{ readonly }} {{ blActionRestriction }}>
+                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC")} %}<br>
+                    
                     <input id="RequOrderFieldTypeEmpty" type="radio" style="margin-left: 30px;" name="value[sCheckOrderFieldType]" value="empty" {% if edit.getValue('sCheckOrderFieldType') == 'empty' %}checked{% endif %} {{ readonly }} {{ blActionRestriction }}>
                     <label for="RequOrderFieldTypeEmpty">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_EMPTY" }) }}</label><br>
+                    
                     <input id="RequOrderFieldTypeNotEmpty" type="radio" style="margin-left: 30px;" name="value[sCheckOrderFieldType]" value="notempty" {% if edit.getValue('sCheckOrderFieldType') == 'notempty' %}checked{% endif %} {{ readonly }} {{ blActionRestriction }}>
                     <label for="RequOrderFieldTypeNotEmpty">{{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_NOTEMPTY" }) }}</label>
                 {% endblock %}
@@ -24,6 +33,10 @@
                     {{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERFIELDVALUE_VALUE" }) }} <br>
                     {% if edit.getValue('sCheckOrderFieldType') == 'content' or edit.getValue('sCheckOrderFieldType') == '' %}
                         {{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_CONTENT" }) }} {{ edit.getValue('sOrderField_FieldValue') }}
+                        {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC")} %}<br>
+                    {% endif %}
+                    {% if edit.getValue('sCheckOrderFieldType') == 'nocontent' %}
+                        {{ translate({ ident: "D3_ORDERMANAGER_REQU_ORDERFIELDVALUETYPE_NOCONTENT" }) }} {{ edit.getValue('sOrderField_FieldNoValue') }}
                         {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_REQU_ARTICLECONTENT2_DESC")} %}<br>
                     {% endif %}
                     {% if edit.getValue('sCheckOrderFieldType') == 'empty' %}

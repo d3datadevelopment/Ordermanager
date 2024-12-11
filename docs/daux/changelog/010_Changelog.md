@@ -7,7 +7,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://git.d3data.de/D3Private/Ordermanager/compare/6.0.1.0...rel_6.x)
+## [Unreleased](https://git.d3data.de/D3Private/Ordermanager/compare/6.1.0.0...rel_6.x)
+
+## [6.1.0.0](https://git.d3data.de/D3Private/Ordermanager/compare/6.0.1.0...6.1.0.0) - 2024-12-11
+### Added
+- installable in OXID 7.2
+- prevent showing TinyMCE WYSIWYG editor on plain input field
+- order field requirement can check for not set content
+- log cron request
+
+### Changed
+- order field requirement check query content is field type dependent
+- make input fields ready for WYSIWYG editor
 
 ## [6.0.1.0](https://git.d3data.de/D3Private/Ordermanager/compare/6.0.0.0...6.0.1.0) - 2024-09-03
 ### Added

@@ -1,0 +1,32 @@
+{
+  "source": {
+    "directories": [
+      "vendor/d3/ordermanager"
+    ],
+    "excludes": [
+      ".php-cs-fixer.php",
+      "d3metadata.php",
+      "metadata.php",
+      "rector.php"
+    ]
+  },
+  "timeout": 60,
+  "logs": {
+    "text": "tests/result/infection/infection.log",
+    "html": "tests/result/infection/infection.html",
+    "summary": "tests/result/infection/summary.log",
+    "json": "tests/result/infection/infection-log.json",
+    "perMutator": "tests/result/infection/per-mutator.md",
+    "summaryJson": "tests/result/infection/summary.json"
+  },
+  "tmpDir": "./infection/tmp",
+  "phpUnit": {
+    "configDir": "tests"
+  },
+  "mutators": {
+    "@default": true,
+    "@function_signature": false
+  },
+  "testFramework":"phpunit",
+  "bootstrap":"source/bootstrap.php"
+}
