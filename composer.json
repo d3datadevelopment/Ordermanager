@@ -33,7 +33,7 @@
   },
   "require": {
     "php": "^8.0",
-    "ext-sourceguardian": "*",
+    "ext-sourceguardian": ">=14",
     "ext-pdo": "*",
     "oxid-esales/oxideshop-ce": "6.8 - 6.14",
     "d3/modcfg": "^6.1.0.000",
@@ -48,7 +48,7 @@
     "mikey179/vfsstream": "^1.4",
     "donatj/mock-webserver": "^2.1",
     "php": "^8.0",
-    "ext-sourceguardian": "*",
+    "ext-sourceguardian": ">=14",
     "friendsofphp/php-cs-fixer": "^3.9",
     "phpstan/phpstan": "^1.8"
   },
