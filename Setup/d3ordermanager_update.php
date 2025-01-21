@@ -49,17 +49,17 @@ class d3ordermanager_update extends d3install_updatebase
 
     public $sModName = 'Auftragsmanager';
 
-    public $sModVersion = '6.1.0.0';
+    public $sModVersion = '6.1.1.0';
 
-    public $sModRevision = '6100';
+    public $sModRevision = '6110';
 
     public $sBaseConf =
-    '9p4v2==RmE5QVhVeWIxSVViVlpNZTIxeUFpa25LVWZZaTVUVXQ5L2dIWG1lY3M0Uk5VRFZVR1hzQzFIL
-2VjcWpYNksrSUxIczFhUDZiOG83akhLazdBM3R3bXJ6OUplT21lSGR2OHJ4cXBaTFlOK2xWV2tJZVlNe
-WlBaitkWVpOZGxDTXpsblZjMVVPSVV2eVZOOFBTY1J2NDkrWG9KbTR0c2NQK3FMaGdBRWliTmNlaDBIV
-1UvczRUdlM0MGZZVkRCeHRrdytEalZWQk9jY3U5VEk1T3QyenJHbFpZMVRmVnVtVG5KUnEyRGQvUUM5K
-zdPT2U5eEhTcVVuL2lrRHBNRjV3ajNDQ3p1a3lwS0FxZjF3bVloS0VHRXdGYnZNSkVuSkV2eDJrWFlKL
-0RyMG5TYUJuaHhMMFIrVExPNVQzV2VCbXk5K053L1FFbUlBeUhUTFA4V2IxVWRBPT0=';
+    '7pRv2==aHpGK1VtdkFlYWlpSVgwSENOUjNqSi9MTGxWdjg2ZVNUVGdGQksyNHpLSjdQdUFjZlhQZ0dMU
+EFHa0YwVXovMGhtbnhoVXdlN3FtM2dBWEUzbmxUbEozUWVZL0UraWhIS0tkSHZZdmhsSmp4THJvd3IzO
+U92WmlFN3hlOWU0SGtTT2Zpa0RkOVZCWUhiQ3FMelF4SVllRVhjZmx3ZXFpdjBqQzVWR2hGUVVacGd2M
+WxMVEd2bFRVbkoyTUVEQkY4K2xrNDArYituVS9haGhKeFJ0R0RMenpseC9IeEdwMWQ2RkpWY1FJTXFyb
+0xpNjN5eDBOWlVKTFc3VWNpVUpscmFHWkRWVkM2WFRGM1RnUTRjTzdoODNIaTJtaGtuVnZtZ1hwZDYrM
+FZ2a3diWFJEbm9YNUF1ZmRTamkrMjdMQThZTkdVQmNZTW9McEhRVUgzSUQzVjl3PT0=';
 
     public $sRequirements = '';
 

@@ -52,10 +52,11 @@ use OxidEsales\Eshop\Core\Exception\DatabaseException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
-use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateEngineInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateRendererBridgeInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateRendererInterface;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
 {
@@ -80,13 +81,16 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
         parent::__construct();
     }
 
-    protected function _d3GetOrderManagerTemplateEngine(): TemplateEngineInterface
+    /**
+     * @return TemplateRendererInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function _d3GetOrderManagerTemplateRenderer(): TemplateRendererInterface
     {
-        /** @var TemplateRendererInterface $renderer */
-        $renderer = $this->d3getOrderManagerDIContainer()
+        return $this->d3getOrderManagerDIContainer()
             ->get(TemplateRendererBridgeInterface::class)
             ->getTemplateRenderer();
-        return $renderer->getTemplateEngine();
     }
 
     /**
@@ -115,13 +119,9 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
             [d3GetOxidDIC()->get(d3ordermanager_renderererrorhandler::class), 'd3HandleTemplateEngineErrors']
         );
 
-        $templateEngine = $this->_d3GetOrderManagerTemplateEngine();
-        foreach ($this->getViewData() as $key => $value) {
-            $templateEngine->addGlobal($key, $value);
-        }
-
-        $this->d3OMsetBody($templateEngine->render($this->_sOrderManagerInfoTemplate));
-        $this->d3OMsetAltBody($templateEngine->render($this->_sOrderManagerInfoPlainTemplate));
+        $templateRenderer = $this->_d3GetOrderManagerTemplateRenderer();
+        $this->d3OMsetBody($templateRenderer->renderTemplate($this->_sOrderManagerInfoTemplate, $this->getViewData()));
+        $this->d3OMsetAltBody($templateRenderer->renderTemplate($this->_sOrderManagerInfoPlainTemplate, $this->getViewData()));
 
         restore_error_handler();
 
@@ -215,6 +215,7 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
             if ($blSuccess && $oRemark instanceof Remark) {
                 $oRemark->save();
             }
+            $this->_d3RemoveOrderManagerPdfAttachmentFiles($oManager);
         } catch (emptyMessageException) {
         }
 
@@ -592,6 +593,11 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
 
         $this->d3addOrderManagerOXIDPdfAttachment($oOrderManager, $oPDFHandler);
         $this->d3addOrderManagerPdfDocumentsAttachment($oOrderManager, $oPDFHandler);
+    }
+
+    protected function _d3RemoveOrderManagerPdfAttachmentFiles()
+    {
+        // ToDo
     }
 
     /**

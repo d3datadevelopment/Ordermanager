@@ -116,17 +116,17 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::_d3GetOrderManagerTemplateEngine
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::_d3GetOrderManagerTemplateRenderer
      * @test
      * @throws ReflectionException
      */
-    public function templateEngineHasRightInstance()
+    public function templateRendererHasRightInstance()
     {
         $this->assertInstanceOf(
-            TemplateEngineInterface::class,
+            TemplateRendererInterface::class,
             $this->callMethod(
                 $this->_oModel,
-                '_d3GetOrderManagerTemplateEngine'
+                '_d3GetOrderManagerTemplateRenderer'
             )
         );
     }
@@ -176,23 +176,20 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $renderer = ContainerFactory::getInstance()->getContainer()
             ->get(TemplateRendererBridgeInterface::class)
             ->getTemplateRenderer();
-        $templateEngine = $renderer->getTemplateEngine();
-        $templateEngineClass = get_class($templateEngine);
 
-        /** @var TemplateEngineInterface|MockObject $templateEngineMock */
-        $templateEngineMock = $this->getMockBuilder($templateEngineClass)
-            ->onlyMethods(['render', 'addGlobal'])
+        /** @var TemplateRendererInterface|MockObject $templateRendererMock */
+        $templateRendererMock = $this->getMockBuilder(get_class($renderer))
+            ->onlyMethods(['renderTemplate'])
             ->disableOriginalConstructor()
             ->getMock();
-        $templateEngineMock->method('render')->willReturn('renderedTemplateContent');
-        $templateEngineMock->expects($this->exactly(count($viewData)))->method('addGlobal')->willReturn(true);
+        $templateRendererMock->method('renderTemplate')->willReturn('renderedTemplateContent');
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(Email::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
                 'getShop',
-                '_d3GetOrderManagerTemplateEngine',
+                '_d3GetOrderManagerTemplateRenderer',
                 'setMailParams',
                 'setViewData',
                 'processViewArray',
@@ -207,7 +204,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ])
             ->getMock();
         $oModelMock->method('getShop')->willReturn($oShopMock);
-        $oModelMock->method('_d3GetOrderManagerTemplateEngine')->willReturn($templateEngineMock);
+        $oModelMock->method( '_d3GetOrderManagerTemplateRenderer' )->willReturn( $templateRendererMock);
         $oModelMock->method('setMailParams')->willReturn(true);
         $oModelMock->method('setViewData')->willReturn(true);
         $oModelMock->method('processViewArray')->willReturn(true);
@@ -217,7 +214,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock->method('d3OMsetSubject')->willReturn(true);
         $oModelMock->expects($this->once())->method('setRecipient')->willReturn(true);
         $oModelMock->method('setReplyTo')->willReturn(true);
-        $oModelMock->method('getViewData')->willReturn($viewData);
+        $oModelMock->expects($this->exactly(2))->method('getViewData')->willReturn($viewData);
         $oModelMock->expects($this->once())->method('send')->willReturn($sendingSuccess);
 
         $this->_oModel = $oModelMock;

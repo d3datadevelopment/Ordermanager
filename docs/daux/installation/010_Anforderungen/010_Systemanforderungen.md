@@ -3,8 +3,7 @@ title: Systemanforderungen
 ---
 
 * PHP Version
-    * 8.0.x
-    * 8.1.x
+    * 8.x
 * PHP Decoder
     * installierter SourceGuardian Loader (PHP ab 8.0)
 * Shopeditionen
@@ -15,6 +14,8 @@ title: Systemanforderungen
 * Shopversionen
     * OXID eShop in Compilation Version 
         * 7.0.x
+        * 7.1.x
+        * 7.2.x
 * Themes und Templaterenderer
     * Das Modul benötigt keine Einbindung ins Frontend und ist damit von diesen Themes unabhängig.
     * Smarty-Templates
