@@ -94,6 +94,9 @@ class actionCustAddToGroupTest extends d3OrdermanagerActionIntegrationTestCase
                 $qb2->expr()->eq('oxobjectid', $qb2->createNamedParameter($this->aUserIdList[0])),
                 $qb2->expr()->eq('oxgroupsid', $qb2->createNamedParameter($this->aGroupsIdList[1]))
             ))->execute();
+
+        $this->deleteGroup($this->aGroupsIdList[0]);
+        $this->deleteGroup($this->aGroupsIdList[1]);
     }
 
     /**

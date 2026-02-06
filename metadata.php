@@ -15,7 +15,6 @@
 
 declare(strict_types=1);
 use D3\Ordermanager\Setup\Events;
-
 use D3\DIContainerHandler\definitionFileContainer;
 use D3\Ordermanager\Application\Model\Constants;
 use D3\Ordermanager\Modules\Application\Model as ModuleModel;
@@ -24,6 +23,8 @@ use D3\Ordermanager\Application\Controller\Admin as OMControllerAdmin;
 use D3\Ordermanager\Modules\Core\DefinitionFileContainer_ordermanager;
 use OxidEsales\Eshop\Application\Model as OxidModel;
 use OxidEsales\Eshop\Core as OxidCore;
+
+// @codeCoverageIgnoreStart
 
 /**
  * Metadata version
@@ -45,7 +46,7 @@ $aModule = [
         'en'    => 'Processes freely definable tasks on the basis of adjustable order lists.',
     ],
     'thumbnail'     => 'picture.svg',
-    'version'       => '6.1.1.0',
+    'version'       => '6.2.0.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'https://www.oxidmodule.com/',
@@ -79,12 +80,12 @@ $aModule = [
     ],
     'templates'   => [
         '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanagerset_main.tpl' => 'views/smarty/admin/d3_cfg_ordermanagerset_main.tpl',
-        '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_list.tpl'=> 'views/smarty/admin/d3_cfg_ordermanageritem_list.tpl',
-        '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_main.tpl'=> 'views/smarty/admin/d3_cfg_ordermanageritem_main.tpl',
-        '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_mall.tpl'=> 'views/smarty/admin/d3_cfg_ordermanageritem_mall.tpl',
+        '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_list.tpl' => 'views/smarty/admin/d3_cfg_ordermanageritem_list.tpl',
+        '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_main.tpl' => 'views/smarty/admin/d3_cfg_ordermanageritem_main.tpl',
+        '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_mall.tpl' => 'views/smarty/admin/d3_cfg_ordermanageritem_mall.tpl',
         '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_trigger.tpl' => 'views/smarty/admin/d3_cfg_ordermanageritem_trigger.tpl',
-        '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_overview.tpl'=> 'views/smarty/admin/d3_cfg_ordermanageritem_overview.tpl',
-        '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_requ.tpl'=> 'views/smarty/admin/d3_cfg_ordermanageritem_requ.tpl',
+        '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_overview.tpl' => 'views/smarty/admin/d3_cfg_ordermanageritem_overview.tpl',
+        '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_requ.tpl' => 'views/smarty/admin/d3_cfg_ordermanageritem_requ.tpl',
         '@' . Constants::OXID_MODULE_ID . '/admin/d3_cfg_ordermanageritem_action.tpl'  => 'views/smarty/admin/d3_cfg_ordermanageritem_action.tpl',
         '@' . Constants::OXID_MODULE_ID . '/admin/d3_ordermanager_jobs.tpl'        => 'views/smarty/admin/d3_ordermanager_jobs.tpl',
         '@' . Constants::OXID_MODULE_ID . '/admin/email/html/d3ordermanager_info_html.tpl'    => 'views/smarty/admin/email/html/d3ordermanager_info_html.tpl',
@@ -167,8 +168,6 @@ $aModule = [
             'views/smarty/admin/Actions/d3ordermanager_action_changedelcosts.tpl',
         '@' . Constants::OXID_MODULE_ID . '/admin/Actions/d3ordermanager_action_changediscount.tpl'      =>
             'views/smarty/admin/Actions/d3ordermanager_action_changediscount.tpl',
-        '@' . Constants::OXID_MODULE_ID . '/admin/Actions/d3ordermanager_action_generatepdf.tpl'         =>
-            'views/smarty/admin/Actions/d3ordermanager_action_generatepdf.tpl',
         '@' . Constants::OXID_MODULE_ID . '/admin/Actions/d3ordermanager_action_getpdfdocuments.tpl'         =>
             'views/smarty/admin/Actions/d3ordermanager_action_getpdfdocuments.tpl',
         '@' . Constants::OXID_MODULE_ID . '/admin/Actions/d3ordermanager_action_custaddtogroup.tpl'      =>
@@ -204,4 +203,19 @@ $aModule = [
             'file'      => 'views/smarty/blocks/admin/d3ordermanager_order_remark_type.tpl',
         ],
     ],
+    'settings' => [
+        [
+            'group'     => 'd3_ordermanager_general',
+            'name'      => 'd3_ordermanager_setting_keptlogfiles',
+            'type'      => 'str',
+            'value'     => '7',
+        ],
+        [
+            'group'     => 'd3_ordermanager_general',
+            'name'      => 'd3_ordermanager_setting_logErrorsOnly',
+            'type'      => 'bool',
+            'value'     => true,
+        ],
+    ],
 ];
+// @codeCoverageIgnoreEnd

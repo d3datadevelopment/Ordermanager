@@ -27,6 +27,7 @@ use D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck;
 use D3\Ordermanager\Application\Model\d3ordermanager_execute;
 use D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
+use D3\Ordermanager\Application\Model\Events\PartiallyRunEvent;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_requirementException;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_smartyException;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_templaterendererExceptionInterface;
@@ -43,6 +44,7 @@ use OxidEsales\Eshop\Core\UtilsView;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 use stdClass;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs
@@ -534,94 +536,26 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
      * @test
      * @throws ReflectionException
      */
-    public function ordermanagerStartExecutionNoConditionCheck()
+    public function ordermanagerStartExecution()
     {
-        /** @var d3ordermanager|MockObject $oManagerMock */
-        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->onlyMethods([
-                'load',
-                'setEditedValues',
-                'getValue',
-            ])
+        $eventDispatcherMock = $this->getMockBuilder(EventDispatcher::class)
+            ->onlyMethods(['dispatch'])
             ->getMock();
-        $oManagerMock->expects($this->once())->method('load')->willReturn(true);
-        $oManagerMock->expects($this->never())->method('setEditedValues');
-        $oManagerMock->method('getValue')->willReturn(false);
-
-        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
-        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager_execute::class)
-            ->onlyMethods([
-                'exec4order',
-                'finishJobExecution',
-                'orderMeetsConditions',
-            ])
-            ->setConstructorArgs([$oManagerMock])
-            ->getMock();
-        $oManagerExecuteMock->expects($this->once())->method('exec4order');
-        $oManagerExecuteMock->expects($this->once())->method('finishJobExecution');
-        $oManagerExecuteMock->method('orderMeetsConditions')->willReturn(false);
-
-        /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
-        $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
-            ->onlyMethods([
-                'getManager',
-                'getManagerExecute',
-            ])
-            ->getMock();
-        $oControllerMock->method('getManager')->willReturn($oManagerMock);
-        $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
-
-        $this->_oController = $oControllerMock;
-
-        $this->callMethod(
-            $this->_oController,
-            'd3execordermanager'
+        $eventDispatcherMock->expects($this->once())->method('dispatch')->with(
+            $this->isInstanceOf(PartiallyRunEvent::class),
         );
-    }
 
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::d3execordermanager
-     * @test
-     * @throws ReflectionException
-     */
-    public function ordermanagerStartExecutionConditionCheckPass()
-    {
-        /** @var d3ordermanager|MockObject $oManagerMock */
-        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->onlyMethods([
-                'load',
-                'setEditedValues',
-                'getValue',
-            ])
-            ->getMock();
-        $oManagerMock->expects($this->once())->method('load')->willReturn(true);
-        $oManagerMock->expects($this->never())->method('setEditedValues');
-        $oManagerMock->method('getValue')->willReturn(true);
-
-        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
-        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager_execute::class)
-            ->onlyMethods([
-                'exec4order',
-                'finishJobExecution',
-                'orderMeetsConditions',
-            ])
-            ->setConstructorArgs([$oManagerMock])
-            ->getMock();
-        $oManagerExecuteMock->expects($this->once())->method('exec4order');
-        $oManagerExecuteMock->expects($this->once())->method('finishJobExecution');
-        $oManagerExecuteMock->method('orderMeetsConditions')->willReturn(true);
+        $_GET['ordermanagerid'] = 'managerIdFixture';
 
         /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
             ->onlyMethods([
-                'getManager',
-                'getManagerExecute',
-                'checkForConfigurationException',
+                'getEventDispatcher',
+                'getEditObjectId',
             ])
             ->getMock();
-        $oControllerMock->method('getManager')->willReturn($oManagerMock);
-        $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
-        $oControllerMock->method('checkForConfigurationException');
+        $oControllerMock->method('getEventDispatcher')->willReturn($eventDispatcherMock);
+        $oControllerMock->method('getEditObjectId')->willReturn('orderId');
 
         $this->_oController = $oControllerMock;
 
@@ -637,55 +571,76 @@ class d3_ordermanager_jobsTest extends d3OrdermanagerUnitTestCase
      * @throws ReflectionException
      * @dataProvider cannotExecChangedContentsBecauseOfExceptionDataProvider
      */
-    public function ordermanagerStartExecutionConditionCheckFailed($exceptionClass)
+    public function ordermanagerStartExecutionFailed($exceptionClass)
     {
-        /** @var d3ordermanager|MockObject $oManagerMock */
-        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->onlyMethods([
-                'load',
-                'setEditedValues',
-                'getValue',
-            ])
-            ->getMock();
-        $oManagerMock->expects($this->once())->method('load')->willReturn(true);
-        $oManagerMock->expects($this->never())->method('setEditedValues');
-        $oManagerMock->method('getValue')->willReturn(true);
-
-        /** @var d3ordermanager_execute|MockObject $oManagerExecuteMock */
-        $oManagerExecuteMock = $this->getMockBuilder(d3ordermanager_execute::class)
-            ->onlyMethods([
-                'exec4order',
-                'finishJobExecution',
-                'orderMeetsConditions',
-            ])
-            ->setConstructorArgs([$oManagerMock])
-            ->getMock();
-        $oManagerExecuteMock->expects($this->never())->method('exec4order');
-        $oManagerExecuteMock->expects($this->never())->method('finishJobExecution');
-        $oManagerExecuteMock->method('orderMeetsConditions')->willReturn(false);
-
         /** @var d3ordermanager_requirementException|d3ordermanager_templaterendererExceptionInterface|MockObject $exception */
         $exception = $this->getMockBuilder($exceptionClass)
             ->disableOriginalConstructor()
             ->getMock();
 
+        $eventDispatcherMock = $this->getMockBuilder(EventDispatcher::class)
+            ->onlyMethods(['dispatch'])
+            ->getMock();
+        $eventDispatcherMock->expects($this->once())->method('dispatch')->with(
+            $this->isInstanceOf(PartiallyRunEvent::class),
+        )->willThrowException($exception);
+
+        $_GET['ordermanagerid'] = 'managerIdFixture';
+
         /** @var d3_ordermanager_jobs|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_ordermanager_jobs::class)
             ->onlyMethods([
-                'getManager',
-                'getManagerExecute',
-                'checkForConfigurationException',
+                'getEventDispatcher',
+                'getEditObjectId',
             ])
             ->getMock();
-        $oControllerMock->method('getManager')->willReturn($oManagerMock);
-        $oControllerMock->method('getManagerExecute')->willReturn($oManagerExecuteMock);
-        $oControllerMock->method('checkForConfigurationException')->willThrowException($exception);
+        $oControllerMock->method('getEventDispatcher')->willReturn($eventDispatcherMock);
+        $oControllerMock->method('getEditObjectId')->willReturn('orderId');
 
         $this->_oController = $oControllerMock;
 
         $this->callMethod(
             $this->_oController,
             'd3execordermanager'
+        );
+    }
+
+    /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getEventDispatcher
+     */
+    public function testGetEventDispatcher(): void
+    {
+        $sut = oxNew(d3_ordermanager_jobs::class);
+
+        $this->assertInstanceOf(
+            EventDispatcher::class,
+            $this->callMethod(
+                $sut,
+                'getEventDispatcher'
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs::getEvent
+     */
+    public function testGetEvent(): void
+    {
+        $sut = oxNew(d3_ordermanager_jobs::class);
+
+        $this->assertInstanceOf(
+            PartiallyRunEvent::class,
+            $this->callMethod(
+                $sut,
+                'getEvent',
+                ['foo', 'bar']
+            )
         );
     }
 

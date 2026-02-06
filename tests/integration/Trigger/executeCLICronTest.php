@@ -33,6 +33,9 @@ use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 
+/**
+ * @coversNothing
+ */
 class executeCLICronTest extends d3IntegrationTestCase
 {
     public $sManagerId = 'managerTestId';

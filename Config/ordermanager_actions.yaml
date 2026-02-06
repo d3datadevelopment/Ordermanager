@@ -118,23 +118,6 @@ services:
     synthetic:  true
     shared:     false
 
-  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf:
-    class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf
-    factory:    'oxNew'
-    shared:     false
-    arguments:
-      - D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf
-      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf.args.ordermanager'
-      - '@D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf.args.order'
-    # arg #1 ordermanager
-  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf.args.ordermanager:
-    synthetic:  true
-    shared:     false
-    # arg #2 order
-  D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf.args.order:
-    synthetic:  true
-    shared:     false
-
   D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments:
     class:      D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments
     factory:    'oxNew'

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-$finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__)
-;
+$finder = PhpCsFixer\Finder::create()->in(__DIR__);
 
 $header = <<<EOF
 Copyright (c) D3 Data Development (Inh. Thomas Dartsch)
@@ -20,7 +18,8 @@ https://www.d3data.de
 EOF;
 
 $config = new PhpCsFixer\Config();
-return $config->setRules([
+return $config->setRules(
+    [
         '@PHP80Migration' => true,
         '@PSR12' => true,
         'header_comment' => [
@@ -31,6 +30,6 @@ return $config->setRules([
         ],
         'php_unit_test_class_requires_covers' => true,
         'doctrine_annotation_indentation' => true,
-    ])
-    ->setFinder($finder)
-;
+    ]
+)
+->setFinder($finder);

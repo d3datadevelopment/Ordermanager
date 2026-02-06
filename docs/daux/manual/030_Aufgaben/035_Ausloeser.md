@@ -36,6 +36,10 @@ Sie haben die Wahl zwischen:
   
   > [i] Technisch gesehen erfolgt die Bearbeitung der Bestellung nach Ausführung von \OxidEsales\Eshop\Application\Model\Order::save()
 
+- programmierbare Auslöser
+  
+  Die Ausführung der Ausgabe erfolgt dann, wenn im Shop der Auslösercode gestartet wird. Dies kann an jeder beliebigen Stelle im Code passieren. Weitere Information zur Integration des Auslösers sind im Kapitel [Aufgaben mit programmierbarem Auslöser starten](../070_Aufgaben_fuer_alle_relevanten_Bestellungen_manuell_ausfuehren.md) beschrieben. 
+
 Aktive Auslöser werden für die schnelle Übersicht mit einen grünen Häkchen markiert.
 
 An jedem Auslöser können Sie die Ausführung einer Vorabsriptes und / oder eines Danachscriptes einstellen, welches vorbereitende oder nachbereitende Arbeiten ausführt (nur verfügbar in der [Premium-Edition](../../editions/010_Editionen.md).

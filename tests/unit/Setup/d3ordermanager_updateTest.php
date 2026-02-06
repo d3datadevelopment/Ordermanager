@@ -705,6 +705,13 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
                     'use_quote'     => true,
                     'use_multilang' => false,
                 ],
+                [
+                    'fieldname'     => 0,
+                    'content'       => "d3unknownContentId",
+                    'force_update'  => false,
+                    'use_quote'     => false,
+                    'use_multilang' => false,
+                ],
             ]
         );
 

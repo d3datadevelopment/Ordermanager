@@ -16,6 +16,8 @@ title: Systemanforderungen
         * 7.0.x
         * 7.1.x
         * 7.2.x
+        * 7.3.x
+        * 7.4.x
 * Themes und Templaterenderer
     * Das Modul benötigt keine Einbindung ins Frontend und ist damit von diesen Themes unabhängig.
     * Smarty-Templates

@@ -78,8 +78,13 @@
 <style>
     <!--
     .d3notallowed,
-    .d3notallowed a {
-        color: silver;
+    .d3notallowed a {color: silver;}
+    #liste td.active {background: none;}
+    #liste td span.active, #liste td span.inactive {height: 15px; width: 19%; display: block; float: left; border-right: 1px solid silver}
+    #liste td span:last-child {border-right: none;}
+    #liste td span.active {
+        background: url([{$config->getOutUrl()}]/admin_twig/src/bg/facelift/ico_active_facelift.png) no-repeat center center;
+        background-color: rgba(0, 0, 0, 0);
     }
     -->
 </style>
@@ -96,10 +101,9 @@
             <table style="border: none; padding: 0; width:100%;">
                 <colgroup>
                     [{block name="admin_d3ordermanager_list_colgroup"}]
-                        <col style="width: 3%">
-                        <col style="width: 3%">
+                        <col style="width: 10%">
                         <col style="width: 14%">
-                        <col style="width: 50%">
+                        <col style="width: 46%">
                         <col style="width: 20%">
                         <col style="width: 10%">
                     [{/block}]
@@ -107,9 +111,6 @@
                 <tr class="listitem">
                     [{block name="admin_d3ordermanager_list_filter"}]
                         <td style="vertical-align: middle; height; 20px;" class="listfilter first" nowrap>
-                            <div class="r1"><div class="b1">&nbsp;</div></div>
-                        </td>
-                        <td style="vertical-align: middle; height; 20px;" class="listfilter" nowrap>
                             <div class="r1"><div class="b1">&nbsp;</div></div>
                         </td>
                         <td style="vertical-align: middle; height; 20px;" class="listfilter" nowrap>
@@ -158,12 +159,7 @@
                     [{block name="admin_d3ordermanager_list_sorting"}]
                         <td class="listheader first" height="15">&nbsp;
                             <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$coreTableName}]', 'oxactive', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader" title="[{oxmultilang ident="D3_ORDERMANAGER_GENERAL_ACTIVTITLE_DESC"}]">
-                                [{oxmultilang ident="D3_ORDERMANAGER_GENERAL_ACTIVTITLE"}]
-                            </a>
-                        </td>
-                        <td class="listheader first" height="15">&nbsp;
-                            <a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$coreTableName}]', 'd3_om_execmanually', '[{$nextSortDir|default:"asc"}]');document.search.submit();" class="listheader" title="[{oxmultilang ident="D3_ORDERMANAGER_GENERAL_ACTIVMANTITLE_DESC"}]">
-                                [{oxmultilang ident="D3_ORDERMANAGER_GENERAL_ACTIVMANTITLE"}]
+                                [{oxmultilang ident="d3tbclordermanager_items_trigger"}]
                             </a>
                         </td>
                         <td class="listheader" height="15">&nbsp;
@@ -209,14 +205,11 @@
                                 [{assign var="listclass" value="listitem4"}]
                             [{/if}]
                             <td style="vertical-align: top;" class="[{$listclass}] [{$formatclass}] [{if $listitem->getFieldData('oxactive') == 1}] active[{/if}]" height="15">
-                                <div class="listitemfloating">
-                                    &nbsp;
-                                </div>
-                            </td>
-                            <td style="vertical-align: top;" class="[{$listclass}] [{$formatclass}] [{if $listitem->getFieldData('D3_OM_EXECMANUALLY')}] active[{/if}]" height="15">
-                                <div class="listitemfloating">
-                                    &nbsp;
-                                </div>
+                                <span class="[{if $listitem->getFieldData('oxactive') == 1 }] active[{else}] inactive[{/if}]" title="[{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_CRONJOB"}]"></span>
+                                <span class="[{if $listitem->getFieldData('D3_OM_EXECMANUALLY') == 1 }] active[{else}] inactive[{/if}]" title="[{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_MANUALLY"}]"></span>
+                                <span class="[{if $listitem->getFieldData('D3_OM_ORDERFINISHTRIGGERED') == 1 }] active[{else}] inactive[{/if}]" title="[{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_AFTERORDERCOMPLETED"}]"></span>
+                                <span class="[{if $listitem->getFieldData('D3_OM_ORDERSAVETRIGGERED') == 1 }] active[{else}] inactive[{/if}]" title="[{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_AFTERORDERSAVE"}]"></span>
+                                <span class="[{if $listitem->getFieldData('D3_OM_EVENTTRIGGERED') == 1 }] active[{else}] inactive[{/if}]" title="[{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_EVENTTRIGGER"}]"></span>
                             </td>
                             <td style="vertical-align: top;" class="[{$listclass}] [{$formatclass}] " height="15">
                                 <div class="listitemfloating">&nbsp;
@@ -257,7 +250,7 @@
                         [{assign var="blWhite" value="2"}]
                     [{/if}]
                 [{/foreach}]
-                [{include file="pagenavisnippet.tpl" colspan="6"}]
+                [{include file="pagenavisnippet.tpl" colspan="5"}]
             </table>
         </form>
     </div>

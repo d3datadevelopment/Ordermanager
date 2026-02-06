@@ -17,7 +17,16 @@ Geben Sie bei Veränderung eines Freitextfeldes als Feldname immer das Stammfeld
 vorgenommen.
 
 ### "E-Mail senden"
-Beim Versand von Mails können Sie als Quelle Ihres Mailinhalts CMS-Bausteine aus Ihrem Shop oder komplette Templatedateien verwenden. In beiden Möglichkeiten haben Sie die folgenden Variablen zur Verfügung, um die Mail zu individualisieren:
+Beim Versand von Mails können Sie als Quelle Ihres Mailinhalts CMS-Bausteine aus Ihrem Shop oder komplette Templatedateien verwenden. 
+
+Bei der Verwendung von Templatedateien tragen Sie bitte den kompletten Alias (also inkl. _main_ bzw. der Modul-ID) ein:
+
+Beispiele:
+
+- `include/email/subject.html.twig`
+- `@d3ordermanager/admin/email/plain/subject.html.twig`
+
+In beiden Möglichkeiten haben Sie die folgenden Variablen zur Verfügung, um die Mail zu individualisieren:
 
 | Variable          | Inhalt                                                                                                                |
 |-------------------|-----------------------------------------------------------------------------------------------------------------------|

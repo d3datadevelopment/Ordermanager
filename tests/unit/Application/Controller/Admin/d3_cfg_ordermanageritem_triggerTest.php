@@ -20,7 +20,6 @@ namespace D3\Ordermanager\tests\unit\Application\Controller\Admin;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger;
 use D3\Ordermanager\Application\Model\d3ordermanager;
-use D3\Ordermanager\Application\Model\d3ordermanager_conf;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
 use Doctrine\DBAL\Exception as DBALException;
 use Exception;

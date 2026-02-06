@@ -21,6 +21,7 @@ use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_list;
 use D3\Ordermanager\Application\Model\Constants;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist as ManagerList;
+use OxidEsales\Eshop\Core\Registry;
 
 class d3_cfg_ordermanageritem_list extends d3_cfg_mod_list
 {
@@ -35,4 +36,13 @@ class d3_cfg_ordermanageritem_list extends d3_cfg_mod_list
     protected $_sMenuItemTitle = 'd3mxordermanager';
 
     protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function render()
+    {
+        $this->addTplParam('config', Registry::getConfig());
+        return parent::render();
+    }
 }

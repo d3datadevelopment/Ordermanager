@@ -17,12 +17,12 @@ declare(strict_types=1);
 
 namespace D3\Ordermanager\Modules\Application\Model;
 
+use D3\ModCfg\Application\Model\d3filesystem;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\ModCfg\Application\Model\Log\d3LogInterface;
-use D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_generatepdf;
 use D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments;
 use D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_sendmail;
 use D3\Ordermanager\Application\Model\Constants;
@@ -587,55 +587,16 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
      * @throws FileExistsException
      * @throws Exception
      */
-    protected function _d3AddOrderManagerPdfAttachment(Manager $oOrderManager)
+    protected function _d3AddOrderManagerPdfAttachment(Manager $orderManager)
     {
-        $oPDFHandler = $this->d3getOrderManagerPdfHandler($oOrderManager);
-
-        $this->d3addOrderManagerOXIDPdfAttachment($oOrderManager, $oPDFHandler);
-        $this->d3addOrderManagerPdfDocumentsAttachment($oOrderManager, $oPDFHandler);
+        $oPDFHandler = $this->d3getOrderManagerPdfHandler($orderManager);
+        $this->d3addOrderManagerPdfDocumentsAttachment($orderManager, $oPDFHandler);
     }
 
-    protected function _d3RemoveOrderManagerPdfAttachmentFiles()
+    protected function _d3RemoveOrderManagerPdfAttachmentFiles(Manager $orderManager)
     {
-        // ToDo
-    }
-
-    /**
-     * @throws FileExistsException
-     * @throws Exception
-     */
-    public function d3addOrderManagerOXIDPdfAttachment(Manager $oOrderManager, d3ordermanager_pdfhandler $oPDFHandler)
-    {
-        d3GetOxidDIC()->set(
-            d3ordermanager_action_generatepdf::class.'.args.ordermanager',
-            d3GetOxidDIC()->get(Manager::class)
-        );
-        d3GetOxidDIC()->set(
-            d3ordermanager_action_generatepdf::class.'.args.order',
-            d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class)
-        );
-
-        /** @var d3ordermanager_action_generatepdf $action */
-        $action = d3GetOxidDIC()->get(d3ordermanager_action_generatepdf::class);
-
-        if ($oOrderManager->getValue($action->getActiveSwitchParameter())
-            && $oOrderManager->getValue('blActionOrderPdfSendAttach')
-            && $oPDFHandler->canGenerateOxidPdf()
-        ) {
-            if ($oOrderManager->getValue('blActionOrderPdfTypeInvoice')) {
-                $oPDFHandler->createOxidPdf(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_INVOICE, d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH);
-                $sFileName = $oPDFHandler->getOxidPdfFileName(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_INVOICE);
-                $sFilePath = $oPDFHandler->getOxidPdfSaveDir(d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH) . $sFileName;
-                $this->addAttachment($sFilePath, $sFileName, 'base64', 'application/pdf');
-            }
-
-            if ($oOrderManager->getValue('blActionOrderPdfTypeDelnote')) {
-                $oPDFHandler->createOxidPdf(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_DELIVERYNOTE, d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH);
-                $sFileName = $oPDFHandler->getOxidPdfFileName(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_DELIVERYNOTE);
-                $sFilePath = $oPDFHandler->getOxidPdfSaveDir(d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH) . $sFileName;
-                $this->addAttachment($sFilePath, $sFileName, 'base64', 'application/pdf');
-            }
-        }
+        $oPDFHandler = $this->d3getOrderManagerPdfHandler($orderManager);
+        $this->d3removeOrderManagerPdfDocumentsAttachment($orderManager, $oPDFHandler);
     }
 
     /**
@@ -675,8 +636,45 @@ class d3_oxemail_ordermanager extends d3_oxemail_ordermanager_parent
             if ($oManager->getValue($action->getDocumentRequestId($document))) {
                 $document->setOrder($action->getItem());
                 $oPDFHandler->createPdfDocument($document, d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH);
-                $sFilePath = $oPDFHandler->getOxidPdfSaveDir(d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH).$document->getFilename();
+                $sFilePath = $oPDFHandler->getPdfDocumentsSaveDir(d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH).$document->getFilename();
                 $this->addAttachment($sFilePath, $document->getFilename(), 'base64', 'application/pdf');
+            }
+        }
+    }
+
+    public function d3removeOrderManagerPdfDocumentsAttachment(Manager $oManager, d3ordermanager_pdfhandler $oPDFHandler)
+    {
+        d3GetOxidDIC()->set(
+            d3ordermanager_action_getpdfdocuments::class.'.args.ordermanager',
+            $oManager
+        );
+
+        d3GetOxidDIC()->set(
+            d3ordermanager_action_getpdfdocuments::class.'.args.order',
+            $oManager->getCurrentItem()
+        );
+
+        /** @var d3ordermanager_action_getpdfdocuments $action */
+        $action = d3GetOxidDIC()->get(d3ordermanager_action_getpdfdocuments::class);
+        if (!$oManager->getValue($action->getActiveSwitchParameter())) {
+            return;
+        }
+
+        if (!$oManager->getValue('blActionOrderPdfDocumentSendAttach')) {
+            return;
+        }
+
+        if (!$oPDFHandler->canGeneratePdfDocuments()) {
+            return;
+        }
+
+        /** @var pdfdocumentsOrderInterface $document */
+        foreach ($action->getDocumentList() as $document) {
+            if ($oManager->getValue($action->getDocumentRequestId($document))) {
+                $document->setOrder($action->getItem());
+                $sFilePath = $oPDFHandler->getPdfDocumentsSaveDir(d3ordermanager_conf::D3_ORDERMANAGER_PDFSENDTYPE_ATTACH).$document->getFilename();
+                $filesystem = d3GetOxidDIC()->get('d3ox.ordermanager.'.d3filesystem::class);
+                $filesystem->del_dir($sFilePath, $document->getFilename());
             }
         }
     }

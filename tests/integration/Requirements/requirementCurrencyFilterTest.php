@@ -196,7 +196,7 @@ class requirementCurrencyFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersNoValidConfigDataProvider(): array
     {
         return [
-            'unknown'=> ['unknownValue'],
+            'unknown' => ['unknownValue'],
             'space'  => ['12'],
             'empty'  => [''],
             'false'  => [false],

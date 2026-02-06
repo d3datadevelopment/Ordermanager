@@ -45,9 +45,11 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
 
     protected $_sThisTemplate = '@'. Constants::OXID_MODULE_ID .'/admin/d3_cfg_ordermanagerset_main';
 
-    protected $_blHasDebugSwitch = true;
+    protected $_blHasDebugSwitch = false;
 
-    protected $_sDebugHelpTextIdent = 'D3_ORDERMANAGER_SET_DEBUG_DESC';
+    protected $_blHasTestModeSwitch = true;
+
+    protected $_sTestModeHelpTextIdent = 'D3_ORDERMANAGER_SET_DEBUG_DESC';
 
     protected $_sMenuItemTitle = 'd3mxordermanager';
 

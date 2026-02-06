@@ -316,7 +316,7 @@ class requirementOrderSumTest extends d3OrdermanagerRequirementIntegrationTestCa
     public function requirementsSelectsRightOrdersNoValidConfigDataProvider(): array
     {
         return [
-            'unknown'=> ['unknownValue'],
+            'unknown' => ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
             'false'  => [false],

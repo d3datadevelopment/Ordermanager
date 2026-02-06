@@ -17,12 +17,12 @@ declare(strict_types=1);
 
 namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
 
+use D3\ModCfg\Application\Model\d3filesystem;
 use D3\ModCfg\Application\Model\d3str;
 use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\ModCfg\Application\Model\Log\d3log;
 use D3\Ordermanager\Application\Model\Actions\d3ordermanager_action_getpdfdocuments;
 use D3\Ordermanager\Application\Model\d3ordermanager;
-use D3\Ordermanager\Application\Model\d3ordermanager_conf;
 use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_templaterendererExceptionInterface;
@@ -33,6 +33,7 @@ use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
 use D3\PdfDocuments\Application\Model\Documents\invoicePdf;
 use Doctrine\DBAL\Exception as DBALException;
 use Exception;
+use Generator;
 use Html2Text\Html2Text;
 use OxidEsales\Eshop\Application\Model\Content;
 use OxidEsales\Eshop\Application\Model\Order;
@@ -44,7 +45,6 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
-use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateEngineInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateRendererBridgeInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateRendererInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -185,7 +185,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $templateRendererMock->method('renderTemplate')->willReturn('renderedTemplateContent');
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
                 'getShop',
@@ -204,7 +204,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ])
             ->getMock();
         $oModelMock->method('getShop')->willReturn($oShopMock);
-        $oModelMock->method( '_d3GetOrderManagerTemplateRenderer' )->willReturn( $templateRendererMock);
+        $oModelMock->method('_d3GetOrderManagerTemplateRenderer')->willReturn($templateRendererMock);
         $oModelMock->method('setMailParams')->willReturn(true);
         $oModelMock->method('setViewData')->willReturn(true);
         $oModelMock->method('processViewArray')->willReturn(true);
@@ -354,7 +354,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oRemarkMock->expects($this->exactly((int) $sendingSuccess))->method('save')->willReturn(true);
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
                 'getOrderManagerMailContent',
@@ -365,6 +365,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 '_d3SetOrderManagerReplyAddress',
                 '_d3SetOrderManagerMailRecipients',
                 '_d3AddOrderManagerPdfAttachment',
+                '_d3RemoveOrderManagerPdfAttachmentFiles',
                 'send',
             ])
             ->getMock();
@@ -380,6 +381,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock->method('_d3SetOrderManagerReplyAddress')->willReturn(true);
         $oModelMock->method('_d3SetOrderManagerMailRecipients')->willReturn($oRemarkMock);
         $oModelMock->method('_d3AddOrderManagerPdfAttachment')->willReturn(true);
+        $oModelMock->method('_d3RemoveOrderManagerPdfAttachmentFiles');
         $oModelMock->expects($this->once())->method('send')->willReturn($sendingSuccess);
 
         $this->_oModel = $oModelMock;
@@ -419,7 +421,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oRemarkMock->expects($this->never())->method('save')->willReturn(true);
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
                 'getOrderManagerMailContent',
@@ -471,7 +473,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canSetOrderManagerMailContent($setMethod, $getMethod, $returnValue, $expectException)
     {
         /** @var Email|MockObject $mailMock */
-        $mailMock = $this->getMockBuilder(Email::class)
+        $mailMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([$setMethod, $getMethod, 'd3OrderManagerThrowUnequalContentException'])
             ->getMock();
         $mailMock->expects(self::atLeastOnce())->method($setMethod)->willReturn(true);
@@ -519,7 +521,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canSetOrderManagerMailContentEmpty($setMethod, $getMethod)
     {
         /** @var Email|MockObject $mailMock */
-        $mailMock = $this->getMockBuilder(Email::class)
+        $mailMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([$setMethod, $getMethod, 'd3OrderManagerThrowUnequalContentException'])
             ->getMock();
         $mailMock->expects(self::atLeastOnce())->method($setMethod)->willReturn(true);
@@ -558,7 +560,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canSetOrderManagerMailRecipientsCustomer()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 '_d3hasOrderManagerCustomerRecipient',
                 '_d3sendOrderManagerMailToCustomer',
@@ -596,7 +598,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canSetOrderManagerMailRecipientsOwner()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 '_d3hasOrderManagerCustomerRecipient',
                 '_d3sendOrderManagerMailToCustomer',
@@ -634,7 +636,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canSetOrderManagerMailRecipientsCustom()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 '_d3hasOrderManagerCustomerRecipient',
                 '_d3sendOrderManagerMailToCustomer',
@@ -731,7 +733,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canHasOrderManagerCustomerRecipient()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['_d3getOrderManagerMailOption'])
             ->getMock();
         $oModelMock->expects($this->once())->method('_d3getOrderManagerMailOption')->with(
@@ -757,7 +759,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canHasOrderManagerOwnerRecipient()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['_d3getOrderManagerMailOption'])
             ->getMock();
         $oModelMock->expects($this->once())->method('_d3getOrderManagerMailOption')->with(
@@ -783,7 +785,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canHasOrderManagerCustomRecipient()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['_d3getOrderManagerMailOption'])
             ->getMock();
         $oModelMock->expects($this->once())->method('_d3getOrderManagerMailOption')->with(
@@ -809,7 +811,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canGetOrderManagerCustomRecipientList()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['_d3getOrderManagerMailOption'])
             ->getMock();
         $oModelMock->expects($this->once())->method('_d3getOrderManagerMailOption')->with(
@@ -861,7 +863,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oManagerMock->method('getFieldData')->willReturn('fieldData');
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['d3HasOrderManagerEditorMailContent', 'd3generateOrderManagerPlainContent'])
             ->getMock();
         $oModelMock->method('d3HasOrderManagerEditorMailContent')->willReturn(true);
@@ -921,7 +923,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         );
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['d3HasOrderManagerEditorMailContent', 'd3generateOrderManagerPlainContent'])
             ->getMock();
         $oModelMock->method('d3HasOrderManagerEditorMailContent')->willReturn(true);
@@ -1004,7 +1006,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $messageContentGeneratorMock->expects($this->exactly(2))->method('generateFromCms')->willReturn('content');
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['getMessageContentGeneratorOrderManager', 'd3GetOrderManagerContentObject'])
             ->getMock();
         $oModelMock->method('getMessageContentGeneratorOrderManager')->willReturn($messageContentGeneratorMock);
@@ -1061,7 +1063,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $messageContentGeneratorMock->expects($this->exactly(3))->method('generateFromTpl')->willReturn('content');
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['getMessageContentGeneratorOrderManager'])
             ->getMock();
         $oModelMock->method('getMessageContentGeneratorOrderManager')->willReturn($messageContentGeneratorMock);
@@ -1116,7 +1118,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $messageContentGeneratorMock->expects($this->exactly(3))->method('generateFromTpl')->willReturn('content');
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['getMessageContentGeneratorOrderManager',])
             ->getMock();
         $oModelMock->method('getMessageContentGeneratorOrderManager')->willReturn($messageContentGeneratorMock);
@@ -1173,7 +1175,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function d3HasOrderManagerEditorMailContentPass()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['d3isOrderManagerArrayEditorMailContent'])
             ->getMock();
         $oModelMock->method('d3isOrderManagerArrayEditorMailContent')->willReturn(true);
@@ -1205,7 +1207,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function d3HasOrderManagerEditorMailContentIsNoArray()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['d3isOrderManagerArrayEditorMailContent'])
             ->getMock();
         $oModelMock->method('d3isOrderManagerArrayEditorMailContent')->willReturn(false);
@@ -1237,7 +1239,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function d3HasOrderManagerEditorMailContentIsNoSubject()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['d3isOrderManagerArrayEditorMailContent'])
             ->getMock();
         $oModelMock->method('d3isOrderManagerArrayEditorMailContent')->willReturn(true);
@@ -1269,7 +1271,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function d3HasOrderManagerEditorMailContentIsNoHtml()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['d3isOrderManagerArrayEditorMailContent'])
             ->getMock();
         $oModelMock->method('d3isOrderManagerArrayEditorMailContent')->willReturn(true);
@@ -1301,7 +1303,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function d3HasOrderManagerEditorMailContentIsNoPlain()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['d3isOrderManagerArrayEditorMailContent'])
             ->getMock();
         $oModelMock->method('d3isOrderManagerArrayEditorMailContent')->willReturn(true);
@@ -1429,10 +1431,10 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ])
             ->getMock();
         $oShopMock->method('__get')->willReturn($oFieldMock);
-        $oShopMock->method('getFieldData')->willReturn('info@mail.com');
+        $oShopMock->method('getFieldData')->willReturn('info@mail.test');
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 'setRecipient',
                 '_d3HasOrderManagerCustomMailAddresses',
@@ -1474,7 +1476,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canSendOrderManagerMailToCustom()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 '_d3hasOrderManagerCustomMailAddresses',
                 '_d3getOrderManagerCustomMailAddressList',
@@ -1513,7 +1515,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canExtractCustomMailAddressList()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['_d3getOrderManagerCustomRecipientList'])
             ->getMock();
         $oModelMock->expects($this->once())->method('_d3getOrderManagerCustomRecipientList')->willReturn(
@@ -1542,7 +1544,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function hasOrderManagerCustomMailAddressesPass()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 '_d3hasOrderManagerCustomRecipient',
                 '_d3getOrderManagerCustomRecipientList',
@@ -1569,7 +1571,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function hasOrderManagerCustomMailAddressesNoCustRecipient()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 '_d3hasOrderManagerCustomRecipient',
                 '_d3getOrderManagerCustomRecipientList',
@@ -1596,7 +1598,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function hasOrderManagerCustomMailAddressesNoCustRecipientList()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 '_d3hasOrderManagerCustomRecipient',
                 '_d3getOrderManagerCustomRecipientList',
@@ -1691,7 +1693,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oRemarkMock->expects($this->once())->method('assign')->willReturn(true);
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 'setRecipient',
                 '_d3hasOrderManagerOwnerRecipient',
@@ -1786,7 +1788,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oRemarkMock->expects($this->once())->method('assign')->willReturn(true);
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 'setRecipient',
                 '_d3hasOrderManagerOwnerRecipient',
@@ -1859,15 +1861,13 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ->getMock();
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 'd3getOrderManagerPdfHandler',
-                'd3addOrderManagerOXIDPdfAttachment',
                 'd3addOrderManagerPdfDocumentsAttachment',
             ])
             ->getMock();
         $oModelMock->method('d3getOrderManagerPdfHandler')->willReturn($oPdfHandlerMock);
-        $oModelMock->expects($this->once())->method('d3addOrderManagerOXIDPdfAttachment')->willReturn(true);
         $oModelMock->expects($this->once())->method('d3addOrderManagerPdfDocumentsAttachment')->willReturn(true);
 
         $this->_oModel = $oModelMock;
@@ -1880,131 +1880,34 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::d3addOrderManagerOXIDPdfAttachment
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::_d3RemoveOrderManagerPdfAttachmentFiles
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
-    public function canAddOrderManagerOxidPdfAttachmentInvoice()
+    public function canRemoveOrderManagerPdfAttachment()
     {
-        /** @var Order|MockObject $oOrderMock */
-        $oOrderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        /** @var d3ordermanager|MockObject $oManagerMock */
-        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->onlyMethods(['getValue', 'getCurrentItem'])
-            ->getMock();
-        $getValueMap = [
-            ['blActionOrderGeneratePdf_status', true],
-            ['blActionOrderPdfSendAttach', true],
-            ['blActionOrderPdfTypeInvoice', true],
-            ['blActionOrderPdfTypeDelnote', false],
-        ];
-        $oManagerMock->method('getValue')->willReturnMap($getValueMap);
-        $oManagerMock->method('getCurrentItem')->willReturn($oOrderMock);
-
         /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
-            ->onlyMethods([
-                'canGenerateOxidPdf',
-                'createOxidPdf',
-                'getOxidPdfFileName',
-                'getOxidPdfSaveDir', ])
-            ->setConstructorArgs([
-                $oManagerMock,
-                d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class),
-            ])
-            ->getMock();
-        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(true);
-        $oPdfHandlerMock->expects($this->once())->method('createOxidPdf')->with(
-            $this->stringContains(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_INVOICE),
-            $this->anything()
-        );
-        $oPdfHandlerMock->method('getOxidPdfFileName')->willReturn('myFilename.pdf');
-        $oPdfHandlerMock->method('getOxidPdfSaveDir')->willReturn('saveFir');
+                                ->disableOriginalConstructor()
+                                ->getMock();
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 'd3getOrderManagerPdfHandler',
-                'addAttachment',
+                'd3removeOrderManagerPdfDocumentsAttachment',
             ])
             ->getMock();
-        $oModelMock->expects($this->once())->method('addAttachment')->willReturn(true);
+        $oModelMock->method('d3getOrderManagerPdfHandler')->willReturn($oPdfHandlerMock);
+        $oModelMock->expects($this->once())->method('d3removeOrderManagerPdfDocumentsAttachment')->willReturn(true);
 
         $this->_oModel = $oModelMock;
 
         $this->callMethod(
             $this->_oModel,
-            'd3addOrderManagerOXIDPdfAttachment',
-            [$oManagerMock, $oPdfHandlerMock]
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::d3addOrderManagerOXIDPdfAttachment
-     * @test
-     * @throws ReflectionException
-     * @throws Exception
-     */
-    public function canAddOrderManagerOxidPdfAttachmentDNote()
-    {
-        /** @var Order|MockObject $oOrderMock */
-        $oOrderMock = $this->getMockBuilder(Order::class)
-           ->disableOriginalConstructor()
-           ->getMock();
-
-        /** @var d3ordermanager|MockObject $oManagerMock */
-        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
-            ->onlyMethods(['getValue', 'getCurrentItem'])
-            ->getMock();
-        $getValueMap = [
-            ['blActionOrderGeneratePdf_status', true],
-            ['blActionOrderPdfSendAttach', true],
-            ['blActionOrderPdfTypeInvoice', false],
-            ['blActionOrderPdfTypeDelnote', true],
-        ];
-        $oManagerMock->method('getValue')->willReturnMap($getValueMap);
-        $oManagerMock->method('getCurrentItem')->willReturn($oOrderMock);
-
-        /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
-        $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
-            ->onlyMethods([
-                'canGenerateOxidPdf',
-                'createOxidPdf',
-                'getOxidPdfFileName',
-                'getOxidPdfSaveDir',
-            ])
-            ->setConstructorArgs([
-                $oManagerMock,
-                d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class),
-            ])
-            ->getMock();
-        $oPdfHandlerMock->method('canGenerateOxidPdf')->willReturn(true);
-        $oPdfHandlerMock->expects($this->once())->method('createOxidPdf')->with(
-            $this->stringContains(d3ordermanager_conf::D3_ORDERMANAGER_PDFTYPE_DELIVERYNOTE),
-            $this->anything()
-        );
-        $oPdfHandlerMock->method('getOxidPdfFileName')->willReturn("myFileName.pdf");
-        $oPdfHandlerMock->method('getOxidPdfSaveDir')->willReturn('saveDir');
-
-        /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
-            ->onlyMethods([
-                'd3getOrderManagerPdfHandler',
-                'addAttachment',
-            ])
-            ->getMock();
-        $oModelMock->expects($this->once())->method('addAttachment')->willReturn(true);
-
-        $this->_oModel = $oModelMock;
-
-        $this->callMethod(
-            $this->_oModel,
-            'd3addOrderManagerOXIDPdfAttachment',
-            [$oManagerMock, $oPdfHandlerMock]
+            '_d3RemoveOrderManagerPdfAttachmentFiles',
+            [d3GetOxidDIC()->get(d3ordermanager::class)]
         );
     }
 
@@ -2013,8 +1916,9 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
      * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::d3addOrderManagerPdfDocumentsAttachment
      * @test
      * @throws ReflectionException
+     * @dataProvider canAddOrderManagerPdfDocumentAttachmentDataProvider
      */
-    public function canAddOrderManagerPdfDocumentAttachment()
+    public function canAddOrderManagerPdfDocumentAttachment(bool $activeSwitch, bool $sendAttached, bool $canGenerate, $expectedCount)
     {
         d3GetOxidDIC()->set(
             d3ordermanager_pdfhandler::class.'.args.ordermanager',
@@ -2057,8 +1961,8 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods(['getValue', 'getCurrentItem'])
             ->getMock();
         $getValueMap = [
-            ['blActionOrderGetPdfDocument_status', true],
-            ['blActionOrderPdfDocumentSendAttach', true],
+            ['blActionOrderGetPdfDocument_status', $activeSwitch],
+            ['blActionOrderPdfDocumentSendAttach', $sendAttached],
             ['blActionOrderPdfDocumentType_invoice', true],
             ['blActionOrderPdfDocumentType_delnote', false],
         ];
@@ -2067,21 +1971,21 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
-            ->onlyMethods(['canGeneratePdfDocuments', 'createPdfDocument', 'getOxidPdfSaveDir'])
+            ->onlyMethods(['canGeneratePdfDocuments', 'createPdfDocument', 'getPdfDocumentsSaveDir'])
             ->setConstructorArgs([$oManagerMock, d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class)])
             ->getMock();
-        $oPdfHandlerMock->method('canGeneratePdfDocuments')->willReturn(true);
-        $oPdfHandlerMock->expects($this->once())->method('createPdfDocument')->with(
+        $oPdfHandlerMock->method('canGeneratePdfDocuments')->willReturn($canGenerate);
+        $oPdfHandlerMock->expects($expectedCount)->method('createPdfDocument')->with(
             $this->isInstanceOf(invoicePdf::class),
             $this->anything()
         );
-        $oPdfHandlerMock->method('getOxidPdfSaveDir')->willReturn('saveDir');
+        $oPdfHandlerMock->method('getPdfDocumentsSaveDir')->willReturn('saveDir');
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods(['d3getOrderManagerPdfHandler', 'addAttachment'])
             ->getMock();
-        $oModelMock->expects($this->once())->method('addAttachment')->willReturn(true);
+        $oModelMock->expects($expectedCount)->method('addAttachment')->willReturn(true);
 
         $this->_oModel = $oModelMock;
 
@@ -2090,6 +1994,97 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             'd3addOrderManagerPdfDocumentsAttachment',
             [$oManagerMock, $oPdfHandlerMock]
         );
+    }
+
+    /**
+     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxemail_ordermanager::d3removeOrderManagerPdfDocumentsAttachment
+     * @test
+     * @throws ReflectionException
+     * @dataProvider canAddOrderManagerPdfDocumentAttachmentDataProvider
+     */
+    public function canRemoveOrderManagerPdfDocumentAttachment(bool $activeSwitch, bool $sendAttached, bool $canGenerate, $expectedCount)
+    {
+        d3GetOxidDIC()->set(
+            d3ordermanager_pdfhandler::class.'.args.ordermanager',
+            d3GetOxidDIC()->get(d3ordermanager::class)
+        );
+        d3GetOxidDIC()->set(
+            d3ordermanager_pdfhandler::class.'.args.order',
+            d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class)
+        );
+
+        /** @var d3ordermanager_pdfhandler $oPdfHandler */
+        $oPdfHandler = d3GetOxidDIC()->get(d3ordermanager_pdfhandler::class);
+
+        if (false === $oPdfHandler->canGeneratePdfDocuments()) {
+            $this->markTestSkipped('no PDF documents module available');
+        }
+
+        /** @var Order|MockObject $oOrderMock */
+        $oOrderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var invoicePdf|MockObject $oDocumentMock */
+        $oDocumentMock = $this->getMockBuilder(invoicePdf::class)
+            ->onlyMethods(['getFilename'])
+            ->getMock();
+        $oDocumentMock->method('getFilename')->willReturn('testFileName');
+
+        /** @var d3ordermanager_action_getpdfdocuments|MockObject $oActionMock */
+        $oActionMock = $this->getMockBuilder(d3ordermanager_action_getpdfdocuments::class)
+            ->onlyMethods(['getDocumentList', 'getItem'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $oActionMock->method('getDocumentList')->willReturn([$oDocumentMock]);
+        $oActionMock->method('getItem')->willReturn(oxNew(Order::class));
+        d3GetOxidDIC()->set(d3ordermanager_action_getpdfdocuments::class, $oActionMock);
+
+        /** @var d3ordermanager|MockObject $oManagerMock */
+        $oManagerMock = $this->getMockBuilder(d3ordermanager::class)
+            ->onlyMethods(['getValue', 'getCurrentItem'])
+            ->getMock();
+        $getValueMap = [
+            ['blActionOrderGetPdfDocument_status', $activeSwitch],
+            ['blActionOrderPdfDocumentSendAttach', $sendAttached],
+            ['blActionOrderPdfDocumentType_invoice', true],
+            ['blActionOrderPdfDocumentType_delnote', false],
+        ];
+        $oManagerMock->method('getValue')->willReturnMap($getValueMap);
+        $oManagerMock->method('getCurrentItem')->willReturn($oOrderMock);
+
+        /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
+        $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
+            ->onlyMethods(['canGeneratePdfDocuments', 'getPdfDocumentsSaveDir'])
+            ->setConstructorArgs([$oManagerMock, d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class)])
+            ->getMock();
+        $oPdfHandlerMock->method('canGeneratePdfDocuments')->willReturn($canGenerate);
+        $oPdfHandlerMock->method('getPdfDocumentsSaveDir')->willReturn('saveDir');
+
+        $filesystemMock = $this->getMockBuilder(d3filesystem::class)
+           ->onlyMethods(['del_dir'])
+           ->getMock();
+        $filesystemMock->expects($expectedCount)->method('del_dir');
+        d3GetOxidDIC()->set('d3ox.ordermanager.'.d3filesystem::class, $filesystemMock);
+
+        /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
+        $oModelMock = oxNew(Email::class);
+
+        $this->_oModel = $oModelMock;
+
+        $this->callMethod(
+            $this->_oModel,
+            'd3removeOrderManagerPdfDocumentsAttachment',
+            [$oManagerMock, $oPdfHandlerMock]
+        );
+    }
+
+    public static function canAddOrderManagerPdfDocumentAttachmentDataProvider(): Generator
+    {
+        yield 'passed'  => [true, true, true, self::atLeastOnce()];
+        yield 'inactive action'  => [false, true, true, self::never()];
+        yield 'dont send attached'  => [true, false, true, self::never()];
+        yield 'cant generate PDF'  => [true, true, false, self::never()];
     }
 
     /**
@@ -2120,12 +2115,12 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods(['getValue'])
             ->getMock();
         $getValueMap = [
-            ['sSendMailReplyAddress', 'reply@test.com'],
+            ['sSendMailReplyAddress', 'reply@test.test'],
         ];
         $oManagerMock->method('getValue')->willReturnMap($getValueMap);
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 'setFrom',
                 'setReplyTo',
@@ -2176,7 +2171,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oManagerMock->method('getValue')->willReturnMap($getValueMap);
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 'setFrom',
                 'setReplyTo',
@@ -2208,7 +2203,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $remarkMock->method('assign')->with($this->isType('array'))->willReturn(true);
 
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 'd3GetOrderManagerRemark',
                 'getAllRecipientAddresses',
@@ -2269,7 +2264,7 @@ class d3_oxemail_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function canGetRemarkText()
     {
         /** @var d3_oxemail_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Email::class)
+        $oModelMock = $this->getMockBuilder(d3_oxemail_ordermanager::class)
             ->onlyMethods([
                 'getAllRecipientAddresses',
                 'getBody',

@@ -20,7 +20,7 @@ use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
-use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
+use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager as ItemExtension;
 use D3\Ordermanager\tests\integration\d3IntegrationTestCase;
 use Doctrine\DBAL\Exception as DBALException;
 use Exception;
@@ -198,7 +198,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
         $user->load($this->aUserIdList[0]);
 
         /** @var Item|MockObject $oItem */
-        $oItem = $this->getMockBuilder(Item::class)
+        $oItem = $this->getMockBuilder(ItemExtension::class)
             ->onlyMethods(
                 ['validateOrder', 'loadFromBasket', 'executePayment', 'sendOrderByEmail']
             )
@@ -222,7 +222,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
         d3GetOxidDIC()->set(d3ordermanagerlist::class, $managerListMock);
 
         // prevent save trigger action in test preparation
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, true);
 
         $oItem->load($this->aOrderIdList[0]);
         $oItem->finalizeOrder(
@@ -230,7 +230,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
             $user
         );
 
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
+        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, false);
 
         $sId = $oItem->getId();
 
@@ -293,7 +293,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
         d3GetOxidDIC()->set(d3ordermanagerlist::class, $managerListMock);
 
         // prevent save trigger action in test preparation
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, true);
 
         $oItem->load($this->aOrderIdList[0]);
         $oItem->finalizeOrder(
@@ -301,7 +301,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
             $user
         );
 
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
+        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, false);
 
         $sId = $oItem->getId();
 
@@ -366,7 +366,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
         d3GetOxidDIC()->set(d3ordermanagerlist::class, $managerListMock);
 
         // prevent save trigger action in test preparation
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, true);
 
         $oItem->load($this->aOrderIdList[0]);
         $oItem->finalizeOrder(
@@ -374,7 +374,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
             $user
         );
 
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
+        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, false);
 
         $sId = $oItem->getId();
 
@@ -429,7 +429,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
         $oItem->method('sendOrderByEmail')->willReturn(Item::ORDER_STATE_OK);
 
         // prevent save trigger action in test preparation
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, true);
 
         $oItem->load($this->aOrderIdList[0]);
         $oItem->finalizeOrder(
@@ -441,7 +441,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
         d3GetOxidDIC()->reset();
         d3GetOxidDIC()->setDefinitions($definitions);
 
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
+        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, false);
 
         // require reload
         /** @var Order $oItem */

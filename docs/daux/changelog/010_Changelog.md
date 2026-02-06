@@ -9,6 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://git.d3data.de/D3Private/Ordermanager/compare/6.1.1.0...rel_6.x)
 
+## [6.2.0.0](https://git.d3data.de/D3Private/Ordermanager/compare/6.1.1.0...6.2.0.0) - 2026-02-06
+### Added
+- make installable in OXID 7.3 + 7.4
+- programmable event triggers
+- statistics export
+### Changed
+- drop sent email attachment files
+- execute task via cron in defined language
+- triggers are based on callable events
+- setup add examples for current shop only
+- remove unneccessary cast in SQL query
+### Fixed
+- use multilang handling
+- english translations containing HTML tags
+### Removed
+- OXID PDF generator action, please use D3 PDF Documents instead
+- deprecated code
+- Conversion from d3ordermanager table to d3modprofile
+  for modules older than 2.1.0: First update to 6.0.0 and perform the update process. Then update to the latest version.
+- cron call without command doesn't execute tasks, use "run" command
+
 ## [6.1.1.0](https://git.d3data.de/D3Private/Ordermanager/compare/6.1.0.0...6.1.1.0) - 2025-01-21
 ### Changed
 - template rendering process use the template renderer service
@@ -33,10 +54,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - use proxy class EE specific mall extension
 - catch Twig template rendering errors
-### Removed
-- deprecated code
-- Conversion from d3ordermanager table to d3modprofile
-  for modules older than 2.1.0: First update to 6.0.0 and perform the update process. Then update to the latest version.
 
 ## [6.0.0.0](https://git.d3data.de/D3Private/Ordermanager/compare/5.1.4.0...6.0.0.0) - 2024-01-22
 ### Added

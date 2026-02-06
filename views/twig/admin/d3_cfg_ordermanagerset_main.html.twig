@@ -234,7 +234,9 @@ function showFormatSettings(sElemId, visible, blUseOldElem)
                                     {{ translate({ ident: "D3_ORDERMANAGER_SET_CRON_LASTEXEC" }) }}
                                 </dt>
                                 <dd>
-                                    {{ edit.getValue(oView.getCronTimestampVarName( aCronJobIds.id ))|format_date }}
+                                    {% if edit.getValue(oView.getCronTimestampVarName( aCronJobIds.id )) %}
+                                        {{ edit.getValue(oView.getCronTimestampVarName( aCronJobIds.id ))|date(translate({ ident: "fullDateFormat" })) }}
+                                    {% endif %}
                                     {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_SET_CRON_LASTEXEC_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_SET_CRON_LASTEXEC_DESC")} %}
                                 </dd>
                                 <div class="spacer"></div>

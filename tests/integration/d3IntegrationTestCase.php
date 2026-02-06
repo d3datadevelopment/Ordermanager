@@ -49,7 +49,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
             /** @var Connection $connection */
             $connection = ContainerFactory::getInstance()->getContainer()->get(ConnectionProviderInterface::class)->get();
             $connection->prepare('SET time_zone = ?')->executeStatement([date_default_timezone_get()]);
-        } catch (\Doctrine\DBAL\Exception\DriverException $e) {
+        } catch (\Doctrine\DBAL\Exception\DriverException) {
             // catch General error: 1298 Unknown or incorrect time zone: 'Europe/Berlin' on MariaDB
         }
 
@@ -127,8 +127,8 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
             array_merge(
                 [
                     'oxprice'   => 0,
-                    'oxvarstock'=> 0,
-                    'oxvarcount'=> 0,
+                    'oxvarstock' => 0,
+                    'oxvarcount' => 0,
                     'oxshopid'  => 1,
                     'oxstockflag'   => 1,
                 ],
@@ -237,17 +237,17 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
         $oObject->save();
 
         // can't use getObject because exists check don't work without an assigned username
-//        $this->createObject(
-//            'd3ox.ordermanager.'.User::class,
-//            $sId,
-//            array_merge(
-//                [
-//                    'oxpassword'    => '',
-//                  'oxusername'   => (string) $sId
-//                ],
-//                $aFields
-//            )
-//        );
+        //        $this->createObject(
+        //            'd3ox.ordermanager.'.User::class,
+        //            $sId,
+        //            array_merge(
+        //                [
+        //                    'oxpassword'    => '',
+        //                  'oxusername'   => (string) $sId
+        //                ],
+        //                $aFields
+        //            )
+        //        );
     }
 
     /**
@@ -265,7 +265,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
             if ($oObject->exists($sId)) {
                 $oObject->delete($sId);
             }
-        } catch (Exception $ex) {
+        } catch (Exception) {
         }
     }
 
@@ -285,7 +285,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
             if ($oObject->exists($sId)) {
                 $oObject->delete($sId);
             }
-        } catch (Exception $ex) {
+        } catch (Exception) {
         }
     }
 
@@ -330,6 +330,14 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
     public function deleteUser($sId)
     {
         $this->deleteObject('d3ox.ordermanager.'.User::class, $sId);
+    }
+
+    /**
+     * @param $sId
+     */
+    public function deleteGroup($sId): void
+    {
+        $this->deleteObject('d3ox.ordermanager.'.Groups::class, $sId);
     }
 
     /**

@@ -255,14 +255,6 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
     /**
      * @throws d3DicException
      */
-    public function canGenerateOxidPdf(): bool
-    {
-        return $this->getPdfHandler()->canGenerateOxidPdf();
-    }
-
-    /**
-     * @throws d3DicException
-     */
     public function canGeneratePdfDocuments(): bool
     {
         return $this->getPdfHandler()->canGeneratePdfDocuments();

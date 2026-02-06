@@ -109,6 +109,9 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $qb2->delete('oxobject2group')
             ->where('oxobjectid = '.$qb2->createNamedParameter($this->aUserIdList[1]))
             ->execute();
+
+        $this->deleteGroup($this->aGroupsIdList[0]);
+        $this->deleteGroup($this->aGroupsIdList[1]);
     }
 
     /**

@@ -213,7 +213,7 @@ class requirementFromOrderNrTest extends d3OrdermanagerRequirementIntegrationTes
     public function requirementsSelectsRightOrdersNoValidConfigDataProvider(): array
     {
         return [
-            'unknown'=> [null],
+            'unknown' => [null],
             'space'  => [' '],
             'empty'  => [''],
             'false'  => [false],

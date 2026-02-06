@@ -19,6 +19,7 @@ namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
 
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager;
+use D3\Ordermanager\Modules\Application\Model\d3_oxbasketitem_ordermanager;
 use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
 use Doctrine\DBAL\Exception as DBALException;
@@ -107,7 +108,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         ]);
 
         /** @var BasketItem|MockObject $oBasketItemMock */
-        $oBasketItemMock = $this->getMockBuilder(BasketItem::class)
+        $oBasketItemMock = $this->getMockBuilder(d3_oxbasketitem_ordermanager::class)
             ->onlyMethods([
                 'setStockCheckStatus',
                 'initFromOrderArticle',
@@ -127,7 +128,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oBasketItemMock->expects($this->once())->method('d3OrderManagerChangeOrderArticle2RealArticle');
 
         /** @var d3_oxbasket_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Basket::class)
+        $oModelMock = $this->getMockBuilder(d3_oxbasket_ordermanager::class)
             ->onlyMethods([
                 'd3getOrderManagerBasketItemInstance',
                 'onUpdate',
@@ -190,7 +191,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oOrderArticleMock->method('getId')->willReturn(md5('newId'));
 
         /** @var BasketItem|MockObject $oBasketItemMock */
-        $oBasketItemMock = $this->getMockBuilder(BasketItem::class)
+        $oBasketItemMock = $this->getMockBuilder(d3_oxbasketitem_ordermanager::class)
             ->onlyMethods([
                 'setStockCheckStatus',
                 'initFromOrderArticle',
@@ -208,7 +209,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oBasketItemMock->expects($this->never())->method('d3OrderManagerChangeOrderArticle2RealArticle');
 
         /** @var d3_oxbasket_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Basket::class)
+        $oModelMock = $this->getMockBuilder(d3_oxbasket_ordermanager::class)
             ->onlyMethods([
                 'd3getOrderManagerBasketItemInstance',
                 'onUpdate',
@@ -257,7 +258,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oPriceMock->method('setBruttoPriceMode')->willReturn(true);
 
         /** @var d3_oxbasket_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Basket::class)
+        $oModelMock = $this->getMockBuilder(d3_oxbasket_ordermanager::class)
             ->onlyMethods([
                 'isEnabled',
                 'd3GetOrderManagerPriceObject',
@@ -350,7 +351,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oPriceMock->method('setBruttoPriceMode')->willReturn(true);
 
         /** @var d3_oxbasket_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Basket::class)
+        $oModelMock = $this->getMockBuilder(d3_oxbasket_ordermanager::class)
             ->onlyMethods([
                 'isEnabled',
                 'd3GetOrderManagerPriceObject',
@@ -443,7 +444,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oPriceMock->method('setBruttoPriceMode')->willReturn(true);
 
         /** @var d3_oxbasket_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Basket::class)
+        $oModelMock = $this->getMockBuilder(d3_oxbasket_ordermanager::class)
             ->onlyMethods([
                 'isEnabled',
                 'd3GetOrderManagerPriceObject',
@@ -536,7 +537,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oPriceMock->method('setBruttoPriceMode')->willReturn(true);
 
         /** @var d3_oxbasket_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Basket::class)
+        $oModelMock = $this->getMockBuilder(d3_oxbasket_ordermanager::class)
             ->onlyMethods([
                 'isEnabled',
                 'd3GetOrderManagerPriceObject',
@@ -705,7 +706,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oPriceListMock->expects($this->exactly(2))->method('addToPriceList')->willReturn(true);
 
         /** @var d3_oxbasket_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Basket::class)
+        $oModelMock = $this->getMockBuilder(d3_oxbasket_ordermanager::class)
             ->onlyMethods([
                 'setSkipDiscounts',
                 'd3GetOrderManagerPriceList',
@@ -824,7 +825,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oPriceListMock->expects($this->exactly(2))->method('addToPriceList')->willReturn(true);
 
         /** @var d3_oxbasket_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Basket::class)
+        $oModelMock = $this->getMockBuilder(d3_oxbasket_ordermanager::class)
             ->onlyMethods([
                 'setSkipDiscounts',
                 'd3GetOrderManagerPriceList',
@@ -943,7 +944,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oPriceListMock->expects($this->never())->method('addToPriceList')->willReturn(true);
 
         /** @var d3_oxbasket_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Basket::class)
+        $oModelMock = $this->getMockBuilder(d3_oxbasket_ordermanager::class)
             ->onlyMethods([
                 'setSkipDiscounts',
                 'd3GetOrderManagerPriceList',
@@ -1023,7 +1024,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oPriceMock->method('setPrice')->willReturn(true);
 
         /** @var d3_oxbasket_ordermanager|MockObject $oModelMock */
-        $oModelMock = $this->getMockBuilder(Basket::class)
+        $oModelMock = $this->getMockBuilder(d3_oxbasket_ordermanager::class)
             ->onlyMethods(['d3GetOrderManagerPriceObject'])
             ->getMock();
         $oModelMock->method('d3GetOrderManagerPriceObject')->willReturn($oPriceMock);

@@ -29,9 +29,12 @@ use D3\Ordermanager\Application\Model\d3ordermanager_execute as ManagerExecuteMo
 use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist as ManagerList;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException as cronUnavailableException;
+use D3\Ordermanager\Core\Registry as ManagerRegistry;
 use DateTime;
+use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Exception as DBALException;
 use OxidEsales\Eshop\Core\Base;
+use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\DatabaseException;
@@ -39,6 +42,9 @@ use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use RuntimeException;
 
 class d3ordermanager_response extends Base
@@ -153,8 +159,7 @@ class d3ordermanager_response extends Base
         $oHandleManagerExec = $this->getManagerExecute($oHandleManager);
 
         // disable admin mode for using active check
-        $blOldAdminMode = self::$_blIsAdmin;
-        self::$_blIsAdmin = false;
+        $blOldAdminMode = $this->setAdminContext(false);
 
         /** @var d3LogInterface $oLog */
         $oLog = d3GetOxidDIC()->get('d3.ordermanager.log');
@@ -165,30 +170,71 @@ class d3ordermanager_response extends Base
             'manager count',
             $oManagerList->count()
         );
+        ManagerRegistry::getLogger()->debug('task list', [ 'count' => $oManagerList->count()]);
 
         /** @var $oManager Manager */
         foreach ($oManagerList->getList() as $oManager) {
+            $this->resetLogHandlers();
             $oHandleManager = $this->getManager();
             $oHandleManager->setLanguage(Registry::getLang()->getTplLanguage());
             $oHandleManager->load($oManager->getId());
             $oHandleManagerExec->setManager($oHandleManager);
 
-            self::$_blIsAdmin = $blOldAdminMode;
+            $this->setAdminContext($blOldAdminMode);
+            ManagerRegistry::getLogger()->info('execute task', [ 'status' => 'started', 'id' => $oManager->getId(), 'name' => $oManager->getFieldData('oxtitle')]);
             $oHandleManagerExec->startJobExecution();
-            self::$_blIsAdmin = false;
+            ManagerRegistry::getLogger()->info('execute task', [ 'status' => 'finished', 'id' => $oManager->getId(), 'name' => $oManager->getFieldData('oxtitle')]);
+            $this->setAdminContext(false);
         }
 
-        self::$_blIsAdmin = $blOldAdminMode;
+        $this->resetLogHandlers();
+        $this->setAdminContext($blOldAdminMode);
         $oHandleManagerExec->finishJobExecution();
 
         stopProfile(__METHOD__);
+    }
+
+    /**
+     * required for unit tests, can't mock getConfig method
+     * @throws Exception
+     */
+    public function d3GetOrderManagerConfigObject(): Config
+    {
+        /** @var Config $config */
+        $config = d3GetOxidDIC()->get('d3ox.ordermanager.'.Config::class);
+        return $config;
+    }
+
+    protected function setAdminContext(bool $blAdmin): bool
+    {
+        $config = $this->d3GetOrderManagerConfigObject();
+        $isAdmin = $config->isAdmin();
+
+        if ($config->isAdmin() !== $blAdmin) {
+            $config->setAdminMode($blAdmin);
+            ContainerFactory::resetContainer();
+        }
+
+        return $isAdmin;
+    }
+
+    /**
+     * if OnErrorOnly handler is used, prevent writing data from former iterations in error case
+     * @return void
+     * @throws \Exception
+     */
+    protected function resetLogHandlers(): void
+    {
+        foreach (ManagerRegistry::getLogger()->getHandlers() as $handler) {
+            $handler->reset();
+        }
     }
 
     public function getManager(): Manager
     {
         /** @var Manager $manager */
         $manager = d3GetOxidDIC()->get(Manager::class);
-
+        $manager->setLanguage(Registry::getLang()->getTplLanguage());
         return $manager;
     }
 
@@ -247,16 +293,16 @@ class d3ordermanager_response extends Base
     protected function _checkUnavailableCronjob()
     {
         $this->_getSet()->isActive() or throw $this->getCronUnavailableException(
-                $this->getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_MODULEDISABLED')
-            );
+            $this->getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_MODULEDISABLED')
+        );
 
         $this->_checkAccessKey() or throw $this->getCronUnavailableException(
-                $this->getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_WRONGPASSWORD')
-            );
+            $this->getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_WRONGPASSWORD')
+        );
 
         $this->_getSet()->getValue('blCronActive') or throw $this->getCronUnavailableException(
-                $this->getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_UNAVAILABLE')
-            );
+            $this->getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_UNAVAILABLE')
+        );
     }
 
     /**
@@ -277,7 +323,7 @@ class d3ordermanager_response extends Base
         $iCjId = $request->getRequestEscapedParameter('cjid');
 
         try {
-            Assert::that( $iCjId )->notBlank();
+            Assert::that($iCjId)->notBlank();
         } catch (InvalidArgumentException) {
             return 0;
         }
@@ -292,7 +338,11 @@ class d3ordermanager_response extends Base
 
     public function getLastExecDate(): string
     {
-        return (string) $this->_getSet()->getValue($this->_getCronTimestampVarName());
+        return
+            ($ts = $this->_getSet()->getValue($this->_getCronTimestampVarName())) ?
+                DateTime::createFromFormat('Y-m-d H:i:s', $ts)
+                        ->format(Registry::getLang()->translateString('fullDateFormat')) :
+                '';
     }
 
     /**
@@ -302,18 +352,19 @@ class d3ordermanager_response extends Base
     public function getLastExecDateInfo(): array
     {
         $sCronJobId = $this->_getCronJobIdParameter();
-        $taskCount = current(
+        $task = current(
             array_filter(
                 $this->getManager()->getAvailableCronjobIds(),
                 static fn ($entry): bool => $entry['id'] == $sCronJobId
             )
-        )['count'];
+        );
+        $taskCount = $task ? $task['count'] : 0;
 
         return [
             sprintf(
                 $this->getLang()->translateString('D3_GENERAL_ORDERMANAGER_TASKCOUNT_CRONID'),
                 $sCronJobId,
-                $taskCount
+                $taskCount ?? 0
             ),
             sprintf(
                 $this->getLang()->translateString('D3_GENERAL_ORDERMANAGER_LASTEXEC_CRONID'),
@@ -321,6 +372,18 @@ class d3ordermanager_response extends Base
                 $this->getLastExecDate()
             ),
         ];
+    }
+
+    /**
+     * @return array
+     * @throws DBALException
+     * @throws Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function getStatistic(): array
+    {
+        return $this->getManagerList()->getAffectedItemsCount();
     }
 
     public function getLang(): Language

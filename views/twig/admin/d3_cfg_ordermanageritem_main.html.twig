@@ -168,7 +168,9 @@
                             {{ translate({ ident: "D3_ORDERMANAGER_MAIN_LASTEXEC" }) }}&nbsp;
                         </td>
                         <td class="edittext">
-                            {{ edit.getValue('iLastExecDate')|date("Y-m-d H:i:S") }}
+                            {% if edit.getValue('iLastExecDate') %}
+                                {{ edit.getValue('iLastExecDate')|date(translate({ ident: "fullDateFormat" })) }}
+                            {% endif %}
                         </td>
                     </tr>
                     {% if blShowLangSwitch %}
@@ -200,11 +202,11 @@
                     <table style="border: none; padding: 0;">
                         <tr>
                             <td class="edittext" style="{% if markHighlight %}font-weight: bold; background-color: darkred; color: white;{% endif %}">
-                                <label for="MainExecute">{{ translate({ ident: "D3_ORDERMANAGER_MAIN_EXECUTE2" }) }}{% if oSet.hasDebugMode() %}<br><span id="debugnote">{{ translate({ ident: "D3_ORDERMANAGER_MAIN_EXECUTE_DEBUG" }) }}</span>{% endif %}</label>
+                                <label for="MainExecute">{{ translate({ ident: "D3_ORDERMANAGER_MAIN_EXECUTE2" }) }}{% if oSet.hasTestMode() %}<br><span id="debugnote">{{ translate({ ident: "D3_ORDERMANAGER_MAIN_EXECUTE_DEBUG" }) }}</span>{% endif %}</label>
                             </td>
                             <td class="edittext">
                                 <input type="hidden" name="value[blItemExecute]" value="1">
-                                <input id="MainExecute" type="checkbox" {% if oSet.hasDebugMode() %}disabled{% endif %} class="edittext ext_edittext" name="value[blItemExecute]" value="0" {% if false == edit.getValue('blItemExecute') %}checked{% endif %} {{ readonly }}>
+                                <input id="MainExecute" type="checkbox" {% if oSet.hasTestMode() %}disabled{% endif %} class="edittext ext_edittext" name="value[blItemExecute]" value="0" {% if false == edit.getValue('blItemExecute') %}checked{% endif %} {{ readonly }}>
                                 {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_MAIN_EXECUTE_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_MAIN_EXECUTE_DESC")} %}
                             </td>
                         </tr>

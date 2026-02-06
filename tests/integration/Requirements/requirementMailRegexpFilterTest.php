@@ -196,7 +196,7 @@ class requirementMailRegexpFilterTest extends d3OrdermanagerRequirementIntegrati
     public function requirementsSelectsRightOrdersNoValidConfigDataProvider(): array
     {
         return [
-            'unknown'=> [null],
+            'unknown' => [null],
             'space'  => [' '],
             'empty'  => [''],
             'false'  => [false],

@@ -20,4 +20,7 @@ namespace D3\Ordermanager\Application\Model;
 class Constants
 {
     public const OXID_MODULE_ID = 'd3ordermanager';
+
+    public const CONFIG_KEPTLOGFILES = 'd3_ordermanager_setting_keptlogfiles';
+    public const CONFIG_LOGERRORSONLY = 'd3_ordermanager_setting_logErrorsOnly';
 }

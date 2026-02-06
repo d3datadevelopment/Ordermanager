@@ -270,7 +270,7 @@ class requirementDeliveryFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersNoValidConfigDataProvider(): array
     {
         return [
-            'unknown'=> ['unknownValue'],
+            'unknown' => ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
             'false'  => [false],

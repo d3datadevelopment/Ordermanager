@@ -23,7 +23,7 @@ use OxidEsales\Eshop\Application\Controller\Admin\AdminMall;  // required for no
 
 // @codeCoverageIgnoreStart
 // fallback for non ee editions
-if ( ! class_exists( '\\' . AdminMall::class ) ) {
+if (! class_exists('\\' . AdminMall::class)) {
     class d3AdminMall extends AdminDetailsController
     {
         protected $_sThisTemplate = '@'. Constants::OXID_MODULE_ID .'/admin/d3_cfg_ordermanageritem_mall';

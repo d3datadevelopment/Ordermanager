@@ -29,12 +29,15 @@ use D3\Ordermanager\Application\Model\Constants;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck;
 use D3\Ordermanager\Application\Model\d3ordermanager_execute as ManagerExecuteModel;
+use D3\Ordermanager\Application\Model\d3ordermanager_listgenerator as Manager_Listgenerator;
 use D3\Ordermanager\Application\Model\d3ordermanager_toorderassignment as ToItemAssignmentModel;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist as ManagerListModel;
 use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
+use D3\Ordermanager\Application\Model\Events\PartiallyRunEvent;
 use D3\Ordermanager\Application\Model\Exceptions\d3ActionRequirementInterface;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_templaterendererExceptionInterface;
+use D3\Ordermanager\Core\Registry as ManagerRegistry;
 use Doctrine\DBAL\Exception as DBALException;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Model\Order as ItemModel;
@@ -45,11 +48,13 @@ use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Model\BaseModel;
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\UtilsView;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\Twig\Resolver\TemplateChain\TemplateType\NonTemplateFilenameException;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class d3_ordermanager_jobs extends AdminDetailsController
 {
@@ -230,24 +235,15 @@ class d3_ordermanager_jobs extends AdminDetailsController
         try {
             /** @var Request $request */
             $request = d3GetOxidDIC()->get($this->_DIC_OxInstance_Id . Request::class);
-
-            $oManager = $this->getManager();
-            $oManager->load($request->getRequestEscapedParameter('ordermanagerid'));
-            $oManagerExec = $this->getManagerExecute($oManager);
-
-            $this->checkForConfigurationException($oManager);
-
-            if (false == $oManager->getValue('sManuallyExecMeetCondition') ||
-                $oManagerExec->orderMeetsConditions($this->getEditObjectId())
-            ) {
-                $oManagerExec->exec4order($this->getEditObjectId());
-                $oManagerExec->finishJobExecution();
-            }
+            $event = $this->getEvent(
+                $request->getRequestEscapedParameter('ordermanagerid'),
+                $this->getEditObjectId()
+            );
+            $this->getEventDispatcher()->dispatch($event);
         } catch (d3ActionRequirementInterface | d3ordermanager_templaterendererExceptionInterface $oEx) {
             // @codeCoverageIgnoreStart
-            if (!defined('OXID_PHP_UNIT')) {
-                $logger = Registry::getLogger();
-                $logger->error($oEx);
+            if (!defined('OXID_PHP_UNIT')) {  // ToDo: disable it by setting a nullLogger
+                ManagerRegistry::getLogger()->error($oEx);
             }
 
             // @codeCoverageIgnoreEnd
@@ -264,9 +260,22 @@ class d3_ordermanager_jobs extends AdminDetailsController
             $utilsView = d3GetOxidDIC()->get('d3ox.ordermanager.'.UtilsView::class);
             $utilsView->addErrorToDisplay($oEx);
         } finally {
+            ManagerRegistry::getLogger()->notice('manually executed task', [
+                'status'   => 'finished',
+            ]);
             $oConfig = d3GetOxidDIC()->get('d3ox.ordermanager.'.Config::class);
             $oConfig->setAdminMode(true);
         }
+    }
+
+    protected function getEventDispatcher(): EventDispatcher
+    {
+        return ContainerFactory::getInstance()->getContainer()->get(EventDispatcherInterface::class);
+    }
+
+    protected function getEvent(string $managerId, string $itemId): PartiallyRunEvent
+    {
+        return oxNew(PartiallyRunEvent::class, $managerId, $itemId);
     }
 
     /**
@@ -299,7 +308,7 @@ class d3_ordermanager_jobs extends AdminDetailsController
         } catch (d3ActionRequirementInterface|d3ordermanager_templaterendererExceptionInterface $e) {
             // @codeCoverageIgnoreStart
             if (!defined('OXID_PHP_UNIT')) {
-                $logger = Registry::getLogger();
+                $logger = ManagerRegistry::getLogger();
                 $logger->error($e);
             }
 
@@ -398,7 +407,7 @@ class d3_ordermanager_jobs extends AdminDetailsController
         } catch (d3ActionRequirementInterface | d3ordermanager_templaterendererExceptionInterface | NonTemplateFilenameException $oEx) {
             // @codeCoverageIgnoreStart
             if (! defined('OXID_PHP_UNIT')) {
-                $logger = Registry::getLogger();
+                $logger = ManagerRegistry::getLogger();
                 $logger->error($oEx->getMessage());
             }
 

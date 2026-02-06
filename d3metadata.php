@@ -17,9 +17,7 @@ declare(strict_types=1);
 
 use D3\Ordermanager\Setup as ModuleSetup;
 
-/**
- * Module information
- */
+// @codeCoverageIgnoreStart
 $aModule = [
 
     'd3FileRegister'    => [
@@ -44,7 +42,6 @@ $aModule = [
         'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_main.tpl',
         'd3/ordermanager/Application/views/admin/tpl/d3_cfg_ordermanageritem_action.tpl',
         'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_changediscount.tpl',
-        'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_generatepdf.tpl',
         'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_sendpushnotification.tpl',
         'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_sendmail.tpl',
         'd3/ordermanager/Application/views/admin/tpl/Actions/d3ordermanager_action_exportlist.tpl',
@@ -146,7 +143,6 @@ $aModule = [
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_executemethod.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_custdelfromgroup.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_getpdfdocuments.php',
-        'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_generatepdf.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_actiongrouplist.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_changedelcosts.php',
         'd3/ordermanager/Application/Model/Actions/d3ordermanager_action_abstract.php',
@@ -252,7 +248,6 @@ $aModule = [
         'd3/ordermanager/tests/unit/Application/Model/d3ordermanager_toorderassignmentTest.php',
         'd3/ordermanager/tests/unit/Application/Model/MessageContentGeneratorTest.php',
         'd3/ordermanager/tests/unit/Application/Model/d3testscript.php',
-        'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractiongeneratepdfTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractionchangediscountTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractionchangedelcostsTest.php',
         'd3/ordermanager/tests/unit/Application/Model/Actions/d3ordermanageractionmoveordertofolderTest.php',
@@ -397,7 +392,6 @@ $aModule = [
         'Application/views/admin/tpl/d3_cfg_ordermanageritem_main.tpl',
         'Application/views/admin/tpl/d3_cfg_ordermanageritem_action.tpl',
         'Application/views/admin/tpl/Actions/d3ordermanager_action_changediscount.tpl',
-        'Application/views/admin/tpl/Actions/d3ordermanager_action_generatepdf.tpl',
         'Application/views/admin/tpl/Actions/d3ordermanager_action_sendpushnotification.tpl',
         'Application/views/admin/tpl/Actions/d3ordermanager_action_sendmail.tpl',
         'Application/views/admin/tpl/Actions/d3ordermanager_action_exportlist.tpl',
@@ -498,7 +492,6 @@ $aModule = [
         'Application/Model/Actions/d3ordermanager_action_executemethod.php',
         'Application/Model/Actions/d3ordermanager_action_custdelfromgroup.php',
         'Application/Model/Actions/d3ordermanager_action_getpdfdocuments.php',
-        'Application/Model/Actions/d3ordermanager_action_generatepdf.php',
         'Application/Model/Actions/d3ordermanager_actiongrouplist.php',
         'Application/Model/Actions/d3ordermanager_action_changedelcosts.php',
         'Application/Model/Actions/d3ordermanager_action_abstract.php',
@@ -559,7 +552,7 @@ $aModule = [
         'Application/Model/Requirements/d3ordermanager_requirement_testfilter.php',
         'Config/services.php',
         'Setup/d3ordermanager_update.php',
-        'assets/d3_ordermanager_cron.php',
+        'public/d3_ordermanager_cron.php',
 
         'Modules/Application/Controller/Admin/d3_order_remark_ordermanager.php',
         'Modules/Application/Model/d3_oxorder_ordermanager.php',
@@ -599,7 +592,6 @@ $aModule = [
         'tests/unit/Application/Model/d3ordermanager_confTest.php',
         'tests/unit/Application/Model/d3ordermanager_toorderassignmentTest.php',
         'tests/unit/Application/Model/d3testscript.php',
-        'tests/unit/Application/Model/Actions/d3ordermanageractiongeneratepdfTest.php',
         'tests/unit/Application/Model/Actions/d3ordermanageractionchangediscountTest.php',
         'tests/unit/Application/Model/Actions/d3ordermanageractionchangedelcostsTest.php',
         'tests/unit/Application/Model/Actions/d3ordermanageractionmoveordertofolderTest.php',
@@ -729,3 +721,4 @@ $aModule = [
         'd3/ordermanager/Config/services.yaml',
     ],
 ];
+// @codeCoverageIgnoreEnd

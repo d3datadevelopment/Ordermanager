@@ -7,10 +7,6 @@
             <rules>
                 <nestingDepth>3</nestingDepth>
             </rules>
-            <styles>
-                <style>upper</style>
-                <style>snake</style>
-            </styles>
             <format>
                 <php/>
             </format>

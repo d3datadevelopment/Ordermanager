@@ -371,7 +371,7 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
     public function requirementsSelectsRightOrdersNoValidConfigDataProvider(): array
     {
         return [
-            'unknown'=> [['unknownValue']],
+            'unknown' => [['unknownValue']],
             'space'  => [' '],
             'empty'  => [''],
             'false'  => [false],

@@ -1,0 +1,23 @@
+services:
+  _defaults:
+    autowire: true
+
+  D3\Ordermanager\Application\Model\EventListeners\FinalizeOrder:
+    tags:
+      - { name: kernel.event_listener }
+
+  D3\Ordermanager\Application\Model\EventListeners\FullRun:
+    tags:
+      - { name: kernel.event_listener }
+
+  D3\Ordermanager\Application\Model\EventListeners\OrderSave:
+    tags:
+      - { name: kernel.event_listener }
+
+  D3\Ordermanager\Application\Model\EventListeners\PartiallyRun:
+    tags:
+      - { name: kernel.event_listener }
+
+  D3\Ordermanager\Application\Model\EventListeners\Custom:
+    tags:
+      - { name: kernel.event_listener }

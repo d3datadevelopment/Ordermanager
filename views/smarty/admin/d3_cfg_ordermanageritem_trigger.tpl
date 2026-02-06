@@ -169,6 +169,7 @@
                     </div>
                 [{/if}]
 
+                [{* cron task triggered *}]
                 <div class="groupExp">
                     <div class="">
                         <a class="rc" onclick="_groupExp(this); return false;" href="#">
@@ -283,6 +284,7 @@
                     </div>
                 </div>
 
+                [{* manually triggered *}]
                 <div class="groupExp">
                     <div class="">
                         <a class="rc" onclick="_groupExp(this); return false;" href="#">
@@ -349,6 +351,7 @@
                     </div>
                 </div>
 
+                [{* order completed triggered *}]
                 <div class="groupExp">
                     <div class="">
                         <a class="rc" onclick="_groupExp(this); return false;" href="#">
@@ -401,6 +404,7 @@
                     </div>
                 </div>
 
+                [{* order save triggered *}]
                 <div class="groupExp">
                     <div class="">
                         <a class="rc" onclick="_groupExp(this); return false;" href="#">
@@ -413,11 +417,11 @@
                         <div>
                             <dl class="[{$blActionTriggersRestriction}]">
                                 <dt>
-                                    <label for="MainExecOrderFinishTriggered">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECORDERSAVETRIGGERED"}]</label>
+                                    <label for="MainExecOrderSavedTriggered">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECORDERSAVETRIGGERED"}]</label>
                                 </dt>
                                 <dd>
                                     <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_OM_ORDERSAVETRIGGERED')}]]" value="0" [{$blActionTriggersRestriction}]>
-                                    <input id="MainExecOrderFinishTriggered" type="checkbox" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_ORDERSAVETRIGGERED')}]]" value="1" [{if $edit->getFieldData('D3_OM_ORDERSAVETRIGGERED')}]checked[{/if}] [{$readonly}] [{$blActionTriggersRestriction}]>
+                                    <input id="MainExecOrderSavedTriggered" type="checkbox" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_ORDERSAVETRIGGERED')}]]" value="1" [{if $edit->getFieldData('D3_OM_ORDERSAVETRIGGERED')}]checked[{/if}] [{$readonly}] [{$blActionTriggersRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_EXECORDERSAVETRIGGERED_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>
@@ -444,6 +448,73 @@
                                 </dt>
                                 <dd>
                                     <input id="MainSavePostExecScript" type="text" class="edittext ext_edittext" name="value[sOrderSaveTriggeredPostExecuteScript]" value="[{$edit->getValue('sOrderSaveTriggeredPostExecuteScript')}]" [{$readonly}] [{$blActionScriptsRestriction}]>
+                                    [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT_DESC"}]
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                        </div>
+
+                    </div>
+                </div>
+
+                [{* event triggered *}]
+                <div class="groupExp">
+                    <div class="">
+                        <a class="rc" onclick="_groupExp(this); return false;" href="#">
+                            <b>
+                                [{oxmultilang ident="D3_ORDERMANAGER_MAIN_FIELDSET_EVENTTRIGGER"}]
+                                [{if $edit->getFieldData('D3_OM_EVENTTRIGGERED')}]<i class="fa fa-check-circle d3fa-color-green"></i>[{/if}]
+                            </b>
+                        </a>
+
+                        <div>
+                            <dl class="[{$blActionTriggersRestriction}]">
+                                <dt>
+                                    <label for="MainExecEventTriggered">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECEVENTTRIGGERED"}]</label>
+                                </dt>
+                                <dd>
+                                    <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_OM_EVENTTRIGGERED')}]]" value="0" [{$blActionTriggersRestriction}]>
+                                    <input id="MainExecEventTriggered" type="checkbox" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_OM_EVENTTRIGGERED')}]]" value="1" [{if $edit->getFieldData('D3_OM_EVENTTRIGGERED')}]checked[{/if}] [{$readonly}] [{$blActionTriggersRestriction}]>
+                                    [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_EXECEVENTTRIGGERED_DESC"}]
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                        </div>
+
+                        <div>
+                            <dl>
+                                <dt>
+                                    <label for="EventID">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EVENTID"}]</label>&nbsp;
+                                </dt>
+                                <dd>
+                                    <input type="hidden" name="editval[[{$edit->d3GetFieldLongName('D3_EVENTID')}]]" value="0">
+                                    <input id="EventID" type="text" maxlength="[{$edit->d3modprofile__d3_eventid->fldmax_length}]" class="edittext ext_edittext" name="editval[[{$edit->d3GetFieldLongName('D3_EVENTID')}]]" value="[{if $edit->getFieldData('D3_EVENTID')}][{$edit->getFieldData('D3_EVENTID')}][{/if}]" [{$readonly}]>
+                                    [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_EVENTID_DESC"}]
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                        </div>
+
+                        <div>
+                            <dl class="[{$blActionScriptsRestriction}]">
+                                <dt>
+                                    <label for="MainSavePreExecScript">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT"}]</label>&nbsp;
+                                </dt>
+                                <dd>
+                                    <input id="MainSavePreExecScript" type="text" class="edittext ext_edittext" name="value[sEventTriggeredPreExecuteScript]" value="[{$edit->getValue('sEventTriggeredPreExecuteScript')}]" [{$readonly}] [{$blActionScriptsRestriction}]>
+                                    [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT_DESC"}]
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                        </div>
+
+                        <div>
+                            <dl class="[{$blActionScriptsRestriction}]">
+                                <dt>
+                                    <label for="MainSavePostExecScript">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT"}]</label>&nbsp;
+                                </dt>
+                                <dd>
+                                    <input id="MainSavePostExecScript" type="text" class="edittext ext_edittext" name="value[sEventTriggeredPostExecuteScript]" value="[{$edit->getValue('sEventTriggeredPostExecuteScript')}]" [{$readonly}] [{$blActionScriptsRestriction}]>
                                     [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>

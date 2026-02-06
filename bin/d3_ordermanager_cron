@@ -15,4 +15,4 @@ while ($count < 5) {
     $filePath = '../' . $filePath;
 }
 
-require($filePath);
+require_once($filePath);

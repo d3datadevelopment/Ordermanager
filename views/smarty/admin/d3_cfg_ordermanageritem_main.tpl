@@ -168,7 +168,10 @@
                             [{oxmultilang ident="D3_ORDERMANAGER_MAIN_LASTEXEC"}]&nbsp;
                         </td>
                         <td class="edittext">
-                            [{$edit->getValue('iLastExecDate')|date_format:"%Y-%m-%d %H:%M:%S"}]
+                            [{if $edit->getValue('iLastExecDate')}]
+                                [{oxmultilang ident="fullDateFormat" assign="dateFormat"}]
+                                [{$edit->getValue('iLastExecDate')|date_format:$dateFormat}]
+                            [{/if}]
                         </td>
                     </tr>
                     [{if $blShowLangSwitch}]
@@ -205,11 +208,11 @@
                     <table style="border: none; padding: 0;">
                         <tr>
                             <td class="edittext" style="[{if $markHighlight}] font-weight: bold; background-color: darkred; color: white; [{/if}]">
-                                <label for="MainExecute">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECUTE2"}][{if $oSet->hasDebugMode()}]<br><span id="debugnote">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECUTE_DEBUG"}]</span>[{/if}]</label>
+                                <label for="MainExecute">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECUTE2"}][{if $oSet->hasTestMode()}]<br><span id="debugnote">[{oxmultilang ident="D3_ORDERMANAGER_MAIN_EXECUTE_DEBUG"}]</span>[{/if}]</label>
                             </td>
                             <td class="edittext">
                                 <input type="hidden" name="value[blItemExecute]" value="1">
-                                <input id="MainExecute" type="checkbox" [{if $oSet->hasDebugMode()}]disabled[{/if}] class="edittext ext_edittext" name="value[blItemExecute]" value="0" [{if false == $edit->getValue('blItemExecute')}]checked[{/if}] [{$readonly}]>
+                                <input id="MainExecute" type="checkbox" [{if $oSet->hasTestMode()}]disabled[{/if}] class="edittext ext_edittext" name="value[blItemExecute]" value="0" [{if false == $edit->getValue('blItemExecute')}]checked[{/if}] [{$readonly}]>
                                 [{oxinputhelp ident="D3_ORDERMANAGER_MAIN_EXECUTE_DESC"}]
                             </td>
                         </tr>

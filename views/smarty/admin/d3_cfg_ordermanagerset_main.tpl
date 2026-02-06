@@ -234,7 +234,10 @@ function showFormatSettings(sElemId, visible, blUseOldElem)
                                     [{oxmultilang ident="D3_ORDERMANAGER_SET_CRON_LASTEXEC"}]
                                 </dt>
                                 <dd>
-                                    [{$edit->getValue($oView->getCronTimestampVarName($aCronJobIds.id))|oxformdate}]
+                                    [{if $edit->getValue($oView->getCronTimestampVarName($aCronJobIds.id))}]
+                                        [{oxmultilang ident="fullDateFormat" assign="dateFormat"}]
+                                        [{$edit->getValue($oView->getCronTimestampVarName($aCronJobIds.id))|date_format:$dateFormat}]
+                                    [{/if}]
                                     [{oxinputhelp ident="D3_ORDERMANAGER_SET_CRON_LASTEXEC_DESC"}]
                                 </dd>
                                 <div class="spacer"></div>

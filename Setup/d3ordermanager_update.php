@@ -38,10 +38,12 @@ use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Application\Model\Shop;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateRenderer;
+use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateRendererBridgeInterface;
 use OxidEsales\Facts\Facts;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use stdClass;
 
 class d3ordermanager_update extends d3install_updatebase
 {
@@ -49,17 +51,17 @@ class d3ordermanager_update extends d3install_updatebase
 
     public $sModName = 'Auftragsmanager';
 
-    public $sModVersion = '6.1.1.0';
+    public $sModVersion = '6.2.0.0';
 
-    public $sModRevision = '6110';
+    public $sModRevision = '6200';
 
     public $sBaseConf =
-    '7pRv2==aHpGK1VtdkFlYWlpSVgwSENOUjNqSi9MTGxWdjg2ZVNUVGdGQksyNHpLSjdQdUFjZlhQZ0dMU
-EFHa0YwVXovMGhtbnhoVXdlN3FtM2dBWEUzbmxUbEozUWVZL0UraWhIS0tkSHZZdmhsSmp4THJvd3IzO
-U92WmlFN3hlOWU0SGtTT2Zpa0RkOVZCWUhiQ3FMelF4SVllRVhjZmx3ZXFpdjBqQzVWR2hGUVVacGd2M
-WxMVEd2bFRVbkoyTUVEQkY4K2xrNDArYituVS9haGhKeFJ0R0RMenpseC9IeEdwMWQ2RkpWY1FJTXFyb
-0xpNjN5eDBOWlVKTFc3VWNpVUpscmFHWkRWVkM2WFRGM1RnUTRjTzdoODNIaTJtaGtuVnZtZ1hwZDYrM
-FZ2a3diWFJEbm9YNUF1ZmRTamkrMjdMQThZTkdVQmNZTW9McEhRVUgzSUQzVjl3PT0=';
+        'IeXv2==cHVpVGdpbTgzbG9YUjJnOHgybk5Qd2YwdmEvYW5CenpTRTBpN0xacys1VnJ2YjRwZWJLRk1Wb
+zhucDl4a3JOOURySndlaHA4MStXcGN1ZmVOYVQraUlGMTlJMWkzQStONTdIcStvYzczRjBteWVQNFZWb
+WZOTXVjVVEwZUQ3OHI3K1VNQldINDZ2dlUxT3RITWdIYkZGby9taGNkMWVLdnFGcEhXdWVuS2l6SkhQS
+EV5K1hvcWw1QW1QcEowMGtNRjBQR3B6cmVvYTd5K1JDZklRVktXUUprZlJ6SDZBeGR6cGFPUkR1aGJuV
+UM4d2lXU2poS2tZcVd2Vyt4K2Z1cFZHcGUxYTNvTTJ3VER4VGEvemROaks1TlkwRW1HUm9mOE1jdnRQL
+zU3YlgzOTE3TjFnUnVDYWlJOTd3d1BSOG04aE4yb0gxSVM4d1phcU5xSDdrMUt3PT0=';
 
     public $sRequirements = '';
 
@@ -152,6 +154,16 @@ FZ2a3diWFJEbm9YNUF1ZmRTamkrMjdMQThZTkdVQmNZTW9McEhRVUgzSUQzVjl3PT0=';
             'sExtra'      => '',
             'blMultilang' => false,
         ],
+        'PROF_EVENTTRIGGERED'        => [
+            'sTableName'  => 'd3modprofile',
+            'sFieldName'  => 'D3_OM_EVENTTRIGGERED',
+            'sType'       => 'TINYINT(1)',
+            'blNull'      => false,
+            'sDefault'    => '0',
+            'sComment'    => 'order manager: job will executed if event is triggered',
+            'sExtra'      => '',
+            'blMultilang' => false,
+        ],
         'PROF_MARKORDER'        => [
             'sTableName'  => 'd3modprofile',
             'sFieldName'  => 'D3_OM_MARKORDER',
@@ -169,6 +181,16 @@ FZ2a3diWFJEbm9YNUF1ZmRTamkrMjdMQThZTkdVQmNZTW9McEhRVUgzSUQzVjl3PT0=';
             'blNull'      => false,
             'sDefault'    => 0,
             'sComment'    => 'ID for identifying via cronjob',
+            'sExtra'      => '',
+            'blMultilang' => false,
+        ],
+        'PROF_EVENTID'        => [
+            'sTableName'  => 'd3modprofile',
+            'sFieldName'  => 'D3_EVENTID',
+            'sType'       => 'VARCHAR(100)',
+            'blNull'      => false,
+            'sDefault'    => '',
+            'sComment'    => 'ID for identifying the event',
             'sExtra'      => '',
             'blMultilang' => false,
         ],
@@ -568,8 +590,14 @@ FZ2a3diWFJEbm9YNUF1ZmRTamkrMjdMQThZTkdVQmNZTW9McEhRVUgzSUQzVjl3PT0=';
         /** @var QueryBuilder $qb */
         $qb = d3GetOxidDIC()->get('d3ox.modcfg.OxDbQueryBuilder');
         // change this to your inividual check criterias
-        $qb->select('count(oxid) ')->from('d3modprofile')
-           ->where('oxmodid = '.$qb->createNamedParameter('d3_ordermanager'))
+        $qb->select('count(oxid) ')
+           ->from('d3modprofile')
+           ->where(
+                $qb->expr()->and(
+                    $qb->expr()->eq('oxmodid', $qb->createNamedParameter('d3_ordermanager')),
+                    $qb->expr()->eq('oxshopid', $qb->createNamedParameter(Registry::getConfig()->getShopId()))
+                )
+           )
            ->setMaxResults(1);
         return $qb->execute()->fetchOne() == 0;
     }
@@ -2643,6 +2671,44 @@ FZ2a3diWFJEbm9YNUF1ZmRTamkrMjdMQThZTkdVQmNZTW9McEhRVUgzSUQzVjl3PT0=';
     {
         $sShopId = $oShop->getId();
 
+        $content = $this->useTwig() ?
+            <<<'TwigContent'
+                <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+                <html lang="de">
+                <head>
+                    <title>{{ oShop.oxshops__oxordersubject.value }}</title>
+                    <meta http-equiv="Content-Type" content="text/html; charset={{ charset }}">
+                </head>
+                <body style="font-family: Verdana,Geneva,Arial,Helvetica,sans-serif; font-size: 10px;" alink="#355222" vlink="#355222" link="#355222" bgcolor="#FFFFFF">
+                    <img src="{{ oViewConf.getNoSslImageDir() }}/logo_white.gif" alt="{{ oShop.oxshops__oxname.value }}" border="0" hspace="0" vspace="0" align="texttop"><br>
+                    <br>
+                    Hallo {{ oOrder.oxorder__oxbillsal.value|translate_salutation }} {{ oOrder.oxorder__oxbilllname.getRawValue() }},<br>
+                    <br>
+                    zur Bestellung {{ oOrder.oxorder__oxordernr.getRawValue() }} liegt uns noch keine Bezahlung vor.<br>
+                    <br>
+                    Ihr {{ oShop.oxshops__oxname.getRawValue() }}-Team.
+                </body>
+                </html>
+                TwigContent :
+            <<<'SmartyContent'
+                <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+                <html lang="de">
+                <head>
+                    <title>[{$oShop->oxshops__oxordersubject->value}]</title>
+                    <meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]">
+                </head>
+                <body style="font-family: Verdana,Geneva,Arial,Helvetica,sans-serif; font-size: 10px;" alink="#355222" vlink="#355222" link="#355222" bgcolor="#FFFFFF">
+                    <img src="[{$oViewConf->getNoSslImageDir()}]/logo_white.gif" alt="[{$oShop->oxshops__oxname->value}]" border="0" hspace="0" vspace="0" align="texttop"><br>
+                    <br>
+                    Hallo [{$oOrder->oxorder__oxbillsal->value|oxmultilangsal}] [{$oOrder->oxorder__oxbilllname->getRawValue()}],<br>
+                    <br>
+                    zur Bestellung [{$oOrder->oxorder__oxordernr->getRawValue()}] liegt uns noch keine Bezahlung vor.<br>
+                    <br>
+                    Ihr [{$oShop->oxshops__oxname->getRawValue()}]-Team.
+                </body>
+                </html>
+                SmartyContent;
+
         return [
             [
                 'fieldname'     => 'OXID',
@@ -2716,7 +2782,7 @@ FZ2a3diWFJEbm9YNUF1ZmRTamkrMjdMQThZTkdVQmNZTW9McEhRVUgzSUQzVjl3PT0=';
             ],
             [
                 'fieldname'     => 'OXCONTENT',
-                'content'       => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html lang="de"><head><title>[{$oShop->oxshops__oxordersubject->value}]</title><meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]"></head><body style="font-family: Verdana,Geneva,Arial,Helvetica,sans-serif; font-size: 10px;" alink="#355222" vlink="#355222" link="#355222" bgcolor="#FFFFFF"><img src="[{$oViewConf->getNoSslImageDir()}]/logo_white.gif" alt="[{$oShop->oxshops__oxname->value}]" border="0" hspace="0" vspace="0" align="texttop"><br><br>Hallo [{$oOrder->oxorder__oxbillsal->value|oxmultilangsal}][{$oOrder->oxorder__oxbilllname->getRawValue()}],<br>'.PHP_EOL.'<br>'.PHP_EOL.'zur Bestellung[{$oOrder->oxorder__oxordernr->getRawValue()}] liegt uns noch keine Bezahlung vor.<br>'.PHP_EOL.'<br>'.PHP_EOL.'Ihr [{$oShop->oxshops__oxname->getRawValue()}]-Team.',
+                'content'       => $content,
                 'force_update'  => false,
                 'use_quote'     => true,
                 'use_multilang' => true,
@@ -2747,6 +2813,22 @@ FZ2a3diWFJEbm9YNUF1ZmRTamkrMjdMQThZTkdVQmNZTW9McEhRVUgzSUQzVjl3PT0=';
     public function getExampleContent2InsertFields(Shop $oShop): array
     {
         $sShopId = $oShop->getId();
+
+        $content = $this->useTwig() ?
+            <<<'TwigContent'
+                Hallo {{ oOrder.oxorder__oxbillsal.value|translate_salutation }} {{ oOrder.oxorder__oxbilllname.getRawValue() }},
+
+                zur Bestellung {{ oOrder.oxorder__oxordernr.getRawValue() }} liegt uns noch keine Bezahlung vor.
+
+                Ihr {{ oShop.oxshops__oxname.getRawValue() }}-Team.
+                TwigContent :
+            <<<'SmartyContent'
+                Hallo [{$oOrder->oxorder__oxbillsal->value|oxmultilangsal}] [{$oOrder->oxorder__oxbilllname->getRawValue()}],
+
+                zur Bestellung [{$oOrder->oxorder__oxordernr->getRawValue()}] liegt uns noch keine Bezahlung vor.
+
+                Ihr [{$oShop->oxshops__oxname->getRawValue()}]-Team.
+                SmartyContent;
 
         return [
             [
@@ -2821,7 +2903,7 @@ FZ2a3diWFJEbm9YNUF1ZmRTamkrMjdMQThZTkdVQmNZTW9McEhRVUgzSUQzVjl3PT0=';
             ],
             [
                 'fieldname'     => 'OXCONTENT',
-                'content'       => 'Hallo [{$oOrder->oxorder__oxbillsal->value|oxmultilangsal}] [{$oOrder->oxorder__oxbilllname->getRawValue()}],'.PHP_EOL.PHP_EOL.'zur Bestellung [{$oOrder->oxorder__oxordernr->getRawValue()}] liegt uns noch keine Bezahlung vor.'.PHP_EOL.PHP_EOL.'Ihr [{$oShop->oxshops__oxname->getRawValue()}]-Team.',
+                'content'       => $content,
                 'force_update'  => false,
                 'use_quote'     => true,
                 'use_multilang' => true,
@@ -2949,17 +3031,19 @@ FZ2a3diWFJEbm9YNUF1ZmRTamkrMjdMQThZTkdVQmNZTW9McEhRVUgzSUQzVjl3PT0=';
         return $ret;
     }
 
-    /**
-     * @param bool $useMultilang
-     *
-     * @return bool
-     * @throws ContainerExceptionInterface
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     * @throws NotFoundExceptionInterface
-     */
-    public function addModProfileMultilangSetting(bool $useMultilang = false): bool
+    protected function useTwig()
     {
-        return parent::addModProfileMultilangSetting(true);
+        /** @var TemplateRenderer $renderer */
+        $renderer = ContainerFactory::getInstance()->getContainer()
+                                    ->get(TemplateRendererBridgeInterface::class)
+                                    ->getTemplateRenderer();
+
+        return in_array(
+            get_class($renderer->getTemplateEngine()),
+            [
+                'OxidEsales\Twig\TwigEngine',
+                '\OxidEsales\Twig\TwigEngine',
+            ]
+        );
     }
 }

@@ -268,7 +268,7 @@ class requirementNotInFolderFilterTest extends d3OrdermanagerRequirementIntegrat
     public function requirementsSelectsRightOrdersNoValidConfigDataProvider(): array
     {
         return [
-            'unknown'=> ['unknownValue'],
+            'unknown' => ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
             'false'  => [false],

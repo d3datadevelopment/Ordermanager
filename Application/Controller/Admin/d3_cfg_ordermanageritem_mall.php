@@ -20,11 +20,9 @@ namespace D3\Ordermanager\Application\Controller\Admin;
 use D3\ModCfg\Application\Model\d3filesystem;
 use D3\ModCfg\Application\Model\d3str;
 use D3\ModCfg\Application\Model\Exception\wrongModIdException;
-use D3\Ordermanager\Application\Model\Constants;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
-use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminMall;  // required for non fallback case
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Request;

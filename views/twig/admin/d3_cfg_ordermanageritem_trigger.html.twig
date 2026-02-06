@@ -169,6 +169,7 @@
                     </div>
                 {% endif %}
 
+                {# cron task triggered #}
                 <div class="groupExp">
                     <div class="">
                         <a class="rc" onclick="_groupExp(this); return false;" href="#">
@@ -283,6 +284,7 @@
                     </div>
                 </div>
 
+                {# manually triggered #}
                 <div class="groupExp">
                     <div class="">
                         <a class="rc" onclick="_groupExp(this); return false;" href="#">
@@ -349,6 +351,7 @@
                     </div>
                 </div>
 
+                {# order completed triggered #}
                 <div class="groupExp">
                     <div class="">
                         <a class="rc" onclick="_groupExp(this); return false;" href="#">
@@ -401,6 +404,7 @@
                     </div>
                 </div>
 
+                {# order save triggered#}
                 <div class="groupExp">
                     <div class="">
                         <a class="rc" onclick="_groupExp(this); return false;" href="#">
@@ -413,11 +417,11 @@
                         <div>
                             <dl class="{{ blActionTriggersRestriction }}">
                                 <dt>
-                                    <label for="MainExecOrderFinishTriggered">{{ translate({ ident: "D3_ORDERMANAGER_MAIN_EXECORDERSAVETRIGGERED" }) }}</label>
+                                    <label for="MainExecOrderSaveTriggered">{{ translate({ ident: "D3_ORDERMANAGER_MAIN_EXECORDERSAVETRIGGERED" }) }}</label>
                                 </dt>
                                 <dd>
                                     <input type="hidden" name="editval[{{ edit.d3GetFieldLongName('D3_OM_ORDERSAVETRIGGERED') }}]" value="0" {{ blActionTriggersRestriction }}>
-                                    <input id="MainExecOrderFinishTriggered" type="checkbox" class="edittext ext_edittext" name="editval[{{ edit.d3GetFieldLongName('D3_OM_ORDERSAVETRIGGERED') }}]" value="1" {% if edit.getFieldData('D3_OM_ORDERSAVETRIGGERED') %}checked{% endif %} {{ readonly }} {{ blActionTriggersRestriction }}>
+                                    <input id="MainExecOrderSaveTriggered" type="checkbox" class="edittext ext_edittext" name="editval[{{ edit.d3GetFieldLongName('D3_OM_ORDERSAVETRIGGERED') }}]" value="1" {% if edit.getFieldData('D3_OM_ORDERSAVETRIGGERED') %}checked{% endif %} {{ readonly }} {{ blActionTriggersRestriction }}>
                                     {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_MAIN_EXECORDERSAVETRIGGERED_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_MAIN_EXECORDERSAVETRIGGERED_DESC")} %}
                                 </dd>
                                 <div class="spacer"></div>
@@ -444,6 +448,73 @@
                                 </dt>
                                 <dd>
                                     <input id="MainSavePostExecScript" type="text" class="edittext ext_edittext" name="value[sOrderSaveTriggeredPostExecuteScript]" value="{{ edit.getValue('sOrderSaveTriggeredPostExecuteScript') }}" {{ readonly }} {{ blActionScriptsRestriction }}>
+                                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT_DESC")} %}
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                        </div>
+
+                    </div>
+                </div>
+
+                {# event triggered #}
+                <div class="groupExp">
+                    <div class="">
+                        <a class="rc" onclick="_groupExp(this); return false;" href="#">
+                            <b>
+                                {{ translate({ ident: "D3_ORDERMANAGER_MAIN_FIELDSET_EVENTTRIGGER" }) }}
+                                {% if edit.getFieldData('D3_OM_EVENTTRIGGERED') %}<i class="fa fa-check-circle d3fa-color-green"></i>{% endif %}
+                            </b>
+                        </a>
+
+                        <div>
+                            <dl class="{{ blActionTriggersRestriction }}">
+                                <dt>
+                                    <label for="MainExecEventTriggered">{{ translate({ ident: "D3_ORDERMANAGER_MAIN_EXECEVENTTRIGGERED" }) }}</label>
+                                </dt>
+                                <dd>
+                                    <input type="hidden" name="editval[{{ edit.d3GetFieldLongName('D3_OM_EVENTTRIGGERED') }}]" value="0" {{ blActionTriggersRestriction }}>
+                                    <input id="MainExecEventTriggered" type="checkbox" class="edittext ext_edittext" name="editval[{{ edit.d3GetFieldLongName('D3_OM_EVENTTRIGGERED') }}]" value="1" {% if edit.getFieldData('D3_OM_EVENTTRIGGERED') %}checked{% endif %} {{ readonly }} {{ blActionTriggersRestriction }}>
+                                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_MAIN_EXECEVENTTRIGGERED_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_MAIN_EXECEVENTTRIGGERED_DESC")} %}
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                        </div>
+
+                        <div>
+                            <dl>
+                                <dt>
+                                    <label for="EventID">{{ translate({ ident: "D3_ORDERMANAGER_MAIN_EVENTID" }) }}</label>&nbsp;
+                                </dt>
+                                <dd>
+                                    <input type="hidden" name="editval[{{ edit.d3GetFieldLongName('D3_EVENTID') }}]" value="0">
+                                    <input id="EventID" type="text" maxlength="{{ edit.d3modprofile__d3_eventid.fldmax_length }}" class="edittext ext_edittext" name="editval[{{ edit.d3GetFieldLongName('D3_EVENTID') }}]" value="{% if edit.getFieldData('D3_EVENTID') %}{{ edit.getFieldData('D3_EVENTID') }}{% endif %}" {{ readonly }}>
+                                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_MAIN_EVENTID_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_MAIN_EVENTID_DESC")} %}
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                        </div>
+
+                        <div>
+                            <dl class="{{ blActionScriptsRestriction }}">
+                                <dt>
+                                    <label for="MainSavePreExecScript">{{ translate({ ident: "D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT" }) }}</label>&nbsp;
+                                </dt>
+                                <dd>
+                                    <input id="MainSavePreExecScript" type="text" class="edittext ext_edittext" name="value[sEventTriggeredPreExecuteScript]" value="{{ edit.getValue('sEventTriggeredPreExecuteScript') }}" {{ readonly }} {{ blActionScriptsRestriction }}>
+                                    {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_MAIN_PREEXECUTESCRIPT_DESC")} %}
+                                </dd>
+                                <div class="spacer"></div>
+                            </dl>
+                        </div>
+
+                        <div>
+                            <dl class="{{ blActionScriptsRestriction }}">
+                                <dt>
+                                    <label for="MainSavePostExecScript">{{ translate({ ident: "D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT" }) }}</label>&nbsp;
+                                </dt>
+                                <dd>
+                                    <input id="MainSavePostExecScript" type="text" class="edittext ext_edittext" name="value[sEventTriggeredPostExecuteScript]" value="{{ edit.getValue('sEventTriggeredPostExecuteScript') }}" {{ readonly }} {{ blActionScriptsRestriction }}>
                                     {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT_DESC"), 'sHelpText': help_text("D3_ORDERMANAGER_MAIN_POSTEXECUTESCRIPT_DESC")} %}
                                 </dd>
                                 <div class="spacer"></div>

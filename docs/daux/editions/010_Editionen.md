@@ -8,18 +8,19 @@ Das Modul **{$modulename}** erhalten Sie in verschiedenen Editionen mit untersch
 
 |                                   | Free-Edition  | Standard-Edition  |  Premium-Edition  |
 |-----------------------------------|:-------------:|:-----------------:|:-----------------:|
-| Anzahl möglicher Aufgaben         | 5             | 25                | beliebig          |
-| vor-Ausführung-Script möglich     |               |                   | X                 |
-| nach-Ausführung-Script möglich    |               |                   | X                 |
+| Anzahl möglicher Aufgaben         |       5       |        25         |     beliebig      |
+| vor-Ausführung-Script möglich     |               |                   |         X         |
+| nach-Ausführung-Script möglich    |               |                   |         X         |
 
 ## Aufgabenauslöser
 
-|                                               | Free-Edition  | Standard-Edition  |  Premium-Edition  |
-|-----------------------------------------------|:-------------:|:-----------------:|:-----------------:|
-| periodischer Start per Cronjob                | X             | X                 | X                 |
-| manueller Start direkt an den Bestellungen    | X             | X                 | X                 |
-| beim Bestellabschluss durch den Kunden        |               | X                 | X                 |
-| beim Speichern der Bestellung                 |               | X                 | X                 |
+|                                               | Free-Edition  | Standard-Edition |  Premium-Edition  |
+|-----------------------------------------------|:-------------:|:----------------:|:-----------------:|
+| periodischer Start per Cronjob                |       X       |        X         |         X         |
+| manueller Start direkt an den Bestellungen    |       X       |        X         |         X         |
+| beim Bestellabschluss durch den Kunden        |               |        X         |         X         |
+| beim Speichern der Bestellung                 |               |        X         |         X         |
+| programmierbare Auslöser an beliebiger Stelle |               |                  |         X         |
 
 ## Bedingungen
 

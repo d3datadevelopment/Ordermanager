@@ -204,8 +204,8 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
         $this->expectExceptionMessage('error occured');
 
         set_error_handler(static function () {
-//            $error = error_get_last();
-//            $errstr = $error['message'];
+            //            $error = error_get_last();
+            //            $errstr = $error['message'];
             throw new Exception('error occured');
         });
 
@@ -245,8 +245,8 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
         $this->expectExceptionMessage('error occured');
 
         set_error_handler(static function () {
-//            $error = error_get_last();
-//            $errstr = $error['message'];
+            //            $error = error_get_last();
+            //            $errstr = $error['message'];
             throw new Exception('error occured');
         });
 

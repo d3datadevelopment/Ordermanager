@@ -29,6 +29,9 @@ use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
 use OxidEsales\Eshop\Core\Registry;
 
+/**
+ * @coversNothing
+ */
 class actionSendPushNotificationTest extends d3OrdermanagerActionIntegrationTestCase
 {
     public $sManagerId = 'managerTestId';
@@ -159,9 +162,7 @@ class actionSendPushNotificationTest extends d3OrdermanagerActionIntegrationTest
         try {
             $testServer->start();
             $oExecute->startJobItemExecution();
-            $this->assertMatchesRegularExpression( '@.*orderNr.*@', $testServer->getLastRequest()->getInput() );
-        } catch (Exception $e) {
-            throw $e;
+            $this->assertMatchesRegularExpression('@.*orderNr.*@', $testServer->getLastRequest()->getInput());
         } finally {
             $testServer->stop();
             Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
@@ -187,11 +188,9 @@ class actionSendPushNotificationTest extends d3OrdermanagerActionIntegrationTest
 
         try {
             $testServer->start();
-            $this->expectException( GuzzleException::class );
+            $this->expectException(GuzzleException::class);
 
             $oExecute->startJobItemExecution();
-        } catch (Exception $e) {
-            throw $e;
         } finally {
             $testServer->stop();
             Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);

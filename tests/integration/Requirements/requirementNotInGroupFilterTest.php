@@ -306,7 +306,7 @@ class requirementNotInGroupFilterTest extends d3OrdermanagerRequirementIntegrati
     public function requirementsSelectsRightOrdersNoValidConfigDataProvider(): array
     {
         return [
-            'unknown'=> ['unknownValue'],
+            'unknown' => ['unknownValue'],
             'space'  => [' '],
             'empty'  => [''],
             'false'  => [false],

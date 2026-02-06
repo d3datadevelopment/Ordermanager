@@ -28,6 +28,7 @@ use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableE
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
 use Doctrine\DBAL\Exception as DBALException;
 use Exception;
+use Generator;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
@@ -876,17 +877,16 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
      * @covers \D3\Ordermanager\Application\Controller\d3ordermanager_response::getLastExecDate
      * @test
      * @throws ReflectionException
+     * @dataProvider getLastExecDatePassedDataProvider
      */
-    public function getLastExecDatePassed()
+    public function getLastExecDatePassed(?string $timestampValue, string $expected)
     {
-        $testValue = 'testValue';
-
         /** @var stdClass|MockObject $oModCfgMock */
         $oModCfgMock = $this->getMockBuilder(stdClass::class)
             ->addMethods(['getValue'])
             ->getMock();
         $map = [
-            ['tsVarName', $testValue],
+            ['tsVarName', $timestampValue],
         ];
         $oModCfgMock->method('getValue')->willReturnMap($map);
 
@@ -903,12 +903,18 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertSame(
-            $testValue,
+            $expected,
             $this->callMethod(
                 $this->_oController,
                 'getLastExecDate'
             )
         );
+    }
+
+    public static function getLastExecDatePassedDataProvider(): Generator
+    {
+        yield 'null value' => [null, ''];
+        yield 'timestamp value' => ['2021-12-24 18:00:00', '24.12.2021 18:00:00'];
     }
 
     /**
@@ -970,6 +976,30 @@ class d3ordermanager_responseTest extends d3OrdermanagerUnitTestCase
                 $this->_oController,
                 'getLastExecDateInfo'
             )
+        );
+    }
+
+    /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Ordermanager\Application\Controller\d3ordermanager_response::getStatistic
+     */
+    public function getStatisticTest()
+    {
+        $managerListMock = $this->getMockBuilder(d3ordermanagerlist::class)
+            ->onlyMethods(['getAffectedItemsCount'])
+            ->getMock();
+        $managerListMock->expects($this->once())->method('getAffectedItemsCount');
+
+        $sut = $this->getMockBuilder(d3ordermanager_response::class)
+            ->onlyMethods(['getManagerList'])
+            ->getMock();
+        $sut->method('getManagerList')->willReturn($managerListMock);
+
+        $this->callMethod(
+            $sut,
+            'getStatistic'
         );
     }
 
