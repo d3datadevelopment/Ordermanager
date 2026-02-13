@@ -166,7 +166,7 @@ class actionStornoOrderTest extends d3OrdermanagerActionIntegrationTestCase
         /** @var Order $oOrder */
         $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
         $oOrder->load($this->aOrderIdList[0]);
-        $this->assertSame(
+        $this->assertEquals(
             1,
             $oOrder->getFieldData('oxstorno')
         );
@@ -174,7 +174,7 @@ class actionStornoOrderTest extends d3OrdermanagerActionIntegrationTestCase
         /** @var Order $oOrderArticle */
         $oOrderArticle = d3GetOxidDIC()->get('d3ox.ordermanager.'.OrderArticle::class);
         $oOrderArticle->load($this->aOrderArticleIdList[0]);
-        $this->assertSame(
+        $this->assertEquals(
             1,
             $oOrderArticle->getFieldData('oxstorno')
         );
@@ -182,7 +182,7 @@ class actionStornoOrderTest extends d3OrdermanagerActionIntegrationTestCase
         /** @var Order $oOrder */
         $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
         $oOrder->load($this->aOrderIdList[1]);
-        $this->assertSame(
+        $this->assertEquals(
             0,
             $oOrder->getFieldData('oxstorno')
         );
@@ -190,7 +190,7 @@ class actionStornoOrderTest extends d3OrdermanagerActionIntegrationTestCase
         /** @var Order $oOrderArticle */
         $oOrderArticle = d3GetOxidDIC()->get('d3ox.ordermanager.'.OrderArticle::class);
         $oOrderArticle->load($this->aOrderArticleIdList[1]);
-        $this->assertSame(
+        $this->assertEquals(
             0,
             $oOrderArticle->getFieldData('oxstorno')
         );

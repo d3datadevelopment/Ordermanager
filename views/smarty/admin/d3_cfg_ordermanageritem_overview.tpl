@@ -167,11 +167,11 @@
                                 </dt>
                                 <dd>
                                     [{assign var="mFinishedCount" value=$oView->getFinishedCount()}]
-                                    [{$mFinishedCount}]
+                                    <span style="float: left">[{$mFinishedCount}]</span>
                                     [{if $oView->getDataOnDemand()}]
                                         <input type="hidden" name="finishedCount" value="[{$mFinishedCount}]">
                                         [{if false == $oView->hasRequestedData('finishedCount', 'getFinishedCount')}]
-                                            <span style="float: left;">
+                                            <span style="float: left; margin-left: 10px">
                                                 <span class="d3modcfg_btn icon d3color-green">
                                                     <button type="submit" name="requestData" onclick="oForm = document.getElementById('myedit'); oForm.sRequestData.value='getFinishedCount'; oForm.submit();">
                                                         <i class="fa fa-check-circle fa-inverse"></i>
@@ -190,11 +190,11 @@
                                 </dt>
                                 <dd>
                                     [{assign var="mFinishedMonthCount" value=$oView->getFinishedMonthCount()}]
-                                    [{$mFinishedMonthCount}]
+                                    <span style="float: left; margin-left: 10px">[{$mFinishedMonthCount}]</span>
                                     [{if $oView->getDataOnDemand()}]
                                         <input type="hidden" name="finishedMonthCount" value="[{$mFinishedMonthCount}]">
                                         [{if false == $oView->hasRequestedData('finishedMonthCount', 'getFinishedMonthCount')}]
-                                            <span style="float: left;">
+                                            <span style="float: left; margin-left: 10px">
                                                 <span class="d3modcfg_btn icon d3color-green">
                                                     <button type="submit" name="requestData" onclick="oForm = document.getElementById('myedit'); oForm.sRequestData.value='getFinishedMonthCount'; oForm.submit();">
                                                         <i class="fa fa-check-circle fa-inverse"></i>
@@ -213,11 +213,11 @@
                                 </dt>
                                 <dd>
                                     [{assign var="mToFinishedCount" value=$oView->getToFinishedCount()}]
-                                    [{$mToFinishedCount}]
+                                    <span style="float: left; margin-left: 10px">[{$mToFinishedCount}]</span>
                                     [{if $oView->getDataOnDemand()}]
                                         <input type="hidden" name="toFinishedCount" value="[{$mToFinishedCount}]">
                                         [{if false == $oView->hasRequestedData('toFinishedCount', 'getToFinishedCount')}]
-                                            <span style="float: left;">
+                                            <span style="float: left; margin-left: 10px">
                                                 <span class="d3modcfg_btn icon d3color-green">
                                                     <button type="submit" name="requestData" onclick="oForm = document.getElementById('myedit'); oForm.sRequestData.value='getToFinishedCount'; oForm.submit();">
                                                         <i class="fa fa-check-circle fa-inverse"></i>
@@ -236,11 +236,11 @@
                                 </dt>
                                 <dd>
                                     [{assign var="mNotFinishedCount" value=$oView->getNotFinishedCount()}]
-                                    [{$mNotFinishedCount}]
+                                    <span style="float: left; margin-left: 10px">[{$mNotFinishedCount}]</span>
                                     [{if $oView->getDataOnDemand()}]
                                         <input type="hidden" name="notFinishedCount" value="[{$mNotFinishedCount}]">
                                         [{if false == $oView->hasRequestedData('notFinishedCount', 'getNotFinishedCount')}]
-                                            <span style="float: left;">
+                                            <span style="float: left; margin-left: 10px">
                                                 <span class="d3modcfg_btn icon d3color-green">
                                                     <button type="submit" name="requestData" onclick="oForm = document.getElementById('myedit'); oForm.sRequestData.value='getNotFinishedCount'; oForm.submit();">
                                                         <i class="fa fa-check-circle fa-inverse"></i>

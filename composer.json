@@ -50,14 +50,15 @@
   },
   "require-dev": {
     "d3/testingtools": "^1.2.0.0",
-    "phpunit/phpunit": "^9.1.1",
+    "phpunit/phpunit": "^9.6",
     "mikey179/vfsstream": "^1.6.8",
     "donatj/mock-webserver": "^2.6",
     "friendsofphp/php-cs-fixer": "^3.13.0",
     "phpstan/phpstan": "^1.10",
     "boxblinkracer/phpunuhi": "^1.12",
     "rector/rector": "^0.18.13",
-    "infection/infection": "^0.29.5"
+    "infection/infection": "^0.26.19|^0.27.0|^0.28.0|^0.29.5",
+    "d3/pdfdocuments": "^2"
   },
   "suggest": {
     "d3/pdfdocuments": "enables the automatic generation, dispatch and storage of highly customizable PDF documents"
@@ -81,9 +82,9 @@
     "phpstan": "./vendor/bin/phpstan --configuration=vendor/d3/ordermanager/phpstan.neon analyse",
     "phpstan-report": "./vendor/bin/phpstan --configuration=vendor/d3/ordermanager/phpstan.neon analyse --error-format=json > vendor/d3/ordermanager/tests/phpstan.report.json",
 
-    "phpunit": "XDEBUG_MODE=off ./vendor/bin/phpunit --config=vendor/d3/ordermanager/tests/ --no-coverage",
-    "phpunit-line-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/ordermanager/tests/ --coverage-html=vendor/d3/ordermanager/tests/result/coverage",
-    "phpunit-path-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/ordermanager/tests/ --coverage-html=vendor/d3/ordermanager/tests/result/coverage --path-coverage",
+    "phpunit": "XDEBUG_MODE=off ./vendor/bin/phpunit --config=vendor/d3/ordermanager/ --no-coverage",
+    "phpunit-line-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/ordermanager/ --coverage-html=vendor/d3/ordermanager/tests/result/coverage",
+    "phpunit-path-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/ordermanager/ --coverage-html=vendor/d3/ordermanager/tests/result/coverage --path-coverage",
 
     "infection": "./vendor/bin/infection --configuration=vendor/d3/ordermanager/infection.json5",
 

@@ -189,6 +189,11 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         $this->_sRequestData = $request->getRequestEscapedParameter('sRequestData');
     }
 
+    protected function hasRequestData(): bool
+    {
+        return is_string($this->_sRequestData) && strlen(trim($this->_sRequestData));
+    }
+
     protected function _getRequestData(): string
     {
         return $this->_sRequestData;
@@ -307,7 +312,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
             return true;
         }
 
-        return $this->_getRequestData() == $sFunctionName;
+        return $this->hasRequestData() && $this->_getRequestData() == $sFunctionName;
     }
 
     /**
@@ -342,7 +347,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         /** @var Request $request */
         $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
         $iRequestCount = (string) $request->getRequestEscapedParameter($sRequestName);
-        return (bool) strlen($iRequestCount) || $this->_getRequestData() == $sFunctionName;
+        return (bool) strlen($iRequestCount) || ($this->hasRequestData() && $this->_getRequestData() == $sFunctionName);
     }
 
     public function getManager(): Manager

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace D3\Ordermanager\tests\unit\Modules\Application\Model;
 
+use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\Events\FinalizeOrderEvent;
 use D3\Ordermanager\Application\Model\Events\OrderSaveEvent;
@@ -397,6 +398,10 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
      */
     public function canFinalizeOrder()
     {
+        /** @var d3_cfg_mod $oSet */
+        $oSet = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $oSet->setActive(true);
+
         $eventDispatcherMock = $this->getMockBuilder(EventDispatcher::class)
             ->onlyMethods(['dispatch'])
             ->getMock();
@@ -417,10 +422,8 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
             'oxbillcompany' => __METHOD__,
         ]);
 
-        $this->_oModel = $oModelMock;
-
         $this->callMethod(
-            $this->_oModel,
+            $oModelMock,
             'finalizeOrder',
             [
                 oxNew(Basket::class),
@@ -438,6 +441,10 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
      */
     public function canSave()
     {
+        /** @var d3_cfg_mod $oSet */
+        $oSet = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $oSet->setActive(true);
+
         $eventDispatcherMock = $this->getMockBuilder(EventDispatcher::class)
             ->onlyMethods(['dispatch'])
             ->getMock();

@@ -221,7 +221,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         $_GET['shp'] = '1';
         $_GET['cjid'] = 'testId';
 
-        $this->setCLIArguments(['script', '-q', 'run', '1', 'testId']);
+        $this->setCLIArguments(['./vendor/bin/d3_ordermanager_cron', '-q', 'run', '1', 'testId']);
 
         // prevent save trigger action in test preparation
         Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
@@ -281,7 +281,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         $_GET['shp'] = '1';
         $_GET['cjid'] = 'testId';
 
-        $this->setCLIArguments(['script', 'run', '1', 'testId']);
+        $this->setCLIArguments(['./vendor/bin/d3_ordermanager_cron', 'run', '1', 'testId']);
 
         stream_filter_register("intercept", Intercept::class);
         stream_filter_append(STDERR, "intercept");  // for warning messages and above
@@ -344,7 +344,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         $_GET['shp'] = '1';
         $_GET['cjid'] = 'testId';
 
-        $this->setCLIArguments(['script', 'run', '1', 'testId']);
+        $this->setCLIArguments(['./vendor/bin/d3_ordermanager_cron', 'run', '1', 'testId']);
 
         stream_filter_register("intercept", Intercept::class);
         stream_filter_append(STDERR, "intercept");  // for warning messages and above
@@ -404,7 +404,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         $_GET['shp'] = '1';
         $_GET['cjid'] = 'testId';
 
-        $this->setCLIArguments(['script', 'run', '1', 'testId']);
+        $this->setCLIArguments(['./vendor/bin/d3_ordermanager_cron', 'run', '1', 'testId']);
 
         stream_filter_register("intercept", Intercept::class);
         stream_filter_append(STDERR, "intercept");  // for warning messages and above
@@ -458,7 +458,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         $set->assign(['oxactive' => 1]);
         $set->saveNoLicenseRefresh();
 
-        $this->setCLIArguments(['script', 'run', '1', 'testId']);
+        $this->setCLIArguments(['./vendor/bin/d3_ordermanager_cron', 'run', '1', 'testId']);
 
         stream_filter_register("intercept", Intercept::class);
         stream_filter_append(STDERR, "intercept");  // for warning messages and above

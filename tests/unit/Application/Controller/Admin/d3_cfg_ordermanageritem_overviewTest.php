@@ -30,6 +30,7 @@ use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlis
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
 use Doctrine\DBAL\Exception as DBALException;
 use Exception;
+use Generator;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
@@ -1066,16 +1067,17 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
      * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_overview::canRequestData
      * @test
      * @throws ReflectionException
+     * @dataProvider canRequestDataNoDemandDataProvider
      */
-    public function canRequestDataNoDemand()
+    public function canRequestDataNoDemand($hasRequestData, $sFncName)
     {
-        $sFncName = 'fncName';
-
         /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_overview::class)
             ->onlyMethods(['getDataOnDemand'])
             ->getMock();
         $oControllerMock->method('getDataOnDemand')->willReturn(false);
+
+        $this->setValue($oControllerMock, '_sRequestData', $sFncName);
 
         $this->_oController = $oControllerMock;
 
@@ -1086,6 +1088,12 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
                 [$sFncName]
             )
         );
+    }
+
+    public static function canRequestDataNoDemandDataProvider(): Generator
+    {
+        yield 'has fnc name' => [true, 'fncName'];
+        yield 'without fnc name' => [false, null];
     }
 
     /**
@@ -1101,10 +1109,12 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_overview::class)
             ->onlyMethods([
                 'getDataOnDemand',
+                'hasRequestData',
                 '_getRequestData',
             ])
             ->getMock();
         $oControllerMock->method('getDataOnDemand')->willReturn(true);
+        $oControllerMock->method('hasRequestData')->willReturn(true);
         $oControllerMock->method('_getRequestData')->willReturn($sFncName);
 
         $this->_oController = $oControllerMock;
@@ -1122,19 +1132,20 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
      * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_overview::canRequestData
      * @test
      * @throws ReflectionException
+     * @dataProvider canRequestDataNoDemandDataProvider
      */
-    public function canRequestDataOnDemandHasNoRequestData()
+    public function canRequestDataOnDemandHasNoRequestData($hasRequestData, $sFncName)
     {
-        $sFncName = 'fncName';
-
         /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_overview::class)
             ->onlyMethods([
                 'getDataOnDemand',
+                'hasRequestData',
                 '_getRequestData',
             ])
             ->getMock();
         $oControllerMock->method('getDataOnDemand')->willReturn(true);
+        $oControllerMock->method('hasRequestData')->willReturn($hasRequestData);
         $oControllerMock->method('_getRequestData')->willReturn('otherFncName');
 
         $this->_oController = $oControllerMock;
@@ -1305,8 +1316,9 @@ class d3_cfg_ordermanageritem_overviewTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_cfg_ordermanageritem_overview|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_overview::class)
-            ->onlyMethods(['_getRequestData'])
+            ->onlyMethods(['hasRequestData', '_getRequestData'])
             ->getMock();
+        $oControllerMock->method('hasRequestData')->willReturn(true);
         $oControllerMock->method('_getRequestData')->willReturn($sFncName);
 
         $this->_oController = $oControllerMock;
