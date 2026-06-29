@@ -34,13 +34,12 @@ abstract class d3OrdermanagerActionIntegrationTestCase extends d3IntegrationTest
      */
     public function getResultList($aOrderIdList = [])
     {
-        /** @var ListModel $oList */
-        $oList = d3GetOxidDIC()->get('d3ox.ordermanager.'.ListModel::class);
+        $oList = oxNew(ListModel::class);
         $oList->init(Order::class);
 
         foreach ($aOrderIdList as $sId) {
             /** @var Order $oOrder */
-            $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+            $oOrder = oxNew(Order::class);
             $oOrder->load($sId);
             $oList->offsetSet($oOrder->getId(), $oOrder);
         }

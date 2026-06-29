@@ -52,29 +52,6 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -97,13 +74,11 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxbillcountryid'   => $this->aCountryIdList[0], // passed
                 'oxdelcountryid'    => '',
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -112,13 +87,11 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxbillcountryid'   => $this->aCountryIdList[3], // don't pass
                 'oxdelcountryid'    => $this->aCountryIdList[1], // passed
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -127,13 +100,11 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[2],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxbillcountryid'   => $this->aCountryIdList[2], // passed
                 'oxdelcountryid'    => $this->aCountryIdList[2],  // passed
             ],
             [
                 $this->aOrderArticleIdList[2] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -142,14 +113,11 @@ class requirementCountryFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[3],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxbillcountryid'   => $this->aCountryIdList[3], // don't pass
                 'oxdelcountryid'    => $this->aCountryIdList[3], // don't pass
             ],
             [
-                $this->aOrderArticleIdList[3] => [
-                    'oxtitle'       => __CLASS__,
-                ],
+                $this->aOrderArticleIdList[3] => [],
             ]
         );
     }

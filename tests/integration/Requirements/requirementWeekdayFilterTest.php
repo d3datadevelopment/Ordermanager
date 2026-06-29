@@ -45,29 +45,6 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -80,13 +57,11 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxsenddate'        => '2018-01-04 00:00:00',
                 'oxpaid'            => '2018-01-07 00:00:00',
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -95,13 +70,11 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-02 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxsenddate'        => '2018-01-05 00:00:00',
                 'oxpaid'            => '2018-01-08 00:00:00',
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -110,13 +83,11 @@ class requirementWeekdayFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[2],
             [
                 'oxorderdate'   => '2018-01-03 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxsenddate'        => '2018-01-06 00:00:00',
                 'oxpaid'            => '2018-01-09 00:00:00',
             ],
             [
                 $this->aOrderArticleIdList[2] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );

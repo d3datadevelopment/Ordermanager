@@ -48,29 +48,6 @@ class requirementOtherJobTest extends d3OrdermanagerRequirementIntegrationTestCa
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -83,11 +60,9 @@ class requirementOtherJobTest extends d3OrdermanagerRequirementIntegrationTestCa
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -105,11 +80,9 @@ class requirementOtherJobTest extends d3OrdermanagerRequirementIntegrationTestCa
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -127,11 +100,9 @@ class requirementOtherJobTest extends d3OrdermanagerRequirementIntegrationTestCa
             $this->aOrderIdList[2],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
             ],
             [
                 $this->aOrderArticleIdList[2] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );

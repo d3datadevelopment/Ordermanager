@@ -21,6 +21,7 @@ use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\Events\FinalizeOrderEvent;
 use D3\Ordermanager\Application\Model\Events\OrderSaveEvent;
+use D3\Ordermanager\Core\ModCfgTrait;
 use D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager;
 use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
@@ -45,6 +46,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 {
+    use ModCfgTrait;
+
     /** @var d3_oxorder_ordermanager */
     protected $_oModel;
 
@@ -59,7 +62,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     {
         parent::setUp();
 
-        $this->_oModel = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $this->_oModel = oxNew(Order::class);
     }
 
     public function tearDown(): void
@@ -70,7 +73,6 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::__get
      * @test
      * @throws ReflectionException
      */
@@ -99,8 +101,8 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3getBasket4OrderManager
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3setBasket4OrderManager
+
+
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -110,7 +112,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oModel,
             'd3setBasket4OrderManager',
-            [d3GetOxidDIC()->get('d3ox.ordermanager.'.Basket::class)]
+            [oxNew(Basket::class)]
         );
 
         $this->assertInstanceOf(
@@ -123,8 +125,8 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3getPayment4OrderManager
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3setPayment4OrderManager
+
+
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -134,7 +136,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $this->callMethod(
             $this->_oModel,
             'd3setPayment4OrderManager',
-            [d3GetOxidDIC()->get('d3ox.ordermanager.'.Payment::class)]
+            [oxNew(Payment::class)]
         );
 
         $this->assertInstanceOf(
@@ -147,7 +149,6 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3getOrderBasket4OrderManager
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -166,7 +167,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ->getMock();
         $oOrderArticleMock->method('count')->willReturn(5);
         /** @var OrderArticle $oOrderArticle */
-        $oOrderArticle = d3GetOxidDIC()->get('d3ox.ordermanager.'.OrderArticle::class);
+        $oOrderArticle = oxNew(OrderArticle::class);
         $oOrderArticleMock->offsetSet('itemNo1', $oOrderArticle);
         $oOrderArticleMock->offsetSet('itemNo2', $oOrderArticle);
         $oOrderArticleMock->offsetSet('itemNo3', $oOrderArticle);
@@ -226,7 +227,6 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3getOrderBasket4OrderManager
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -245,7 +245,7 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ->getMock();
         $oOrderArticleMock->method('count')->willReturn(5);
         /** @var OrderArticle $oOrderArticle */
-        $oOrderArticle = d3GetOxidDIC()->get('d3ox.ordermanager.'.OrderArticle::class);
+        $oOrderArticle = oxNew(OrderArticle::class);
         $oOrderArticleMock->offsetSet('itemNo1', $oOrderArticle);
         $oOrderArticleMock->offsetSet('itemNo2', $oOrderArticle);
         $oOrderArticleMock->offsetSet('itemNo3', $oOrderArticle);
@@ -305,7 +305,6 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3getOrderBasket4OrderManager
      * @test
      * @throws ReflectionException
      */
@@ -376,30 +375,12 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3GetOrderManagerVoucher
-     * @test
-     * @throws ReflectionException
-     */
-    public function d3GetOrderManagerVoucherHasRightInstance()
-    {
-        $this->assertInstanceOf(
-            Voucher::class,
-            $this->callMethod(
-                $this->_oModel,
-                'd3GetOrderManagerVoucher'
-            )
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::finalizeOrder
      * @test
      * @throws ReflectionException
      */
     public function canFinalizeOrder()
     {
-        /** @var d3_cfg_mod $oSet */
-        $oSet = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $oSet = $this->d3GetOrderManagerConfig();
         $oSet->setActive(true);
 
         $eventDispatcherMock = $this->getMockBuilder(EventDispatcher::class)
@@ -411,9 +392,11 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(d3_oxorder_ordermanager::class)
-            ->onlyMethods(['d3GetEventDispatcher'])
+            ->onlyMethods(['d3GetEventDispatcher', 'd3GetOrderManagerConfig'])
             ->getMock();
         $oModelMock->method('d3GetEventDispatcher')->willReturn($eventDispatcherMock);
+        $oModelMock->method('d3GetOrderManagerConfig')->willReturn($oSet);
+
         $orderId = Registry::getUtilsObject()->generateUId();
         $oModelMock->setId($orderId);
         $oModelMock->assign([
@@ -435,14 +418,12 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::save
      * @test
      * @throws ReflectionException
      */
     public function canSave()
     {
-        /** @var d3_cfg_mod $oSet */
-        $oSet = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $oSet = $this->d3GetOrderManagerConfig();
         $oSet->setActive(true);
 
         $eventDispatcherMock = $this->getMockBuilder(EventDispatcher::class)
@@ -454,9 +435,11 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_oxorder_ordermanager|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(d3_oxorder_ordermanager::class)
-            ->onlyMethods(['d3GetEventDispatcher'])
+            ->onlyMethods(['d3GetEventDispatcher', 'd3GetOrderManagerConfig'])
             ->getMock();
         $oModelMock->method('d3GetEventDispatcher')->willReturn($eventDispatcherMock);
+        $oModelMock->method('d3GetOrderManagerConfig')->willReturn($oSet);
+
         $orderId = Registry::getUtilsObject()->generateUId();
         $oModelMock->setId($orderId);
         $oModelMock->assign([
@@ -479,7 +462,6 @@ class d3_oxorder_ordermanagerTest extends d3OrdermanagerUnitTestCase
      * @test
      * @return void
      * @throws ReflectionException
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager::d3GetEventDispatcher
      */
     public function testd3GetEventDispatcher(): void
     {

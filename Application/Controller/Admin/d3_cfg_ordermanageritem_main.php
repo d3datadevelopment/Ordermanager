@@ -22,23 +22,15 @@ use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\Constants;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
-use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
 use Doctrine\DBAL\Exception as DBALException;
-use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
-use OxidEsales\Eshop\Core\Request;
+use OxidEsales\Eshop\Core\Registry;
 
 class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
 {
-    use VariablesTrait;
-
     protected $_sSavedId;
-
-    protected $_sSetModId = 'd3_ordermanager';
-
-    protected $_sModId = 'd3_ordermanager';
 
     protected $_sMenuItemTitle = 'd3mxordermanager';
 
@@ -72,10 +64,7 @@ class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
     {
         $sRet = parent::render();
 
-        /** @var Config $config */
-        $config = d3GetOxidDIC()->get('d3ox.ordermanager.'.Config::class);
-
-        $this->addTplParam("blUseTimeCheck", $config->getConfigParam('blUseTimeCheck'));
+        $this->addTplParam("blUseTimeCheck", Registry::getConfig()->getConfigParam('blUseTimeCheck'));
 
         return $sRet;
     }
@@ -90,13 +79,10 @@ class d3_cfg_ordermanageritem_main extends d3_cfg_mod_main
     {
         $aParams = parent::addDefaultValues($aParams);
 
-        /** @var Manager $oManager */
-        $oManager = d3GetOxidDIC()->get(Manager::class);
+        $oManager = oxNew(Manager::class);
         $sFieldLongName = $oManager->d3GetFieldLongName('d3_cronjobid');
 
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
-        $aRequestParameter = $request->getRequestEscapedParameter("editval");
+        $aRequestParameter = Registry::getRequest()->getRequestEscapedParameter("editval");
 
         if (is_array($aRequestParameter) && isset($aRequestParameter[$sFieldLongName])) {
             $aRequestParameter[$sFieldLongName] = $this->fixCronjobId($aRequestParameter[$sFieldLongName]);

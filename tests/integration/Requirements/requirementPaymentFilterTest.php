@@ -49,29 +49,6 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -88,12 +65,10 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxpaymenttype'     => $this->aPaymentIdList[0],    // pass
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -102,12 +77,10 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxpaymenttype'     => $this->aPaymentIdList[1],    // pass
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -116,12 +89,10 @@ class requirementPaymentFilterTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[2],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxpaymenttype'     => $this->aPaymentIdList[2],    // pass
             ],
             [
                 $this->aOrderArticleIdList[2] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );

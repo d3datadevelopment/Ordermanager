@@ -43,11 +43,3 @@ namespace D3\Ordermanager\Modules\Application\Model
     {
     }
 }
-
-namespace D3\Ordermanager\Modules\Core {
-    use D3\DIContainerHandler\definitionFileContainer;
-
-    class DefinitionFileContainer_ordermanager_parent extends definitionFileContainer
-    {
-    }
-}

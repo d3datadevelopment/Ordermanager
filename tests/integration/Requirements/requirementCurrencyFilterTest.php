@@ -42,29 +42,6 @@ class requirementCurrencyFilterTest extends d3OrdermanagerRequirementIntegration
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -77,12 +54,10 @@ class requirementCurrencyFilterTest extends d3OrdermanagerRequirementIntegration
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxcurrency'   => 'ABC',
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -91,12 +66,10 @@ class requirementCurrencyFilterTest extends d3OrdermanagerRequirementIntegration
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxcurrency'   => 'USD',
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );

@@ -44,29 +44,6 @@ class requirementTransactionFilterTest extends d3OrdermanagerRequirementIntegrat
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -79,12 +56,10 @@ class requirementTransactionFilterTest extends d3OrdermanagerRequirementIntegrat
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxtransstatus'      => 'OK',
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -93,12 +68,10 @@ class requirementTransactionFilterTest extends d3OrdermanagerRequirementIntegrat
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxtransstatus'      => 'TestTransStatus',
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -107,12 +80,10 @@ class requirementTransactionFilterTest extends d3OrdermanagerRequirementIntegrat
             $this->aOrderIdList[2],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxtransstatus'      => '',
             ],
             [
                 $this->aOrderArticleIdList[2] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );

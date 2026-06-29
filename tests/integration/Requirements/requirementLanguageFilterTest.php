@@ -52,29 +52,6 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -87,12 +64,10 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxlang'        => $this->aLanguageId[0],
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -101,12 +76,10 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxlang'        => $this->aLanguageId[1],
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -115,12 +88,10 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
             $this->aOrderIdList[2],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxlang'        => $this->aLanguageId[2],
             ],
             [
                 $this->aOrderArticleIdList[2] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -181,7 +152,7 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
     public function requirementsSelectsRightOrdersSingle()
     {
         /** @var Language $oLang */
-        $oLang = d3GetOxidDIC()->get('d3ox.ordermanager.'.Language::class);
+        $oLang = Registry::getLang();
         $langBackup = $oLang;
         $aLangs = $oLang->getLanguageArray();
 
@@ -203,23 +174,21 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
             ->getMock();
         $oLangMock->method('getLanguageArray')->willReturn($aLangs);
 
-        $definitions = d3GetOxidDIC()->getDefinitions();
+        Registry::set(Language::class, $oLangMock);
 
-        d3GetOxidDIC()->set('d3ox.ordermanager.'.Language::class, $oLangMock);
+        try {
+            $oListGenerator = $this->getListGenerator($this->getConfiguredManagerSingle());
+            $oOrderList = $oListGenerator->getConcernedItems();
 
-        $oListGenerator = $this->getListGenerator($this->getConfiguredManagerSingle());
-        $oOrderList = $oListGenerator->getConcernedItems();
-
-        d3GetOxidDIC()->reset();
-        d3GetOxidDIC()->setDefinitions($definitions);
-        Registry::set(Language::class, $langBackup);
-
-        $this->assertTrue(
-            $oOrderList->count() === 1
-            && $oOrderList->offsetExists($this->aOrderIdList[0])
-            && false == $oOrderList->offsetExists($this->aOrderIdList[1])
-            && false == $oOrderList->offsetExists($this->aOrderIdList[2])
-        );
+            $this->assertTrue(
+                $oOrderList->count() === 1
+                && $oOrderList->offsetExists($this->aOrderIdList[0])
+                && false == $oOrderList->offsetExists($this->aOrderIdList[1])
+                && false == $oOrderList->offsetExists($this->aOrderIdList[2])
+            );
+        } finally {
+            Registry::set(Language::class, $langBackup);
+        }
     }
 
     /**
@@ -234,8 +203,7 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
      */
     public function requirementsSelectsRightOrdersMulti()
     {
-        /** @var Language $oLang */
-        $oLang = d3GetOxidDIC()->get('d3ox.ordermanager.'.Language::class);
+        $oLang = Registry::getLang();
         $langBackup = $oLang;
         $aLangs = $oLang->getLanguageArray();
 
@@ -257,23 +225,21 @@ class requirementLanguageFilterTest extends d3OrdermanagerRequirementIntegration
             ->getMock();
         $oLangMock->method('getLanguageArray')->willReturn($aLangs);
 
-        $definitions = d3GetOxidDIC()->getDefinitions();
+        Registry::set(Language::class, $oLangMock);
 
-        d3GetOxidDIC()->set('d3ox.ordermanager.'.Language::class, $oLangMock);
+        try {
+            $oListGenerator = $this->getListGenerator($this->getConfiguredManagerMulti());
+            $oOrderList = $oListGenerator->getConcernedItems();
 
-        $oListGenerator = $this->getListGenerator($this->getConfiguredManagerMulti());
-        $oOrderList = $oListGenerator->getConcernedItems();
-
-        d3GetOxidDIC()->reset();
-        d3GetOxidDIC()->setDefinitions($definitions);
-        Registry::set(Language::class, $langBackup);
-
-        $this->assertTrue(
-            $oOrderList->count() === 2
-            && $oOrderList->offsetExists($this->aOrderIdList[0])
-            && $oOrderList->offsetExists($this->aOrderIdList[1])
-            && false == $oOrderList->offsetExists($this->aOrderIdList[2])
-        );
+            $this->assertTrue(
+                $oOrderList->count() === 2
+                && $oOrderList->offsetExists($this->aOrderIdList[0])
+                && $oOrderList->offsetExists($this->aOrderIdList[1])
+                && false == $oOrderList->offsetExists($this->aOrderIdList[2])
+            );
+        } finally {
+            Registry::set(Language::class, $langBackup);
+        }
     }
 
     /**

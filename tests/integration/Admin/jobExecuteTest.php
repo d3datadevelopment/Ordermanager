@@ -15,6 +15,8 @@
 
 namespace D3\Ordermanager\tests\integration\Admin;
 
+use D3\Ordermanager\Application\Context\ExecutionMode;
+use D3\Ordermanager\Application\Context\ProcessExecutionContext;
 use D3\Ordermanager\Application\Controller\Admin\d3_ordermanager_jobs;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
@@ -24,6 +26,7 @@ use OxidEsales\Eshop\Application\Model\Order as Item;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use ReflectionException;
 
 /**
@@ -148,20 +151,20 @@ class jobExecuteTest extends d3IntegrationTestCase
         $_GET['ordermanagerid'] = $this->sManagerId;
         $_GET['oxid'] = $this->aOrderIdList[0];
 
-        // prevent trigger action in test preparation
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_FINALIZEORDER, true);
+        // prevent save trigger action in test
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::partialRun());
 
         $this->callMethod(
             $this->_oController,
             $methodname
         );
 
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_FINALIZEORDER, false);
+        $context->resetMode();
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dExpectedValue * 100),
@@ -184,22 +187,21 @@ class jobExecuteTest extends d3IntegrationTestCase
         $manager->setValue('sManuallyExecMeetCondition', false);
         $manager->save();
 
-        // prevent trigger action in test preparation
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_FINALIZEORDER, true);
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::partialRun());
 
         $this->callMethod(
             $this->_oController,
             $methodname
         );
 
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_FINALIZEORDER, false);
+        $context->resetMode();
 
         $this->getConfiguredManager()->save();
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dExpectedValue * 100),
@@ -230,7 +232,7 @@ class jobExecuteTest extends d3IntegrationTestCase
         $this->getConfiguredManager()->save();
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
@@ -260,7 +262,7 @@ class jobExecuteTest extends d3IntegrationTestCase
         $this->getConfiguredManager()->save();
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),

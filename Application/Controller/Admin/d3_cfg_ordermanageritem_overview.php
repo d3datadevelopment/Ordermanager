@@ -25,28 +25,26 @@ use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist as Actio
 use D3\Ordermanager\Application\Model\Constants;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanager_configurationcheck;
-use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
 use D3\Ordermanager\Application\Model\Exceptions\d3ActionRequirementInterface;
 use D3\Ordermanager\Application\Model\Requirements\d3ordermanager_requirementlist as RequirementListModel;
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action as ItemActionController;
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ as ItemRequirementController;
+use D3\Ordermanager\Core\ModCfgTrait;
+use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Exception as DBALException;
 use OxidEsales\Eshop\Application\Model\Order as ItemModel;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Language;
-use OxidEsales\Eshop\Core\Request;
-use OxidEsales\Eshop\Core\UtilsView;
+use OxidEsales\Eshop\Core\Registry;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use ReflectionException;
 
 class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 {
-    use VariablesTrait;
-
-    protected $_sSetModId = 'd3_ordermanager';
-
-    protected $_sModId = 'd3_ordermanager';
+    use ModCfgTrait;
 
     protected $_sThisTemplate = '@'. Constants::OXID_MODULE_ID .'/admin/d3_cfg_ordermanageritem_overview';
 
@@ -78,34 +76,30 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     public function render(): string
     {
         try {
-            d3GetOxidDIC()->set(
-                d3ordermanager_configurationcheck::class.'.args.ordermanager',
-                $this->getManager()
-            );
-            /** @var d3ordermanager_configurationcheck $confCheck */
-            $confCheck = d3GetOxidDIC()->get(d3ordermanager_configurationcheck::class);
+            $confCheck = $this->createConfigurationCheck();
             $confCheck->checkThrowingExceptions(d3ordermanager_configurationcheck::REQUIREMENTS_AND_ACTIONS);
         } catch (d3ActionRequirementInterface $d3ActionRequirement) {
-            /** @var UtilsView $utilsView */
-            $utilsView = d3GetOxidDIC()->get('d3ox.ordermanager.'.UtilsView::class);
+            $utilsView = Registry::getUtilsView();
             $utilsView->addErrorToDisplay($d3ActionRequirement);
         }
 
         return parent::render();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getActionAdminController(): ItemActionController
     {
-        /** @var ItemActionController $action */
-        $action = d3GetOxidDIC()->get(ItemActionController::class);
-        return $action;
+        return oxNew(ItemActionController::class);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getRequirementAdminController(): ItemRequirementController
     {
-        /** @var ItemRequirementController $requ */
-        $requ = d3GetOxidDIC()->get(ItemRequirementController::class);
-        return $requ;
+        return oxNew(ItemRequirementController::class);
     }
 
     /**
@@ -129,16 +123,12 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         return parent::__call($method, $arguments);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getRequirementListObject(Manager $oManager): RequirementListModel
     {
-        d3GetOxidDIC()->set(
-            RequirementListModel::class.'.args.ordermanager',
-            $oManager
-        );
-
-        /** @var RequirementListModel $requList */
-        $requList = d3GetOxidDIC()->get(RequirementListModel::class);
-        return $requList;
+        return oxNew(RequirementListModel::class, $oManager);
     }
 
     public function getRequirementList(): array
@@ -153,18 +143,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 
     public function getActionListObject(Manager $oManager): ActionListModel
     {
-        d3GetOxidDIC()->set(
-            ActionListModel::class.'.args.ordermanager',
-            $oManager
-        );
-        d3GetOxidDIC()->set(
-            ActionListModel::class.'.args.order',
-            d3GetOxidDIC()->get('d3ox.ordermanager.'.ItemModel::class)
-        );
-
-        /** @var ActionListModel $actionlist */
-        $actionlist = d3GetOxidDIC()->get(ActionListModel::class);
-        return $actionlist;
+        return oxNew(ActionListModel::class, $oManager, oxNew(ItemModel::class));
     }
 
     public function getActionList(): array
@@ -184,9 +163,7 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
 
     public function setRequestData(): void
     {
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
-        $this->_sRequestData = $request->getRequestEscapedParameter('sRequestData');
+        $this->_sRequestData = Registry::getRequest()->getRequestEscapedParameter('sRequestData');
     }
 
     protected function hasRequestData(): bool
@@ -200,16 +177,22 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     }
 
     /**
+     * @return int
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws ReflectionException
+     * @throws StandardException
+     * @throws Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws d3ParameterNotFoundException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
      */
     public function getToFinishedCount(): int
     {
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
-        $requestCount = $request->getRequestEscapedParameter('toFinishedCount');
+        $requestCount = Registry::getRequest()->getRequestEscapedParameter('toFinishedCount');
         if ($this->canRequestData(__FUNCTION__)) {
             /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
@@ -224,20 +207,22 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     }
 
     /**
+     * @return int
+     * @throws ContainerExceptionInterface
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
-     * @throws StandardException
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
      * @throws ReflectionException
+     * @throws StandardException
      * @throws d3ParameterNotFoundException
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
      */
     public function getFinishedCount(): int
     {
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
-        $requestCount = $request->getRequestEscapedParameter('finishedCount');
+        $requestCount = Registry::getRequest()->getRequestEscapedParameter('finishedCount');
         if ($this->canRequestData(__FUNCTION__)) {
             /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
@@ -252,16 +237,22 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     }
 
     /**
+     * @return int
+     * @throws ContainerExceptionInterface
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
+     * @throws ReflectionException
+     * @throws StandardException
      * @throws d3ParameterNotFoundException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
      */
     public function getFinishedMonthCount(): int
     {
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
-        $requestCount = $request->getRequestEscapedParameter('finishedMonthCount');
+        $requestCount = Registry::getRequest()->getRequestEscapedParameter('finishedMonthCount');
         if ($this->canRequestData(__FUNCTION__)) {
             /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
@@ -276,16 +267,22 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
     }
 
     /**
+     * @return int
+     * @throws ContainerExceptionInterface
      * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
+     * @throws ReflectionException
+     * @throws StandardException
      * @throws d3ParameterNotFoundException
+     * @throws d3ShopCompatibilityAdapterException
+     * @throws d3_cfg_mod_exception
      */
     public function getNotFinishedCount(): int
     {
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
-        $requestCount = $request->getRequestEscapedParameter('notFinishedCount');
+        $requestCount = Registry::getRequest()->getRequestEscapedParameter('notFinishedCount');
         if ($this->canRequestData(__FUNCTION__)) {
             /** @var Manager $oProfile */
             $oProfile = $this->getProfile();
@@ -335,35 +332,28 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
      */
     public function getDataOnDemand(): bool
     {
-        return (bool) $this->d3GetSet()->getValue('blCalcStatOnDemand');
+        return (bool) $this->d3GetOrderManagerConfig()->getValue('blCalcStatOnDemand');
     }
 
-    /**
-     * @param $sRequestName
-     * @param $sFunctionName
-     */
     public function hasRequestedData($sRequestName, $sFunctionName): bool
     {
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
-        $iRequestCount = (string) $request->getRequestEscapedParameter($sRequestName);
-        return (bool) strlen($iRequestCount) || ($this->hasRequestData() && $this->_getRequestData() == $sFunctionName);
+        $iRequestCount = (string) Registry::getRequest()->getRequestEscapedParameter($sRequestName);
+        return strlen($iRequestCount) || ($this->hasRequestData() && $this->_getRequestData() == $sFunctionName);
     }
 
     public function getManager(): Manager
     {
-        /** @var Manager $manager */
-        $manager = d3GetOxidDIC()->get(Manager::class);
+        $manager = oxNew(Manager::class);
         $manager->load($this->getEditObjectId());
         return $manager;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getLang(): Language
     {
-        /** @var Language $lang */
-        $lang = d3GetOxidDIC()->get('d3ox.ordermanager.'.Language::class);
-
-        return $lang;
+        return Registry::getLang();
     }
 
     /**
@@ -377,5 +367,13 @@ class d3_cfg_ordermanageritem_overview extends d3_cfg_mod_main
         }
 
         return $this->getLang()->translateString('D3_ORDERMANAGER_REQU_OTHERJOB_UNKNOWNJOBID').' "'.$sManagerId.'"';
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function createConfigurationCheck(): d3ordermanager_configurationcheck
+    {
+        return oxNew(d3ordermanager_configurationcheck::class, $this->getManager());
     }
 }

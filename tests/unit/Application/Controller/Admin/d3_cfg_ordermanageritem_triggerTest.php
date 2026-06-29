@@ -49,7 +49,7 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     {
         parent::setUp();
 
-        $this->_oController = d3GetOxidDIC()->get(d3_cfg_ordermanageritem_trigger::class);
+        $this->_oController = oxNew(d3_cfg_ordermanageritem_trigger::class);
     }
 
     public function tearDown(): void
@@ -60,7 +60,6 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::render
      * @test
      * @throws ReflectionException
      */
@@ -73,7 +72,6 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::addDefaultValues
      * @test
      * @throws ReflectionException
      */
@@ -100,7 +98,6 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::addDefaultValues
      * @test
      * @throws ReflectionException
      */
@@ -127,7 +124,6 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::fixCronjobId
      * @test
      * @throws ReflectionException
      */
@@ -152,7 +148,6 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::triggersAreAllowed
      * @test
      * @throws ReflectionException
      * @dataProvider triggersAreAllowedPassDataProvider
@@ -172,10 +167,10 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_cfg_ordermanageritem_trigger|MockObject $oActionMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_trigger::class)
-            ->onlyMethods(['d3GetSet'])
+            ->onlyMethods(['d3GetOrderManagerConfig'])
             ->setConstructorArgs([$oManagerMock])
             ->getMock();
-        $oControllerMock->method('d3GetSet')->willReturn($oModCfgMock);
+        $oControllerMock->method('d3GetOrderManagerConfig')->willReturn($oModCfgMock);
 
         $this->_oController = $oControllerMock;
 
@@ -188,7 +183,7 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
         );
     }
 
-    public function triggersAreAllowedPassDataProvider(): Generator
+    public static function triggersAreAllowedPassDataProvider(): Generator
     {
         yield 'is demo' => [true, true];
         yield 'no demo, no standard' => [false, false];
@@ -196,7 +191,6 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_trigger::scriptsAreAllowed
      * @test
      * @throws ReflectionException
      * @dataProvider scriptsAreAllowedPassDataProvider
@@ -216,10 +210,10 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
 
         /** @var d3_cfg_ordermanageritem_trigger|MockObject $oActionMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_trigger::class)
-            ->onlyMethods(['d3GetSet'])
+            ->onlyMethods(['d3GetOrderManagerConfig'])
             ->setConstructorArgs([$oManagerMock])
             ->getMock();
-        $oControllerMock->method('d3GetSet')->willReturn($oModCfgMock);
+        $oControllerMock->method('d3GetOrderManagerConfig')->willReturn($oModCfgMock);
 
         $this->_oController = $oControllerMock;
 
@@ -232,7 +226,7 @@ class d3_cfg_ordermanageritem_triggerTest extends d3OrdermanagerUnitTestCase
         );
     }
 
-    public function scriptsAreAllowedPassDataProvider(): Generator
+    public static function scriptsAreAllowedPassDataProvider(): Generator
     {
         yield 'is demo' => [true, true];
         yield 'no demo, no premium' => [false, false];

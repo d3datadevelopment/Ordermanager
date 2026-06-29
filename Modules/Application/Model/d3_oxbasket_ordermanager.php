@@ -28,21 +28,18 @@ use OxidEsales\Eshop\Application\Model\Discount;
 use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Price;
 use OxidEsales\Eshop\Core\PriceList;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use stdClass;
 
-/**
- * Class d3_oxbasket_ordermanager
- * @package D3\Ordermanager\Modules\Models
- * @mixin Basket
- */
 class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
 {
-    public function d3getOrderManagerBasketItemInstance(): d3_oxbasketitem_ordermanager
+    /**
+     * @codeCoverageIgnore
+     */
+    public function d3getOrderManagerBasketItemInstance(): BasketItem|d3_oxbasketitem_ordermanager
     {
-        /** @var d3_oxbasketitem_ordermanager $basketItem */
-        $basketItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.BasketItem::class);
-        return $basketItem;
+        return oxNew(BasketItem::class);
     }
 
     /**
@@ -71,18 +68,14 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
         }
     }
 
-    public function d3GetOrderManagerConfig(): Config
+    public function d3OrderManagerGetOxidConfig(): Config
     {
-        /** @var Config $config */
-        $config = d3GetOxidDIC()->get('d3ox.ordermanager.'.Config::class);
-        return $config;
+        return Registry::getConfig();
     }
 
     public function d3GetOrderManagerSession(): Session
     {
-        /** @var Session $session */
-        $session = d3GetOxidDIC()->get('d3ox.ordermanager.'.Session::class);
-        return $session;
+        return Registry::getSession();
     }
 
     /**
@@ -114,7 +107,7 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
         $this->addBundles();
 
         // reserve active basket
-        if ($this->d3GetOrderManagerConfig()->getConfigParam('blPsBasketReservationEnabled')) {
+        if ($this->d3OrderManagerGetOxidConfig()->getConfigParam('blPsBasketReservationEnabled')) {
             /** @var BasketReservation $oBasketReservation */
             $oBasketReservation = $this->d3GetOrderManagerSession()->getBasketReservations();
             $oBasketReservation->reserveBasket($this);
@@ -156,23 +149,19 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
     }
 
     /**
-     * @throws Exception
+     * @codeCoverageIgnore
      */
     public function d3GetOrderManagerPriceList(): PriceList
     {
-        /** @var PriceList $priceList */
-        $priceList = d3GetOxidDIC()->get('d3ox.ordermanager.'.PriceList::class);
-        return $priceList;
+        return oxNew(PriceList::class);
     }
 
     /**
-     * @throws Exception
+     * @codeCoverageIgnore
      */
     public function d3GetOrderManagerDiscountList(): DiscountList
     {
-        /** @var DiscountList $discountList */
-        $discountList = d3GetOxidDIC()->get('d3ox.ordermanager.'.DiscountList::class);
-        return $discountList;
+        return oxNew(DiscountList::class);
     }
 
     /**
@@ -241,13 +230,11 @@ class d3_oxbasket_ordermanager extends d3_oxbasket_ordermanager_parent
     }
 
     /**
-     * @throws Exception
+     * @codeCoverageIgnore
      */
     public function d3GetOrderManagerPriceObject(): Price
     {
-        /** @var Price $price */
-        $price = d3GetOxidDIC()->get('d3ox.ordermanager.'.Price::class);
-        return $price;
+        return oxNew(Price::class);
     }
 
     /**

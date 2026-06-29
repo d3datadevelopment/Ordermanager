@@ -45,30 +45,6 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     *
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -81,13 +57,11 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => (new DateTimeImmutable('25 minutes ago'))->format("Y-m-d H:i:s"),
-                'oxbillcompany' => __CLASS__,
                 'oxsenddate'    => (new DateTimeImmutable('4 days ago'))->format("Y-m-d H:i:s"),
                 'oxpaid'        => (new DateTimeImmutable('6 hours ago'))->format("Y-m-d H:i:s"),
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -96,13 +70,11 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => (new DateTimeImmutable('6 hours ago'))->format("Y-m-d H:i:s"),
-                'oxbillcompany' => __CLASS__,
                 'oxsenddate'    => (new DateTimeImmutable('25 minutes ago'))->format("Y-m-d H:i:s"),
                 'oxpaid'        => (new DateTimeImmutable('4 days ago'))->format("Y-m-d H:i:s"),
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -111,13 +83,11 @@ class requirementTimespanFilterTest extends d3OrdermanagerRequirementIntegration
             $this->aOrderIdList[2],
             [
                 'oxorderdate'   => (new DateTimeImmutable('4 days ago'))->format("Y-m-d H:i:s"),
-                'oxbillcompany' => __CLASS__,
                 'oxsenddate'    => (new DateTimeImmutable('6 hours ago'))->format("Y-m-d H:i:s"),
                 'oxpaid'        => (new DateTimeImmutable('25 minutes ago'))->format("Y-m-d H:i:s"),
             ],
             [
                 $this->aOrderArticleIdList[2] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );

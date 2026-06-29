@@ -21,3 +21,39 @@ services:
   D3\Ordermanager\Application\Model\EventListeners\Custom:
     tags:
       - { name: kernel.event_listener }
+
+  D3\Ordermanager\Application\Bridge\ShopContext:
+    class: D3\Ordermanager\Application\Bridge\ShopContext
+    public: false
+
+  D3\Ordermanager\Application\Service\TaskGroupRunner:
+    class: D3\Ordermanager\Application\Service\TaskGroupRunner
+    public: false
+
+  D3\Ordermanager\Application\Service\TaskGroupStatisticService:
+    class: D3\Ordermanager\Application\Service\TaskGroupStatisticService
+    public: false
+
+  D3\Ordermanager\Application\Service\TaskGroupStatusService:
+    class: D3\Ordermanager\Application\Service\TaskGroupStatusService
+    public: false
+
+  D3\Ordermanager\Application\Command\Run:
+    class: D3\Ordermanager\Application\Command\Run
+    tags:
+      - { name: 'console.command', command: 'd3:ordermanager:run' }
+
+  D3\Ordermanager\Application\Command\Statistic:
+    class: D3\Ordermanager\Application\Command\Statistic
+    tags:
+      - { name: 'console.command', command: 'd3:ordermanager:statistic' }
+
+  D3\Ordermanager\Application\Command\Status:
+    class: D3\Ordermanager\Application\Command\Status
+    tags:
+      - { name: 'console.command', command: 'd3:ordermanager:status' }
+
+  D3\Ordermanager\Application\Context\ProcessExecutionContext:
+    class: D3\Ordermanager\Application\Context\ProcessExecutionContext
+    shared: true
+    public: true

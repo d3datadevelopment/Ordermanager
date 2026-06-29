@@ -34,14 +34,14 @@
     "php": "^8.0",
     "ext-sourceguardian": ">=16",
     "ext-pdo": "*",
-    "oxid-esales/oxideshop-ce": "7.0 - 7.4",
+    "oxid-esales/oxideshop-ce": "7.0 - 7.5",
     "symfony/event-dispatcher": "^6.0",
     "d3/modcfg": "^7.1.3.0",
     "league/flysystem": "^1.0",
     "splitbrain/php-cli": "^1.1",
     "mathieuviossat/arraytotexttable": "^v1.0.11",
     "html2text/html2text": "^4.2",
-    "d3/oxid-sql-logger": "^2.0.0",
+    "d3/oxid-sql-logger": "^2.1.0",
     "d3/oxidservicebridges": "^2.0.0",
     "beberlei/assert": "^3.3",
     "guzzlehttp/guzzle": "^7.8.1",
@@ -54,9 +54,9 @@
     "mikey179/vfsstream": "^1.6.8",
     "donatj/mock-webserver": "^2.6",
     "friendsofphp/php-cs-fixer": "^3.13.0",
-    "phpstan/phpstan": "^1.10",
+    "phpstan/phpstan": "^2.2",
     "boxblinkracer/phpunuhi": "^1.12",
-    "rector/rector": "^0.18.13",
+    "rector/rector": "^2.4",
     "infection/infection": "^0.26.19|^0.27.0|^0.28.0|^0.29.5",
     "d3/pdfdocuments": "^2"
   },
@@ -77,19 +77,19 @@
   },
   "bin": ["bin/d3_ordermanager_cron"],
   "scripts": {
-    "php-cs-fixer": "./vendor/bin/php-cs-fixer fix --config=vendor/d3/ordermanager/.php-cs-fixer.php",
+    "php-cs-fixer": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix --config=vendor/d3/ordermanager/.ci-tools/.php-cs-fixer.php",
 
-    "phpstan": "./vendor/bin/phpstan --configuration=vendor/d3/ordermanager/phpstan.neon analyse",
-    "phpstan-report": "./vendor/bin/phpstan --configuration=vendor/d3/ordermanager/phpstan.neon analyse --error-format=json > vendor/d3/ordermanager/tests/phpstan.report.json",
+    "phpstan": "XDEBUG_MODE=off ./vendor/bin/phpstan --configuration=vendor/d3/ordermanager/.ci-tools/phpstan.neon analyse",
+    "phpstan-report": "XDEBUG_MODE=off ./vendor/bin/phpstan --configuration=vendor/d3/ordermanager/.ci-tools/phpstan.neon analyse --error-format=json > vendor/d3/ordermanager/tests/phpstan.report.json",
 
-    "phpunit": "XDEBUG_MODE=off ./vendor/bin/phpunit --config=vendor/d3/ordermanager/ --no-coverage",
-    "phpunit-line-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/ordermanager/ --coverage-html=vendor/d3/ordermanager/tests/result/coverage",
-    "phpunit-path-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/ordermanager/ --coverage-html=vendor/d3/ordermanager/tests/result/coverage --path-coverage",
+    "phpunit": "XDEBUG_MODE=off ./vendor/bin/phpunit --config=vendor/d3/ordermanager/.ci-tools/ --no-coverage",
+    "phpunit-line-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/ordermanager/.ci-tools/ --coverage-html=reports/phpunit/ordermanager",
+    "phpunit-path-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/ordermanager/.ci-tools/ --coverage-html=--coverage-html=reports/phpunit/ordermanager --path-coverage",
 
-    "infection": "./vendor/bin/infection --configuration=vendor/d3/ordermanager/infection.json5",
+    "infection": "./vendor/bin/infection --configuration=vendor/d3/ordermanager/.ci-tools/infection.json5",
 
-    "rector": "./vendor/bin/rector process --dry-run --config ./vendor/d3/ordermanager/rector.php",
+    "rector": "./vendor/bin/rector process --dry-run --config ./vendor/d3/ordermanager/.ci-tools/rector.php",
 
-    "phpunuhi": "./vendor/bin/phpunuhi --configuration=vendor/d3/ordermanager/phpunuhi.xml validate"
+    "phpunuhi": "./vendor/bin/phpunuhi --configuration=vendor/d3/ordermanager/.ci-tools/phpunuhi.xml validate"
   }
 }

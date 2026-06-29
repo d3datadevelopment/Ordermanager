@@ -49,9 +49,9 @@ return [
     'D3_ORDERMANAGER_SET_CRON_PATH'                      => 'interner Cronaufruf',
     'D3_ORDERMANAGER_SET_CRON_PATH_DESC'                 => 'Zur Einrichtung des Cronjobs auf dem Server verwenden Sie bitte diesen Aufruf. Alternativ können Sie sich auch ein Shell-Script erzeugen lassen, welches diesen Aufruf ebenfalls enthält.',
     'D3_ORDERMANAGER_SET_CRON_LASTEXEC'                  => 'letzte Ausführung',
-    'D3_ORDERMANAGER_SET_CRON_JOBID'                     => 'Cronjobeinstellungen für Cronjob-ID "%1$s" -> %2$d zugeordnete Aufgabe',
-    'D3_ORDERMANAGER_SET_CRON_JOBSID'                    => 'Cronjobeinstellungen für Cronjob-ID "%1$s" -> %2$d zugeordnete Aufgaben',
-    'D3_ORDERMANAGER_SET_CRON_JOB_DESC'                  => 'Neu angelegte Aufgaben oder Aufgaben, denen Sie keine spezielle Cronjob-ID zugewiesen haben, stehen automatisch unter der Cronjob-ID 0 zur Verfügung. Hierfür können Sie mit den in den Modul-Grundeinstellungen angezeigten Daten einen Cronjob einrichten, der diese Aufgaben automatisch ausführt. - Möchten Sie einzelne Aufgaben statt dessen zu anderen Zeiten oder in anderen Intervallen starten, können Sie durch das Definieren einer anderen Cronjob-ID eine einzelne Aufgabe oder Aufgabengruppe gezielt über zusätzliche Cronjobs starten lassen. Die Cronjob-ID setzen Sie an jeder einzelnen Aufgabe. Für Aufgabengruppen setzen Sie die gleiche ID an mehreren Aufgaben. Sobald die ID dort gespeichert ist, sehen Sie in den Modul-Grundeinstellungen die nötigen Informationen für diese Cronjob-ID (Cronjobeinstellungen mit Cronjob-ID X). Damit können Sie den zusätzlichen Cronjob einrichten. - Weitere Informationen zur Verwendung der Cronjob-IDs finden Sie im Handbuch zum Modul.',
+    'D3_ORDERMANAGER_SET_CRON_JOBID'                     => 'Aufrufdaten für Cronjob-ID "%1$s" -> %2$d zugeordnete Aufgabe',
+    'D3_ORDERMANAGER_SET_CRON_JOBSID'                    => 'Aufrufdaten für Cronjob-ID "%1$s" -> %2$d zugeordnete Aufgaben',
+    'D3_ORDERMANAGER_SET_CRON_JOB_DESC'                  => 'Mit der Cronjob-ID gruppieren Sie Aufgaben für die automatische Ausführung. Aufgaben ohne eigene ID laufen über Cronjob-ID 0. Für andere Intervalle (z. B. täglich oder wöchentlich) vergeben Sie je Aufgabe oder Aufgabengruppe eine eigene ID. Für jede gespeicherte ID zeigt das Modul in den Grundeinstellungen den passenden Aufruf, den Sie als separaten Cronjob mit eigenem Intervall einrichten können. Weitere Informationen finden Sie im Handbuch.',
     'D3_ORDERMANAGER_SET_JOBSETTINGS'                    => 'Aufgabeneinstellungen',
     'D3_ORDERMANAGER_SET_CALCULATESTATONDEMAND'          => 'statistische Daten zur Aufgabe einzeln und nur nach Anforderung berechnen',
     'D3_ORDERMANAGER_SET_CALCULATESTATONDEMAND_DESC'     => 'Für die Anzeige der statistischen Daten werden im entsprechenden Tab mehrere Datenbankabfragen ausgeführt. Bei Shops mit umfangreichen Bestelldaten oder aufwändigen Aufgaben kann es sein, dass die Statistikdaten nicht einem Durchlauf ermittelt werden können. Die Seite kann dann nicht angezeigt werden. Durch diese Option werden die Daten einzeln und nur auf Anforderung ermittelt.',
@@ -240,8 +240,10 @@ return [
     'D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_SELVARIANT'     => 'Variante / Auswahlliste',
     'D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_PERSPARAM'      => 'Individualisierung (PersParams)',
     'D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_CATID'          => 'Kategorie-ID',
-    'D3_ORDERMANAGER_REQU_INVOICENUM'                    => 'hat Rechnungsnummer erhalten',
+    'D3_ORDERMANAGER_REQU_INVOICENUM'                    => 'hat Belegnummer erhalten (oxbillnr)',
     'D3_ORDERMANAGER_REQU_INVOICENUM_ERR_INVALID'        => '',
+    'D3_ORDERMANAGER_REQU_INVOICENUM2'                   => 'hat Rechnungsnummer erhalten (oxinvoicenr)',
+    'D3_ORDERMANAGER_REQU_INVOICENUM2_ERR_INVALID'       => '',
     'D3_ORDERMANAGER_REQU_TRANSACTION'                   => 'Transaktionsstatus',
     'D3_ORDERMANAGER_REQU_TRANSACTION_ERR_STATUS'        => 'kein gültiger Status gesetzt',
     'D3_ORDERMANAGER_REQU_INFOLDER'                      => 'in einem der Ordner',
@@ -353,6 +355,7 @@ return [
     'D3_ORDERMANAGER_ACTION_MAILSEND_ERR_NOVALIDTPL'     => 'keine gültigen Templatedaten gesetzt',
     'D3_ORDERMANAGER_ACTION_MAILSEND_ERR_NOVALIDCMS'     => 'kein gültiger CMS-Eintrag gesetzt',
     'D3_ORDERMANAGER_ACTION_MAILSEND_ERR_NOVALIDRCP'     => 'kein gültiger Empfänger gesetzt',
+    'D3_ORDERMANAGER_ACTION_MAILSEND_EXCEPTION'          => 'Mail kann nicht versendet werden, bitte die Bestellung "%s" und die Aufgabe "%s" prüfen',
     'D3_ORDERMANAGER_ACTION_EXPORTGROUP'                 => 'Export',
     'D3_ORDERMANAGER_ACTION_EXPORT'                      => 'Bestellungen in Liste exportieren',
     'D3_ORDERMANAGER_ACTION_EXPORTCONTAINS'              => 'enthaltene Felder: ',
@@ -398,6 +401,8 @@ return [
     'D3_ORDERMANAGER_ORDERMAIN_GENPLAIN'                 => 'Plain (unformatiert) aus formatiertem Text erstellen',
     'D3_ORDERMANAGER_ORDERMAIN_GENPLAIN_DESC'            => 'Hierbei werden Zeilenumbrüche umgestellt und alle HTML-Tags entfernt. Je nach verwendeter Formatierung kann dies zu unpassender Darstellung führen. Tragen Sie dann besser den Plaintext selbst ein.',
     'D3_ORDERMANAGER_ORDERMAIN_PLAIN'                    => 'Plain (unformatiert):',
+    'D3_ORDERMANAGER_ORDERMAIN_UNSUPPORTED'              => 'Die Aufgabe kann nicht manuell gestartet werden.',
+
     'D3_ORDERMANAGER_MAIL_OMJFROM'                       => 'Auftragsmanager - Auswertung von',
     'D3_ORDERMANAGER_MAIL_ORDER'                         => 'Bestellung:',
     'D3_ORDERMANAGER_MAIL_GENERAL'                       => 'Allgemein:',
@@ -415,6 +420,10 @@ return [
     'D3_ORDERMANAGER_JOBDESC_ADDCUSTGROUP'               => 'füge Kunde zu Gruppe "%s" hinzu',
     'D3_ORDERMANAGER_JOBDESC_REMOVECUSTGROUP'            => 'entferne Kunde aus Gruppe "%s"',
     'D3_ORDERMANAGER_JOBDESC_SENDMAIL'                   => 'sende E-Mail an %s',
+    'D3_ORDERMANAGER_JOBDESC_SENDMAIL_ATTACHMENT'        => 'füge Anhang "%s" an E-Mail an',
+    'D3_ORDERMANAGER_JOBDESC_DELETEPDFATTACHMENT'        => 'lösche "%s" PDF Anhang Datei',
+    'D3_ORDERMANAGER_JOBDESC_SENDMAIL_SUCCESS'           => 'E-Mail erfolgreich versendet',
+    'D3_ORDERMANAGER_JOBDESC_SENDMAIL_FAILED'            => 'E-Mail konnte nicht versandt werden',
     'D3_ORDERMANAGER_JOBDESC_EXPORTLIST'                 => 'exportiere in Liste %s',
     'D3_ORDERMANAGER_JOBDESC_CREATEPDFDOCUMENT'          => 'erzeuge %s PDF in %s',
     'D3_ORDERMANAGER_JOBDESC_ADDREMARK'                  => 'füge Remark hinzu',
@@ -523,26 +532,26 @@ return [
 
     'D3_ORDERMANAGER_GENERAL_ORDER'                      => 'Auftrag:',
 
-    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDSHOPID'           => 'ungültige Shop-ID',
-    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDCJID'             => 'ungültige Cronjob-ID',
-    'D3_ORDERMANAGER_CLI_HELP'                           => 'Ermöglicht die Ausführung von Auftragsmanageraufgaben.',
-    'D3_ORDERMANAGER_CLI_OPTION_VERSION'                 => 'zeigt Version',
-    'D3_ORDERMANAGER_CLI_OPTION_QUIET'                   => 'verhindert die Anzeige der Ausgabe',
-    'D3_ORDERMANAGER_CLI_OPTION_LANG'                    => 'optional - Sprache der ausgegebenen Meldungen, mögliche Werte sind: "%1$s"',
-    'D3_ORDERMANAGER_CLI_OPTION_HELP'                    => 'Diesen Hilfetext anzeigen und den Aufruf verlassen.',
-    'D3_ORDERMANAGER_CLI_OPTION_NOCOLORS'                => 'Verwendet keine Farben in der Ausgabe. Nützlich bei der Weitergabe der Ausgabe an andere Tools oder Dateien.',
-    'D3_ORDERMANAGER_CLI_OPTION_LOGLEVELS'               => 'Kleinstes Level der anzuzeigenden Meldungen. Standard ist "info". Gültige Stufen sind: "debug", "info", "notice", "success", "warning", "error", "critical", "alert", "emergency".',
-    'D3_ORDERMANAGER_CLI_COMMAND'                        => 'Dieses Tool akzeptiert einen Befehl als ersten Parameter, wie unten beschrieben:',
-    'D3_ORDERMANAGER_CLI_COMMAND_RUN'                    => 'Ausführen der Aufgabengruppe mit definierter Cronjob-ID',
-    'D3_ORDERMANAGER_CLI_COMMAND_STATUS'                 => 'Statusinfos zur Cronjob-ID anzeigen',
-    'D3_ORDERMANAGER_CLI_COMMAND_STATISTIC'              => 'Statistik zum Ausführungsstatus anzeigen',
-    'D3_ORDERMANAGER_CLI_ARGUMENT_CJID'                  => 'ID der zu startenden Aufgabengruppe (kann im Shop-Backend eingestellt werden), mögliche Werte sind: "%1$s"',
-    'D3_ORDERMANAGER_CLI_ARGUMENT_SHOPID'                => 'ID des ausgewählten Shops, mögliche Werte sind: "%1$s"',
-    'D3_ORDERMANAGER_CLI_ARGUMENT_KEY'                   => 'optional - nur für externe Anrufe erforderlich,'.PHP_EOL.'Zugriffsschlüssel zur Verhinderung externer unbefugter Anrufe (kann im Shop-Backend eingestellt werden)',
-    'D3_ORDERMANAGER_CLI_ARGUMENT_ENCLOSER'              => '", "',
-    'D3_ORDERMANAGER_CLI_FINISHED_SUCCESSFULLY'          => 'Das Script wurde beendet.',
-    'D3_ORDERMANAGER_CLI_FINISHED_ERRORS'                => 'Diese Fehler sind aufgetreten:',
-    'D3_ORDERMANAGER_CLI_DEPRECATED'                     => 'Die Cronjobausführung über dieses Script wird mittelfristig deaktiviert. Bitte stellen Sie den Cronjob auf diesen Konsolenaufruf um: "./vendor/bin/d3_ordermanager_cron" um.',
+    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDSHOPID'           => 'ungültige Shop-ID',  // deprecated
+    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDCJID'             => 'ungültige Cronjob-ID',  // deprecated
+    'D3_ORDERMANAGER_CLI_HELP'                           => 'Ermöglicht die Ausführung von Auftragsmanageraufgaben.',  // deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_VERSION'                 => 'zeigt Version',// deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_QUIET'                   => 'verhindert die Anzeige der Ausgabe',  // deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_LANG'                    => 'optional - Sprache der ausgegebenen Meldungen, mögliche Werte sind: "%1$s"',  // deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_HELP'                    => 'Diesen Hilfetext anzeigen und den Aufruf verlassen.',  // deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_NOCOLORS'                => 'Verwendet keine Farben in der Ausgabe. Nützlich bei der Weitergabe der Ausgabe an andere Tools oder Dateien.',  // deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_LOGLEVELS'               => 'Kleinstes Level der anzuzeigenden Meldungen. Standard ist "info". Gültige Stufen sind: "debug", "info", "notice", "success", "warning", "error", "critical", "alert", "emergency".',  // deprecated
+    'D3_ORDERMANAGER_CLI_COMMAND'                        => 'Dieses Tool akzeptiert einen Befehl als ersten Parameter, wie unten beschrieben:',  // deprecated
+    'D3_ORDERMANAGER_CLI_COMMAND_RUN'                    => 'Ausführen der Aufgabengruppe mit definierter Cronjob-ID',  // deprecated
+    'D3_ORDERMANAGER_CLI_COMMAND_STATUS'                 => 'Statusinfos zur Cronjob-ID anzeigen',  // deprecated
+    'D3_ORDERMANAGER_CLI_COMMAND_STATISTIC'              => 'Statistik zum Ausführungsstatus anzeigen',  // deprecated
+    'D3_ORDERMANAGER_CLI_ARGUMENT_CJID'                  => 'ID der zu startenden Aufgabengruppe (kann im Shop-Backend eingestellt werden), mögliche Werte sind: "%1$s"',  // deprecated
+    'D3_ORDERMANAGER_CLI_ARGUMENT_SHOPID'                => 'ID des ausgewählten Shops, mögliche Werte sind: "%1$s"',   // deprecated
+    'D3_ORDERMANAGER_CLI_ARGUMENT_KEY'                   => 'optional - nur für externe Anrufe erforderlich,'.PHP_EOL.'Zugriffsschlüssel zur Verhinderung externer unbefugter Anrufe (kann im Shop-Backend eingestellt werden)',  // deprecated
+    'D3_ORDERMANAGER_CLI_ARGUMENT_ENCLOSER'              => '", "',  // deprecated
+    'D3_ORDERMANAGER_CLI_FINISHED_SUCCESSFULLY'          => 'Das Script wurde beendet.',  // deprecated
+    'D3_ORDERMANAGER_CLI_FINISHED_ERRORS'                => 'Diese Fehler sind aufgetreten:',  // deprecated
+    'D3_ORDERMANAGER_CLI_DEPRECATED'                     => 'Die Cronjobausführung über dieses Script wird mittelfristig deaktiviert. Bitte stellen Sie den Cronjob auf diesen Konsolenaufruf um: "./vendor/bin/d3_ordermanager_cron" um.',  // deprecated
 
     'D3_ORDERMANAGER_SETUP_CRONPASSWORD'                 => 'Für die Absicherung externer Cronjobaufrufe wird ein sicheres Passwort gesetzt. Dieses können Sie später in den Moduleinstellungen einsehen und bei Bedarf verändern.',
 

@@ -42,31 +42,9 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
     public $aOrderArticleIdList = [
         'orderTestIdNo1Article1',
         'orderTestIdNo2Article1',
+        'orderTestIdNo3Article1',
+        'orderTestIdNo4Article1',
     ];
-
-    /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DBALException
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
 
     /**
      * @throws Exception
@@ -81,13 +59,10 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxcardid'   => 'testContent',
             ],
             [
-                $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
-                ],
+                $this->aOrderArticleIdList[0] => [],
             ]
         );
 
@@ -95,13 +70,10 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxcardid'      => null,
             ],
             [
-                $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
-                ],
+                $this->aOrderArticleIdList[1] => [],
             ]
         );
 
@@ -109,13 +81,10 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
             $this->aOrderIdList[2],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxcardid'      => 0,
             ],
             [
-                $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
-                ],
+                $this->aOrderArticleIdList[2] => [],
             ]
         );
 
@@ -123,13 +92,10 @@ class requirementOrderFieldTest extends d3OrdermanagerRequirementIntegrationTest
             $this->aOrderIdList[3],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxcardid'      => '0000-00-00',
             ],
             [
-                $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
-                ],
+                $this->aOrderArticleIdList[3] => [],
             ]
         );
     }

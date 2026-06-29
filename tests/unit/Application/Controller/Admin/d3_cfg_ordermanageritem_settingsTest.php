@@ -17,12 +17,9 @@ declare(strict_types=1);
 
 namespace D3\Ordermanager\tests\unit\Application\Controller\Admin;
 
-use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
-use Doctrine\DBAL\Exception as DBALException;
-use Exception;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
@@ -36,21 +33,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
 {
-    /** @var d3_cfg_ordermanageritem_settings */
-    protected $_oController;
+    protected d3_cfg_ordermanageritem_settings $_oController;
 
     /**
      * setup basic requirements
-     * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
-     * @throws Exception
      */
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->_oController = d3GetOxidDIC()->get(d3_cfg_ordermanageritem_settings::class);
+        $this->_oController = oxNew(d3_cfg_ordermanageritem_settings::class);
     }
 
     public function tearDown(): void
@@ -61,40 +55,6 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::__construct
-     * @test
-     */
-    public function constructorPass()
-    {
-        $this->assertSame(
-            'd3_ordermanager',
-            d3GetOxidDIC()->getParameter('d3.ordermanager.modcfgid')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::__construct
-     * @test
-     */
-    public function constructorException()
-    {
-        /** @var d3_cfg_ordermanageritem_settings|MockObject $controller */
-        $controller = $this->getMockBuilder(d3_cfg_ordermanageritem_settings::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        d3GetOxidDIC()->setParameter('d3.ordermanager.modcfgid', 'differentModCfgid');
-
-        $this->expectException(wrongModIdException::class);
-
-        $this->callMethod(
-            $controller,
-            '__construct'
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::getItemFolders
      * @test
      * @throws ReflectionException
      */
@@ -106,7 +66,6 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::getGroupsList
      * @test
      * @throws ReflectionException
      */
@@ -129,7 +88,6 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::_getObjectList
      * @test
      * @throws ReflectionException
      */
@@ -176,7 +134,6 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::isEditMode
      * @test
      * @throws ReflectionException
      */
@@ -188,7 +145,6 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::getRestrictionMessage
      * @test
      * @throws ReflectionException
      */
@@ -207,21 +163,5 @@ class d3_cfg_ordermanageritem_settingsTest extends d3OrdermanagerUnitTestCase
     protected function _setModuleLicenseKey($sLicenseKey, $oManager = null)
     {
         return null;
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_settings::getDIContainer
-     * @test
-     * @throws ReflectionException
-     */
-    public function getDIContainerHasRightInstance()
-    {
-        $this->assertInstanceOf(
-            ContainerInterface::class,
-            $this->callMethod(
-                $this->_oController,
-                'getDIContainer'
-            )
-        );
     }
 }

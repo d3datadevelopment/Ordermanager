@@ -17,7 +17,6 @@ declare(strict_types=1);
 
 namespace D3\Ordermanager\Application\Controller\Admin;
 
-use D3\DIContainerHandler\d3DicException;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
@@ -27,7 +26,6 @@ use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actionlist as Actio
 use D3\Ordermanager\Application\Model\Constants;
 use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler as PdfHandler;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
-use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_actionException;
 use DateTime;
 use Doctrine\DBAL\Exception as DBALException;
@@ -42,13 +40,12 @@ use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Model\ListModel;
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\Eshop\Core\Request;
 use OxidEsales\Eshop\Core\UtilsView;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
 
 class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
 {
-    use VariablesTrait;
-
     protected $_sThisTemplate = '@'. Constants::OXID_MODULE_ID .'/admin/d3_cfg_ordermanageritem_action';
 
     protected $_sMenuSubItemTitle = 'd3mxordermanager_items';
@@ -66,7 +63,6 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @throws StandardException
-     * @throws d3DicException
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
      */
@@ -97,44 +93,29 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
         }
     }
 
-    /**
-     * @throws d3DicException
-     */
     public function getContentList(): ListModel
     {
-        /** @var $oContentList ContentList */
-        $oContentList = d3GetOxidDIC()->get('d3ox.ordermanager.'.ContentList::class);
+        $oContentList = oxNew(ContentList::class);
         return $this->_getObjectList($oContentList);
     }
 
     /**
-     * @throws d3DicException
+     * @codeCoverageIgnore
      */
     public function d3GetConfig(): Config
     {
-        /** @var Config $config */
-        $config = d3GetOxidDIC()->get('d3ox.ordermanager.'.Config::class);
-
-        return $config;
+        return Registry::getConfig();
     }
 
-    /**
-     * @throws d3DicException
-     */
     public function getItemFieldNames(): array
     {
-        /** @var Item $item */
-        $item = d3GetOxidDIC()->get('d3ox.ordermanager.'. Item::class);
+        $item = oxNew(Item::class);
         return $item->getFieldNames();
     }
 
-    /**
-     * @throws d3DicException
-     */
     public function getProfile(): Manager
     {
-        /** @var Manager $oProfile */
-        $oProfile = d3GetOxidDIC()->get(Manager::class);
+        $oProfile = oxNew(Manager::class);
 
         $soxId = $this->getEditObjectId();
 
@@ -152,15 +133,10 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
         return $oProfile;
     }
 
-    /**
-     * @throws d3DicException
-     */
     public function getExportExamplePath(): string
     {
         $oProfile = $this->getProfile();
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
-        $soxId    = $request->getRequestEscapedParameter("oxid");
+        $soxId    = Registry::getRequest()->getRequestEscapedParameter("oxid");
 
         if (isset($soxId) && $soxId && $soxId != "-1") {
             // load object
@@ -169,16 +145,13 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
         }
 
         $aSearch = [(new DateTime())->setTimestamp($oProfile->getStartTime())->format('Y-m-d_H-i-s')];
-        /** @var Language $oLang */
-        $oLang = d3GetOxidDIC()->get('d3ox.ordermanager.'.Language::class);
-        $aReplace = [$oLang->translateString('D3_ORDERMANAGER_ACTION_DATEPLACEHOLDER')];
+        $aReplace = [$this->getLang()->translateString('D3_ORDERMANAGER_ACTION_DATEPLACEHOLDER')];
 
         return str_replace($aSearch, $aReplace, $oProfile->getListExportFilePath());
     }
 
     /**
      * @param $sFieldName
-     * @throws d3DicException
      */
     public function getFieldNameDescription($sFieldName): string
     {
@@ -193,20 +166,13 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
         return $sFieldName;
     }
 
-    /**
-     * @throws d3DicException
-     */
     public function getLang(): Language
     {
-        /** @var Language $language */
-        $language = d3GetOxidDIC()->get('d3ox.ordermanager.'.Language::class);
-
-        return $language;
+        return Registry::getLang();
     }
 
     /**
      * @param $sFieldName
-     * @throws d3DicException
      */
     public function getFieldNameTitle($sFieldName): ?string
     {
@@ -233,75 +199,31 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
     }
 
     /**
-     * @throws d3DicException
+     * @codeCoverageIgnore
      */
     public function getPdfHandler(): PdfHandler
     {
-        d3GetOxidDIC()->set(
-            PdfHandler::class.'.args.ordermanager',
-            $this->getProfile()
-        );
-        d3GetOxidDIC()->set(
-            PdfHandler::class.'.args.order',
-            d3GetOxidDIC()->get('d3ox.ordermanager.'. Item::class)
-        );
-
-        /** @var PdfHandler $pdfhandler */
-        $pdfhandler = d3GetOxidDIC()->get(PdfHandler::class);
-
-        return $pdfhandler;
+        return oxNew(PdfHandler::class, $this->getProfile(), oxNew(Item::class));
     }
 
-    /**
-     * @throws d3DicException
-     */
     public function canGeneratePdfDocuments(): bool
     {
         return $this->getPdfHandler()->canGeneratePdfDocuments();
     }
 
     /**
-     * @throws d3DicException
+     * @codeCoverageIgnore
      */
     public function getActionGroupList(): ActionGroupList
     {
-        d3GetOxidDIC()->set(
-            ActionGroupList::class.'.args.ordermanager',
-            $this->getProfile()
-        );
-        d3GetOxidDIC()->set(
-            ActionGroupList::class.'.args.order',
-            d3GetOxidDIC()->get('d3ox.ordermanager.'. Item::class)
-        );
-
-        /** @var ActionGroupList $actiongroup */
-        $actiongroup = d3GetOxidDIC()->get(ActionGroupList::class);
-
-        return $actiongroup;
+        return oxNew(ActionGroupList::class, $this->getProfile(), oxNew(Item::class));
     }
 
-    /**
-     * @throws d3DicException
-     */
     public function getActionListObject(): ActionList
     {
-        d3GetOxidDIC()->set(
-            ActionList::class.'.args.ordermanager',
-            $this->getProfile()
-        );
-        d3GetOxidDIC()->set(
-            ActionList::class.'.args.order',
-            d3GetOxidDIC()->get('d3ox.ordermanager.'. Item::class)
-        );
-
-        /** @var ActionList $actionlist */
-        $actionlist = d3GetOxidDIC()->get(ActionList::class);
-        return $actionlist;
+        return oxNew(ActionList::class, $this->getProfile(), oxNew(Item::class));
     }
 
-    /**
-     * @throws d3DicException
-     */
     public function getGroupedActionList(): array
     {
         $oManager = $this->getProfile();
@@ -311,9 +233,6 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
         return $oActionList->getGroupList();
     }
 
-    /**
-     * @throws d3DicException
-     */
     public function getActionList(): array
     {
         $oManager = $this->getProfile();
@@ -340,7 +259,6 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
      * @throws DatabaseErrorException
      * @throws DBALDriverException
      * @throws StandardException
-     * @throws d3DicException
      * @throws d3ParameterNotFoundException
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
@@ -349,16 +267,16 @@ class d3_cfg_ordermanageritem_action extends d3_cfg_ordermanageritem_settings
     {
         $oProfile = $this->getProfile();
         /** @var QueryBuilder $qb */
-        $qb = d3GetOxidDIC()->get('d3ox.modcfg.OxDbQueryBuilder');
+        $qb = ContainerFactory::getInstance()->getContainer()->get(QueryBuilderFactoryInterface::class)->create();
         $qb->select('count(*)')
-            ->from(d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class)->getViewName());
+            ->from((oxNew(Item::class))->getViewName());
         $iAllCount = (int) $qb->execute()->fetchOne();
         $iCount = $oProfile->markConcernedItemsAsFinished(true);
 
         $oEx = oxNew(
             StandardException::class,
             sprintf(
-                Registry::getLang()->translateString('D3_ORDERMANAGER_ACTION_MARKASFINISHED_MESSAGE'),
+                $this->getLang()->translateString('D3_ORDERMANAGER_ACTION_MARKASFINISHED_MESSAGE'),
                 $iCount,
                 $iAllCount
             )

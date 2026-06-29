@@ -32,7 +32,7 @@ class d3_oxuser_ordermanager extends d3_oxuser_ordermanager_parent
             // same extension  in the usermanager module can prevent execution
             // @codeCoverageIgnoreStart
             return $this->{$sParamName};
-        // @codeCoverageIgnoreEnd
+            // @codeCoverageIgnoreEnd
         } elseif ($mContent) {
             return $mContent;
         }

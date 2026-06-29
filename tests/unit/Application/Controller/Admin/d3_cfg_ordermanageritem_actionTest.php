@@ -18,17 +18,14 @@ declare(strict_types=1);
 namespace D3\Ordermanager\tests\unit\Application\Controller\Admin;
 
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action;
-use D3\Ordermanager\Application\Model\Actions\d3ordermanager_actiongrouplist;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\Application\Model\d3ordermanager_conf;
 use D3\Ordermanager\Application\Model\d3ordermanager_pdfhandler;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
-use Doctrine\DBAL\Exception as DBALException;
 use Exception as ExceptionAlias;
 use Exception;
 use OxidEsales\Eshop\Application\Model\ContentList;
 use OxidEsales\Eshop\Application\Model\Order;
-use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Language;
@@ -46,16 +43,14 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
 
     /**
      * setup basic requirements
-     * @throws DBALException
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
-     * @throws Exception
      */
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->_oController = d3GetOxidDIC()->get(d3_cfg_ordermanageritem_action::class);
+        $this->_oController = oxNew(d3_cfg_ordermanageritem_action::class);
     }
 
     public function tearDown(): void
@@ -66,7 +61,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::save
      * @test
      * @throws ReflectionException
      */
@@ -92,7 +86,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::save
      * @test
      * @throws ReflectionException
      */
@@ -121,7 +114,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getContentList
      * @test
      * @throws ReflectionException
      */
@@ -134,23 +126,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::d3GetConfig
-     * @test
-     * @throws ReflectionException
-     */
-    public function d3GetConfigReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            Config::class,
-            $this->callMethod(
-                $this->_oController,
-                'd3GetConfig'
-            )
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getItemFieldNames
      * @test
      * @throws ReflectionException
      */
@@ -162,14 +137,13 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getProfile
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function getProfileReturnsRightInstance()
     {
-        $oProfile = d3GetOxidDIC()->get(d3ordermanager::class);
+        $oProfile = oxNew(d3ordermanager::class);
         $oProfile->setId('newProfileId');
         $oProfile->save();
 
@@ -193,14 +167,13 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getProfile
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function getProfileOtherLangReturnsRightInstance()
     {
-        $oProfile = d3GetOxidDIC()->get(d3ordermanager::class);
+        $oProfile = oxNew(d3ordermanager::class);
         $oProfile->setId('newProfileId');
         $oProfile->save();
 
@@ -225,7 +198,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getExportExamplePath
      * @test
      * @throws ReflectionException
      */
@@ -263,7 +235,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getLang
      * @test
      * @throws ReflectionException
      */
@@ -276,7 +247,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getFieldNameDescription
      * @test
      * @throws ReflectionException
      */
@@ -307,7 +277,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getFieldNameDescription
      * @test
      * @throws ReflectionException
      */
@@ -328,7 +297,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getFieldNameTitle
      * @test
      * @throws ReflectionException
      */
@@ -365,7 +333,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getFieldNameTitle
      * @test
      * @throws ReflectionException
      */
@@ -394,7 +361,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getFieldNameTitle
      * @test
      * @throws ReflectionException
      */
@@ -422,20 +388,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getPdfHandler
-     * @test
-     * @throws ReflectionException
-     */
-    public function pdfHandlerReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            d3ordermanager_pdfhandler::class,
-            $this->callMethod($this->_oController, 'getPdfHandler')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::canGeneratePdfDocuments
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -445,7 +397,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
             ->onlyMethods(['canGeneratePdfDocuments'])
-            ->setConstructorArgs([d3GetOxidDIC()->get(d3ordermanager::class), d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class)])
+            ->setConstructorArgs([oxNew(d3ordermanager::class), oxNew(Order::class)])
             ->getMock();
         $oPdfHandlerMock->method('canGeneratePdfDocuments')->willReturn(true);
 
@@ -463,7 +415,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::canGeneratePdfDocuments
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -473,7 +424,7 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
         /** @var d3ordermanager_pdfhandler|MockObject $oPdfHandlerMock */
         $oPdfHandlerMock = $this->getMockBuilder(d3ordermanager_pdfhandler::class)
             ->onlyMethods(['canGeneratePdfDocuments'])
-            ->setConstructorArgs([d3GetOxidDIC()->get(d3ordermanager::class), d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class)])
+            ->setConstructorArgs([oxNew(d3ordermanager::class), oxNew(Order::class)])
             ->getMock();
         $oPdfHandlerMock->method('canGeneratePdfDocuments')->willReturn(false);
 
@@ -491,24 +442,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getActionGroupList
-     * @test
-     * @throws ReflectionException
-     * @throws ExceptionAlias
-     */
-    public function getActionListReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            d3ordermanager_actiongrouplist::class,
-            $this->callMethod(
-                $this->_oController,
-                'getActionGroupList'
-            )
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getActionListObject
      * @test
      * @throws ReflectionException
      */
@@ -521,7 +454,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getActionList
      * @test
      * @throws ReflectionException
      */
@@ -535,7 +467,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::getGroupedActionList
      * @test
      * @throws ReflectionException
      * @throws ExceptionAlias
@@ -583,7 +514,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::_d3LoadInOtherLang
      * @test
      * @throws ReflectionException
      */
@@ -612,7 +542,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::_d3LoadInOtherLang
      * @test
      * @throws ReflectionException
      */
@@ -650,7 +579,6 @@ class d3_cfg_ordermanageritem_actionTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_action::markAsFinished
      * @test
      * @throws ReflectionException
      */

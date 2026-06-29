@@ -46,29 +46,6 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -81,13 +58,11 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxsenddate'   => '0000-00-00 00:00:00',
                 'oxpaid'   => '0000-00-00 00:00:00',
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -96,13 +71,11 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxsenddate'   => '2018-01-01 00:00:00',
                 'oxpaid'   => '0000-00-00 00:00:00',
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -111,13 +84,11 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
             $this->aOrderIdList[2],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxsenddate'   => '0000-00-00 00:00:00',
                 'oxpaid'   => '2018-01-01 00:00:00',
             ],
             [
                 $this->aOrderArticleIdList[2] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -126,13 +97,11 @@ class requirementDateNotSetTest extends d3OrdermanagerRequirementIntegrationTest
             $this->aOrderIdList[3],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxsenddate'   => '2018-01-01 00:00:00',
                 'oxpaid'   => '2018-01-01 00:00:00',
             ],
             [
                 $this->aOrderArticleIdList[3] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );

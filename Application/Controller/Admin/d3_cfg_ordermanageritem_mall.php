@@ -19,19 +19,15 @@ namespace D3\Ordermanager\Application\Controller\Admin;
 
 use D3\ModCfg\Application\Model\d3filesystem;
 use D3\ModCfg\Application\Model\d3str;
-use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
-use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
-use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
+use D3\Ordermanager\Core\ModCfgTrait;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminMall;  // required for non fallback case
 use OxidEsales\Eshop\Core\Language;
-use OxidEsales\Eshop\Core\Request;
+use OxidEsales\Eshop\Core\Registry;
 
 class d3_cfg_ordermanageritem_mall extends d3AdminMall
 {
-    use VariablesTrait;
-
-    private string $_sModId = 'd3_ordermanager';
+    use ModCfgTrait;
 
     /**
      * DB table having oxshopincl and oxshopexcl fields we are going to deal with
@@ -59,29 +55,17 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
     protected $_sObjectClassName = Manager::class;
 
     /**
-     * constructor.
+     * @codeCoverageIgnore
      */
-    public function __construct()
-    {
-        d3GetOxidDIC()->getParameter($this->_DIC_Instance_Id . 'modcfgid') === $this->_sModId or
-            throw oxNew(wrongModIdException::class, $this->_sModId);
-
-        parent::__construct();
-    }
-
     public function getProfile(): Manager
     {
-        /** @var Manager $oManager */
-        $oManager = d3GetOxidDIC()->get($this->_sObjectClassName);
-        return $oManager;
+        return oxNew($this->_sObjectClassName);
     }
 
     public function render(): string
     {
         $oProfile = $this->getProfile();
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
-        $soxId = $request->getRequestEscapedParameter("oxid");
+        $soxId = Registry::getRequest()->getRequestEscapedParameter("oxid");
 
         if ($this->_isSetOxid($soxId)) {
             // load object
@@ -99,45 +83,32 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
         return [];
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getLang(): Language
     {
-        /** @var Language $lang */
-        $lang = d3GetOxidDIC()->get('d3ox.ordermanager.'.Language::class);
-
-        return $lang;
+        return Registry::getLang();
     }
 
     public function getHelpURL(): string
     {
-        $sUrl = $this->d3GetSet()->getHelpURL();
-        /** @var d3str $oD3Str */
-        $oD3Str = d3GetOxidDIC()->get(d3str::class);
+        $sUrl = $this->d3GetOrderManagerConfig()->getHelpURL();
+        $oD3Str = $this->createD3Str();
 
         if ($this->_sHelpLinkMLAdd) {
             $sUrl .= $oD3Str->unprefixedslashit($this->getLang()->translateString($this->_sHelpLinkMLAdd));
         }
 
-        $oFS = d3GetOxidDIC()->get(d3filesystem::class);
+        $oFS = $this->created3Filesystem();
         $aFileName = $oFS->splitFilename($sUrl);
 
         // has no extension
-        if (false == $aFileName['ext']) {
+        if (!$aFileName['ext']) {
             return $oD3Str->trailingslashit($sUrl);
         }
 
         return $sUrl;
-    }
-
-    /**
-     * return type can't be defined, because of unmockable d3_cfg_mod class, use stdClass in test
-     * @return d3_cfg_mod
-     */
-    public function d3GetSet()
-    {
-        /** @var d3_cfg_mod $modcfg */
-        $modcfg = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
-
-        return $modcfg;
     }
 
     /**
@@ -178,10 +149,26 @@ class d3_cfg_ordermanageritem_mall extends d3AdminMall
         // load object in other languages
         $oOtherLang = $oProfile->getAvailableInLangs();
 
-        if (false == isset($oOtherLang[$this->_iEditLang])) {
+        if (!isset($oOtherLang[$this->_iEditLang])) {
             $oProfile->loadInLang(key($oOtherLang), $soxId);
         }
 
         return $oProfile;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function createD3Str(): d3str
+    {
+        return oxNew(d3str::class);
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function created3Filesystem(): d3filesystem
+    {
+        return oxNew(d3filesystem::class);
     }
 }

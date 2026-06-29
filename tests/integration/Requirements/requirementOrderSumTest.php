@@ -42,29 +42,6 @@ class requirementOrderSumTest extends d3OrdermanagerRequirementIntegrationTestCa
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -77,14 +54,12 @@ class requirementOrderSumTest extends d3OrdermanagerRequirementIntegrationTestCa
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxtotalordersum'      => 600.20,
                 'oxtotalbrutsum'      => 400.20,
                 'oxcurrate'      => 1,
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -93,14 +68,12 @@ class requirementOrderSumTest extends d3OrdermanagerRequirementIntegrationTestCa
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxtotalordersum'      => 400.20,
                 'oxtotalbrutsum'      => 600.20,
                 'oxcurrate'      => 1,
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );

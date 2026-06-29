@@ -15,14 +15,14 @@
 
 namespace D3\Ordermanager\tests\integration;
 
-use D3\DIContainerHandler\d3DicHandler;
 use D3\ModCfg\Application\Model\d3database;
 use D3\ModCfg\Application\Model\Log\d3log;
-use D3\ModCfg\Application\Model\Log\d3NullLogger;
 use D3\ModCfg\Tests\unit\d3ModCfgUnitTestCase;
+use D3\Ordermanager\Application\Context\ExecutionMode;
+use D3\Ordermanager\Application\Context\ProcessExecutionContext;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanager_listgenerator as Manager_Listgenerator;
-use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Driver\Exception as DriverException;
@@ -33,7 +33,6 @@ use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Model\BaseModel;
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Database\ConnectionProviderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -53,13 +52,14 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
             // catch General error: 1298 Unknown or incorrect time zone: 'Europe/Berlin' on MariaDB
         }
 
-        d3DicHandler::getUncompiledInstance();
-
         parent::setUp();
 
-        d3GetOxidDIC()->set('d3.ordermanager.log', d3GetOxidDIC()->get(d3NullLogger::class));
-
         $this->createTestData();
+
+        // prevent save trigger action in test
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::fullRun());
     }
 
     /**
@@ -71,7 +71,9 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
 
         parent::tearDown();
 
-        d3DicHandler::removeInstance();
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->resetMode();
     }
 
     abstract public function createTestData();
@@ -82,12 +84,12 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
      * @param $sClass
      * @param $sId
      * @param array $aFields
-     * @throws Exception
+     * @return BaseModel
      */
-    public function createObject($sClass, $sId, $aFields = [])
+    public function createObject($sClass, $sId, $aFields = []): BaseModel
     {
         /** @var BaseModel $oObject */
-        $oObject = d3GetOxidDIC()->get($sClass);
+        $oObject = oxNew($sClass);
 
         if ($oObject->exists($sId)) {
             $oObject->delete($sId);
@@ -95,7 +97,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
 
         $oObject->setId($sId);
         $oObject->assign($aFields);
-        $oObject->save();
+        return $oObject;
     }
 
     /**
@@ -107,7 +109,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
     public function createBaseModelObject($sTableName, $sId, $aFields = [])
     {
         /** @var BaseModel $oObject */
-        $oObject = d3GetOxidDIC()->get('d3ox.ordermanager.'.BaseModel::class);
+        $oObject = oxNew(BaseModel::class);
         $oObject->init($sTableName);
         $oObject->setId($sId);
         $oObject->assign($aFields);
@@ -122,7 +124,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
     public function createArticle($sId, $aFields = [])
     {
         $this->createObject(
-            'd3ox.ordermanager.'.Article::class,
+            Article::class,
             $sId,
             array_merge(
                 [
@@ -131,10 +133,13 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
                     'oxvarcount' => 0,
                     'oxshopid'  => 1,
                     'oxstockflag'   => 1,
+                    'oxstock'   => 10,
+                    'oxparentid' => '',
+                    'oxtitle'   => get_called_class(),
                 ],
                 $aFields
             )
-        );
+        )->save();
     }
 
     /**
@@ -153,7 +158,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
                 'OXMODID'           => 'd3_ordermanager',
                 'D3_OM_MARKORDER'   => false,
             ]
-        );
+        )->save();
     }
 
     /**
@@ -165,24 +170,44 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
     public function createOrder($sId, $aFields = [], $aOrderArticles = [])
     {
         // prevent trigger action in test preparation
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::preparation());
 
         $this->createObject(
-            'd3ox.ordermanager.'.Order::class,
+            Order::class,
             $sId,
             array_merge(
                 [
                     'oxsenddate'    => '1970-01-01 00:00:00',
+                    'oxbillcompany' => get_called_class(),
+                    'oxcurrency'    => 'EUR',
                 ],
                 $aFields
             )
-        );
+        )->save();
 
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
+        $context->resetMode();
 
         if (is_array($aOrderArticles) && count($aOrderArticles)) {
             foreach ($aOrderArticles as $sOArtId => $aOArtFields) {
-                $this->createObject('d3ox.ordermanager.'.OrderArticle::class, $sOArtId, array_merge(['oxorderid' => $sId], $aOArtFields));
+                if (!isset($aOArtFields['oxartid'])) {
+                    $aOArtFields['oxartid'] = 'artIdTestNo'.bin2hex(random_bytes(16 / 2));
+                }
+                if (!(oxNew(Article::class))->exists($aOArtFields['oxartid'])) {
+                    $this->createArticle($aOArtFields['oxartid']);
+                }
+                $this->createObject(
+                    OrderArticle::class,
+                    $sOArtId,
+                    array_merge(
+                        [
+                            'oxorderid' => $sId,
+                            'oxtitle'   => get_called_class(),
+                        ],
+                        $aOArtFields
+                    )
+                )->save();
             }
         }
     }
@@ -197,13 +222,13 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
     public function createGroup($sId, $aFields = [])
     {
         $this->createObject(
-            'd3ox.ordermanager.'.Groups::class,
+            Groups::class,
             $sId,
             array_merge(
                 //['oxusername'   => (string) $sId],
                 $aFields
             )
-        );
+        )->save();
     }
 
     /**
@@ -213,10 +238,10 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
      */
     public function createUser($sId, $aFields = [])
     {
-        $sClass = 'd3ox.ordermanager.'.User::class;
+        $sClass = User::class;
 
         /** @var BaseModel $oObject */
-        $oObject = d3GetOxidDIC()->get($sClass);
+        $oObject = oxNew($sClass);
 
         $oObject->assign(['oxusername'  => $sId]);
 
@@ -235,19 +260,6 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
             )
         );
         $oObject->save();
-
-        // can't use getObject because exists check don't work without an assigned username
-        //        $this->createObject(
-        //            'd3ox.ordermanager.'.User::class,
-        //            $sId,
-        //            array_merge(
-        //                [
-        //                    'oxpassword'    => '',
-        //                  'oxusername'   => (string) $sId
-        //                ],
-        //                $aFields
-        //            )
-        //        );
     }
 
     /**
@@ -258,7 +270,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
     {
         try {
             /** @var BaseModel $oObject */
-            $oObject = d3GetOxidDIC()->get($sClass);
+            $oObject = oxNew($sClass);
             if (method_exists($oObject, 'setRights')) {
                 $oObject->setRights(null);
             }
@@ -276,8 +288,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
     public function deleteBaseModelObject($sTableName, $sId)
     {
         try {
-            /** @var BaseModel $oObject */
-            $oObject = d3GetOxidDIC()->get('d3ox.ordermanager.' . BaseModel::class);
+            $oObject = oxNew(BaseModel::class);
             $oObject->init($sTableName);
             if (method_exists($oObject, 'setRights')) {
                 $oObject->setRights(null);
@@ -313,7 +324,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
      */
     public function deleteArticle($sId)
     {
-        $this->deleteObject('d3ox.ordermanager.'.Article::class, $sId);
+        $this->deleteObject(Article::class, $sId);
     }
 
     /**
@@ -321,7 +332,17 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
      */
     public function deleteOrder($sId)
     {
-        $this->deleteObject('d3ox.ordermanager.'.Order::class, $sId);
+        $artIds = [];
+        $order = oxNew(Order::class);
+        $order->load($sId);
+        foreach ($order->getOrderArticles() as $orderArticle) {
+            $orderArticle->delete();
+            $artIds[] = $orderArticle->getFieldData('oxartid');
+        }
+        $this->deleteObject(Order::class, $sId);
+        foreach ($artIds as $artId) {
+            (oxNew(Article::class))->delete($artId);
+        }
     }
 
     /**
@@ -329,7 +350,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
      */
     public function deleteUser($sId)
     {
-        $this->deleteObject('d3ox.ordermanager.'.User::class, $sId);
+        $this->deleteObject(User::class, $sId);
     }
 
     /**
@@ -337,7 +358,7 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
      */
     public function deleteGroup($sId): void
     {
-        $this->deleteObject('d3ox.ordermanager.'.Groups::class, $sId);
+        $this->deleteObject(Groups::class, $sId);
     }
 
     /**
@@ -364,12 +385,10 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
         /** @var Manager|MockObject $oManager */
         $oManager = $this->getMockBuilder(Manager::class)
             ->onlyMethods([
-                'd3getLog',
                 'getListGenerator',
                 'getRecalculateFlag',
             ])
             ->getMock();
-        $oManager->method('d3getLog')->willReturn($this->getD3LogMock());
         $oManager->method('getListGenerator')->willReturn($this->getListGenerator($oManager));
         $oManager->method('getRecalculateFlag')->willReturn(false);
         $oManager->load($sManagerId);
@@ -381,17 +400,10 @@ abstract class d3IntegrationTestCase extends d3ModCfgUnitTestCase
      * @param Manager $oManager
      * @return Manager_Listgenerator|MockObject
      * @throws Exception
+     * @codeCoverageIgnore
      */
     public function getListGenerator(Manager $oManager)
     {
-        d3GetOxidDIC()->set(
-            Manager_Listgenerator::class.'.args.ordermanager',
-            $oManager
-        );
-
-        /** @var Manager_Listgenerator $object */
-        $object = d3GetOxidDIC()->get(Manager_Listgenerator::class);
-
-        return $object;
+        return oxNew(Manager_Listgenerator::class, $oManager);
     }
 }

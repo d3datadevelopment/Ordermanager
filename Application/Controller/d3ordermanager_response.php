@@ -19,51 +19,31 @@ namespace D3\Ordermanager\Application\Controller;
 
 use Assert\Assert;
 use Assert\InvalidArgumentException;
-use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
-use D3\ModCfg\Application\Model\Exception\wrongModIdException;
-use D3\ModCfg\Application\Model\Log\d3LogInterface;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanager_execute as ManagerExecuteModel;
-use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist as ManagerList;
 use D3\Ordermanager\Application\Model\Exceptions\d3ordermanager_cronUnavailableException as cronUnavailableException;
+use D3\Ordermanager\Core\ModCfgTrait;
 use D3\Ordermanager\Core\Registry as ManagerRegistry;
 use DateTime;
 use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Exception as DBALException;
 use OxidEsales\Eshop\Core\Base;
-use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\DatabaseException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
-use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\Eshop\Core\Request;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use RuntimeException;
+use ReflectionClass;
 
 class d3ordermanager_response extends Base
 {
-    use VariablesTrait;
-    private string $_sModId = 'd3_ordermanager';
-
-    /**
-     * constructor.
-     */
-    public function __construct()
-    {
-        $this->isCLI() or throw new RuntimeException('controller must called via command line interface');
-
-        d3GetOxidDIC()->getParameter($this->_DIC_Instance_Id . 'modcfgid') === $this->_sModId or
-        throw oxNew(wrongModIdException::class, $this->_sModId);
-
-        parent::__construct();
-    }
+    use ModCfgTrait;
 
     public function isCLI(): bool
     {
@@ -95,13 +75,12 @@ class d3ordermanager_response extends Base
 
         $iStartTime = microtime(true);
 
-        /** @var d3LogInterface $oLog */
-        $oLog = d3GetOxidDIC()->get('d3.ordermanager.log');
+        $oLog = $this->d3GetOrderManagerLog();
         $oLog->info(self::class, __FUNCTION__, __LINE__, "start cron", "");
 
         $this->_checkUnavailableCronjob();
-        $this->_getSet()->setValue($this->_getCronTimestampVarName(), (new DateTime())->format('Y-m-d H:i:s'));
-        $this->_getSet()->saveNoLicenseRefresh();
+        $this->d3GetOrderManagerConfig()->setValue($this->_getCronTimestampVarName(), (new DateTime())->format('Y-m-d H:i:s'));
+        $this->d3GetOrderManagerConfig()->saveNoLicenseRefresh();
 
         $this->_startJobs();
 
@@ -117,25 +96,20 @@ class d3ordermanager_response extends Base
         stopProfile(__METHOD__);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getManagerList(): ManagerList
     {
-        /** @var ManagerList $managerList */
-        $managerList = d3GetOxidDIC()->get(ManagerList::class);
-
-        return $managerList;
+        return oxNew(ManagerList::class);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getManagerExecute(Manager $oManager): ManagerExecuteModel
     {
-        d3GetOxidDIC()->set(
-            ManagerExecuteModel::class.'.args.ordermanager',
-            $oManager
-        );
-
-        /** @var ManagerExecuteModel $manager_execute */
-        $manager_execute = d3GetOxidDIC()->get(ManagerExecuteModel::class);
-
-        return $manager_execute;
+        return oxNew(ManagerExecuteModel::class, $oManager);
     }
 
     /**
@@ -161,8 +135,7 @@ class d3ordermanager_response extends Base
         // disable admin mode for using active check
         $blOldAdminMode = $this->setAdminContext(false);
 
-        /** @var d3LogInterface $oLog */
-        $oLog = d3GetOxidDIC()->get('d3.ordermanager.log');
+        $oLog = $this->d3GetOrderManagerLog();
         $oLog->info(
             self::class,
             __FUNCTION__,
@@ -194,25 +167,19 @@ class d3ordermanager_response extends Base
         stopProfile(__METHOD__);
     }
 
-    /**
-     * required for unit tests, can't mock getConfig method
-     * @throws Exception
-     */
-    public function d3GetOrderManagerConfigObject(): Config
-    {
-        /** @var Config $config */
-        $config = d3GetOxidDIC()->get('d3ox.ordermanager.'.Config::class);
-        return $config;
-    }
-
     protected function setAdminContext(bool $blAdmin): bool
     {
-        $config = $this->d3GetOrderManagerConfigObject();
+        $config = Registry::getConfig();
         $isAdmin = $config->isAdmin();
 
-        if ($config->isAdmin() !== $blAdmin) {
+        if ($isAdmin !== $blAdmin) {
             $config->setAdminMode($blAdmin);
-            ContainerFactory::resetContainer();
+
+            $refClass = new ReflectionClass(ContainerFactory::class);
+
+            $instanceProp = $refClass->getProperty('instance');
+            $instanceProp->setAccessible(true);
+            $instanceProp->setValue(null, null);
         }
 
         return $isAdmin;
@@ -232,34 +199,19 @@ class d3ordermanager_response extends Base
 
     public function getManager(): Manager
     {
-        /** @var Manager $manager */
-        $manager = d3GetOxidDIC()->get(Manager::class);
+        $manager = oxNew(Manager::class);
         $manager->setLanguage(Registry::getLang()->getTplLanguage());
         return $manager;
     }
 
     protected function _checkAccessKey(): bool
     {
-        $sSetCronPassword = $this->_getSet()->getValue('sCronPassword');
+        $sSetCronPassword = $this->d3GetOrderManagerConfig()->getValue('sCronPassword');
 
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
-        $sGetAccessKey  = $request->getRequestEscapedParameter("key");
+        $sGetAccessKey  = Registry::getRequest()->getRequestEscapedParameter("key");
         $sRegisteredAccessKey = $sSetCronPassword ?: $this->getManager()->getBaseCronPW();
 
         return $this->hasValidAccessKey($sRegisteredAccessKey, $sGetAccessKey);
-    }
-
-    /**
-     * return type can't be defined, because of unmockable d3_cfg_mod class, use stdClass in test
-     * @return d3_cfg_mod
-     */
-    protected function _getSet()
-    {
-        /** @var d3_cfg_mod $modcfg */
-        $modcfg = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
-
-        return $modcfg;
     }
 
     public function isBrowserCall(): bool
@@ -274,7 +226,7 @@ class d3ordermanager_response extends Base
      */
     protected function hasValidAccessKey($sRegisteredAccessKey, $sGetAccessKey): bool
     {
-        if (false == $this->isBrowserCall()) {
+        if (!$this->isBrowserCall()) {
             return true;
         }
 
@@ -292,21 +244,21 @@ class d3ordermanager_response extends Base
      */
     protected function _checkUnavailableCronjob()
     {
-        $this->_getSet()->isActive() or throw $this->getCronUnavailableException(
-            $this->getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_MODULEDISABLED')
+        $this->d3GetOrderManagerConfig()->isActive() or throw $this->getCronUnavailableException(
+            Registry::getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_MODULEDISABLED')
         );
 
         $this->_checkAccessKey() or throw $this->getCronUnavailableException(
-            $this->getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_WRONGPASSWORD')
+            Registry::getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_WRONGPASSWORD')
         );
 
-        $this->_getSet()->getValue('blCronActive') or throw $this->getCronUnavailableException(
-            $this->getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_UNAVAILABLE')
+        $this->d3GetOrderManagerConfig()->getValue('blCronActive') or throw $this->getCronUnavailableException(
+            Registry::getLang()->translateString('D3_ORDERMANAGER_EXC_CRON_UNAVAILABLE')
         );
     }
 
     /**
-     * @param $sMessage
+     * @codeCoverageIgnore
      */
     public function getCronUnavailableException($sMessage): cronUnavailableException
     {
@@ -318,9 +270,7 @@ class d3ordermanager_response extends Base
      */
     protected function _getCronJobIdParameter()
     {
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get('d3ox.ordermanager.'.Request::class);
-        $iCjId = $request->getRequestEscapedParameter('cjid');
+        $iCjId = Registry::getRequest()->getRequestEscapedParameter('cjid');
 
         try {
             Assert::that($iCjId)->notBlank();
@@ -339,7 +289,7 @@ class d3ordermanager_response extends Base
     public function getLastExecDate(): string
     {
         return
-            ($ts = $this->_getSet()->getValue($this->_getCronTimestampVarName())) ?
+            ($ts = $this->d3GetOrderManagerConfig()->getValue($this->_getCronTimestampVarName())) ?
                 DateTime::createFromFormat('Y-m-d H:i:s', $ts)
                         ->format(Registry::getLang()->translateString('fullDateFormat')) :
                 '';
@@ -362,12 +312,12 @@ class d3ordermanager_response extends Base
 
         return [
             sprintf(
-                $this->getLang()->translateString('D3_GENERAL_ORDERMANAGER_TASKCOUNT_CRONID'),
+                Registry::getLang()->translateString('D3_GENERAL_ORDERMANAGER_TASKCOUNT_CRONID'),
                 $sCronJobId,
                 $taskCount ?? 0
             ),
             sprintf(
-                $this->getLang()->translateString('D3_GENERAL_ORDERMANAGER_LASTEXEC_CRONID'),
+                Registry::getLang()->translateString('D3_GENERAL_ORDERMANAGER_LASTEXEC_CRONID'),
                 $sCronJobId,
                 $this->getLastExecDate()
             ),
@@ -384,13 +334,5 @@ class d3ordermanager_response extends Base
     public function getStatistic(): array
     {
         return $this->getManagerList()->getAffectedItemsCount();
-    }
-
-    public function getLang(): Language
-    {
-        /** @var Language $lang */
-        $lang = d3GetOxidDIC()->get('d3ox.ordermanager.'.Language::class);
-
-        return $lang;
     }
 }

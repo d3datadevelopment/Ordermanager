@@ -15,13 +15,10 @@
 
 namespace D3\Ordermanager\tests\integration\Trigger;
 
-use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
-use D3\Ordermanager\Application\Model\Output\d3ordermanager_debugoutput;
-use D3\Ordermanager\Application\Model\Output\d3ordermanager_nulloutput;
-use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
+use D3\Ordermanager\Core\ModCfgTrait;
 use D3\Ordermanager\publicDir\d3_ordermanager_cron;
 use D3\Ordermanager\tests\integration\d3IntegrationTestCase;
 use D3\Ordermanager\tests\tools\Intercept;
@@ -38,6 +35,8 @@ use OxidEsales\Eshop\Core\Registry;
  */
 class executeCLICronTest extends d3IntegrationTestCase
 {
+    use ModCfgTrait;
+
     public $sManagerId = 'managerTestId';
     public $aArticleIdList = [
         'articleTestIdNo1',
@@ -59,16 +58,6 @@ class executeCLICronTest extends d3IntegrationTestCase
 
     public $dCurrentValue = 1.23;
     public $dExpectedValue = 2.34;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        d3GetOxidDIC()->set(
-            d3ordermanager_debugoutput::class,
-            oxNew(d3ordermanager_nulloutput::class)
-        );
-    }
 
     /**
      * @throws Exception
@@ -212,7 +201,7 @@ class executeCLICronTest extends d3IntegrationTestCase
      */
     public function runCronOk()
     {
-        $set = d3_cfg_mod::get('d3_ordermanager');
+        $set = $this->d3GetOrderManagerConfig();
         $blCurrentCronStatus = $set->getValue('blCronActive');
         $set->setValue('blCronActive', true);
         $set->assign([ 'oxactive' => 1 ]);
@@ -223,24 +212,16 @@ class executeCLICronTest extends d3IntegrationTestCase
 
         $this->setCLIArguments(['./vendor/bin/d3_ordermanager_cron', '-q', 'run', '1', 'testId']);
 
-        // prevent save trigger action in test preparation
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_FINALIZEORDER, true);
-
         /** @var d3_ordermanager_cron $cron */
         $cron = oxNew(d3_ordermanager_cron::class);
         $cron->run();
-
-        // prevent save trigger action in test preparation
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_FINALIZEORDER, false);
 
         $set->setValue('blCronActive', $blCurrentCronStatus);
         $set->assign([ 'oxactive' => 1 ]);
         $set->saveNoLicenseRefresh();
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dExpectedValue * 100),
@@ -248,11 +229,11 @@ class executeCLICronTest extends d3IntegrationTestCase
         );
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[1]);
         $this->assertSame(
-            round((float) $this->dCurrentValue * 100),
-            round((float) $oItem->getFieldData('oxdelcost') * 100)
+            round((float)$this->dCurrentValue * 100),
+            round((float)$oItem->getFieldData('oxdelcost') * 100)
         );
     }
 
@@ -268,7 +249,7 @@ class executeCLICronTest extends d3IntegrationTestCase
      */
     public function runCronCanceledInvalidRequirementConfig()
     {
-        $set = d3_cfg_mod::get('d3_ordermanager');
+        $set = $this->d3GetOrderManagerConfig();
         $blCurrentCronStatus = $set->getValue('blCronActive');
         $set->setValue('blCronActive', true);
         $set->assign([ 'oxactive' => 1 ]);
@@ -303,7 +284,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         $set->saveNoLicenseRefresh();
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
@@ -311,7 +292,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         );
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[1]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
@@ -331,7 +312,7 @@ class executeCLICronTest extends d3IntegrationTestCase
      */
     public function runCronCanceledInvalidActionConfig()
     {
-        $set = d3_cfg_mod::get('d3_ordermanager');
+        $set = $this->d3GetOrderManagerConfig();
         $blCurrentCronStatus = $set->getValue('blCronActive');
         $set->setValue('blCronActive', true);
         $set->assign([ 'oxactive' => 1 ]);
@@ -366,7 +347,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         $set->saveNoLicenseRefresh();
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
@@ -374,7 +355,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         );
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[1]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
@@ -394,7 +375,7 @@ class executeCLICronTest extends d3IntegrationTestCase
      */
     public function runCronInactiveModule()
     {
-        $set = d3_cfg_mod::get('d3_ordermanager');
+        $set = $this->d3GetOrderManagerConfig();
         $blCurrentCronStatus = $set->getValue('blCronActive');
 
         $set->setValue('blCronActive', true);
@@ -424,7 +405,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         $set->saveNoLicenseRefresh();
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
@@ -432,7 +413,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         );
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[1]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
@@ -452,7 +433,7 @@ class executeCLICronTest extends d3IntegrationTestCase
      */
     public function runDisabledCron()
     {
-        $set = d3_cfg_mod::get('d3_ordermanager');
+        $set = $this->d3GetOrderManagerConfig();
         $blCurrentCronStatus = $set->getValue('blCronActive');
         $set->setValue('blCronActive', false);
         $set->assign(['oxactive' => 1]);
@@ -478,7 +459,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         $set->saveNoLicenseRefresh();
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
@@ -486,7 +467,7 @@ class executeCLICronTest extends d3IntegrationTestCase
         );
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[1]);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),

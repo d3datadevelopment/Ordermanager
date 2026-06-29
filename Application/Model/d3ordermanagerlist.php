@@ -21,10 +21,10 @@ use Assert\Assert;
 use Assert\InvalidArgumentException;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist as ManagerList;
-use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Configuration\d3modprofilelist;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
+use D3\Ordermanager\Core\ModCfgTrait;
 use DateTime;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\ParameterType;
@@ -42,6 +42,8 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class d3ordermanagerlist extends d3modprofilelist
 {
+    use ModCfgTrait;
+
     /**
      * List Object class name
      *
@@ -98,10 +100,14 @@ class d3ordermanagerlist extends d3modprofilelist
      */
     public function d3GetOrderSaveTriggeredManagerTasks(): ManagerList
     {
-        if ($this->d3GetSet()->isDemo() ||
+        if ($this->d3GetOrderManagerConfig()->isDemo() ||
             in_array(
                 true,
-                array_map(fn (string|int $mConfigKey, $mDefaultValue = null): bool => $this->d3GetSet()->getLicenseConfigData($mConfigKey, $mDefaultValue), [d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION])
+                array_map(
+                    fn (string|int $mConfigKey, $mDefaultValue = null): bool =>
+                    $this->d3GetOrderManagerConfig()->getLicenseConfigData($mConfigKey, $mDefaultValue),
+                    [d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION]
+                )
             )
         ) {
             /** @var Manager $oListObject */
@@ -147,10 +153,14 @@ class d3ordermanagerlist extends d3modprofilelist
      */
     public function d3GetOrderFinishTriggeredManagerTasks(): ManagerList
     {
-        if ($this->d3GetSet()->isDemo() ||
+        if ($this->d3GetOrderManagerConfig()->isDemo() ||
             in_array(
                 true,
-                array_map(fn (string|int $mConfigKey, $mDefaultValue = null): bool => $this->d3GetSet()->getLicenseConfigData($mConfigKey, $mDefaultValue), [d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION])
+                array_map(
+                    fn (string|int $mConfigKey, $mDefaultValue = null): bool =>
+                    $this->d3GetOrderManagerConfig()->getLicenseConfigData($mConfigKey, $mDefaultValue),
+                    [d3ordermanager_conf::SERIAL_BIT_STANDARD_EDITION]
+                )
             )
         ) {
             /** @var Manager $oListObject */
@@ -197,11 +207,12 @@ class d3ordermanagerlist extends d3modprofilelist
      */
     public function d3GetCustomManagerTasks(string $eventName): self
     {
-        if ($this->d3GetSet()->isDemo() ||
+        if ($this->d3GetOrderManagerConfig()->isDemo() ||
             in_array(
                 true,
                 array_map(
-                    fn (string|int $mConfigKey, $mDefaultValue = null): bool => $this->d3GetSet()->getLicenseConfigData($mConfigKey, $mDefaultValue),
+                    fn (string|int $mConfigKey, $mDefaultValue = null): bool =>
+                        $this->d3GetOrderManagerConfig()->getLicenseConfigData($mConfigKey, $mDefaultValue),
                     [d3ordermanager_conf::SERIAL_BIT_PREMIUM_EDITION]
                 )
             )
@@ -499,17 +510,6 @@ class d3ordermanagerlist extends d3modprofilelist
         }
 
         return $taskList;
-    }
-
-    /**
-     * return type can't be defined, because of unmockable d3_cfg_mod class, use stdClass in test
-     * @return d3_cfg_mod
-     */
-    public function d3GetSet()
-    {
-        /** @var d3_cfg_mod $set */
-        $set = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
-        return $set;
     }
 
     public function getDIContainer(): ContainerInterface

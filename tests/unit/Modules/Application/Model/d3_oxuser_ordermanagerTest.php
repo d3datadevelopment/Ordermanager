@@ -48,7 +48,7 @@ class d3_oxuser_ordermanagerTest extends d3OrdermanagerUnitTestCase
     {
         parent::setUp();
 
-        $this->_oModel = d3GetOxidDIC()->get('d3ox.ordermanager.'.User::class);
+        $this->_oModel = oxNew(User::class);
     }
 
     public function tearDown(): void
@@ -61,7 +61,7 @@ class d3_oxuser_ordermanagerTest extends d3OrdermanagerUnitTestCase
     /**
      * @param $propertyName
      * @param $expected
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxuser_ordermanager::__get
+
      * @test
      * @throws ReflectionException
      * @dataProvider __getPassDataProvider
@@ -92,7 +92,7 @@ class d3_oxuser_ordermanagerTest extends d3OrdermanagerUnitTestCase
     /**
      * @param $propertyName
      * @param $expected
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxuser_ordermanager::__get
+
      * @test
      * @throws ReflectionException
      */

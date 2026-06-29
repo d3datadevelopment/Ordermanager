@@ -1,0 +1,25 @@
+parameters:
+    scanFiles:
+        - ../../../autoload.php
+        - ../../../oxid-esales/oxideshop-ce/source/bootstrap.php
+        - ../../../oxid-esales/oxideshop-ce/source/oxfunctions.php
+        - ../../../oxid-esales/oxideshop-ce/source/overridablefunctions.php
+        - ../IntelliSenseHelper.php
+    paths:
+        - ../Application
+        - ../assets
+        - ../bin
+        - ../Core
+        - ../Modules
+        - ../public
+        - ../Setup
+        - ../views
+        - ../metadata.php
+        - ../d3metadata.php
+    excludePaths:
+        - ../docs
+        - ../tests
+        - ./.php-cs-fixer.php
+        - ./rector.php
+    level: 1
+    phpVersion: 80300

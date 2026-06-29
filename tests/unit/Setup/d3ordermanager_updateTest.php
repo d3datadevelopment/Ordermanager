@@ -15,7 +15,6 @@
 
 namespace D3\Ordermanager\tests\unit\Setup;
 
-use D3\DIContainerHandler\d3DicException;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\d3bitmask;
 use D3\ModCfg\Application\Model\d3str;
@@ -23,6 +22,7 @@ use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\ModCfg\Application\Model\Installwizzard\d3installdbrecord;
 use D3\Ordermanager\Application\Model\d3ordermanager;
+use D3\Ordermanager\Core\ModCfgTrait;
 use D3\Ordermanager\Setup\d3ordermanager_update;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
 use Doctrine\DBAL\Exception as DBALException;
@@ -44,6 +44,8 @@ use ReflectionException;
  */
 class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
 {
+    use ModCfgTrait;
+
     /** @var d3ordermanager_update */
     protected $_oModel;
 
@@ -58,7 +60,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     {
         parent::setUp();
 
-        $this->_oModel = d3GetOxidDIC()->get(d3ordermanager_update::class);
+        $this->_oModel = oxNew(d3ordermanager_update::class);
     }
 
     public function tearDown(): void
@@ -69,7 +71,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::doesOrder2OrderManagerTableNotExist
      * @test
      * @throws ReflectionException
      */
@@ -90,7 +91,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addOrder2OrderManagerTable
      * @test
      * @throws ReflectionException
      */
@@ -115,7 +115,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addOrder2OrderManagerTable
      * @test
      * @throws ReflectionException
      */
@@ -140,39 +139,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::d3GetInstallDbRecord
-     * @test
-     * @throws ReflectionException
-     */
-    public function d3GetInstallDbRecordReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            d3installdbrecord::class,
-            $this->callMethod(
-                $this->_oModel,
-                'd3GetInstallDbRecord'
-            )
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::d3GetConfig
-     * @test
-     * @throws ReflectionException
-     */
-    public function d3GetConfigReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            Config::class,
-            $this->callMethod(
-                $this->_oModel,
-                'd3GetConfig'
-            )
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::doesModCfgItemNotExist
      * @test
      * @throws ReflectionException
      */
@@ -212,7 +178,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::doesModCfgItemNotExist
      * @test
      * @throws ReflectionException
      */
@@ -252,7 +217,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addModCfgItem
      * @test
      * @throws ReflectionException
      */
@@ -297,7 +261,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addModCfgItem
      * @test
      * @throws ReflectionException
      */
@@ -342,7 +305,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addModCfgItem
      * @test
      * @throws ReflectionException
      */
@@ -387,7 +349,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::checkCronPasswordSet
      * @test
      * @throws DBALException
      * @throws DatabaseConnectionException
@@ -400,16 +361,20 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
      */
     public function canCheckCronPasswordSet($testPW, $expected)
     {
-        /** @var d3_cfg_mod $set */
-        $set = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $set = $this->d3GetOrderManagerConfig();
         $currPassword = $set->getValue('sCronPassword');
         $set->setValue('sCronPassword', $testPW);
         $set->saveNoLicenseRefresh();
 
+        $model = $this->getMockBuilder(d3ordermanager_update::class)
+            ->onlyMethods(['d3GetOrderManagerConfig'])
+            ->getMock();
+        $model->method('d3GetOrderManagerConfig')->willReturn($set);
+
         $this->assertSame(
             $expected,
             $this->callMethod(
-                $this->_oModel,
+                $model,
                 'checkCronPasswordSet'
             )
         );
@@ -434,7 +399,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::createCronPassword
      * @test
      * @throws DBALException
      * @throws DatabaseConnectionException
@@ -448,8 +412,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     {
         $expectedPW = 'testRandom';
 
-        /** @var d3_cfg_mod $set */
-        $set = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $set = $this->d3GetOrderManagerConfig();
         $currPassword = $set->getValue('sCronPassword');
         $set->setValue('sCronPassword', 'otherContent');
         $set->saveNoLicenseRefresh();
@@ -458,17 +421,20 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods(['random_str'])
             ->getMock();
         $oStrMock->expects($this->atLeastOnce())->method('random_str')->willReturn($expectedPW);
-        d3GetOxidDIC()->set(d3str::class, $oStrMock);
 
         /** @var d3ordermanager_update|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
             ->onlyMethods([
                 'hasExecute',
                 'setActionLog',
+                'createD3Str',
+                'd3GetOrderManagerConfig',
             ])
             ->getMock();
         $oModelMock->method('hasExecute')->willReturn(true);
         $oModelMock->expects($this->exactly(1))->method('setActionLog')->willReturn(true);
+        $oModelMock->method('createD3Str')->willReturn($oStrMock);
+        $oModelMock->method('d3GetOrderManagerConfig')->willReturn($set);
 
         $this->_oModel = $oModelMock;
 
@@ -477,8 +443,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             'createCronPassword'
         );
 
-        /** @var d3_cfg_mod $set */
-        $fixtureSet = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $fixtureSet = $this->d3GetOrderManagerConfig();
         $fixturePw = $fixtureSet->getValue('sCronPassword');
 
         $this->assertSame($expectedPW, $fixturePw);
@@ -488,7 +453,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::createCronPassword
      * @test
      * @throws DBALException
      * @throws DatabaseConnectionException
@@ -502,8 +466,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     {
         $expectedPW = 'testRandom';
 
-        /** @var d3_cfg_mod $set */
-        $set = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $set = $this->d3GetOrderManagerConfig();
         $currPassword = $set->getValue('sCronPassword');
         $set->setValue('sCronPassword', 'otherContent');
         $set->saveNoLicenseRefresh();
@@ -512,17 +475,18 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods(['random_str'])
             ->getMock();
         $oStrMock->expects($this->never())->method('random_str')->willReturn($expectedPW);
-        d3GetOxidDIC()->set(d3str::class, $oStrMock);
 
         /** @var d3ordermanager_update|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
             ->onlyMethods([
                 'hasExecute',
                 'setActionLog',
+                'createD3Str',
             ])
             ->getMock();
         $oModelMock->method('hasExecute')->willReturn(false);
         $oModelMock->expects($this->exactly(1))->method('setActionLog')->willReturn(true);
+        $oModelMock->method('createD3Str')->willReturn($oStrMock);
 
         $this->_oModel = $oModelMock;
 
@@ -531,8 +495,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             'createCronPassword'
         );
 
-        /** @var d3_cfg_mod $set */
-        $fixtureSet = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $fixtureSet = $this->d3GetOrderManagerConfig();
         $fixturePw = $fixtureSet->getValue('sCronPassword');
 
         $this->assertSame('otherContent', $fixturePw);
@@ -542,10 +505,8 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::needExampleJobList
      * @test
      * @throws ReflectionException
-     * @throws d3DicException
      */
     public function needExampleJobListPass()
     {
@@ -562,21 +523,22 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             ->getMock();
         $oQBMock->method('execute')->willReturn($resultMock);
 
-        d3GetOxidDIC()->set('d3ox.modcfg.OxDbQueryBuilder', $oQBMock);
+        $model = $this->getMockBuilder(d3ordermanager_update::class)
+            ->onlyMethods(['createQueryBuilder'])
+            ->getMock();
+        $model->method('createQueryBuilder')->willReturn($oQBMock);
 
         $this->assertTrue(
             $this->callMethod(
-                $this->_oModel,
+                $model,
                 'needExampleJobList'
             )
         );
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::needExampleJobList
      * @test
      * @throws ReflectionException
-     * @throws d3DicException
      */
     public function needExampleJobListDontPass()
     {
@@ -593,18 +555,20 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             ->getMock();
         $oQBMock->method('execute')->willReturn($resultMock);
 
-        d3GetOxidDIC()->set('d3ox.modcfg.OxDbQueryBuilder', $oQBMock);
+        $model = $this->getMockBuilder(d3ordermanager_update::class)
+            ->onlyMethods(['createQueryBuilder'])
+            ->getMock();
+        $model->method('createQueryBuilder')->willReturn($oQBMock);
 
         $this->assertFalse(
             $this->callMethod(
-                $this->_oModel,
+                $model,
                 'needExampleJobList'
             )
         );
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addExampleJobList
      * @test
      * @throws ReflectionException
      */
@@ -646,7 +610,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::isExampleContentMissingInDatabase
      * @test
      * @throws DBALException
      * @throws ReflectionException
@@ -679,8 +642,10 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'getExampleContentInsertList',
                 'getExampleJobItem1InsertFields',
+                'createQueryBuilder',
             ])
             ->getMock();
+        $oModelMock->method('createQueryBuilder')->willReturn($queryBuilderMock);
         $oModelMock->method('getExampleContentInsertList')->willReturn(
             [
                 [
@@ -717,8 +682,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
 
         $this->_oModel = $oModelMock;
 
-        d3GetOxidDIC()->set('d3ox.modcfg.OxDbQueryBuilder', $queryBuilderMock);
-
         $this->assertTrue(
             $this->callMethod(
                 $this->_oModel,
@@ -728,10 +691,8 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::isExampleContentMissingInDatabase
      * @test
      * @throws ReflectionException
-     * @throws d3DicException
      */
     public function checkIsExampleContentMissingInDatabaseNegative()
     {
@@ -761,8 +722,10 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'getExampleContentInsertList',
                 'getExampleJobItem1InsertFields',
+                'createQueryBuilder',
             ])
             ->getMock();
+        $oModelMock->method('createQueryBuilder')->willReturn($queryBuilderMock);
         $oModelMock->method('getExampleContentInsertList')->willReturn(
             [
                 [
@@ -792,8 +755,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
 
         $this->_oModel = $oModelMock;
 
-        d3GetOxidDIC()->set('d3ox.modcfg.OxDbQueryBuilder', $queryBuilderMock);
-
         $this->assertFalse(
             $this->callMethod(
                 $this->_oModel,
@@ -803,10 +764,8 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::isExampleContentMissingInDatabase
      * @test
      * @throws ReflectionException
-     * @throws d3DicException
      */
     public function checkIsExampleContentMissingInDatabaseNegativeNoLoadId()
     {
@@ -828,8 +787,10 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'getExampleContentInsertList',
                 'getExampleJobItem1InsertFields',
+                'createQueryBuilder',
             ])
             ->getMock();
+        $oModelMock->method('createQueryBuilder')->willReturn($queryBuilderMock);
         $oModelMock->method('getExampleContentInsertList')->willReturn(
             [
                 [
@@ -852,8 +813,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
 
         $this->_oModel = $oModelMock;
 
-        d3GetOxidDIC()->set('d3ox.modcfg.OxDbQueryBuilder', $queryBuilderMock);
-
         $this->assertFalse(
             $this->callMethod(
                 $this->_oModel,
@@ -863,7 +822,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addExampleContentList
      * @test
      * @throws ReflectionException
      */
@@ -905,7 +863,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::requireExample2ShopRelation
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -936,9 +893,9 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
         $oModelMock->expects($this->exactly($expected ? 1 : 3))->method('_require2ShopRelation')->willReturn($expected);
         $oModelMock->expects($this->atLeastOnce())->method('getShopListByActiveModule')->willReturn(
             [
-                1 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
-                2 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
-                3 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
+                1 => oxNew(Shop::class),
+                2 => oxNew(Shop::class),
+                3 => oxNew(Shop::class),
             ]
         );
 
@@ -954,7 +911,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addExample2ShopRelation
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -996,9 +952,9 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
         $oModelMock->expects($this->exactly(9))->method('_add2ShopRelation')->willReturn(true);
         $oModelMock->expects($this->atLeastOnce())->method('getShopListByActiveModule')->willReturn(
             [
-                1 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
-                2 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
-                3 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
+                1 => oxNew(Shop::class),
+                2 => oxNew(Shop::class),
+                3 => oxNew(Shop::class),
             ]
         );
 
@@ -1013,7 +969,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addExample2ShopRelation
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -1067,9 +1022,9 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
         );
         $oModelMock->expects($this->atLeastOnce())->method('getShopListByActiveModule')->willReturn(
             [
-                1 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
-                2 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
-                3 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
+                1 => oxNew(Shop::class),
+                2 => oxNew(Shop::class),
+                3 => oxNew(Shop::class),
             ]
         );
 
@@ -1084,7 +1039,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobInsertList
      * @test
      * @throws ReflectionException
      */
@@ -1100,7 +1054,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleContentInsertList
      * @test
      * @throws ReflectionException
      */
@@ -1116,16 +1069,16 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem1InsertFields
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem2InsertFields
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem3InsertFields
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem4InsertFields
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem5InsertFields
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem6InsertFields
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem7InsertFields
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem8InsertFields
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem9InsertFields
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleJobItem10InsertFields
+
+
+
+
+
+
+
+
+
+
      * @test
      * @throws ReflectionException
      */
@@ -1168,8 +1121,8 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleContent1InsertFields
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getExampleContent2InsertFields
+
+
      * @test
      * @throws ReflectionException
      */
@@ -1212,7 +1165,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers       \D3\Ordermanager\Setup\d3ordermanager_update::_addExampleJobItem
      * @test
      *
      * @param $expected
@@ -1234,8 +1186,8 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
 
         $oModelMock->method('getShopListByActiveModule')->willReturn(
             [
-                1 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
-                2 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
+                1 => oxNew(Shop::class),
+                2 => oxNew(Shop::class),
             ]
         );
 
@@ -1257,23 +1209,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::getD3BitMask
-     * @test
-     * @throws ReflectionException
-     */
-    public function getD3BitReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            d3bitmask::class,
-            $this->callMethod(
-                $this->_oModel,
-                'getD3BitMask'
-            )
-        );
-    }
-
-    /**
-     * @covers       \D3\Ordermanager\Setup\d3ordermanager_update::_addExampleJobItem
      * @test
      *
      * @param $expected
@@ -1297,8 +1232,8 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
 
         $oModelMock->method('getShopListByActiveModule')->willReturn(
             [
-                1 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
-                2 => d3GetOxidDIC()->get('d3ox.ordermanager.'.Shop::class),
+                1 => oxNew(Shop::class),
+                2 => oxNew(Shop::class),
             ]
         );
 
@@ -1335,7 +1270,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
      * @param $blCheckStatus
      * @param $blExpected
      * @param $iArticleCount
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::hasNotOrderArticlesParentId
+
      * @test
      * @throws DBALException
      * @throws ReflectionException
@@ -1361,14 +1296,14 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods([
                 'mustCheckOrderArticlesParentId',
                 'setDontCheckOrderArticlesParentId',
+                'createQueryBuilder',
             ])
             ->getMock();
         $oModelMock->method('mustCheckOrderArticlesParentId')->willReturn($blCheckStatus);
         $oModelMock->expects($this->exactly(((int)!(bool) $iArticleCount)))->method('setDontCheckOrderArticlesParentId');
+        $oModelMock->method('createQueryBuilder')->willReturn($oQBMock);
 
         $this->_oModel = $oModelMock;
-
-        d3GetOxidDIC()->set('d3ox.modcfg.OxDbQueryBuilder', $oQBMock);
 
         $this->assertSame(
             $blExpected,
@@ -1394,7 +1329,7 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     /**
      * @param $blConfig
      * @param $blExpected
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::mustCheckOrderArticlesParentId
+
      * @test
      * @throws ReflectionException
      * @dataProvider mustCheckOrderArticlesParentIdPassDataProvider
@@ -1436,7 +1371,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::setDontCheckOrderArticlesParentId()
      * @test
      * @throws ReflectionException
      */
@@ -1463,7 +1397,6 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Setup\d3ordermanager_update::addOrderArticlesParentId()
      * @test
      * @throws ReflectionException
      */
@@ -1475,17 +1408,17 @@ class d3ordermanager_updateTest extends d3OrdermanagerUnitTestCase
                         ->setConstructorArgs([(new ConnectionProvider())->get()])
                         ->getMock();
 
-        d3GetOxidDIC()->set('d3ox.modcfg.OxDbQueryBuilder', $oQBMock);
-
         /** @var d3ordermanager_update|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(d3ordermanager_update::class)
             ->onlyMethods([
                 '_tableSqlExecute',
                 'setDontCheckOrderArticlesParentId',
+                'createQueryBuilder',
             ])
             ->getMock();
         $oModelMock->expects($this->once())->method('_tableSqlExecute')->willReturn(true);
         $oModelMock->expects($this->once())->method('setDontCheckOrderArticlesParentId');
+        $oModelMock->method('createQueryBuilder')->willReturn($oQBMock);
 
         $this->_oModel = $oModelMock;
 

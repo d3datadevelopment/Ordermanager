@@ -16,11 +16,8 @@
 namespace D3\Ordermanager\tests\unit;
 
 use Assert\Assert;
-use D3\DIContainerHandler\d3DicException;
-use D3\DIContainerHandler\d3DicHandler;
 use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
-use D3\ModCfg\Application\Model\Log\d3NullLogger;
 use D3\ModCfg\Tests\unit\d3ModCfgUnitTestCase;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -88,27 +85,15 @@ abstract class d3OrdermanagerUnitTestCase extends d3ModCfgUnitTestCase
      *
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
-     * @throws d3DicException
      */
     public function setUp(): void
     {
         parent::setUp();
 
-        d3DicHandler::getUncompiledInstance();
-
-        d3GetOxidDIC()->set('d3.ordermanager.log', d3GetOxidDIC()->get(d3NullLogger::class));
-
         Assert::that(d3_cfg_mod::get($this->sModId))->isInstanceOf(d3_cfg_mod::class);
         Assert::that(d3_cfg_mod::get($this->sModId)->getFieldData('oxserial'))->notBlank('The module license key is missing.');
 
         $this->_setLicenseKeyBackup(d3_cfg_mod::get($this->sModId)->getFieldData('oxserial'));
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        d3DicHandler::removeInstance();
     }
 
     /**

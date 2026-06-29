@@ -98,7 +98,7 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $this->deleteOrder($this->aOrderIdList[1]);
         $this->deleteUser($this->aUserIdList[0]);
         $this->deleteUser($this->aUserIdList[1]);
-        $this->deleteObject('d3ox.ordermanager.'.Object2Group::class, $this->aO2GroupIdList[0]);
+        $this->deleteObject(Object2Group::class, $this->aO2GroupIdList[0]);
 
         $qb1 = d3database::getInstance()->getQueryBuilder();
         $qb1->delete('oxobject2group')
@@ -196,34 +196,34 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
     public function actionChangeConcernedOrderSingleGroupsExistsAssigned()
     {
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[0],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
             ]
-        );
+        )->save();
 
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[1],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[1],
             ]
-        );
+        )->save();
 
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[3],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[1],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
             ]
-        );
+        )->save();
 
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerSingleGroupsExists());
         $oExecute->startJobItemExecution();
@@ -296,34 +296,34 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
     public function actionChangeConcernedOrderMultiGroupsExistsAssigned()
     {
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[0],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
             ]
-        );
+        )->save();
 
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[1],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[1],
             ]
-        );
+        )->save();
 
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[2],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[1],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
             ]
-        );
+        )->save();
 
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerMultiGroupsExists());
         $oExecute->startJobItemExecution();
@@ -387,24 +387,24 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
     public function actionChangeConcernedOrderSingleGroupsExistsNotAssigned()
     {
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[0],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[1],
             ]
-        );
+        )->save();
 
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[1],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[1],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
             ]
-        );
+        )->save();
 
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerSingleGroupsExists());
         $oExecute->startJobItemExecution();
@@ -470,34 +470,34 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
     public function actionChangeConcernedOrderSingleGroupsNotExistsNotAssigned()
     {
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[0],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
             ]
-        );
+        )->save();
 
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[1],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[1],
             ]
-        );
+        )->save();
 
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[2],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[1],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
             ]
-        );
+        )->save();
 
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerSingleGroupsNotExists());
         $oExecute->startJobItemExecution();
@@ -603,34 +603,34 @@ class actionCustDelFromGroupTest extends d3OrdermanagerActionIntegrationTestCase
     public function actionChangeConcernedOrderNoGroups()
     {
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[0],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
             ]
-        );
+        )->save();
 
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[1],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[1],
             ]
-        );
+        )->save();
 
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[2],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[1],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
             ]
-        );
+        )->save();
 
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerNoGroups());
         $oExecute->startJobItemExecution();

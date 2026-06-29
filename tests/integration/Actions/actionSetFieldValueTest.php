@@ -18,7 +18,6 @@ namespace D3\Ordermanager\tests\integration\Actions;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
-use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
 use Doctrine\DBAL\Exception as DBALException;
 use Exception;
 use OxidEsales\Eshop\Application\Model\Order;
@@ -26,7 +25,6 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use OxidEsales\Eshop\Core\Registry;
 
 /**
  * @coversNothing
@@ -153,16 +151,11 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function actionChangeConcernedOrderExistingSingleLangField()
     {
-        // prevent save trigger action in test
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
-
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerExistingSingleLangField());
         $oExecute->startJobItemExecution();
 
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
-
         /** @var Order $oOrder */
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
         $oOrder->load($this->aOrderIdList[0]);
         $this->assertSame(
             $this->sExpectedValue,
@@ -170,7 +163,7 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
         );
 
         /** @var Order $oOrder */
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
         $oOrder->load($this->aOrderIdList[1]);
         $this->assertSame(
             $this->sCurrentValue,
@@ -190,16 +183,11 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function actionChangeConcernedOrderNotExistingSingleLangField()
     {
-        // prevent save trigger action in test
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
-
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerNotExistingSingleLangField());
         $oExecute->startJobItemExecution();
 
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
-
         /** @var Order $oOrder */
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
 
         $this->expectExceptionMessage('error occured');
 
@@ -214,8 +202,7 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
             $oOrder->getFieldData('d3TestField')
         );
 
-        /** @var Order $oOrder */
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
         $oOrder->load($this->aOrderIdList[1]);
         $this->assertNull(
             $oOrder->getFieldData('d3TestField')
@@ -234,13 +221,8 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function actionChangeConcernedOrderNotExistingMultiLangField()
     {
-        // prevent save trigger action in test
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
-
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerNotExistingMultiLangField());
         $oExecute->startJobItemExecution();
-
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
 
         $this->expectExceptionMessage('error occured');
 
@@ -251,14 +233,14 @@ class actionSetFieldValueTest extends d3OrdermanagerActionIntegrationTestCase
         });
 
         /** @var Order $oOrder */
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
         $oOrder->load($this->aOrderIdList[0]);
         $this->assertNull(
             $oOrder->getFieldData('d3TestField_1')
         );
 
         /** @var Order $oOrder */
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
         $oOrder->load($this->aOrderIdList[1]);
         $this->assertNull(
             $oOrder->getFieldData('d3TestField_1')

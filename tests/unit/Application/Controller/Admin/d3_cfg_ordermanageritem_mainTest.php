@@ -46,7 +46,7 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
     {
         parent::setUp();
 
-        $this->_oController = d3GetOxidDIC()->get(d3_cfg_ordermanageritem_main::class);
+        $this->_oController = oxNew(d3_cfg_ordermanageritem_main::class);
     }
 
     public function tearDown(): void
@@ -57,7 +57,6 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main::render
      * @test
      * @throws ReflectionException
      */
@@ -70,7 +69,6 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main::addDefaultValues
      * @test
      * @throws ReflectionException
      */
@@ -97,7 +95,6 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main::addDefaultValues
      * @test
      * @throws ReflectionException
      */
@@ -124,7 +121,6 @@ class d3_cfg_ordermanageritem_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_main::fixCronjobId
      * @test
      * @throws ReflectionException
      */

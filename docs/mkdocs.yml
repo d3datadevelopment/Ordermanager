@@ -1,0 +1,120 @@
+site_name: Auftragsmanager · __PLUGIN_VERSION__
+docs_dir: .
+use_directory_urls: true
+
+theme:
+  name: material
+  language: de
+  logo: assets/logo.svg
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.path
+    - content.code.copy
+    - content.tabs.link
+    - toc.follow
+    - toc.integrate
+
+  icon:
+    logo: material/library
+
+extra_css:
+  - assets/extra.css
+
+plugins:
+  - macros
+  - include-markdown
+  - search:
+      lang: de
+      separator: '[\s\-\.]+'
+
+nav:
+  - Übersicht: index.md
+  - Editionen: editionen.md
+  - Installation:
+    - Überblick: installation/start.md
+    - Anforderungen:
+      - Systemanforderungen: installation/anforderungen/systemanforderungen.md
+      - Kompatibilität: installation/anforderungen/kompatibilitaet.md
+    - Neuinstallation: installation/neuinstallation.md
+    - Update: installation/update.md
+    - Deinstallation: installation/deinstallation.md
+    - Installationsprüfung: installation/installationspruefung.md
+  - Handbuch:
+    - Einstieg:
+      - Inhalte: handbuch/einstieg/inhalte.md
+      - Beispielaufgaben: handbuch/einstieg/beispielaufgaben.md
+    - Bedienoberfläche:
+      - Einstellungen:
+        - Grundeinstellungen: handbuch/bedienoberflaeche/einstellungen/grundeinstellungen.md
+        - Aufgabeneinstellungen -> Ordner: handbuch/bedienoberflaeche/einstellungen/aufgabeneinstellungen.md
+        - Allgemeine Cronjobeinstellungen: handbuch/bedienoberflaeche/einstellungen/allgemeine_cronjobeinstellungen.md
+        - Aufrufdaten je Cronjob-ID: handbuch/bedienoberflaeche/einstellungen/cronjobeinstellungen_fuer_cronjob-id.md
+      - Aufgaben:
+        - Überblick: handbuch/bedienoberflaeche/aufgaben/inhalte.md
+        - Stamm: handbuch/bedienoberflaeche/aufgaben/stamm.md
+        - Mall: handbuch/bedienoberflaeche/aufgaben/mall.md
+        - Übersicht: handbuch/bedienoberflaeche/aufgaben/uebersicht.md
+        - Auslöser: handbuch/bedienoberflaeche/aufgaben/ausloeser.md
+        - Bedingungen: handbuch/bedienoberflaeche/aufgaben/bedingungen.md
+        - Aktionen: handbuch/bedienoberflaeche/aufgaben/aktionen.md
+    - Ausführung mit Cronjob:
+      - Bestellzeitpunkt global für Aufgaben festlegen: handbuch/ausfuehrung_mit_cronjob/relevante_bestellungen_einschraenken.md
+      - Cronjob-Einrichtung: handbuch/ausfuehrung_mit_cronjob/aufgaben_automatisch_ausfuehren.md
+      - Cronjobs für unterschiedlich zu steuernde Aufgaben: handbuch/ausfuehrung_mit_cronjob/cronjobs_fuer_unterschiedlich_zu_steuernde_aufgaben.md
+      - Ausführungsstatus abfragen: handbuch/ausfuehrung_mit_cronjob/ausfuehrungsstatus_abfragen.md
+    - Alternative Ausführungswege:
+      - Aufgaben mit programmierbarem Auslöser starten: handbuch/alternative_ausfuehrungswege/aufgaben_mit_programmierbarem_ausloeser_starten.md
+      - Aufgaben für alle relevanten Bestellungen manuell ausführen: handbuch/alternative_ausfuehrungswege/aufgaben_fuer_alle_relevanten_bestellungen_manuell_ausfuehren.md
+      - Aufgaben für einzelne Bestellung manuell ausführen: handbuch/alternative_ausfuehrungswege/aufgaben_fuer_einzelne_bestellung_manuell_ausfuehren.md
+      - Anzeige der gefundenen Bestellungen als Liste: handbuch/alternative_ausfuehrungswege/anzeige_der_gefundenen_bestellungen_als_liste.md
+    - Weiterentwicklung: handbuch/weiterentwicklung.md
+  - Changelog: changelog.md
+  - Support:
+    - Hilfe und Support: support/hilfe_und_support.md
+    - Lizenzen: support/lizenzen.md
+
+extra:
+  modulename: "Auftragsmanager"
+  modulefolder: "ordermanager"
+  metadataident: "d3ordermanager"
+  modcfgident: "d3_ordermanager"
+  composerident: "d3/ordermanager"
+  menutitle: "Auftragsmanager"
+  moduleversion: "__PLUGIN_VERSION__"
+  homepage: https://docs.oxidmodule.com/
+  generator: false
+  doc_version: "__PLUGIN_VERSION__"
+  last_updated: "__PLUGIN_DATE__"
+
+copyright: >
+  <a href="https://www.d3data.de/">Copyright &copy; __YEAR__ D3 Data Development · Inh. Thomas Dartsch</a> ·
+  Dokumentation Stand: __PLUGIN_DATE__
+
+markdown_extensions:
+  - tables
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg

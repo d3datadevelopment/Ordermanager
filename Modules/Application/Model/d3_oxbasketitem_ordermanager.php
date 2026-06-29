@@ -17,25 +17,28 @@ declare(strict_types=1);
 
 namespace D3\Ordermanager\Modules\Application\Model;
 
-use D3\DIContainerHandler\d3DicException;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
 use OxidEsales\Eshop\Application\Model\Article;
 
 class d3_oxbasketitem_ordermanager extends d3_oxbasketitem_ordermanager_parent
 {
-    /**
-     * @throws d3DicException
-     */
     public function d3OrderManagerChangeOrderArticle2RealArticle(): void
     {
         if ($this->_oArticle instanceof OrderArticle) {
             $sArticleId = $this->_oArticle->getProductId();
-            /** @var Article $oArticle */
-            $oArticle = d3GetOxidDIC()->get('d3ox.ordermanager.'.Article::class);
+            $oArticle = $this->createOrderManagerArticle();
 
             if ($oArticle->exists($sArticleId) && $oArticle->load($sArticleId)) {
                 $this->_oArticle = $oArticle;
             }
         }
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    protected function createOrderManagerArticle(): Article
+    {
+        return oxNew(Article::class);
     }
 }

@@ -41,18 +41,11 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
     /** @var d3_oxbasketitem_ordermanager */
     protected $_oModel;
 
-    /**
-     * setup basic requirements
-     * @throws DatabaseConnectionException
-     * @throws DBALException
-     * @throws DatabaseErrorException
-     * @throws Exception
-     */
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->_oModel = d3GetOxidDIC()->get('d3ox.ordermanager.'.BasketItem::class);
+        $this->_oModel = oxNew(BasketItem::class);
     }
 
     public function tearDown(): void
@@ -63,7 +56,6 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasketitem_ordermanager::d3OrderManagerChangeOrderArticle2RealArticle
      * @test
      * @throws ArticleException
      * @throws ArticleInputException
@@ -73,8 +65,7 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
      */
     public function orderArticlesCanConvertedToArticles()
     {
-        /** @var Article $oArticle */
-        $oArticle = d3GetOxidDIC()->get('d3ox.ordermanager.'.Article::class);
+        $oArticle = oxNew(Article::class);
         $qb = d3database::getInstance()->getQueryBuilder();
         $qb->select('oxid')
             ->from($oArticle->getViewName())
@@ -84,7 +75,7 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
 
         if ($sOXID) {
             /** @var OrderArticle $oOrderArticle */
-            $oOrderArticle = d3GetOxidDIC()->get('d3ox.ordermanager.'.OrderArticle::class);
+            $oOrderArticle = oxNew(OrderArticle::class);
             $oOrderArticle->assign(
                 [
                     'oxartid' => $sOXID,
@@ -100,7 +91,6 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasketitem_ordermanager::d3OrderManagerChangeOrderArticle2RealArticle
      * @test
      * @throws ArticleException
      * @throws ArticleInputException
@@ -111,7 +101,7 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
     public function orderArticlesCantConvertedToArticles()
     {
         /** @var OrderArticle $oOrderArticle */
-        $oOrderArticle = d3GetOxidDIC()->get('d3ox.ordermanager.'.OrderArticle::class);
+        $oOrderArticle = oxNew(OrderArticle::class);
         $oOrderArticle->assign(
             [
                 'oxartid' => 'foobar',
@@ -122,11 +112,15 @@ class d3_oxbasketitem_ordermanagerTest extends d3OrdermanagerUnitTestCase
             ->onlyMethods(['exists'])
             ->getMock();
         $articleMock->method('exists')->willReturn(false);
-        d3GetOxidDIC()->set('d3ox.ordermanager.'.Article::class, $articleMock);
 
-        $this->setValue($this->_oModel, '_oArticle', $oOrderArticle);
-        $this->callMethod($this->_oModel, 'd3OrderManagerChangeOrderArticle2RealArticle');
-        $this->assertInstanceOf(OrderArticle::class, $this->_oModel->getArticle());
+        $model = $this->getMockBuilder(d3_oxbasketitem_ordermanager::class)
+            ->onlyMethods(['createOrderManagerArticle'])
+            ->getMock();
+        $model->method('createOrderManagerArticle')->willReturn($articleMock);
+
+        $this->setValue($model, '_oArticle', $oOrderArticle);
+        $this->callMethod($model, 'd3OrderManagerChangeOrderArticle2RealArticle');
+        $this->assertInstanceOf(OrderArticle::class, $model->getArticle());
     }
 
     /**

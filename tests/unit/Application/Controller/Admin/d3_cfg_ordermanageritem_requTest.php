@@ -48,13 +48,13 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     {
         parent::setUp();
 
-        $this->_oController = d3GetOxidDIC()->get(d3_cfg_ordermanageritem_requ::class);
+        $this->_oController = oxNew(d3_cfg_ordermanageritem_requ::class);
 
-        $oSampleManager = d3GetOxidDIC()->get(d3ordermanager::class);
+        $oSampleManager = oxNew(d3ordermanager::class);
         $oSampleManager->setId('testId');
         $oSampleManager->save();
 
-        $oTestDelivery = d3GetOxidDIC()->get('d3ox.ordermanager.'.Delivery::class);
+        $oTestDelivery = oxNew(Delivery::class);
         $oTestDelivery->setId('testId');
         $oTestDelivery->save();
 
@@ -75,15 +75,14 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
 
         unset($this->_oController);
 
-        $oSampleManager = d3GetOxidDIC()->get(d3ordermanager::class);
+        $oSampleManager = oxNew(d3ordermanager::class);
         $oSampleManager->delete('testId');
 
-        $oTestDelivery = d3GetOxidDIC()->get('d3ox.ordermanager.'.Delivery::class);
+        $oTestDelivery = oxNew(Delivery::class);
         $oTestDelivery->delete('testId');
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::save
      * @test
      * @throws ReflectionException
      */
@@ -109,7 +108,6 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::save
      * @test
      * @throws ReflectionException
      */
@@ -139,7 +137,6 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getPaymentList
      * @test
      * @throws ReflectionException
      */
@@ -159,7 +156,6 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getDeliverySetList
      * @test
      * @throws ReflectionException
      */
@@ -179,7 +175,6 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getCountryList
      * @test
      * @throws ReflectionException
      */
@@ -199,7 +194,6 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getJobList
      * @test
      * @throws ReflectionException
      */
@@ -220,7 +214,6 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getLanguageList
      * @test
      * @throws ReflectionException
      */
@@ -237,7 +230,6 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::addDefaultValues
      * @test
      * @throws ReflectionException
      */
@@ -259,27 +251,6 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getRequirementGroupList
-     * @test
-     * @throws ReflectionException
-     * @throws Exception
-     */
-    public function getRequirementGroupListReturnsRightInstance()
-    {
-        $oManager = d3GetOxidDIC()->get(d3ordermanager::class);
-
-        $this->assertInstanceOf(
-            d3ordermanager_requirementgrouplist::class,
-            $this->callMethod(
-                $this->_oController,
-                'getRequirementGroupList',
-                [$oManager]
-            )
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getRequirementListObject
      * @test
      * @throws ReflectionException
      * @throws Exception
@@ -291,13 +262,12 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
             $this->callMethod(
                 $this->_oController,
                 'getRequirementListObject',
-                [d3GetOxidDIC()->get(d3ordermanager::class)]
+                [oxNew(d3ordermanager::class)]
             )
         );
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getRequirementList
      * @test
      * @throws ReflectionException
      */
@@ -311,7 +281,6 @@ class d3_cfg_ordermanageritem_requTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_requ::getGroupedRequirementList
      * @test
      * @throws ReflectionException
      */

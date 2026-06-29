@@ -79,7 +79,7 @@ class actionCustAddToGroupTest extends d3OrdermanagerActionIntegrationTestCase
         $this->deleteManager($this->sManagerId);
         $this->deleteOrder($this->aOrderIdList[0]);
         $this->deleteUser($this->aUserIdList[0]);
-        $this->deleteObject('d3ox.ordermanager.'.Object2Group::class, $this->aO2GroupIdList[0]);
+        $this->deleteObject(Object2Group::class, $this->aO2GroupIdList[0]);
 
         $qb1 = d3database::getInstance()->getQueryBuilder();
         $qb1->delete('oxobject2group')
@@ -346,14 +346,14 @@ class actionCustAddToGroupTest extends d3OrdermanagerActionIntegrationTestCase
     public function actionChangeConcernedOrderSingleGroupsExistsAlreadyAssigned()
     {
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Group::class,
+            Object2Group::class,
             $this->aO2GroupIdList[0],
             [
                 'oxshopid'      => 1,
                 'oxobjectid'    => $this->aUserIdList[0],
                 'oxgroupsid'    => $this->aGroupsIdList[0],
             ]
-        );
+        )->save();
 
         $oExecute = $this->getExecuteMock($this->getConfiguredManagerSingleGroupsExists());
         $oExecute->startJobItemExecution();

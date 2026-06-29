@@ -40,29 +40,6 @@ class requirementArticleStornoTest extends d3OrdermanagerRequirementIntegrationT
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -75,12 +52,10 @@ class requirementArticleStornoTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
             ],
             [
                 $this->aOrderArticleIdList[0] => [
                     'oxstorno'      => '1',
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -89,12 +64,10 @@ class requirementArticleStornoTest extends d3OrdermanagerRequirementIntegrationT
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
             ],
             [
                 $this->aOrderArticleIdList[1] => [
                     'oxstorno'      => '0',
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );

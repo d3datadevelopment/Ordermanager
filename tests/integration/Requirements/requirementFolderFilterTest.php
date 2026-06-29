@@ -25,6 +25,7 @@ use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\Eshop\Core\Registry;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -50,29 +51,6 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -81,7 +59,7 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
             $this->sManagerId
         );
 
-        $config = d3GetOxidDIC()->get('d3ox.ordermanager.'.Config::class);
+        $config = Registry::getConfig();
         $folders = $config->getConfigParam('aOrderfolder');
         foreach ($this->aOrderFolderIdList as $sId) {
             $folders[$sId] = '#000000';
@@ -92,12 +70,10 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxfolder'      => $this->aOrderFolderIdList[0],
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -106,12 +82,10 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxfolder'      => $this->aOrderFolderIdList[1],
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -120,12 +94,10 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
             $this->aOrderIdList[2],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxfolder'      => $this->aOrderFolderIdList[2],
             ],
             [
                 $this->aOrderArticleIdList[2] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -138,7 +110,7 @@ class requirementFolderFilterTest extends d3OrdermanagerRequirementIntegrationTe
     {
         $this->deleteManager($this->sManagerId);
 
-        $config = d3GetOxidDIC()->get('d3ox.ordermanager.'.Config::class);
+        $config = Registry::getConfig();
         $folders = $config->getConfigParam('aOrderfolder');
         foreach ($this->aOrderFolderIdList as $sId) {
             unset($folders[$sId]);

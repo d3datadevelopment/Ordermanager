@@ -17,8 +17,6 @@ declare(strict_types=1);
 
 namespace D3\Ordermanager\Setup;
 
-use D3\DIContainerHandler\d3DicException;
-use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\d3bitmask;
 use D3\ModCfg\Application\Model\d3database;
 use D3\ModCfg\Application\Model\d3str;
@@ -27,6 +25,7 @@ use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\ModCfg\Application\Model\Install\d3install_updatebase;
 use D3\ModCfg\Application\Model\Installwizzard\d3installdbrecord;
+use D3\Ordermanager\Core\ModCfgTrait;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -39,6 +38,7 @@ use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Application\Model\Shop;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateRenderer;
 use OxidEsales\EshopCommunity\Internal\Framework\Templating\TemplateRendererBridgeInterface;
 use OxidEsales\Facts\Facts;
@@ -47,21 +47,23 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class d3ordermanager_update extends d3install_updatebase
 {
+    use ModCfgTrait;
+
     public $sModKey = 'd3_ordermanager';
 
     public $sModName = 'Auftragsmanager';
 
-    public $sModVersion = '6.2.1.0';
+    public $sModVersion = '6.3.0.0';
 
-    public $sModRevision = '6210';
+    public $sModRevision = '6300';
 
     public $sBaseConf =
-        'E8ov2==Wk5uZXZkVjVDaVhXQnNtZmJPVVNzVnRIOWNpSEJlSmJTcytSSHlETzdMMzBmeHVxZEZBMFpqR
-WV6UzdpUEFTR1NqQ3cvSjg3cDZSdjJjZGtKZzh2aFhiWGFCQXpuNk1lTDdBOGZ2WUJUL1Q0U3FyOEpjZ
-VBVWnAvV0R0YTBnRUlieHNSS014R1hiZ0EvVlFaZUg0T1JJcmhPaDUyQzk0cHhCeTNFeU4yMGRyMVFia
-lZQdWgwNFhjNFFrMHBvU3pEMnBsWDRFV2tDZTcxUTN0UmoxdDQ1Z09DcENWNnk4d2FKdXBDNVlHcmtpa
-jZkNFlvbzgvS3dHM014RzlNK3ZOaUxMeW5pckozVFgwQlNIUXJwRlJ2cUJVbFJqdUZGT084SlJUekFJS
-FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
+        'FQvv2==WEZSUGx6NVJSWlF1ZnNJR09DbkdMdWNkeE91L2pRendQQVM1K2o3VUtRUEtjTGRrU3l1TU40U
+29LUVdxQ1cyYW5BQzJFcDU0cFd0dVJLSlRFY2ZKS3dzYVdsN0cwaFp3WUQ4aXpFdVk2cnlKdWpNSFNHc
+E42MmpHS1l1cGEwcEkya200bFNRRFRGMTg4MzJPakV0QzBaYk1ZV0RIU2xnY1c1dmdDcGtUeld3eTdpb
+jJmWHJQOXNaVlVTMmVMYVdQQkNXMlp3K09rUFdVd0VDT0NCeHZjWXY3djFORVRqaW94TVRrQzc4Y3Fub
+HFpcXN6cGFJQkVaWkJDSURhRElrRXNCSmV0UGZHbDhnSW92b2l2VmhXTEVtajV6akFBV2s1WE0xQzdoL
+3lqR21KUEJoc3QrQm5QSi9FTzVpWGMyYjRFSlFHRHRFV2pOakZsQ3dtSUo4dEtRPT0=';
 
     public $sRequirements = '';
 
@@ -363,26 +365,17 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
         return $blRet;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function d3GetInstallDbRecord(): d3installdbrecord
     {
-        d3GetOxidDIC()->set(
-            d3installdbrecord::class.'.arg_updatebase',
-            $this
-        );
-
-        /** @var d3installdbrecord $dbRecord */
-        $dbRecord = d3GetOxidDIC()->get(d3installdbrecord::class);
-        return $dbRecord;
+        return oxNew(d3installdbrecord::class, $this);
     }
 
-    /**
-     * required for unitTests
-     */
     public function d3GetConfig(): Config
     {
-        /** @var Config $config */
-        $config = d3GetOxidDIC()->get('d3ox.ordermanager.'.Config::class);
-        return $config;
+        return Registry::getConfig();
     }
 
     /**
@@ -546,8 +539,7 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
      */
     public function checkCronPasswordSet(): bool
     {
-        /** @var d3_cfg_mod $set */
-        $set = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $set = $this->d3GetOrderManagerConfig();
         $password = $set->getValue('sCronPassword');
         return false === $password || is_null($password) || (is_string($password) && strlen($password) <= 0);
     }
@@ -566,12 +558,10 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
         $this->setActionLog('msg', $message, __METHOD__);
 
         if ($this->hasExecute()) {
-            /** @var d3str $oD3str */
-            $oD3str = d3GetOxidDIC()->get(d3str::class);
+            $oD3str = $this->createD3Str();
             $password = $oD3str->random_str(12);
 
-            /** @var d3_cfg_mod $set */
-            $set = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+            $set = $this->d3GetOrderManagerConfig();
             $set->setValue('sCronPassword', $password);
             $set->saveNoLicenseRefresh();
         }
@@ -583,20 +573,19 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
      * @return bool true, if update is required
      * @throws DBALDriverException
      * @throws DBALException
-     * @throws d3DicException
      */
     public function needExampleJobList(): bool
     {
         /** @var QueryBuilder $qb */
-        $qb = d3GetOxidDIC()->get('d3ox.modcfg.OxDbQueryBuilder');
+        $qb = $this->createQueryBuilder();
         // change this to your inividual check criterias
         $qb->select('count(oxid) ')
            ->from('d3modprofile')
            ->where(
-                $qb->expr()->and(
-                    $qb->expr()->eq('oxmodid', $qb->createNamedParameter('d3_ordermanager')),
-                    $qb->expr()->eq('oxshopid', $qb->createNamedParameter(Registry::getConfig()->getShopId()))
-                )
+               $qb->expr()->and(
+                   $qb->expr()->eq('oxmodid', $qb->createNamedParameter('d3_ordermanager')),
+                   $qb->expr()->eq('oxshopid', $qb->createNamedParameter(Registry::getConfig()->getShopId()))
+               )
            )
            ->setMaxResults(1);
         return $qb->execute()->fetchOne() == 0;
@@ -629,7 +618,6 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
      * @return bool true, if update is required
      * @throws DBALDriverException
      * @throws DBALException
-     * @throws d3DicException
      */
     public function isExampleContentMissingInDatabase(): bool
     {
@@ -654,7 +642,7 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
         if ($aIdentList !== []) {
             // change this to your inividual check criterias
             /** @var QueryBuilder $qb */
-            $qb = d3GetOxidDIC()->get('d3ox.modcfg.OxDbQueryBuilder');
+            $qb = $this->createQueryBuilder();
             $qb->select('count(oxid) < '.count($aIdentList))
                 ->from('oxcontents')
                 ->where(
@@ -813,13 +801,11 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
     }
 
     /**
-     * @throws Exception
+     * @codeCoverageIgnore
      */
     public function getD3BitMask(): d3bitmask
     {
-        /** @var d3bitmask $bitMask */
-        $bitMask = d3GetOxidDIC()->get(d3bitmask::class);
-        return $bitMask;
+        return oxNew(d3bitmask::class);
     }
 
     /**
@@ -2954,7 +2940,6 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
     /**
      * @throws DBALDriverException
      * @throws DBALException
-     * @throws d3DicException
      */
     public function hasNotOrderArticlesParentId(): bool
     {
@@ -2963,7 +2948,7 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
         }
 
         /** @var QueryBuilder $qb */
-        $qb = d3GetOxidDIC()->get('d3ox.modcfg.OxDbQueryBuilder');
+        $qb = $this->createQueryBuilder();
 
         $qb->select('ooa.oxparentid != oa.oxparentid')
             ->from('oxorderarticles', 'ooa')
@@ -2995,12 +2980,11 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
     /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
-     * @throws d3DicException
      */
     public function addOrderArticlesParentId(): bool
     {
         /** @var QueryBuilder $qbsub */
-        $qbsub = d3GetOxidDIC()->get('d3ox.modcfg.OxDbQueryBuilder');
+        $qbsub = $this->createQueryBuilder();
         $qbsub->select('oxarticles.oxparentid')
             ->from('oxarticles')
             ->where(
@@ -3011,7 +2995,7 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
             );
 
         /** @var QueryBuilder $qb */
-        $qb = d3GetOxidDIC()->get('d3ox.modcfg.OxDbQueryBuilder');
+        $qb = $this->createQueryBuilder();
         $qb->update('oxorderarticles')
             ->set(
                 'oxparentid',
@@ -3045,5 +3029,24 @@ FRQNW1XRm1OcktvZ1pZY3ZCWU43YWNwWWFxTTJrTUVWSzUrSG9icDVjbHVubExRPT0=';
                 '\OxidEsales\Twig\TwigEngine',
             ]
         );
+    }
+
+    /**
+     * @return QueryBuilder
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @codeCoverageIgnore
+     */
+    protected function createQueryBuilder(): QueryBuilder
+    {
+        return ContainerFactory::getInstance()->getContainer()->get(QueryBuilderFactoryInterface::class)->create();
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    protected function createD3Str(): d3str
+    {
+        return oxNew(d3str::class);
     }
 }

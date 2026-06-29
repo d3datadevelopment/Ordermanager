@@ -17,10 +17,7 @@ declare(strict_types=1);
 
 namespace D3\Ordermanager\tests\unit\Application\Controller\Admin;
 
-use D3\ModCfg\Application\Model\d3str;
-use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\ModCfg\Application\Model\Filegenerator\d3filegeneratorcronsh;
-use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
@@ -52,7 +49,7 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     {
         parent::setUp();
 
-        $this->_oController = d3GetOxidDIC()->get(d3_cfg_ordermanagerset_main::class);
+        $this->_oController = oxNew(d3_cfg_ordermanagerset_main::class);
     }
 
     public function tearDown(): void
@@ -63,53 +60,6 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::__construct
-     * @test
-     */
-    public function constructorPass()
-    {
-        $this->assertSame(
-            'd3_ordermanager',
-            d3GetOxidDIC()->getParameter('d3.ordermanager.modcfgid')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::__construct
-     * @test
-     */
-    public function constructorException()
-    {
-        /** @var d3_cfg_ordermanagerset_main|MockObject $controller */
-        $controller = $this->getMockBuilder(d3_cfg_ordermanagerset_main::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        d3GetOxidDIC()->setParameter('d3.ordermanager.modcfgid', 'differentModCfgid');
-
-        $this->expectException(wrongModIdException::class);
-
-        $this->callMethod(
-            $controller,
-            '__construct'
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getManager
-     * @test
-     * @throws ReflectionException
-     */
-    public function getManagerReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            d3ordermanager::class,
-            $this->callMethod($this->_oController, 'getManager')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getBaseCronPW
      * @test
      * @throws ReflectionException
      */
@@ -136,33 +86,6 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getViewConfig
-     * @test
-     * @throws ReflectionException
-     */
-    public function getViewConfigReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            ViewConfig::class,
-            $this->callMethod($this->_oController, 'getViewConfig')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getD3Str
-     * @test
-     * @throws ReflectionException
-     */
-    public function getD3StrReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            d3str::class,
-            $this->callMethod($this->_oController, 'getD3Str')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronPath
      * @test
      * @throws ReflectionException
      */
@@ -189,7 +112,6 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronPath
      * @test
      * @throws ReflectionException
      */
@@ -218,7 +140,6 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getAvailableCronjobIds
      * @test
      * @throws ReflectionException
      */
@@ -245,7 +166,6 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCJIDDesc
      * @test
      * @throws ReflectionException
      */
@@ -263,7 +183,6 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCJIDDesc
      * @test
      * @throws ReflectionException
      */
@@ -281,7 +200,6 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronTimestampVarName
      * @test
      * @throws ReflectionException
      */
@@ -293,7 +211,6 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronTimestampVarName
      * @test
      * @throws ReflectionException
      */
@@ -306,20 +223,6 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getFileGeneratorCronSh
-     * @test
-     * @throws ReflectionException
-     */
-    public function getFileGeneratorCronShReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            d3filegeneratorcronsh::class,
-            $this->callMethod($this->_oController, 'getFileGeneratorCronSh')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCronProviderList
      * @test
      * @throws ReflectionException
      */
@@ -348,33 +251,6 @@ class d3_cfg_ordermanagerset_mainTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::getCompatibilityAdapterHandler
-     * @test
-     * @throws ReflectionException
-     */
-    public function getCompatibilityAdapterHandlerReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            d3ShopCompatibilityAdapterHandler::class,
-            $this->callMethod($this->_oController, 'getCompatibilityAdapterHandler')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::d3GetActiveShop
-     * @test
-     * @throws ReflectionException
-     */
-    public function getActiveShopReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            Shop::class,
-            $this->callMethod($this->_oController, 'd3GetActiveShop')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_main::generateCronShFile
      * @test
      * @throws ReflectionException
      */

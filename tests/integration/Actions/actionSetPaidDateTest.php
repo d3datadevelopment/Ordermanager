@@ -18,7 +18,6 @@ namespace D3\Ordermanager\tests\integration\Actions;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
-use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception as DBALException;
 use Exception;
@@ -27,7 +26,6 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use OxidEsales\Eshop\Core\Registry;
 
 /**
  * @coversNothing
@@ -113,16 +111,11 @@ class actionSetPaidDateTest extends d3OrdermanagerActionIntegrationTestCase
      */
     public function actionChangeConcernedOrder()
     {
-        // prevent save trigger action in test
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
-
         $oExecute = $this->getExecuteMock($this->getConfiguredManager());
         $oExecute->startJobItemExecution();
 
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
-
         /** @var Order $oOrder */
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
         $oOrder->load($this->aOrderIdList[0]);
         $current = strtotime($oOrder->getFieldData('oxpaid'));
         // accepts 10 seconds delay
@@ -133,7 +126,7 @@ class actionSetPaidDateTest extends d3OrdermanagerActionIntegrationTestCase
         );
 
         /** @var Order $oOrder */
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
         $oOrder->load($this->aOrderIdList[1]);
         $this->assertSame(
             $this->sCurrentValue,

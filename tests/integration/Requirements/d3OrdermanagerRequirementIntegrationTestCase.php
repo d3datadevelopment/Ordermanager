@@ -34,10 +34,7 @@ abstract class d3OrdermanagerRequirementIntegrationTestCase extends d3Integratio
     public function getManagerMock($sManagerId)
     {
         /** @var d3ordermanager|MockObject $oManager */
-        $oManager = $this->getMockBuilder(d3ordermanager::class)
-            ->onlyMethods(['d3getLog'])
-            ->getMock();
-        $oManager->method('d3getLog')->willReturn($this->getD3LogMock());
+        $oManager = oxNew(d3ordermanager::class);
         $oManager->load($sManagerId);
 
         $oManager->d3getModCfg()->setValue('iMaxOrderCnt', 10000);

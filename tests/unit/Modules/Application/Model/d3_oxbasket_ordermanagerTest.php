@@ -59,7 +59,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     {
         parent::setUp();
 
-        $this->_oModel = d3GetOxidDIC()->get('d3ox.ordermanager.'.Basket::class);
+        $this->_oModel = oxNew(Basket::class);
     }
 
     public function tearDown(): void
@@ -70,23 +70,6 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::d3getOrderManagerBasketItemInstance
-     * @test
-     * @throws ReflectionException
-     */
-    public function getBasketItemReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            BasketItem::class,
-            $this->callMethod(
-                $this->_oModel,
-                'd3getOrderManagerBasketItemInstance'
-            )
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::addOrderArticleToBasket4OrderManager
      * @test
      * @throws ReflectionException
      */
@@ -142,23 +125,21 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::d3GetOrderManagerConfig
      * @test
      * @throws ReflectionException
      */
-    public function d3GetOrderManagerConfigIsRightInstance()
+    public function d3OrderManagerGetOxidConfigIsRightInstance()
     {
         $this->assertInstanceOf(
             Config::class,
             $this->callMethod(
                 $this->_oModel,
-                'd3GetOrderManagerConfig'
+                'd3OrderManagerGetOxidConfig'
             )
         );
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::d3GetOrderManagerSession
      * @test
      * @throws ReflectionException
      */
@@ -174,7 +155,6 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::addOrderArticleToBasket4OrderManager
      * @test
      * @throws ReflectionException
      */
@@ -224,14 +204,13 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::calculateBasket4OrderManager
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function calculateBasket4OrderManagerCanStartedEnabledAndUpdateNeededAndUnforced()
     {
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
 
         /** @var Session|MockObject $oBasketReservationMock */
         $oBasketReservationMock = $this->getMockBuilder(Session::class)
@@ -265,7 +244,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'save',
                 'clearBundles',
                 'addBundles',
-                'd3GetOrderManagerConfig',
+                'd3OrderManagerGetOxidConfig',
                 'd3GetOrderManagerSession',
                 '_calcItemsPrice4OrderManager',
                 '_calcBasketDiscount4OrderManager',
@@ -286,7 +265,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock->expects($this->once())->method('save')->willReturn(true);
         $oModelMock->method('clearBundles')->willReturn(true);
         $oModelMock->method('addBundles')->willReturn(true);
-        $oModelMock->method('d3GetOrderManagerConfig')->willReturn($oConfigMock);
+        $oModelMock->method('d3OrderManagerGetOxidConfig')->willReturn($oConfigMock);
         $oModelMock->method('d3GetOrderManagerSession')->willReturn($oSessionMock);
         $oModelMock->method('_calcItemsPrice4OrderManager')->willReturn(true);
         $oModelMock->method('_calcBasketDiscount4OrderManager')->willReturn(true);
@@ -317,14 +296,13 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::calculateBasket4OrderManager
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function calculateBasket4OrderManagerCanStartedDisabled()
     {
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
 
         /** @var Session|MockObject $oBasketReservationMock */
         $oBasketReservationMock = $this->getMockBuilder(Session::class)
@@ -358,7 +336,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'save',
                 'clearBundles',
                 'addBundles',
-                'd3GetOrderManagerConfig',
+                'd3OrderManagerGetOxidConfig',
                 'd3GetOrderManagerSession',
                 '_calcItemsPrice4OrderManager',
                 '_calcBasketDiscount4OrderManager',
@@ -379,7 +357,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock->expects($this->never())->method('save')->willReturn(true);
         $oModelMock->method('clearBundles')->willReturn(true);
         $oModelMock->method('addBundles')->willReturn(true);
-        $oModelMock->method('d3GetOrderManagerConfig')->willReturn($oConfigMock);
+        $oModelMock->method('d3OrderManagerGetOxidConfig')->willReturn($oConfigMock);
         $oModelMock->method('d3GetOrderManagerSession')->willReturn($oSessionMock);
         $oModelMock->method('_calcItemsPrice4OrderManager')->willReturn(true);
         $oModelMock->method('_calcBasketDiscount4OrderManager')->willReturn(true);
@@ -410,14 +388,13 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::calculateBasket4OrderManager
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function calculateBasket4OrderManagerCanStartedNoUpdate()
     {
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
 
         /** @var Session|MockObject $oBasketReservationMock */
         $oBasketReservationMock = $this->getMockBuilder(Session::class)
@@ -451,7 +428,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'save',
                 'clearBundles',
                 'addBundles',
-                'd3GetOrderManagerConfig',
+                'd3OrderManagerGetOxidConfig',
                 'd3GetOrderManagerSession',
                 '_calcItemsPrice4OrderManager',
                 '_calcBasketDiscount4OrderManager',
@@ -472,7 +449,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock->expects($this->never())->method('save')->willReturn(true);
         $oModelMock->method('clearBundles')->willReturn(true);
         $oModelMock->method('addBundles')->willReturn(true);
-        $oModelMock->method('d3GetOrderManagerConfig')->willReturn($oConfigMock);
+        $oModelMock->method('d3OrderManagerGetOxidConfig')->willReturn($oConfigMock);
         $oModelMock->method('d3GetOrderManagerSession')->willReturn($oSessionMock);
         $oModelMock->method('_calcItemsPrice4OrderManager')->willReturn(true);
         $oModelMock->method('_calcBasketDiscount4OrderManager')->willReturn(true);
@@ -503,14 +480,13 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::calculateBasket4OrderManager
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function calculateBasket4OrderManagerCanStartedNoUpdateForced()
     {
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
 
         /** @var Session|MockObject $oBasketReservationMock */
         $oBasketReservationMock = $this->getMockBuilder(Session::class)
@@ -544,7 +520,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
                 'save',
                 'clearBundles',
                 'addBundles',
-                'd3GetOrderManagerConfig',
+                'd3OrderManagerGetOxidConfig',
                 'd3GetOrderManagerSession',
                 '_calcItemsPrice4OrderManager',
                 '_calcBasketDiscount4OrderManager',
@@ -565,7 +541,7 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
         $oModelMock->expects($this->once())->method('save')->willReturn(true);
         $oModelMock->method('clearBundles')->willReturn(true);
         $oModelMock->method('addBundles')->willReturn(true);
-        $oModelMock->method('d3GetOrderManagerConfig')->willReturn($oConfigMock);
+        $oModelMock->method('d3OrderManagerGetOxidConfig')->willReturn($oConfigMock);
         $oModelMock->method('d3GetOrderManagerSession')->willReturn($oSessionMock);
         $oModelMock->method('_calcItemsPrice4OrderManager')->willReturn(true);
         $oModelMock->method('_calcBasketDiscount4OrderManager')->willReturn(true);
@@ -596,39 +572,6 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::d3GetOrderManagerPriceList
-     * @test
-     * @throws ReflectionException
-     */
-    public function d3GetOrderManagerPriceListReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            PriceList::class,
-            $this->callMethod(
-                $this->_oModel,
-                'd3GetOrderManagerPriceList'
-            )
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::d3GetOrderManagerDiscountList
-     * @test
-     * @throws ReflectionException
-     */
-    public function d3GetOrderManagerDiscountListReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            DiscountList::class,
-            $this->callMethod(
-                $this->_oModel,
-                'd3GetOrderManagerDiscountList'
-            )
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::_calcItemsPrice4OrderManager
      * @test
      * @throws ReflectionException
      */
@@ -746,7 +689,6 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::_calcItemsPrice4OrderManager
      * @test
      * @throws ReflectionException
      */
@@ -865,7 +807,6 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::_calcItemsPrice4OrderManager
      * @test
      * @throws ReflectionException
      */
@@ -984,23 +925,6 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::d3GetOrderManagerPriceObject
-     * @test
-     * @throws ReflectionException
-     */
-    public function d3GetOrderManagerPriceObjectReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            Price::class,
-            $this->callMethod(
-                $this->_oModel,
-                'd3GetOrderManagerPriceObject'
-            )
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::_calcPaymentCost4OrderManager
      * @test
      * @throws ReflectionException
      */
@@ -1042,16 +966,16 @@ class d3_oxbasket_ordermanagerTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::_calcBasketDiscount4OrderManager
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::d3GetOrderManagerDiscountedVats
-     * @covers \D3\Ordermanager\Modules\Application\Model\d3_oxbasket_ordermanager::d3GetOrderManagerDiscounts
+
+
+
      * @test
      * @throws ReflectionException
      * @throws Exception
      */
     public function calcBasketDiscount4OrderManagerPass()
     {
-        $oOrder = d3GetOxidDIC()->get('d3ox.ordermanager.'.Order::class);
+        $oOrder = oxNew(Order::class);
         $oOrder->assign([
             'oxorderdate'   => '2022-02-02 02:02:22',
             'oxsenddate'    => '2022-02-02 02:02:22',

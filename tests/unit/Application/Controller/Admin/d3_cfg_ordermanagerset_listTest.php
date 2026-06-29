@@ -46,7 +46,7 @@ class d3_cfg_ordermanagerset_listTest extends d3OrdermanagerUnitTestCase
     {
         parent::setUp();
 
-        $this->_oController = d3GetOxidDIC()->get(d3_cfg_ordermanagerset_list::class);
+        $this->_oController = oxNew(d3_cfg_ordermanagerset_list::class);
     }
 
     public function tearDown(): void
@@ -57,7 +57,6 @@ class d3_cfg_ordermanagerset_listTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanagerset_list::render
      * @test
      * @throws ReflectionException
      */

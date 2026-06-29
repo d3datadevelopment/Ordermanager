@@ -18,7 +18,6 @@ namespace D3\Ordermanager\tests\integration\Actions;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
 use D3\Ordermanager\Application\Model\d3ordermanager;
-use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
 use Doctrine\DBAL\Exception as DBALException;
 use donatj\MockWebServer\MockWebServer;
 use Exception;
@@ -27,7 +26,6 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
-use OxidEsales\Eshop\Core\Registry;
 
 /**
  * @coversNothing
@@ -154,9 +152,6 @@ class actionSendPushNotificationTest extends d3OrdermanagerActionIntegrationTest
      */
     public function actionRequestSuccess()
     {
-        // prevent save trigger action in test
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
-
         $testServer = new MockWebServer(3456);
         $oExecute = $this->getExecuteMock($this->getConfiguredManager($testServer->getServerRoot()));
         try {
@@ -165,7 +160,6 @@ class actionSendPushNotificationTest extends d3OrdermanagerActionIntegrationTest
             $this->assertMatchesRegularExpression('@.*orderNr.*@', $testServer->getLastRequest()->getInput());
         } finally {
             $testServer->stop();
-            Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
         }
     }
 
@@ -180,9 +174,6 @@ class actionSendPushNotificationTest extends d3OrdermanagerActionIntegrationTest
      */
     public function actionRequestFailed()
     {
-        // prevent save trigger action in test
-        Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, true);
-
         $testServer = new MockWebServer(3456);
         $oExecute = $this->getExecuteMock($this->getConfiguredManager(str_replace('3456', '4567', $testServer->getServerRoot())));
 
@@ -193,7 +184,6 @@ class actionSendPushNotificationTest extends d3OrdermanagerActionIntegrationTest
             $oExecute->startJobItemExecution();
         } finally {
             $testServer->stop();
-            Registry::getSession()->setVariable(d3_oxorder_ordermanager::PREVENTION_SAVEORDER, false);
         }
     }
 }

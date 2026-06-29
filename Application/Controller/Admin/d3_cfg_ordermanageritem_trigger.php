@@ -23,22 +23,18 @@ use D3\Ordermanager\Application\Model\Constants;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
 use D3\Ordermanager\Application\Model\d3ordermanager_conf as ConfModel;
-use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
+use D3\Ordermanager\Core\ModCfgTrait;
 use Doctrine\DBAL\Exception as DBALException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
-use OxidEsales\Eshop\Core\Request;
+use OxidEsales\Eshop\Core\Registry;
 
 class d3_cfg_ordermanageritem_trigger extends d3_cfg_mod_main
 {
-    use VariablesTrait;
+    use ModCfgTrait;
 
     protected $_sSavedId;
-
-    protected $_sSetModId = 'd3_ordermanager';
-
-    protected $_sModId = 'd3_ordermanager';
 
     protected $_sMenuItemTitle = 'd3mxordermanager';
 
@@ -67,13 +63,10 @@ class d3_cfg_ordermanageritem_trigger extends d3_cfg_mod_main
     {
         $aParams = parent::addDefaultValues($aParams);
 
-        /** @var Manager $oManager */
-        $oManager = d3GetOxidDIC()->get(Manager::class);
+        $oManager = oxNew(Manager::class);
         $sFieldLongName = $oManager->d3GetFieldLongName('d3_cronjobid');
 
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get($this->_DIC_OxInstance_Id.Request::class);
-        $aRequestParameter = $request->getRequestEscapedParameter("editval");
+        $aRequestParameter = Registry::getRequest()->getRequestEscapedParameter("editval");
 
         if (is_array($aRequestParameter) && isset($aRequestParameter[$sFieldLongName])) {
             $aRequestParameter[$sFieldLongName] = $this->fixCronjobId($aRequestParameter[$sFieldLongName]);
@@ -110,13 +103,13 @@ class d3_cfg_ordermanageritem_trigger extends d3_cfg_mod_main
      */
     public function triggersAreAllowed(): bool
     {
-        if ($this->d3GetSet()->isDemo()) {
+        if ($this->d3GetOrderManagerConfig()->isDemo()) {
             return true;
         }
 
         return in_array(
             true,
-            array_map([$this->d3GetSet(),'getLicenseConfigData'], [ConfModel::SERIAL_BIT_STANDARD_EDITION])
+            array_map([$this->d3GetOrderManagerConfig(),'getLicenseConfigData'], [ConfModel::SERIAL_BIT_STANDARD_EDITION])
         );
     }
 
@@ -130,13 +123,13 @@ class d3_cfg_ordermanageritem_trigger extends d3_cfg_mod_main
      */
     public function scriptsAreAllowed(): bool
     {
-        if ($this->d3GetSet()->isDemo()) {
+        if ($this->d3GetOrderManagerConfig()->isDemo()) {
             return true;
         }
 
         return in_array(
             true,
-            array_map([$this->d3GetSet(),'getLicenseConfigData'], [ConfModel::SERIAL_BIT_PREMIUM_EDITION])
+            array_map([$this->d3GetOrderManagerConfig(),'getLicenseConfigData'], [ConfModel::SERIAL_BIT_PREMIUM_EDITION])
         );
     }
 }

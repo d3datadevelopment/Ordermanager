@@ -52,29 +52,6 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -87,7 +64,6 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
             ],
             [
                 $this->aOrderArticleIdList[0] => [
@@ -103,20 +79,19 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
         );
 
         $this->createObject(
-            'd3ox.ordermanager.'.Object2Category::class,
+            Object2Category::class,
             $this->aArt2CatIdList[0],
             [
                 'oxshopid'      => '1',
                 'oxobjectid'    => 'artIdTestNo1',
                 'oxcatnid'      => 'catTestId',
             ]
-        );
+        )->save();
 
         $this->createOrder(
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
             ],
             [
                 $this->aOrderArticleIdList[1] => [
@@ -136,7 +111,6 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
             $this->aOrderIdList[2],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
             ],
             [
                 $this->aOrderArticleIdList[2] => [
@@ -155,7 +129,6 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
             $this->aOrderIdList[3],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
             ],
             [
                 $this->aOrderArticleIdList[3] => [
@@ -175,7 +148,6 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
             $this->aOrderIdList[4],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
             ],
             [
                 $this->aOrderArticleIdList[4] => [
@@ -204,7 +176,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
             $this->deleteOrder($sOrderId);
         }
 
-        $this->deleteObject('d3ox.ordermanager.'.Object2Category::class, $this->aArt2CatIdList[0]);
+        $this->deleteObject(Object2Category::class, $this->aArt2CatIdList[0]);
     }
 
     /**
@@ -258,7 +230,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
     public function getConfiguredManagerTitle()
     {
         /** @var d3ordermanager $oManager */
-        $oManager = d3GetOxidDIC()->get(d3ordermanager::class);
+        $oManager = oxNew(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
         $oManager->setValue('blCheckNoOrderArticle1_status', true);
@@ -300,7 +272,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
     public function getConfiguredManagerShortDesc()
     {
         /** @var d3ordermanager $oManager */
-        $oManager = d3GetOxidDIC()->get(d3ordermanager::class);
+        $oManager = oxNew(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
         $oManager->setValue('blCheckNoOrderArticle1_status', true);
@@ -342,7 +314,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
     public function getConfiguredManagerSelVariant()
     {
         /** @var d3ordermanager $oManager */
-        $oManager = d3GetOxidDIC()->get(d3ordermanager::class);
+        $oManager = oxNew(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
         $oManager->setValue('blCheckNoOrderArticle1_status', true);
@@ -384,7 +356,7 @@ class requirementNoArticleContentTest extends d3OrdermanagerRequirementIntegrati
     public function getConfiguredManagerPersParams()
     {
         /** @var d3ordermanager $oManager */
-        $oManager = d3GetOxidDIC()->get(d3ordermanager::class);
+        $oManager = oxNew(d3ordermanager::class);
         $oManager->load($this->sManagerId);
 
         $oManager->setValue('blCheckNoOrderArticle1_status', true);

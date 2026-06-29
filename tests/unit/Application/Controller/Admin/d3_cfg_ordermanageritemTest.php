@@ -48,7 +48,7 @@ class d3_cfg_ordermanageritemTest extends d3OrdermanagerUnitTestCase
 
         // required because error if test is executed with intergration tests
         Registry::getConfig()->getActiveShop();
-        $this->_oController = d3GetOxidDIC()->get(d3_cfg_ordermanageritem::class);
+        $this->_oController = oxNew(d3_cfg_ordermanageritem::class);
     }
 
     public function tearDown(): void
@@ -59,7 +59,6 @@ class d3_cfg_ordermanageritemTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem::render
      * @test
      * @throws ReflectionException
      */

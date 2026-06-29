@@ -15,12 +15,10 @@
 
 declare(strict_types=1);
 use D3\Ordermanager\Setup\Events;
-use D3\DIContainerHandler\definitionFileContainer;
 use D3\Ordermanager\Application\Model\Constants;
 use D3\Ordermanager\Modules\Application\Model as ModuleModel;
 use D3\Ordermanager\Application\Controller as OMController;
 use D3\Ordermanager\Application\Controller\Admin as OMControllerAdmin;
-use D3\Ordermanager\Modules\Core\DefinitionFileContainer_ordermanager;
 use OxidEsales\Eshop\Application\Model as OxidModel;
 use OxidEsales\Eshop\Core as OxidCore;
 
@@ -30,7 +28,6 @@ use OxidEsales\Eshop\Core as OxidCore;
  * Metadata version
  */
 $sMetadataVersion = '2.1';
-$sLogo = '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="height:1em;width:1em"> ';
 
 /**
  * Module information
@@ -38,15 +35,15 @@ $sLogo = '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="h
 $aModule = [
     'id'            => 'd3ordermanager',
     'title'         => [
-        'de'    => $sLogo . 'Auftragsmanager',
-        'en'    => $sLogo . 'Order Manager',
+        'de'    => '(D3) Auftragsmanager',
+        'en'    => '(D3) Order Manager',
     ],
     'description'  => [
         'de'    => 'Bearbeitet frei definierbare Auftr&auml;ge auf Basis von einstellbaren Bestellungslisten.',
         'en'    => 'Processes freely definable tasks on the basis of adjustable order lists.',
     ],
     'thumbnail'     => 'picture.svg',
-    'version'       => '6.2.1.0',
+    'version'       => '6.3.0.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'https://www.oxidmodule.com/',
@@ -56,7 +53,6 @@ $aModule = [
         OxidModel\User::class                   => ModuleModel\d3_oxuser_ordermanager::class,
         OxidModel\Basket::class                 => ModuleModel\d3_oxbasket_ordermanager::class,
         OxidModel\BasketItem::class             => ModuleModel\d3_oxbasketitem_ordermanager::class,
-        definitionFileContainer::class          => DefinitionFileContainer_ordermanager::class,
     ],
     'controllers'   => [
         'd3ordermanager_response'           => OMController\d3ordermanager_response::class,
@@ -119,6 +115,8 @@ $aModule = [
             'views/smarty/admin/Requirements/d3ordermanager_requ_ordersum.tpl',
         '@' . Constants::OXID_MODULE_ID . '/admin/Requirements/d3ordermanager_requ_invoiceno.tpl'             =>
             'views/smarty/admin/Requirements/d3ordermanager_requ_invoiceno.tpl',
+        '@' . Constants::OXID_MODULE_ID . '/admin/Requirements/d3ordermanager_requ_invoiceno2.tpl'             =>
+            'views/smarty/admin/Requirements/d3ordermanager_requ_invoiceno2.tpl',
         '@' . Constants::OXID_MODULE_ID . '/admin/Requirements/d3ordermanager_requ_transactionfilter.tpl'     =>
             'views/smarty/admin/Requirements/d3ordermanager_requ_transactionfilter.tpl',
         '@' . Constants::OXID_MODULE_ID . '/admin/Requirements/d3ordermanager_requ_currencyfilter.tpl'        =>

@@ -21,26 +21,21 @@ use D3\ModCfg\Application\Controller\Admin\d3_cfg_mod_main;
 use D3\ModCfg\Application\Model\d3str;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
-use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\ModCfg\Application\Model\Filegenerator\d3filegeneratorcronsh;
 use D3\ModCfg\Application\Model\Shopcompatibility\d3ShopCompatibilityAdapterHandler;
 use D3\Ordermanager\Application\Model\Constants;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
-use D3\Ordermanager\Application\Model\d3ordermanager_vars as VariablesTrait;
-use Doctrine\DBAL\Exception as DBALException;
 use OxidEsales\Eshop\Application\Model\Shop;
-use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
-use OxidEsales\Eshop\Core\Language;
-use OxidEsales\Eshop\Core\Request;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\ViewConfig;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
 {
-    use VariablesTrait;
-
     protected $_sModId = 'd3_ordermanager';
 
     protected $_sThisTemplate = '@'. Constants::OXID_MODULE_ID .'/admin/d3_cfg_ordermanagerset_main';
@@ -56,22 +51,11 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
     protected $_sMenuSubItemTitle = 'd3mxordermanager_settings';
 
     /**
-     * constructor.
+     * @codeCoverageIgnore
      */
-    public function __construct()
-    {
-        d3GetOxidDIC()->getParameter($this->_DIC_Instance_Id . 'modcfgid') === $this->_sModId or
-            throw oxNew(wrongModIdException::class, $this->_sModId);
-
-        parent::__construct();
-    }
-
     public function getManager(): Manager
     {
-        /** @var Manager $manager */
-        $manager = d3GetOxidDIC()->get(Manager::class);
-
-        return $manager;
+        return oxNew(Manager::class);
     }
 
     /**
@@ -82,9 +66,11 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         return $this->getManager()->getBaseCronPW();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getViewConfig(): ViewConfig
     {
-        // don't use DIC because of circular reference
         if ($this->_oViewConf === null) {
             $this->_oViewConf = oxNew(ViewConfig::class);
         }
@@ -92,17 +78,15 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         return $this->_oViewConf;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getD3Str(): d3str
     {
-        /** @var d3str $d3str */
-        $d3str = d3GetOxidDIC()->get(d3str::class);
-        return $d3str;
+        return oxNew(d3str::class);
     }
 
-    /**
-     * @param bool|int $iCronJobId
-     */
-    public function getCronPath($iCronJobId = false): string
+    public function getCronPath($iCronJobId = null): string
     {
         $sScriptPath = VENDOR_PATH.'bin/d3_ordermanager_cron';
 
@@ -111,7 +95,7 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
             'shp'   => $this->getViewConfig()->getActiveShopId(),
         ];
 
-        if ($iCronJobId !== false) {
+        if ($iCronJobId !== null) {
             $aParameters['cjid'] = $iCronJobId;
         }
 
@@ -126,13 +110,9 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         return $this->getManager()->getAvailableCronjobIds();
     }
 
-    /**
-     * @param bool|array $aCJID
-     */
     public function getCJIDDesc(array $aCJID): string
     {
-        /** @var Language $oLang */
-        $oLang = d3GetOxidDIC()->get($this->_DIC_OxInstance_Id.Language::class);
+        $oLang = Registry::getLang();
         if ($aCJID['count'] == 1) {
             return sprintf(
                 $oLang->translateString('D3_ORDERMANAGER_SET_CRON_JOBID', null, true),
@@ -162,12 +142,12 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         return $sVarName;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getFileGeneratorCronSh(): d3filegeneratorcronsh
     {
-        /** @var d3filegeneratorcronsh $filegenerator */
-        $filegenerator = d3GetOxidDIC()->get(d3filegeneratorcronsh::class);
-
-        return $filegenerator;
+        return oxNew(d3filegeneratorcronsh::class);
     }
 
     public function getCronProviderList(): array
@@ -175,26 +155,28 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         return $this->getFileGeneratorCronSh()->getContentList();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getCompatibilityAdapterHandler(): d3ShopCompatibilityAdapterHandler
     {
-        /** @var d3ShopCompatibilityAdapterHandler $compatiblityHandler */
-        $compatiblityHandler = d3GetOxidDIC()->get(d3ShopCompatibilityAdapterHandler::class);
-        return $compatiblityHandler;
-    }
-
-    public function d3GetActiveShop(): Shop
-    {
-        /** @var Config $config */
-        $config = d3GetOxidDIC()->get($this->_DIC_OxInstance_Id.Config::class);
-
-        return $config->getActiveShop();
+        return oxNew(d3shopcompatibilityadapterhandler::class);
     }
 
     /**
-     * @throws DBALException
+     * @codeCoverageIgnore
+     */
+    public function d3GetActiveShop(): Shop
+    {
+        return Registry::getConfig()->getActiveShop();
+    }
+
+    /**
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @throws StandardException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws d3ShopCompatibilityAdapterException
      * @throws d3_cfg_mod_exception
      */
@@ -202,9 +184,7 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
     {
         $sScriptPath = VENDOR_PATH.'bin/d3_ordermanager_cron';
 
-        /** @var Request $request */
-        $request = d3GetOxidDIC()->get($this->_DIC_OxInstance_Id.Request::class);
-        $sCronId = $request->getRequestEscapedParameter('cronid');
+        $sCronId = Registry::getRequest()->getRequestEscapedParameter('cronid');
 
         $oShop = $this->d3GetActiveShop();
         $aParameters = [
@@ -214,7 +194,7 @@ class d3_cfg_ordermanagerset_main extends d3_cfg_mod_main
         ];
 
         $oD3ShGenerator = $this->getFileGeneratorCronSh();
-        $oD3ShGenerator->setContentType($request->getRequestEscapedParameter('crontype'));
+        $oD3ShGenerator->setContentType(Registry::getRequest()->getRequestEscapedParameter('crontype'));
         $oD3ShGenerator->setScriptPath($sScriptPath);
         $oD3ShGenerator->setSortedParameterList($aParameters);
         $oD3ShGenerator->startDownload('d3ordermanager_'.$oShop->getId()."_".$sCronId.".sh");

@@ -15,11 +15,13 @@
 
 namespace D3\Ordermanager\tests\integration\Trigger;
 
-use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
+use D3\Ordermanager\Application\Context\ExecutionMode;
+use D3\Ordermanager\Application\Context\ProcessExecutionContext;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
+use D3\Ordermanager\Core\ModCfgTrait;
 use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager as ItemExtension;
 use D3\Ordermanager\tests\integration\d3IntegrationTestCase;
 use Doctrine\DBAL\Exception as DBALException;
@@ -35,6 +37,7 @@ use OxidEsales\Eshop\Core\Exception\NoArticleException;
 use OxidEsales\Eshop\Core\Exception\OutOfStockException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -42,6 +45,8 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class finalizeOrderTest extends d3IntegrationTestCase
 {
+    use ModCfgTrait;
+
     public $sManagerId = 'managerTestId';
     public $aArticleIdList = [
         'articleTestIdNo1',
@@ -190,7 +195,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
      */
     public function runTriggerOk()
     {
-        $set = d3_cfg_mod::get('d3_ordermanager');
+        $set = $this->d3GetOrderManagerConfig();
         $set->assign([ 'oxactive' => 1 ]);
         $set->saveNoLicenseRefresh();
 
@@ -217,12 +222,10 @@ class finalizeOrderTest extends d3IntegrationTestCase
         $managerListMock->offsetSet($manager->getId(), $manager);
         $managerListMock->method('d3GetOrderFinishTriggeredManagerTasks')->willReturnSelf();
 
-        $definitions = d3GetOxidDIC()->getDefinitions();
-
-        d3GetOxidDIC()->set(d3ordermanagerlist::class, $managerListMock);
-
-        // prevent save trigger action in test preparation
-        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, true);
+        // prevent save trigger action in test
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::finalizeOrder());
 
         $oItem->load($this->aOrderIdList[0]);
         $oItem->finalizeOrder(
@@ -230,16 +233,14 @@ class finalizeOrderTest extends d3IntegrationTestCase
             $user
         );
 
-        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, false);
+        $context->resetMode();
 
         $sId = $oItem->getId();
 
-        d3GetOxidDIC()->reset();
-        d3GetOxidDIC()->setDefinitions($definitions);
 
         // require reload
         /** @var Order $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($sId);
         $this->assertSame(
             round((float) $this->dExpectedValue * 100),
@@ -260,7 +261,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
      */
     public function runTriggerCanceledInvalidRequirementConfig()
     {
-        $set = d3_cfg_mod::get('d3_ordermanager');
+        $set = $this->d3GetOrderManagerConfig();
         $set->assign([ 'oxactive' => 1 ]);
         $set->saveNoLicenseRefresh();
 
@@ -288,12 +289,11 @@ class finalizeOrderTest extends d3IntegrationTestCase
             ->getMock();
         $managerListMock->method('d3GetOrderFinishTriggeredManagerTasks')->willReturnSelf();
 
-        $definitions = d3GetOxidDIC()->getDefinitions();
 
-        d3GetOxidDIC()->set(d3ordermanagerlist::class, $managerListMock);
-
-        // prevent save trigger action in test preparation
-        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, true);
+        // prevent save trigger action in test
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::finalizeOrder());
 
         $oItem->load($this->aOrderIdList[0]);
         $oItem->finalizeOrder(
@@ -301,24 +301,25 @@ class finalizeOrderTest extends d3IntegrationTestCase
             $user
         );
 
-        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, false);
+        $context->resetMode();
 
         $sId = $oItem->getId();
-
-        d3GetOxidDIC()->reset();
-        d3GetOxidDIC()->setDefinitions($definitions);
 
         $this->getConfiguredManager()->save();
 
         // require reload
         /** @var Order $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($sId);
-        $this->assertSame(
-            round((float) $this->dCurrentValue * 100),
-            round((float) $oItem->getFieldData('oxdelcost') * 100)
-        );
-        $oItem->delete();
+
+        try {
+            $this->assertSame(
+                round((float)$this->dCurrentValue * 100),
+                round((float)$oItem->getFieldData('oxdelcost') * 100)
+            );
+        } finally {
+            $oItem->delete();
+        }
     }
 
     /**
@@ -333,7 +334,7 @@ class finalizeOrderTest extends d3IntegrationTestCase
      */
     public function runTriggerCanceledInvalidActionConfig()
     {
-        $set = d3_cfg_mod::get('d3_ordermanager');
+        $set = $this->d3GetOrderManagerConfig();
         $set->assign([ 'oxactive' => 1 ]);
         $set->saveNoLicenseRefresh();
 
@@ -361,12 +362,11 @@ class finalizeOrderTest extends d3IntegrationTestCase
             ->getMock();
         $managerListMock->method('d3GetOrderFinishTriggeredManagerTasks')->willReturnSelf();
 
-        $definitions = d3GetOxidDIC()->getDefinitions();
 
-        d3GetOxidDIC()->set(d3ordermanagerlist::class, $managerListMock);
-
-        // prevent save trigger action in test preparation
-        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, true);
+        // prevent save trigger action in test
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::finalizeOrder());
 
         $oItem->load($this->aOrderIdList[0]);
         $oItem->finalizeOrder(
@@ -374,18 +374,15 @@ class finalizeOrderTest extends d3IntegrationTestCase
             $user
         );
 
-        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, false);
+        $context->resetMode();
 
         $sId = $oItem->getId();
-
-        d3GetOxidDIC()->reset();
-        d3GetOxidDIC()->setDefinitions($definitions);
 
         $this->getConfiguredManager()->save();
 
         // require reload
         /** @var Order $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($sId);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),
@@ -410,9 +407,6 @@ class finalizeOrderTest extends d3IntegrationTestCase
             ->getMock();
         $managerListMock->method('d3GetOrderFinishTriggeredManagerTasks')->willReturnSelf();
 
-        $definitions = d3GetOxidDIC()->getDefinitions();
-
-        d3GetOxidDIC()->set(d3ordermanagerlist::class, $managerListMock);
 
         $user = oxNew(User::class);
         $user->load($this->aUserIdList[0]);
@@ -428,8 +422,10 @@ class finalizeOrderTest extends d3IntegrationTestCase
         $oItem->method('executePayment')->willReturn(true);
         $oItem->method('sendOrderByEmail')->willReturn(Item::ORDER_STATE_OK);
 
-        // prevent save trigger action in test preparation
-        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, true);
+        // prevent save trigger action in test
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::finalizeOrder());
 
         $oItem->load($this->aOrderIdList[0]);
         $oItem->finalizeOrder(
@@ -438,14 +434,11 @@ class finalizeOrderTest extends d3IntegrationTestCase
         );
         $sId = $oItem->getId();
 
-        d3GetOxidDIC()->reset();
-        d3GetOxidDIC()->setDefinitions($definitions);
-
-        Registry::getSession()->setVariable(ItemExtension::PREVENTION_SAVEORDER, false);
+        $context->resetMode();
 
         // require reload
         /** @var Order $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($sId);
         $this->assertSame(
             round((float) $this->dCurrentValue * 100),

@@ -17,13 +17,17 @@ declare(strict_types=1);
 
 namespace D3\Ordermanager\Modules\Application\Model;
 
-use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ParameterNotFoundException;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
+use D3\Ordermanager\Application\Context\ExecutionMode;
+use D3\Ordermanager\Application\Context\ProcessExecutionContext;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\Events\FinalizeOrderEvent;
 use D3\Ordermanager\Application\Model\Events\OrderSaveEvent;
+use D3\Ordermanager\Application\Model\Events\States\FinalizeOrderEventExecutionState;
+use D3\Ordermanager\Application\Model\Events\States\OrderSaveEventExecutionState;
+use D3\Ordermanager\Core\ModCfgTrait;
 use Doctrine\DBAL\Exception as DBALException;
 use Exception;
 use OxidEsales\Eshop\Application\Model\OrderArticle;
@@ -37,11 +41,12 @@ use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
 {
+    use ModCfgTrait;
+
     /** @var Payment */
     protected $_oPayment;
 
@@ -51,11 +56,9 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
 
     public $isLast  = false;
 
-    public const PREVENTION_FINALIZEORDER = 'd3PreventOMFinalizeOrderTrigger';
+    protected ?OrderSaveEventExecutionState $orderSaveEventState = null;
 
-    public const PREVENTION_SAVEORDER = 'd3PreventOMSaveOrderTrigger';
-
-    public const PREVENTION_CUSTOMEVENT = 'd3PreventOMEventTrigger';
+    protected ?FinalizeOrderEventExecutionState $finalizeOrderEventState = null;
 
     /**
      * @param $sName
@@ -97,13 +100,11 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
     }
 
     /**
-     * @throws Exception
+     * @codeCoverageIgnore
      */
     public function d3GetOrderManagerVoucher(): Voucher
     {
-        /** @var Voucher $voucher */
-        $voucher = d3GetOxidDIC()->get('d3ox.ordermanager.'.Voucher::class);
-        return $voucher;
+        return oxNew(Voucher::class);
     }
 
     /**
@@ -163,12 +164,21 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
     {
         $iRet = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
 
-        /** @var d3_cfg_mod $oSet */
-        $oSet = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $oSet = $this->d3GetOrderManagerConfig();
 
         if ($oSet->isActive()) {
+            /** @var ProcessExecutionContext $context */
+            $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+            if ($context->is(ExecutionMode::default())) {
+                $context->setMode(ExecutionMode::finalizeOrder());
+            }
+
             $event = oxNew(FinalizeOrderEvent::class, $this);
             $this->d3GetEventDispatcher()->dispatch($event);
+
+            if ($context->is(ExecutionMode::finalizeOrder())) {
+                $context->resetMode();
+            }
         }
 
         return $iRet;
@@ -190,19 +200,52 @@ class d3_oxorder_ordermanager extends d3_oxorder_ordermanager_parent
         /** @var false|string $mReturn */
         $mReturn = parent::save();
 
-        /** @var d3_cfg_mod $oSet */
-        $oSet = d3GetOxidDIC()->get('d3.ordermanager.modcfg');
+        $oSet = $this->d3GetOrderManagerConfig();
 
         if ($oSet->isActive()) {
+            /** @var ProcessExecutionContext $context */
+            $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+            if ($context->is(ExecutionMode::default())) {
+                $context->setMode(ExecutionMode::orderSave());
+            }
+
             $event = oxNew(OrderSaveEvent::class, $this);
             $this->d3GetEventDispatcher()->dispatch($event);
+
+            if ($context->is(ExecutionMode::orderSave())) {
+                $context->resetMode();
+            }
         }
 
         return $mReturn;
     }
 
-    protected function d3GetEventDispatcher(): EventDispatcher
+    protected function d3GetEventDispatcher(): EventDispatcherInterface
     {
         return ContainerFactory::getInstance()->getContainer()->get(EventDispatcherInterface::class);
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function d3GetOrderSaveEventState(): OrderSaveEventExecutionState
+    {
+        if ($this->orderSaveEventState === null) {
+            $this->orderSaveEventState = new OrderSaveEventExecutionState();
+        }
+
+        return $this->orderSaveEventState;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function d3GetFinalizeOrderEventState(): FinalizeOrderEventExecutionState
+    {
+        if ($this->finalizeOrderEventState === null) {
+            $this->finalizeOrderEventState = new FinalizeOrderEventExecutionState();
+        }
+
+        return $this->finalizeOrderEventState;
     }
 }

@@ -17,11 +17,8 @@ declare(strict_types=1);
 
 namespace D3\Ordermanager\tests\unit\Application\Controller\Admin;
 
-use D3\DIContainerHandler\d3DicException;
-use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\d3filesystem;
 use D3\ModCfg\Application\Model\d3str;
-use D3\ModCfg\Application\Model\Exception\wrongModIdException;
 use D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall;
 use D3\Ordermanager\Application\Model\d3ordermanager;
 use D3\Ordermanager\tests\unit\d3OrdermanagerUnitTestCase;
@@ -54,7 +51,7 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     {
         parent::setUp();
 
-        $this->_oController = d3GetOxidDIC()->get(d3_cfg_ordermanageritem_mall::class);
+        $this->_oController = oxNew(d3_cfg_ordermanageritem_mall::class);
     }
 
     public function tearDown(): void
@@ -65,58 +62,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::__construct
-     * @test
-     * @return void
-     * @throws d3DicException
-     */
-    public function constructorPass()
-    {
-        $this->assertSame(
-            'd3_ordermanager',
-            d3GetOxidDIC()->getParameter('d3.ordermanager.modcfgid')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::__construct
-     * @test
-     * @return void
-     * @throws ReflectionException
-     * @throws d3DicException
-     */
-    public function constructorException()
-    {
-        /** @var d3_cfg_ordermanageritem_mall|MockObject $controller */
-        $controller = $this->getMockBuilder(d3_cfg_ordermanageritem_mall::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        d3GetOxidDIC()->setParameter('d3.ordermanager.modcfgid', 'differentModCfgid');
-
-        $this->expectException(wrongModIdException::class);
-
-        $this->callMethod(
-            $controller,
-            '__construct'
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getProfile
-     * @test
-     * @throws ReflectionException
-     */
-    public function profileObjectHasRightInstance()
-    {
-        $this->assertInstanceOf(
-            d3ordermanager::class,
-            $this->callMethod($this->_oController, 'getProfile')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::render
      * @test
      * @throws ReflectionException
      */
@@ -153,7 +98,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::render
      * @test
      * @throws ReflectionException
      */
@@ -190,7 +134,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getUserMessages
      * @test
      * @throws ReflectionException
      */
@@ -202,7 +145,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getLang
      * @test
      * @throws ReflectionException
      */
@@ -215,7 +157,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getHelpURL
      * @test
      * @throws ReflectionException
      */
@@ -232,7 +173,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
         $oFileSystemMock->method('splitFilename')->willReturn(
             ['name' => 'filename', 'ext' => 'html']
         );
-        d3GetOxidDIC()->set(d3filesystem::class, $oFileSystemMock);
 
         /** @var Language|MockObject $oLangMock */
         $oLangMock = $this->getMockBuilder(Language::class)
@@ -249,12 +189,14 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
         /** @var d3_cfg_ordermanageritem_mall|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_mall::class)
             ->onlyMethods([
-                'd3GetSet',
+                'd3GetOrderManagerConfig',
                 'getLang',
+                'created3Filesystem',
             ])
             ->getMock();
-        $oControllerMock->method('d3GetSet')->willReturn($oModCfgMock);
+        $oControllerMock->method('d3GetOrderManagerConfig')->willReturn($oModCfgMock);
         $oControllerMock->method('getLang')->willReturn($oLangMock);
+        $oControllerMock->method('created3Filesystem')->willReturn($oFileSystemMock);
 
         $this->setValue($oControllerMock, '_sHelpLinkMLAdd', 'foobar');
 
@@ -267,7 +209,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getHelpURL
      * @test
      * @throws ReflectionException
      */
@@ -281,8 +222,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
             ['name' => 'filename', 'ext' => '']
         );
 
-        d3GetOxidDIC()->set(d3filesystem::class, $oFileSystemMock);
-
         /** @var d3str|MockObject $oD3StrMock */
         $oD3StrMock = $this->getMockBuilder(d3str::class)
             ->onlyMethods([
@@ -291,9 +230,8 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
             ])
             ->getMock();
         $oD3StrMock->method('unprefixedslashit')->willReturnCallback([$this, 'firstArgumentReturnCallback']);
-        $oD3StrMock->expects($this->once())->method('trailingslashit')->willReturnCallback([$this, 'firstArgumentReturnCallback']);
-
-        d3GetOxidDIC()->set(d3str::class, $oD3StrMock);
+        $oD3StrMock->expects(self::once())->method('trailingslashit')
+            ->willReturnCallback([$this, 'firstArgumentReturnCallback']);
 
         /** @var Language|MockObject $oLangMock */
         $oLangMock = $this->getMockBuilder(Language::class)
@@ -310,12 +248,16 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
         /** @var d3_cfg_ordermanageritem_mall|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_cfg_ordermanageritem_mall::class)
             ->onlyMethods([
-                'd3GetSet',
+                'd3GetOrderManagerConfig',
                 'getLang',
+                'createD3Str',
+                'created3Filesystem',
             ])
             ->getMock();
-        $oControllerMock->method('d3GetSet')->willReturn($oModCfgMock);
+        $oControllerMock->method('d3GetOrderManagerConfig')->willReturn($oModCfgMock);
         $oControllerMock->method('getLang')->willReturn($oLangMock);
+        $oControllerMock->method('createD3Str')->willReturn($oD3StrMock);
+        $oControllerMock->method('created3Filesystem')->willReturn($oFileSystemMock);
 
         $this->setValue($oControllerMock, '_sHelpLinkMLAdd', 'foobar');
 
@@ -337,20 +279,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::d3GetSet
-     * @test
-     * @throws ReflectionException
-     */
-    public function modcfgObjectIsRightInstance()
-    {
-        $this->assertInstanceOf(
-            d3_cfg_mod::class,
-            $this->callMethod($this->_oController, 'd3GetSet')
-        );
-    }
-
-    /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::getNaviItems
      * @test
      * @throws ReflectionException
      */
@@ -362,7 +290,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::d3GetMenuItemTitle
      * @test
      * @throws ReflectionException
      */
@@ -374,7 +301,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::d3GetMenuSubItemTitle
      * @test
      * @throws ReflectionException
      */
@@ -386,7 +312,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::_isSetOxid
      * @test
      * @throws ReflectionException
      */
@@ -398,7 +323,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::_isSetOxid
      * @test
      * @throws ReflectionException
      */
@@ -413,7 +337,6 @@ class d3_cfg_ordermanageritem_mallTest extends d3OrdermanagerUnitTestCase
     }
 
     /**
-     * @covers \D3\Ordermanager\Application\Controller\Admin\d3_cfg_ordermanageritem_mall::_d3LoadInOtherLang
      * @test
      * @throws ReflectionException
      */

@@ -49,9 +49,9 @@ return [
     'D3_ORDERMANAGER_SET_CRON_PATH'                      => 'internal cron call',
     'D3_ORDERMANAGER_SET_CRON_PATH_DESC'                 => 'Please use this call to set up the cronjob on the server. Alternatively, you can also have a shell script generated which also contains this call.',
     'D3_ORDERMANAGER_SET_CRON_LASTEXEC'                  => 'last execution',
-    'D3_ORDERMANAGER_SET_CRON_JOBID'                     => 'cronjob informations for cronjob id "%1$s" -> %2$d assigned job',
-    'D3_ORDERMANAGER_SET_CRON_JOBSID'                    => 'cronjob informations for cronjob id "%1$s" -> %2$d assigned jobs',
-    'D3_ORDERMANAGER_SET_CRON_JOB_DESC'                  => "If you want to start individual tasks at specific times or at intervals, you can use the cronjob ID to define a single task or task group that can then be started in a targeted manner. You set the cronjob ID on each individual task. For task groups, you set the same ID to multiple tasks. As soon as it is stored there, you will find the necessary information for this cronjob ID (Cron job for active tasks with cronjob ID X ) in the module's basic settings. This allows you to set up the extra cron job. Newly created tasks or tasks that have not been assigned a cronjob ID are automatically available under cronjob ID 0. Learn more about using the cronjob IDs can be found in the manual for the module.",
+    'D3_ORDERMANAGER_SET_CRON_JOBID'                     => 'call data for cronjob id "%1$s" -> %2$d assigned job',
+    'D3_ORDERMANAGER_SET_CRON_JOBSID'                    => 'call data for cronjob id "%1$s" -> %2$d assigned jobs',
+    'D3_ORDERMANAGER_SET_CRON_JOB_DESC'                  => 'Use the cronjob ID to group jobs for automatic execution. Jobs without an assigned ID run with cronjob ID 0. For different intervals (for example daily or weekly), assign a dedicated ID per job or job group. For each saved ID, the module shows the matching call in the main settings, which you can configure as a separate cronjob with its own interval. For more details, see the module manual.',
     'D3_ORDERMANAGER_SET_JOBSETTINGS'                    => 'job settings',
     'D3_ORDERMANAGER_SET_CALCULATESTATONDEMAND'          => 'retrieve statistical informations for every task individually and on request only',
     'D3_ORDERMANAGER_SET_CALCULATESTATONDEMAND_DESC'     => 'To display the statistical data, several database queries are executed in the corresponding tab. For shops with extensive order data or complex tasks, it may be that the statistics data can not be determined in one pass. The page can not be displayed. This option determines the data individually and only on request.',
@@ -240,8 +240,10 @@ return [
     'D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_SELVARIANT'     => 'variants / select list',
     'D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_PERSPARAM'      => 'customization (PersParams)',
     'D3_ORDERMANAGER_REQU_ARTCONTENTTYPE_CATID'          => 'category id',
-    'D3_ORDERMANAGER_REQU_INVOICENUM'                    => 'has got an invoice number',
+    'D3_ORDERMANAGER_REQU_INVOICENUM'                    => 'has got a bill number',
     'D3_ORDERMANAGER_REQU_INVOICENUM_ERR_INVALID'        => '',
+    'D3_ORDERMANAGER_REQU_INVOICENUM2'                   => 'has got an invoice number',
+    'D3_ORDERMANAGER_REQU_INVOICENUM2_ERR_INVALID'       => '',
     'D3_ORDERMANAGER_REQU_TRANSACTION'                   => 'transaction status',
     'D3_ORDERMANAGER_REQU_TRANSACTION_ERR_STATUS'        => 'no valid status set',
     'D3_ORDERMANAGER_REQU_INFOLDER'                      => 'in one of the selected folders',
@@ -353,6 +355,7 @@ return [
     'D3_ORDERMANAGER_ACTION_MAILSEND_ERR_NOVALIDTPL'     => 'no valid template configuration set',
     'D3_ORDERMANAGER_ACTION_MAILSEND_ERR_NOVALIDCMS'     => 'no valid CMS entry set',
     'D3_ORDERMANAGER_ACTION_MAILSEND_ERR_NOVALIDRCP'     => 'no valid recipient set',
+    'D3_ORDERMANAGER_ACTION_MAILSEND_EXCEPTION'          => 'The email cannot be sent. Please check the order "%s" and the task "%s".',
     'D3_ORDERMANAGER_ACTION_EXPORTGROUP'                 => 'Export',
     'D3_ORDERMANAGER_ACTION_EXPORT'                      => 'export orders to list',
     'D3_ORDERMANAGER_ACTION_EXPORTCONTAINS'              => 'containing fields: ',
@@ -398,6 +401,8 @@ return [
     'D3_ORDERMANAGER_ORDERMAIN_GENPLAIN'                 => 'Create plain (unformatted) from formatted text',
     'D3_ORDERMANAGER_ORDERMAIN_GENPLAIN_DESC'            => 'Line breaks are converted and all HTML tags are removed. Depending on the formatting used, this can lead to inappropriate display. It is then better to enter the plain text yourself.',
     'D3_ORDERMANAGER_ORDERMAIN_PLAIN'                    => 'plain (unformatted):',
+    'D3_ORDERMANAGER_ORDERMAIN_UNSUPPORTED'              => 'The task cannot be started manually.',
+
     'D3_ORDERMANAGER_MAIL_OMJFROM'                       => 'Order Manager - result from',
     'D3_ORDERMANAGER_MAIL_ORDER'                         => 'order:',
     'D3_ORDERMANAGER_MAIL_GENERAL'                       => 'general:',
@@ -414,9 +419,13 @@ return [
     'D3_ORDERMANAGER_JOBDESC_CHANGEDISCOUNT'             => 'change discount to %01.2f %s',
     'D3_ORDERMANAGER_JOBDESC_ADDCUSTGROUP'               => 'add customer to group "%s"',
     'D3_ORDERMANAGER_JOBDESC_REMOVECUSTGROUP'            => 'remove customer from group "%s"',
-    'D3_ORDERMANAGER_JOBDESC_SENDMAIL'                   => 'send mail to %s',
+    'D3_ORDERMANAGER_JOBDESC_SENDMAIL'                   => 'send mail to "%s"',
+    'D3_ORDERMANAGER_JOBDESC_SENDMAIL_ATTACHMENT'        => 'add attachment "%s" to mail',
+    'D3_ORDERMANAGER_JOBDESC_DELETEPDFATTACHMENT'        => 'delete "%s" PDF attachment file',
+    'D3_ORDERMANAGER_JOBDESC_SENDMAIL_SUCCESS'           => 'mail successfully sended',
+    'D3_ORDERMANAGER_JOBDESC_SENDMAIL_FAILED'            => 'sending mail failed',
     'D3_ORDERMANAGER_JOBDESC_EXPORTLIST'                 => 'export to list %s',
-    'D3_ORDERMANAGER_JOBDESC_CREATEPDFDOCUMENT'          => 'erzeuge %s PDF in %s',
+    'D3_ORDERMANAGER_JOBDESC_CREATEPDFDOCUMENT'          => 'create %s PDF in %s',
     'D3_ORDERMANAGER_JOBDESC_ADDREMARK'                  => 'add remark',
     'D3_ORDERMANAGER_JOBERR_NOFOLDER'                    => "ERROR: order folder isn't available: %s",
     'D3_ORDERMANAGER_JOBERR_NOFOLDERDEFINED'             => 'ERROR: no order folder is chosen',
@@ -523,26 +532,26 @@ return [
 
     'D3_ORDERMANAGER_GENERAL_ORDER'                      => 'order:',
 
-    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDSHOPID'           => 'unvalid shop id',
-    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDCJID'             => 'unvalid cronjob id',
-    'D3_ORDERMANAGER_CLI_HELP'                           => 'Enables remote execution of tasks of the order manager',
-    'D3_ORDERMANAGER_CLI_OPTION_VERSION'                 => 'print version',
-    'D3_ORDERMANAGER_CLI_OPTION_QUIET'                   => 'prevents output from being displayed',
-    'D3_ORDERMANAGER_CLI_OPTION_LANG'                    => 'optional - language of the output messages, possible values are: "%1$s"',
-    'D3_ORDERMANAGER_CLI_OPTION_HELP'                    => 'Display this help screen and exit immeadiately.',
-    'D3_ORDERMANAGER_CLI_OPTION_NOCOLORS'                => 'Do not use any colors in output. Useful when piping output to other tools or files.',
-    'D3_ORDERMANAGER_CLI_OPTION_LOGLEVELS'               => 'Minimum level of messages to display. Default is "info". Valid levels are: "debug", "info", "notice", "success", "warning", "error", "critical", "alert", "emergency".',
-    'D3_ORDERMANAGER_CLI_COMMAND'                        => 'This tool accepts a command as first parameter as outlined below:',
-    'D3_ORDERMANAGER_CLI_COMMAND_RUN'                    => 'run the task group with a defined Cronjob ID',
-    'D3_ORDERMANAGER_CLI_COMMAND_STATUS'                 => 'display status information for Cronjob ID',
-    'D3_ORDERMANAGER_CLI_COMMAND_STATISTIC'              => 'display execution status statistic',
-    'D3_ORDERMANAGER_CLI_ARGUMENT_CJID'                  => 'ID of the task group to be started (can be set in the shop backend), possible values are: "%1$s"',
-    'D3_ORDERMANAGER_CLI_ARGUMENT_SHOPID'                => 'ID of the selected shop, possible values are: "%1$s"',
-    'D3_ORDERMANAGER_CLI_ARGUMENT_KEY'                   => 'optional - required for external calls only,'.PHP_EOL.'access key to prevent external unauthorized calls (can be set in the shop backend)',
-    'D3_ORDERMANAGER_CLI_ARGUMENT_ENCLOSER'              => '", "',
-    'D3_ORDERMANAGER_CLI_FINISHED_SUCCESSFULLY'          => 'The script execution was finished.',
-    'D3_ORDERMANAGER_CLI_FINISHED_ERRORS'                => 'These errors have occurred:',
-    'D3_ORDERMANAGER_CLI_DEPRECATED'                     => 'Cronjob execution via this script will be deactivated in the medium term. Please change the cronjob to this console call: "./vendor/bin/d3_ordermanager_cron".',
+    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDSHOPID'           => 'unvalid shop id',  // deprecated
+    'D3_ORDERMANAGER_CLI_COMMON_UNVALIDCJID'             => 'unvalid cronjob id',  // deprecated
+    'D3_ORDERMANAGER_CLI_HELP'                           => 'Enables remote execution of tasks of the order manager',   // deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_VERSION'                 => 'print version', // deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_QUIET'                   => 'prevents output from being displayed',  // deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_LANG'                    => 'optional - language of the output messages, possible values are: "%1$s"',  // deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_HELP'                    => 'Display this help screen and exit immeadiately.',  // deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_NOCOLORS'                => 'Do not use any colors in output. Useful when piping output to other tools or files.',  // deprecated
+    'D3_ORDERMANAGER_CLI_OPTION_LOGLEVELS'               => 'Minimum level of messages to display. Default is "info". Valid levels are: "debug", "info", "notice", "success", "warning", "error", "critical", "alert", "emergency".',  // deprecated
+    'D3_ORDERMANAGER_CLI_COMMAND'                        => 'This tool accepts a command as first parameter as outlined below:',  // deprecated
+    'D3_ORDERMANAGER_CLI_COMMAND_RUN'                    => 'run the task group with a defined Cronjob ID',   // deprecated
+    'D3_ORDERMANAGER_CLI_COMMAND_STATUS'                 => 'display status information for Cronjob ID',    // deprecated
+    'D3_ORDERMANAGER_CLI_COMMAND_STATISTIC'              => 'display execution status statistic',    // deprecated
+    'D3_ORDERMANAGER_CLI_ARGUMENT_CJID'                  => 'ID of the task group to be started (can be set in the shop backend), possible values are: "%1$s"',  // deprecated
+    'D3_ORDERMANAGER_CLI_ARGUMENT_SHOPID'                => 'ID of the selected shop, possible values are: "%1$s"',  // deprecated
+    'D3_ORDERMANAGER_CLI_ARGUMENT_KEY'                   => 'optional - required for external calls only,'.PHP_EOL.'access key to prevent external unauthorized calls (can be set in the shop backend)',  // deprecated
+    'D3_ORDERMANAGER_CLI_ARGUMENT_ENCLOSER'              => '", "',  // deprecated
+    'D3_ORDERMANAGER_CLI_FINISHED_SUCCESSFULLY'          => 'The script execution was finished.',  // deprecated
+    'D3_ORDERMANAGER_CLI_FINISHED_ERRORS'                => 'These errors have occurred:',  // deprecated
+    'D3_ORDERMANAGER_CLI_DEPRECATED'                     => 'Cronjob execution via this script will be deactivated in the medium term. Please change the cronjob to this console call: "./vendor/bin/d3_ordermanager_cron".',  // deprecated
 
     'D3_ORDERMANAGER_SETUP_CRONPASSWORD'                 => 'A secure password is set to protect external cron job calls. You can later view this password in the module settings and change it if necessary.',
 

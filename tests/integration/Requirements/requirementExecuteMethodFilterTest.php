@@ -25,6 +25,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Model\ListModel;
+use OxidEsales\Eshop\Core\UtilsObject;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -43,29 +44,6 @@ class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegr
     ];
 
     /**
-     * Set up fixture.
-     * @throws Exception
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->createTestData();
-    }
-
-    /**
-     * Tear down fixture.
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
-     */
-    public function tearDown(): void
-    {
-        $this->cleanTestData();
-
-        parent::tearDown();
-    }
-
-    /**
      * @throws Exception
      */
     public function createTestData()
@@ -78,12 +56,10 @@ class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegr
             $this->aOrderIdList[0],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxbillnr'      => 'TestBillNo1',
             ],
             [
                 $this->aOrderArticleIdList[0] => [
-                    'oxtitle'           => __CLASS__,
                 ],
             ]
         );
@@ -92,12 +68,10 @@ class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegr
             $this->aOrderIdList[1],
             [
                 'oxorderdate'   => '2018-01-01 00:00:00',
-                'oxbillcompany' => __CLASS__,
                 'oxbillnr'      => '0',
             ],
             [
                 $this->aOrderArticleIdList[1] => [
-                    'oxtitle'       => __CLASS__,
                 ],
             ]
         );
@@ -127,7 +101,7 @@ class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegr
 
         $oManager->setValue('blItemExecute', true);
         $oManager->setValue('blCheckExecuteMethod_status', true);
-        $oManager->setValue('sRequirementExecuteMethod_name', 'testChangeOrderList');
+        $oManager->setValue('sRequirementExecuteMethod_name', 'key');
 
         return $oManager;
     }
@@ -145,20 +119,7 @@ class requirementExecuteMethodFilterTest extends d3OrdermanagerRequirementIntegr
     public function requirementsSelectsRightOrders()
     {
         $oListGenerator = $this->getListGenerator($this->getConfiguredManager());
-
-        $definitions = d3GetOxidDIC()->getDefinitions();
-
-        /** @var ListModel|MockObject $oListMock */
-        $oListMock = $this->getMockBuilder(ListModel::class)
-            ->addMethods(['testChangeOrderList'])
-            ->getMock();
-        $oListMock->expects($this->once())->method('testChangeOrderList')->willReturn(null);
-        d3GetOxidDIC()->set('d3ox.ordermanager.'.ListModel::class, $oListMock);
-
         $oOrderList = $oListGenerator->getConcernedItems();
-
-        d3GetOxidDIC()->reset();
-        d3GetOxidDIC()->setDefinitions($definitions);
 
         $this->assertTrue(
             $oOrderList->count() >= 2

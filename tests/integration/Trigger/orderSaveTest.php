@@ -15,11 +15,13 @@
 
 namespace D3\Ordermanager\tests\integration\Trigger;
 
-use D3\ModCfg\Application\Model\Configuration\d3_cfg_mod;
 use D3\ModCfg\Application\Model\Exception\d3_cfg_mod_exception;
 use D3\ModCfg\Application\Model\Exception\d3ShopCompatibilityAdapterException;
+use D3\Ordermanager\Application\Context\ExecutionMode;
+use D3\Ordermanager\Application\Context\ProcessExecutionContext;
 use D3\Ordermanager\Application\Model\d3ordermanager as Manager;
 use D3\Ordermanager\Application\Model\d3ordermanagerlist;
+use D3\Ordermanager\Core\ModCfgTrait;
 use D3\Ordermanager\Modules\Application\Model\d3_oxorder_ordermanager;
 use D3\Ordermanager\tests\integration\d3IntegrationTestCase;
 use Doctrine\DBAL\Exception as DBALException;
@@ -28,6 +30,7 @@ use OxidEsales\Eshop\Application\Model\Order as Item;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -35,6 +38,8 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class orderSaveTest extends d3IntegrationTestCase
 {
+    use ModCfgTrait;
+
     public $sManagerId = 'managerTestId';
     public $aArticleIdList = [
         'articleTestIdNo1',
@@ -153,7 +158,11 @@ class orderSaveTest extends d3IntegrationTestCase
      */
     public function runTriggerOk()
     {
-        $set = d3_cfg_mod::get('d3_ordermanager');
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::orderSave());
+
+        $set = $this->d3GetOrderManagerConfig();
         $set->assign([ 'oxactive' => 1 ]);
         $set->saveNoLicenseRefresh();
 
@@ -165,26 +174,23 @@ class orderSaveTest extends d3IntegrationTestCase
         $managerListMock->offsetSet($manager->getId(), $manager);
         $managerListMock->method('d3GetOrderSaveTriggeredManagerTasks')->willReturnSelf();
 
-        $definitions = d3GetOxidDIC()->getDefinitions();
-
-        d3GetOxidDIC()->set(d3ordermanagerlist::class, $managerListMock);
-
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $oItem->save();
 
-        d3GetOxidDIC()->reset();
-        d3GetOxidDIC()->setDefinitions($definitions);
-
-        // require reload
-        /** @var d3_oxorder_ordermanager $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
-        $oItem->load($this->aOrderIdList[0]);
-        $this->assertSame(
-            round((float) $this->dExpectedValue * 100),
-            round((float) $oItem->getFieldData('oxdelcost') * 100)
-        );
+        try {
+            // require reload
+            /** @var d3_oxorder_ordermanager $oItem */
+            $oItem = oxNew(Item::class);
+            $oItem->load($this->aOrderIdList[0]);
+            $this->assertSame(
+                round((float)$this->dExpectedValue * 100),
+                round((float)$oItem->getFieldData('oxdelcost') * 100)
+            );
+        } finally {
+            $context->resetMode();
+        }
     }
 
     /**
@@ -199,7 +205,12 @@ class orderSaveTest extends d3IntegrationTestCase
      */
     public function runTriggerCanceledInvalidRequirementConfig()
     {
-        $set = d3_cfg_mod::get('d3_ordermanager');
+        // prevent save trigger action in test
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::orderSave());
+
+        $set = $this->d3GetOrderManagerConfig();
         $set->assign([ 'oxactive' => 1 ]);
         $set->saveNoLicenseRefresh();
 
@@ -214,26 +225,23 @@ class orderSaveTest extends d3IntegrationTestCase
         $managerListMock->offsetSet($manager->getId(), $manager);
         $managerListMock->method('d3GetOrderSaveTriggeredManagerTasks')->willReturnSelf();
 
-        $definitions = d3GetOxidDIC()->getDefinitions();
-
-        d3GetOxidDIC()->set(d3ordermanagerlist::class, $managerListMock);
-
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $oItem->save();
 
-        d3GetOxidDIC()->reset();
-        d3GetOxidDIC()->setDefinitions($definitions);
-
-        // require reload
-        /** @var d3_oxorder_ordermanager $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
-        $oItem->load($this->aOrderIdList[0]);
-        $this->assertSame(
-            round((float) $this->dCurrentValue * 100),
-            round((float) $oItem->getFieldData('oxdelcost') * 100)
-        );
+        try {
+            // require reload
+            /** @var d3_oxorder_ordermanager $oItem */
+            $oItem = oxNew(Item::class);
+            $oItem->load($this->aOrderIdList[0]);
+            $this->assertSame(
+                round((float)$this->dCurrentValue * 100),
+                round((float)$oItem->getFieldData('oxdelcost') * 100)
+            );
+        } finally {
+            $context->resetMode();
+        }
     }
 
     /**
@@ -248,7 +256,12 @@ class orderSaveTest extends d3IntegrationTestCase
      */
     public function runTriggerCanceledInvalidActionConfig()
     {
-        $set = d3_cfg_mod::get('d3_ordermanager');
+        // prevent save trigger action in test
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::orderSave());
+
+        $set = $this->d3GetOrderManagerConfig();
         $set->assign([ 'oxactive' => 1 ]);
         $set->saveNoLicenseRefresh();
 
@@ -262,26 +275,24 @@ class orderSaveTest extends d3IntegrationTestCase
             ->getMock();
         $managerListMock->method('d3GetOrderSaveTriggeredManagerTasks')->willReturnSelf();
 
-        $definitions = d3GetOxidDIC()->getDefinitions();
-
-        d3GetOxidDIC()->set(d3ordermanagerlist::class, $managerListMock);
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $oItem->save();
 
-        d3GetOxidDIC()->reset();
-        d3GetOxidDIC()->setDefinitions($definitions);
-
-        // require reload
-        /** @var d3_oxorder_ordermanager $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
-        $oItem->load($this->aOrderIdList[0]);
-        $this->assertSame(
-            round((float) $this->dCurrentValue * 100),
-            round((float) $oItem->getFieldData('oxdelcost') * 100)
-        );
+        try {
+            // require reload
+            /** @var d3_oxorder_ordermanager $oItem */
+            $oItem = oxNew(Item::class);
+            $oItem->load($this->aOrderIdList[0]);
+            $this->assertSame(
+                round((float)$this->dCurrentValue * 100),
+                round((float)$oItem->getFieldData('oxdelcost') * 100)
+            );
+        } finally {
+            $context->resetMode();
+        }
     }
 
     /**
@@ -290,6 +301,11 @@ class orderSaveTest extends d3IntegrationTestCase
      */
     public function runDisabledTrigger()
     {
+        // prevent save trigger action in test
+        /** @var ProcessExecutionContext $context */
+        $context = ContainerFactory::getInstance()->getContainer()->get(ProcessExecutionContext::class);
+        $context->setMode(ExecutionMode::orderSave());
+
         $manager = $this->getConfiguredManager();
         $manager->assign(['D3_OM_ORDERSAVETRIGGERED'  => '0']);
         $manager->save();
@@ -300,25 +316,23 @@ class orderSaveTest extends d3IntegrationTestCase
             ->getMock();
         $managerListMock->method('d3GetOrderSaveTriggeredManagerTasks')->willReturnSelf();
 
-        $definitions = d3GetOxidDIC()->getDefinitions();
-
-        d3GetOxidDIC()->set(d3ordermanagerlist::class, $managerListMock);
 
         /** @var Item $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
+        $oItem = oxNew(Item::class);
         $oItem->load($this->aOrderIdList[0]);
         $oItem->save();
 
-        d3GetOxidDIC()->reset();
-        d3GetOxidDIC()->setDefinitions($definitions);
-
-        // require reload
-        /** @var d3_oxorder_ordermanager $oItem */
-        $oItem = d3GetOxidDIC()->get('d3ox.ordermanager.'.Item::class);
-        $oItem->load($this->aOrderIdList[0]);
-        $this->assertSame(
-            round((float) $this->dCurrentValue * 100),
-            round((float) $oItem->getFieldData('oxdelcost') * 100)
-        );
+        try {
+            // require reload
+            /** @var d3_oxorder_ordermanager $oItem */
+            $oItem = oxNew(Item::class);
+            $oItem->load($this->aOrderIdList[0]);
+            $this->assertSame(
+                round((float)$this->dCurrentValue * 100),
+                round((float)$oItem->getFieldData('oxdelcost') * 100)
+            );
+        } finally {
+            $context->resetMode();
+        }
     }
 }
